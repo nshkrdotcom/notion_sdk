@@ -40,7 +40,8 @@ defmodule NotionSDK.MixProject do
     [
       {:pristine, path: "../pristine"},
       {:oauth2, "~> 2.1"},
-      {:oapi_generator, path: "../open-api-generator", only: [:dev, :test], runtime: false},
+      {:oapi_generator,
+       github: "nshkrdotcom/open-api-generator", only: [:dev, :test], runtime: false},
       {:jason, "~> 1.4"},
       {:finch, "~> 0.18"},
       {:telemetry, "~> 1.2"},
