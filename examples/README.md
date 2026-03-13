@@ -108,9 +108,16 @@ export NOTION_EXAMPLE_SEARCH_QUERY="roadmap"
 If `NOTION_EXAMPLE_SEARCH_QUERY` is unset, `00_smoke.exs` runs `search` with an
 empty query string.
 
-### 4. Optional external URL upload fixture
+### 4. External URL upload fixture for file suites
 
-`13_create_external_file_upload.exs` requires a real HTTPS file URL:
+`13_create_external_file_upload.exs` requires a real HTTPS file URL. That means
+`NOTION_EXAMPLE_FILE_URL` is required when you run:
+- `mix run examples/13_create_external_file_upload.exs`
+- `./examples/run_all.sh files`
+- `./examples/run_all.sh all`
+- `./examples/run_all.sh everything`
+
+Set:
 
 ```bash
 export NOTION_EXAMPLE_FILE_URL="https://example.com/path/to/file.pdf"
@@ -118,7 +125,10 @@ export NOTION_EXAMPLE_FILE_FILENAME="file.pdf"
 export NOTION_EXAMPLE_FILE_CONTENT_TYPE="application/pdf"
 ```
 
-`NOTION_EXAMPLE_FILE_FILENAME` and `NOTION_EXAMPLE_FILE_CONTENT_TYPE` are optional, but setting them removes ambiguity.
+`NOTION_EXAMPLE_FILE_FILENAME` and `NOTION_EXAMPLE_FILE_CONTENT_TYPE` are
+optional, but setting them removes ambiguity. If you do not want to provide an
+external URL fixture, stop before the file suite and run only `smoke`,
+`content`, or `data`.
 
 ### 5. Optional OAuth fixture
 

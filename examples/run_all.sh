@@ -55,6 +55,10 @@ This runner is strict:
   - API failures fail
   - the script stops on the first failing example
 
+File suite prerequisite:
+  - `files`, `all`, and `everything` require `NOTION_EXAMPLE_FILE_URL`
+    for `13_create_external_file_upload.exs`
+
 Read examples/README.md before running anything beyond the smoke flow.
 EOF
 }
