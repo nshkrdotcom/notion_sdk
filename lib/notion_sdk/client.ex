@@ -39,7 +39,7 @@ defmodule NotionSDK.Client do
             | {:allow_stale?, boolean()}
           ]
 
-  @type request_t :: %{
+  @type generated_request_t :: %{
           required(:args) => map(),
           required(:call) => {module(), atom()},
           required(:method) => atom(),
@@ -62,6 +62,31 @@ defmodule NotionSDK.Client do
           optional(:telemetry) => String.t(),
           optional(:timeout) => pos_integer()
         }
+
+  @type raw_request_t :: %{
+          required(:method) => atom(),
+          required(:path) => String.t(),
+          optional(:path_params) => map(),
+          optional(:query) => map(),
+          optional(:body) => term() | nil,
+          optional(:form_data) => term() | nil,
+          optional(:headers) => map(),
+          optional(:auth) => term(),
+          optional(:security) => [map()] | nil,
+          optional(:request_schema) => term() | nil,
+          optional(:response_schema) => term() | nil,
+          optional(:id) => String.t() | nil,
+          optional(:typed_responses) => boolean(),
+          optional(:circuit_breaker) => String.t() | nil,
+          optional(:rate_limit) => String.t() | nil,
+          optional(:resource) => String.t() | nil,
+          optional(:retry) => String.t() | nil,
+          optional(:retry_opts) => keyword(),
+          optional(:telemetry) => String.t() | nil,
+          optional(:timeout) => pos_integer()
+        }
+
+  @type request_t :: generated_request_t() | raw_request_t()
 
   @type t :: %__MODULE__{
           auth: String.t() | nil,
@@ -152,6 +177,24 @@ defmodule NotionSDK.Client do
 
   @spec request(t(), request_t()) :: {:ok, term()} | {:error, NotionSDK.Error.t()}
   def request(%__MODULE__{} = client, request) when is_map(request) do
+    cond do
+      generated_request?(request) ->
+        execute_generated_request(client, request)
+
+      raw_request?(request) ->
+        execute_raw_request(client, request)
+
+      true ->
+        raise ArgumentError,
+              "expected generated request shape or raw request spec, got: #{inspect(request)}"
+    end
+  end
+
+  def request(other, _request) do
+    raise ArgumentError, "expected NotionSDK.Client, got: #{inspect(other)}"
+  end
+
+  defp execute_generated_request(%__MODULE__{} = client, request) do
     typed_runtime? = typed_runtime_enabled?(client, request)
     endpoint = build_endpoint(client, request, typed_runtime?)
     {payload, body_type, content_type} = request_payload(request, endpoint.method)
@@ -171,8 +214,16 @@ defmodule NotionSDK.Client do
     Pristine.execute_endpoint(endpoint, payload, client.context, execute_opts)
   end
 
-  def request(other, _request) do
-    raise ArgumentError, "expected NotionSDK.Client, got: #{inspect(other)}"
+  defp execute_raw_request(%__MODULE__{} = client, request) do
+    typed_runtime? = typed_runtime_enabled?(client, request)
+    request_spec = build_request_spec(client, request, typed_runtime?)
+
+    execute_opts =
+      []
+      |> maybe_put(:retry_opts, request[:retry_opts])
+      |> maybe_put(:typed_responses, typed_runtime?)
+
+    Pristine.execute_request(request_spec, client.context, execute_opts)
   end
 
   defp build_context(%__MODULE__{} = client) do
@@ -226,6 +277,32 @@ defmodule NotionSDK.Client do
       timeout: request[:timeout],
       request: maybe_request_schema(request, typed_runtime?),
       response: maybe_response_schema(request, typed_runtime?)
+    }
+  end
+
+  defp build_request_spec(%__MODULE__{} = client, request, typed_runtime?) do
+    resource = request[:resource] || resource_group(request)
+    retry_group = request[:retry] || retry_group(request, resource)
+
+    %{
+      method: request[:method],
+      path: request[:path],
+      path_params: normalize_map(request[:path_params]),
+      query: normalize_map(request[:query]),
+      body: Map.get(request, :body),
+      form_data: normalize_form_data(request[:form_data]),
+      headers: normalize_map(request[:headers]),
+      auth: Map.get(request, :auth),
+      security: Map.get(request, :security),
+      request_schema: maybe_raw_request_schema(request, typed_runtime?),
+      response_schema: maybe_raw_response_schema(request, typed_runtime?),
+      id: raw_request_id(request),
+      circuit_breaker: resolve_circuit_breaker(client, request[:circuit_breaker], resource),
+      rate_limit: request[:rate_limit] || "notion.integration",
+      resource: resource,
+      retry: retry_group,
+      telemetry: request[:telemetry],
+      timeout: request[:timeout]
     }
   end
 
@@ -318,6 +395,12 @@ defmodule NotionSDK.Client do
       schemas -> {:union, schemas}
     end
   end
+
+  defp maybe_raw_request_schema(_request, false), do: nil
+  defp maybe_raw_request_schema(request, true), do: request[:request_schema]
+
+  defp maybe_raw_response_schema(_request, false), do: nil
+  defp maybe_raw_response_schema(request, true), do: request[:response_schema]
 
   @doc false
   @spec oauth_request_auth(map()) :: map() | nil
@@ -489,6 +572,25 @@ defmodule NotionSDK.Client do
   defp maybe_put(opts, _key, value) when value == %{}, do: opts
   defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 
+  defp generated_request?(request) when is_map(request) do
+    Map.has_key?(request, :call) and
+      (Map.has_key?(request, :path_template) or Map.has_key?(request, :url))
+  end
+
+  defp raw_request?(request) when is_map(request) do
+    Map.has_key?(request, :method) and Map.has_key?(request, :path)
+  end
+
+  defp raw_request_id(%{id: id}) when is_binary(id), do: id
+
+  defp raw_request_id(request) do
+    method =
+      request[:method]
+      |> Atom.to_string()
+
+    "raw:" <> method <> ":" <> Map.get(request, :path, "")
+  end
+
   defp default_user_agent do
     "notion-sdk-elixir/#{package_version()}"
   end
@@ -656,7 +758,7 @@ defmodule NotionSDK.Client do
   defp explicit_circuit_breaker_name?(value), do: String.contains?(value, ":")
 
   defp resource_group(request) do
-    path = request[:path_template] || request[:url] || ""
+    path = request[:path] || request[:path_template] || request[:url] || ""
 
     cond do
       String.starts_with?(path, "/v1/oauth/") ->

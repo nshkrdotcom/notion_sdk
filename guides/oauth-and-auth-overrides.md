@@ -1,5 +1,7 @@
 # OAuth and Auth Overrides
 
+Related guides: `client-configuration.md`, `examples/README.md`.
+
 Normal Notion API calls use bearer auth. OAuth token exchange and token
 lifecycle operations use Basic auth credentials instead. `NotionSDK` supports
 both without forcing you to create separate client types.

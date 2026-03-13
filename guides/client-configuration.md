@@ -2,6 +2,8 @@
 
 `NotionSDK.Client` owns transport setup, default headers, retry behavior, and per-request auth overrides. Most applications only need one client per Notion integration token.
 
+Related guides: `getting-started.md`, `low-level-requests.md`, `versioning-and-compatibility.md`, `errors-retries-and-observability.md`, `oauth-and-auth-overrides.md`.
+
 Resource ids such as page ids, database ids, and block ids are not client configuration. Pass them to endpoint calls instead of `Client.new/1`.
 
 ## Client constructors
@@ -38,6 +40,10 @@ Both return a `%NotionSDK.Client{}` configured with:
 - `typed_responses`: opt in to runtime request validation and generated response structs
 - `oauth2`: explicit bearer-OAuth opt-in for endpoints whose generated security metadata requires `bearerAuth`
 - `foundation`: curated Foundation-backed production runtime settings
+
+The generic transport, retry, telemetry, and path-validation behavior behind
+these options comes from `pristine`. `notion_sdk` keeps the Notion-specific
+classifier, retry groups, breaker grouping, and compatibility defaults locally.
 
 ## Foundation-backed production runtime
 
@@ -249,24 +255,29 @@ NotionSDK.Client.request(client, %{
 
 ## Low-level requests
 
-`NotionSDK.Client.request/2` is the escape hatch when you need to hit a path before a generated wrapper exists or when you want to attach custom headers.
+`NotionSDK.Client.request/2` is the escape hatch when you need to hit a path
+before a generated wrapper exists or when you want to attach custom headers.
+
+End users should prefer the simplified raw request shape:
 
 ```elixir
 {:ok, response} =
   NotionSDK.Client.request(client, %{
-    call: {MyApp.Notion, :list_comments},
     method: :get,
-    path_template: "/v1/comments",
-    url: "/v1/comments",
+    path: "/v1/comments",
     path_params: %{},
     query: %{"page_size" => 25},
-    body: %{},
-    form_data: %{},
+    body: nil,
+    form_data: nil,
     headers: %{"X-Debug-Request" => "true"}
   })
 ```
 
-The required request keys are the same ones the generated modules emit: `call`, `method`, `path_template`, `url`, `path_params`, `query`, `body`, and `form_data`.
+The generated modules still use a richer internal request shape, but that is
+not the recommended user-facing contract anymore.
+
+See `low-level-requests.md` for auth overrides, typed schema refs, and the full
+request-spec walkthrough.
 
 ## Typed responses
 

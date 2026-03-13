@@ -2,6 +2,8 @@
 
 `NotionSDK` is a thin Elixir client for the Notion API. The library stays close to the upstream JSON payloads, exposes the documented API namespaces as generated modules, and layers a small amount of Notion-specific behavior on top of `Pristine`.
 
+Related guides: `client-configuration.md`, `low-level-requests.md`, `versioning-and-compatibility.md`, `capabilities-permissions-and-sharing.md`, `examples/README.md`.
+
 ## Add the dependency
 
 ```elixir
@@ -26,6 +28,9 @@ The client already ships with sensible defaults:
 - Notion API version: `2025-09-03`
 - Timeout: `60_000` ms
 - Retry policy: two retries with exponential backoff
+
+The compatibility contract for newer concepts such as `position` and
+`meeting_notes` lives in `guides/versioning-and-compatibility.md`.
 
 Only configure values you want to override:
 
@@ -155,6 +160,9 @@ The supporting utilities live in:
 
 ## Where to go next
 
-- Read the client options in `guides/client-configuration.md`
-- Use the resource walkthroughs for pages, blocks, search, data sources, uploads, comments, and users
-- Use the error and pagination guides before building higher-level wrappers
+- Read `guides/client-configuration.md` for all client options and production runtime wiring
+- Read `guides/low-level-requests.md` when you need a custom path before a generated wrapper exists
+- Read `guides/versioning-and-compatibility.md` before changing the `Notion-Version` header or relying on newer concepts
+- Read `guides/capabilities-permissions-and-sharing.md` before debugging `403 restricted_resource` failures
+- Use the workflow guides for pages, blocks, data sources, uploads, comments, and users
+- Use `examples/README.md` when you want live proofs against a real Notion workspace

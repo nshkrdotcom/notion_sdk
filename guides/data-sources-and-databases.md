@@ -1,5 +1,7 @@
 # Data Sources and Databases
 
+Related guides: `content-creation-and-mutation.md`, `capabilities-permissions-and-sharing.md`, `versioning-and-compatibility.md`.
+
 The SDK exposes both `NotionSDK.DataSources` and `NotionSDK.Databases` because the upstream Notion surface still documents both namespaces. In practice:
 
 - use `NotionSDK.DataSources` for querying records and template workflows

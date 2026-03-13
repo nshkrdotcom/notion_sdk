@@ -4,6 +4,7 @@ defmodule NotionSDK.Examples.Live do
   alias NotionSDK.Blocks
   alias NotionSDK.Client
   alias NotionSDK.Comments
+  alias NotionSDK.DataSources
   alias NotionSDK.Databases
   alias NotionSDK.FileUploads
   alias NotionSDK.Helpers
@@ -33,13 +34,11 @@ defmodule NotionSDK.Examples.Live do
     Client.new(client_opts_from_env())
   end
 
-  def oauth_bearer_client! do
+  def oauth_bearer_client!(path \\ oauth_token_path()) do
     start!()
 
     Client.new(
-      Keyword.put(client_opts_from_env(), :oauth2,
-        token_source: {FileTokenSource, path: oauth_token_path()}
-      )
+      Keyword.put(client_opts_from_env(), :oauth2, token_source: {FileTokenSource, path: path})
     )
   end
 
@@ -261,6 +260,37 @@ defmodule NotionSDK.Examples.Live do
     end
   end
 
+  def oauth_auth_code! do
+    fetch_env!("NOTION_OAUTH_AUTH_CODE")
+  end
+
+  def oauth_auth_code_or_prompt! do
+    case get_env("NOTION_OAUTH_AUTH_CODE") do
+      value when is_binary(value) and value != "" ->
+        value
+
+      _ ->
+        prompt_oauth_auth_code!()
+    end
+  end
+
+  def oauth_exchange_token_path do
+    case get_env("NOTION_OAUTH_EXCHANGE_TOKEN_PATH") do
+      value when is_binary(value) and value != "" -> Path.expand(value)
+      _ -> Path.join(System.tmp_dir!(), "notion_sdk_example_oauth_exchange.json")
+    end
+  end
+
+  def oauth_revoke_token! do
+    case get_env("NOTION_OAUTH_REVOKE_TOKEN") do
+      value when is_binary(value) and value != "" ->
+        value
+
+      _ ->
+        oauth_exchange_token_from_file!()
+    end
+  end
+
   def retrieve_page!(client) do
     Pages.retrieve(client, %{"page_id" => page_id!()})
     |> ok!("NotionSDK.Pages.retrieve/2")
@@ -284,6 +314,58 @@ defmodule NotionSDK.Examples.Live do
   end
 
   def default_page_size, do: @default_page_size
+
+  def unique_name(prefix) when is_binary(prefix) do
+    "#{prefix} #{System.system_time(:millisecond)}-#{System.unique_integer([:positive])}"
+  end
+
+  def rich_text(text) when is_binary(text) do
+    [%{"text" => %{"content" => text}}]
+  end
+
+  def title_property(text) when is_binary(text) do
+    %{"title" => rich_text(text)}
+  end
+
+  def page_title_properties(text) when is_binary(text) do
+    %{"title" => title_property(text)}
+  end
+
+  def data_source_page_properties!(client, text) when is_binary(text) do
+    %{data_source_title_property!(client).name => title_property(text)}
+  end
+
+  def paragraph_block(text) when is_binary(text) do
+    %{
+      "type" => "paragraph",
+      "paragraph" => %{
+        "rich_text" => rich_text(text)
+      }
+    }
+  end
+
+  def heading_2_block(text) when is_binary(text) do
+    %{
+      "type" => "heading_2",
+      "heading_2" => %{
+        "rich_text" => rich_text(text)
+      }
+    }
+  end
+
+  def basic_data_source_properties do
+    %{
+      "Name" => %{"title" => %{}},
+      "Status" => %{
+        "select" => %{
+          "options" => [
+            %{"name" => "To Do", "color" => "red"},
+            %{"name" => "Done", "color" => "green"}
+          ]
+        }
+      }
+    }
+  end
 
   def print_json!(label, value) when is_binary(label) do
     IO.puts("#{label}:")
@@ -383,6 +465,16 @@ defmodule NotionSDK.Examples.Live do
     }
   end
 
+  def comment_summary(comment) when is_map(comment) do
+    %{
+      "id" => comment["id"],
+      "object" => comment["object"],
+      "discussion_id" => comment["discussion_id"],
+      "parent" => comment["parent"],
+      "plain_text" => plain_text(comment["rich_text"] || [])
+    }
+  end
+
   def put_if_present(map, _key, nil), do: map
   def put_if_present(map, _key, ""), do: map
   def put_if_present(map, key, value), do: Map.put(map, key, value)
@@ -414,6 +506,12 @@ defmodule NotionSDK.Examples.Live do
     :ok
   end
 
+  def cleanup_oauth_exchange_token_file! do
+    path = oauth_exchange_token_path()
+    File.rm(path)
+    :ok
+  end
+
   def get_env(name) when is_binary(name) do
     System.get_env(name)
   end
@@ -432,6 +530,150 @@ defmodule NotionSDK.Examples.Live do
       "page_size" => default_page_size()
     })
     |> ok!("NotionSDK.Blocks.list_children/2")
+  end
+
+  def first_child_block!(client, block_id) when is_binary(block_id) do
+    children =
+      Blocks.list_children(client, %{
+        "block_id" => block_id,
+        "page_size" => 1
+      })
+      |> ok!("NotionSDK.Blocks.list_children/2")
+
+    case Map.get(children, "results", []) do
+      [%{"id" => id} = block | _rest] when is_binary(id) ->
+        block
+
+      _ ->
+        raise "no child blocks were returned for #{block_id}"
+    end
+  end
+
+  def trash_page!(client, page_id) when is_binary(page_id) do
+    Pages.update(client, %{
+      "page_id" => page_id,
+      "in_trash" => true
+    })
+    |> ok!("NotionSDK.Pages.update/2")
+  end
+
+  def trash_database!(client, database_id) when is_binary(database_id) do
+    Databases.update(client, %{
+      "database_id" => database_id,
+      "in_trash" => true
+    })
+    |> ok!("NotionSDK.Databases.update/2")
+  end
+
+  def trash_data_source!(client, data_source_id) when is_binary(data_source_id) do
+    DataSources.update(client, %{
+      "data_source_id" => data_source_id,
+      "in_trash" => true
+    })
+    |> ok!("NotionSDK.DataSources.update/2")
+  end
+
+  def create_comment!(client, body) when is_map(body) do
+    Client.request(client, %{
+      method: :post,
+      path: "/v1/comments",
+      body: body
+    })
+    |> ok!("POST /v1/comments")
+  end
+
+  def save_oauth_exchange_token!(response) when is_map(response) do
+    path = oauth_exchange_token_path()
+    token = Pristine.OAuth2.Token.from_backend_token(response)
+
+    case FileTokenSource.put(token, path: path, create_dirs?: true) do
+      :ok ->
+        path
+
+      {:error, reason} ->
+        raise "failed to save exchanged oauth token to #{path}: #{inspect(reason)}"
+    end
+  end
+
+  def data_source_title_property!(client) do
+    data_source_id = data_source_id!(client)
+
+    data_source =
+      DataSources.retrieve(client, %{"data_source_id" => data_source_id})
+      |> ok!("NotionSDK.DataSources.retrieve/2")
+
+    properties = fetch_map!(data_source, "properties", "data_source.properties")
+
+    {name, definition} =
+      Enum.find(properties, fn {_name, property} ->
+        is_map(property) and Map.get(property, "type") == "title"
+      end) ||
+        raise "data source #{data_source_id} does not expose a title property"
+
+    %{
+      id: Map.get(definition, "id"),
+      name: name
+    }
+  end
+
+  defp prompt_oauth_auth_code! do
+    credentials = oauth_credentials!()
+    redirect_uri = fetch_env!("NOTION_OAUTH_REDIRECT_URI")
+
+    authorize_url =
+      NotionSDK.OAuth.authorize_url(
+        client_id: credentials["client_id"],
+        redirect_uri: redirect_uri
+      )
+      |> ok!("NotionSDK.OAuth.authorize_url/1")
+
+    IO.puts("""
+    NOTION_OAUTH_AUTH_CODE is not set.
+
+    Open this authorization URL, approve access, then paste either:
+    - the final redirected URL, or
+    - the raw authorization code
+
+    #{authorize_url}
+    """)
+
+    case IO.gets("Authorization code or redirected URL: ") do
+      nil ->
+        raise "expected an authorization code or redirected URL on stdin"
+
+      response ->
+        response
+        |> String.trim()
+        |> extract_oauth_auth_code!()
+    end
+  end
+
+  defp extract_oauth_auth_code!(value) when is_binary(value) do
+    trimmed = String.trim(value)
+
+    cond do
+      trimmed == "" ->
+        raise "authorization code input was empty"
+
+      String.contains?(trimmed, "://") ->
+        trimmed
+        |> URI.parse()
+        |> extract_oauth_code_from_uri!()
+
+      true ->
+        trimmed
+    end
+  end
+
+  defp extract_oauth_code_from_uri!(%URI{query: query}) when is_binary(query) do
+    case URI.decode_query(query) do
+      %{"code" => code} when is_binary(code) and code != "" -> code
+      _ -> raise "redirected URL did not contain a code query param"
+    end
+  end
+
+  defp extract_oauth_code_from_uri!(_uri) do
+    raise "redirected URL did not contain a query string"
   end
 
   defp oauth_token_from_file! do
@@ -455,6 +697,31 @@ defmodule NotionSDK.Examples.Live do
         for a registered HTTPS redirect URI, or `mix notion.oauth --save` for a
         registered loopback redirect URI. Set NOTION_OAUTH_TOKEN_PATH only if
         you want to override the default saved path.
+        """
+
+      {:error, reason} ->
+        raise "failed to load #{path}: #{inspect(reason)}"
+    end
+  end
+
+  defp oauth_exchange_token_from_file! do
+    path = oauth_exchange_token_path()
+
+    case FileTokenSource.fetch(path: path) do
+      {:ok, %Pristine.OAuth2.Token{access_token: access_token}}
+      when is_binary(access_token) and access_token != "" ->
+        access_token
+
+      {:ok, %Pristine.OAuth2.Token{}} ->
+        raise """
+        #{path} does not contain an access token
+        run examples/34_oauth_token_exchange.exs first or set NOTION_OAUTH_REVOKE_TOKEN
+        """
+
+      :error ->
+        raise """
+        #{path} does not exist
+        run examples/34_oauth_token_exchange.exs first or set NOTION_OAUTH_REVOKE_TOKEN
         """
 
       {:error, reason} ->

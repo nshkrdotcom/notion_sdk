@@ -86,7 +86,7 @@ defmodule NotionSDK.MixProject do
 
   defp docs do
     [
-      main: "readme",
+      main: "readme-1",
       assets: %{"assets" => "assets"},
       logo: "assets/notion_sdk.svg",
       canonical: "https://hexdocs.pm/notion_sdk",
@@ -104,13 +104,21 @@ defmodule NotionSDK.MixProject do
       # Getting Started
       "guides/getting-started.md",
       "guides/client-configuration.md",
+      "guides/versioning-and-compatibility.md",
       # Working with Notion
+      "guides/capabilities-permissions-and-sharing.md",
       "guides/pages-blocks-and-search.md",
+      "guides/content-creation-and-mutation.md",
       "guides/data-sources-and-databases.md",
       "guides/file-uploads-comments-and-users.md",
+      "guides/file-uploads-and-page-attachments.md",
+      # Examples
+      "examples/README.md",
+      "examples/cookbook/README.md",
       # Authentication & Security
       "guides/oauth-and-auth-overrides.md",
       # Advanced
+      "guides/low-level-requests.md",
       "guides/pagination-helpers-and-guards.md",
       "guides/errors-retries-and-observability.md",
       # Internals
@@ -127,20 +135,26 @@ defmodule NotionSDK.MixProject do
       {"Getting Started",
        [
          "guides/getting-started.md",
-         "guides/client-configuration.md"
+         "guides/client-configuration.md",
+         "guides/versioning-and-compatibility.md"
        ]},
       {"Working with Notion",
        [
+         "guides/capabilities-permissions-and-sharing.md",
          "guides/pages-blocks-and-search.md",
+         "guides/content-creation-and-mutation.md",
          "guides/data-sources-and-databases.md",
-         "guides/file-uploads-comments-and-users.md"
+         "guides/file-uploads-comments-and-users.md",
+         "guides/file-uploads-and-page-attachments.md"
        ]},
+      {"Examples", ["examples/README.md", "examples/cookbook/README.md"]},
       {"Authentication & Security",
        [
          "guides/oauth-and-auth-overrides.md"
        ]},
       {"Advanced",
        [
+         "guides/low-level-requests.md",
          "guides/pagination-helpers-and-guards.md",
          "guides/errors-retries-and-observability.md"
        ]},

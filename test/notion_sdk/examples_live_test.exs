@@ -13,10 +13,15 @@ defmodule NotionSDK.Examples.LiveTest do
     "NOTION_EXAMPLE_DATABASE_ID",
     "NOTION_EXAMPLE_FILE_UPLOAD_ID",
     "NOTION_EXAMPLE_FILE_URL",
+    "NOTION_EXAMPLE_FILE_FILENAME",
+    "NOTION_EXAMPLE_FILE_CONTENT_TYPE",
     "NOTION_EXAMPLE_PAGE_ID",
     "NOTION_EXAMPLE_PROPERTY_ID",
     "NOTION_EXAMPLE_PROPERTY_NAME",
     "NOTION_EXAMPLE_SEARCH_QUERY",
+    "NOTION_OAUTH_AUTH_CODE",
+    "NOTION_OAUTH_EXCHANGE_TOKEN_PATH",
+    "NOTION_OAUTH_REVOKE_TOKEN",
     "NOTION_OAUTH_TOKEN_PATH",
     "XDG_CONFIG_HOME"
   ]
@@ -55,6 +60,21 @@ defmodule NotionSDK.Examples.LiveTest do
 
     assert Live.oauth_token_path() ==
              Path.join([tmp_dir, "notion_sdk", "oauth", "notion.json"])
+  end
+
+  test "oauth exchange token path defaults to a temp file and honors env override" do
+    assert Live.oauth_exchange_token_path() ==
+             Path.join(System.tmp_dir!(), "notion_sdk_example_oauth_exchange.json")
+
+    System.put_env("NOTION_OAUTH_EXCHANGE_TOKEN_PATH", "/tmp/custom-notion-oauth.json")
+
+    assert Live.oauth_exchange_token_path() == "/tmp/custom-notion-oauth.json"
+  end
+
+  test "oauth auth code helper prefers the explicit env var" do
+    System.put_env("NOTION_OAUTH_AUTH_CODE", "example-auth-code")
+
+    assert Live.oauth_auth_code_or_prompt!() == "example-auth-code"
   end
 
   test "ok! raises with structured Pristine error details" do

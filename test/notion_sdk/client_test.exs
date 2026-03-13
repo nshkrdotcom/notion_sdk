@@ -494,6 +494,56 @@ defmodule NotionSDK.ClientTest do
       assert request.headers["Notion-Version"] == "2025-09-03"
     end
 
+    test "accepts the simplified raw request shape for query params and custom headers" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(client, %{
+                 method: :get,
+                 path: "/v1/comments",
+                 path_params: %{},
+                 query: %{"page_size" => 25},
+                 body: nil,
+                 form_data: nil,
+                 headers: %{"X-Custom-Header" => "custom-value"}
+               })
+
+      assert_receive {:transport_request, request, _context}
+      assert request.url == "https://api.notion.com/v1/comments?page_size=25"
+      assert request.headers["Authorization"] == "Bearer secret_test_token"
+      assert request.headers["X-Custom-Header"] == "custom-value"
+      assert request.headers["Notion-Version"] == "2025-09-03"
+    end
+
+    test "supports auth overrides on the simplified raw request shape" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(client, %{
+                 method: :get,
+                 path: "/v1/users/me",
+                 path_params: %{},
+                 query: %{},
+                 body: nil,
+                 form_data: nil,
+                 headers: %{},
+                 auth: false
+               })
+
+      assert_receive {:transport_request, request, _context}
+      refute Map.has_key?(request.headers, "Authorization")
+    end
+
     test "maps additional_data from validation errors without fabricating retry_after" do
       client =
         Client.new(
@@ -623,6 +673,60 @@ defmodule NotionSDK.ClientTest do
                  "filename" => "test.txt",
                  "content_type" => "text/plain",
                  "mode" => "not-a-real-mode"
+               })
+
+      refute_receive {:transport_request, _request, _context}
+    end
+
+    test "raw requests materialize typed responses when response_schema is provided" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          typed_responses: true,
+          transport: TestTransport,
+          transport_opts: [response: ok_response(page_response_body())]
+        )
+
+      assert {:ok, %NotionSDK.PageObjectResponse{} = response} =
+               Client.request(client, %{
+                 method: :get,
+                 path: "/v1/pages/{page_id}",
+                 path_params: %{"page_id" => "00000000-0000-0000-0000-000000000010"},
+                 query: %{},
+                 body: nil,
+                 form_data: nil,
+                 headers: %{},
+                 response_schema: {NotionSDK.PageObjectResponse, :t}
+               })
+
+      assert response.object == "page"
+      assert %DateTime{} = response.created_time
+    end
+
+    test "raw requests validate request payloads when request_schema is provided" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          typed_responses: true,
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:error, %NotionSDK.Error{code: :validation}} =
+               Client.request(client, %{
+                 method: :post,
+                 path: "/v1/file_uploads",
+                 path_params: %{},
+                 query: %{},
+                 body: %{
+                   "filename" => "test.txt",
+                   "content_type" => "text/plain",
+                   "mode" => "not-a-real-mode"
+                 },
+                 form_data: nil,
+                 headers: %{},
+                 request_schema: {NotionSDK.FileUploads, :create_json_req},
+                 response_schema: {NotionSDK.FileUploadObjectResponse, :t}
                })
 
       refute_receive {:transport_request, _request, _context}
@@ -866,6 +970,45 @@ defmodule NotionSDK.ClientTest do
 
       assert oauth_request.metadata.endpoint.circuit_breaker ==
                "notion:api.notion.com:oauth_control"
+    end
+
+    test "derives endpoint metadata for the simplified raw request shape too" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          foundation: [
+            integration_key: {:integration, :demo},
+            rate_limit: [enabled: false],
+            circuit_breaker: [enabled: false],
+            telemetry: [enabled: false]
+          ],
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(client, %{
+                 method: :post,
+                 path: "/v1/file_uploads/{file_upload_id}/send",
+                 path_params: %{"file_upload_id" => "upload-123"},
+                 query: %{},
+                 body: nil,
+                 form_data: %{
+                   "file" => %{
+                     "filename" => "test.txt",
+                     "data" => "payload",
+                     "content_type" => "text/plain"
+                   }
+                 },
+                 headers: %{}
+               })
+
+      assert_receive {:transport_request, request, _context}
+      assert request.metadata.endpoint.resource == "file_upload_send"
+      assert request.metadata.endpoint.retry == "notion.file_upload_send"
+
+      assert request.metadata.endpoint.circuit_breaker ==
+               "notion:api.notion.com:file_upload_send"
     end
 
     test "shares rate-limit learning across endpoints for one integration" do

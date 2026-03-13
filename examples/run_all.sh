@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 SMOKE=(
   "00_smoke.exs"
+  "19_retrieve_user.exs"
 )
 
 CONTENT=(
@@ -31,10 +32,37 @@ FILES=(
   "15_upload_small_text_file.exs"
 )
 
+MUTATIONS=(
+  "20_create_page.exs"
+  "21_update_page.exs"
+  "22_move_page.exs"
+  "23_update_page_markdown.exs"
+  "24_append_block_children.exs"
+  "25_update_block.exs"
+  "26_delete_block.exs"
+  "27_create_comment.exs"
+  "28_retrieve_comment.exs"
+  "29_create_database.exs"
+  "30_update_database.exs"
+  "31_create_data_source.exs"
+  "32_update_data_source.exs"
+  "33_complete_file_upload.exs"
+)
+
 OAUTH=(
   "16_oauth_introspect.exs"
-  "18_oauth_refresh_and_get_self.exs"
   "17_oauth_bearer_get_self.exs"
+  "18_oauth_refresh_and_get_self.exs"
+  "34_oauth_token_exchange.exs"
+  "35_oauth_revoke.exs"
+)
+
+COOKBOOK=(
+  "cookbook/01_create_page_with_blocks.exs"
+  "cookbook/02_create_and_query_data_source.exs"
+  "cookbook/03_upload_and_attach_file.exs"
+  "cookbook/04_search_paginate_and_branch.exs"
+  "cookbook/05_oauth_onboard_and_call_api.exs"
 )
 
 usage() {
@@ -42,12 +70,14 @@ usage() {
 usage: ./examples/run_all.sh <suite>
 
 Suites:
-  smoke       Run the first real smoke flow.
+  smoke       Run the core auth and users smoke flows.
   content     Run page, block, and comment examples.
   data        Run database and data source examples.
   files       Run file upload examples, including real upload creation.
+  mutations   Run write-heavy page, block, comment, database, data source, and file-complete proofs.
   all         Run every non-OAuth example.
   oauth       Run the real OAuth examples.
+  cookbook    Run the task-oriented workflow examples.
   everything  Run every example, including OAuth.
 
 This runner is strict:
@@ -58,6 +88,11 @@ This runner is strict:
 File suite prerequisite:
   - `files`, `all`, and `everything` require `NOTION_EXAMPLE_FILE_URL`
     for `13_create_external_file_upload.exs`
+  - `mutations`, `all`, and `everything` also include
+    `33_complete_file_upload.exs`, which requires a workspace plan that
+    supports multipart uploads
+  - `34_oauth_token_exchange.exs` uses `NOTION_OAUTH_AUTH_CODE` when set,
+    otherwise it prints an authorization URL and prompts for the redirected URL
 
 Read examples/README.md before running anything beyond the smoke flow.
 EOF
@@ -89,14 +124,20 @@ build_suite() {
     files)
       printf '%s\n' "${FILES[@]}"
       ;;
+    mutations)
+      printf '%s\n' "${MUTATIONS[@]}"
+      ;;
     all)
-      printf '%s\n' "${SMOKE[@]}" "${CONTENT[@]}" "${DATA[@]}" "${FILES[@]}"
+      printf '%s\n' "${SMOKE[@]}" "${CONTENT[@]}" "${DATA[@]}" "${FILES[@]}" "${MUTATIONS[@]}"
       ;;
     oauth)
       printf '%s\n' "${OAUTH[@]}"
       ;;
+    cookbook)
+      printf '%s\n' "${COOKBOOK[@]}"
+      ;;
     everything)
-      printf '%s\n' "${SMOKE[@]}" "${CONTENT[@]}" "${DATA[@]}" "${FILES[@]}" "${OAUTH[@]}"
+      printf '%s\n' "${SMOKE[@]}" "${CONTENT[@]}" "${DATA[@]}" "${FILES[@]}" "${MUTATIONS[@]}" "${OAUTH[@]}"
       ;;
     *)
       echo "unknown suite: ${suite}" >&2

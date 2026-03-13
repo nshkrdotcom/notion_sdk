@@ -1,5 +1,7 @@
 # File Uploads, Comments, and Users
 
+Related guides: `file-uploads-and-page-attachments.md`, `capabilities-permissions-and-sharing.md`, `examples/README.md`.
+
 These namespaces are smaller, but they cover important workflow edges: file ingestion, comment inspection, and workspace identity.
 
 ## File upload lifecycle
@@ -77,7 +79,8 @@ Retrieve a single comment:
   })
 ```
 
-The SDK also exposes `NotionSDK.Comments.create/2`. Use the generated API reference for that function as the source of truth for the exact request keys emitted by your current build.
+For comment-creation flows that need the full parent-or-discussion body shape,
+use `NotionSDK.Client.request/2` with `method: :post` and `path: "/v1/comments"`.
 
 ## Inspect workspace users
 

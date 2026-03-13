@@ -10,9 +10,45 @@
 
 # NotionSDK
 
-Elixir SDK for the Notion API, generated from the official Notion docs snippets through `oapi_generator` and executed through `pristine`.
+Elixir SDK for the Notion API, generated from committed upstream Notion
+reference fixtures and executed through the shared `pristine` runtime.
 
-## Runtime usage
+## What this SDK is
+
+`NotionSDK` is intentionally thin:
+
+- generated endpoint modules stay close to upstream JSON payloads
+- `NotionSDK.Client` owns Notion-specific runtime defaults and auth behavior
+- generic transport, retry, telemetry, and path-safety behavior comes from `pristine`
+- hand-written guides explain the runtime contract, compatibility story, and common workflows around the generated API reference
+
+The client owns runtime concerns such as auth, retries, transport, and headers.
+Workspace resource ids stay on each request:
+
+```elixir
+{:ok, page} =
+  NotionSDK.Pages.retrieve(client, %{
+    "page_id" => "00000000-0000-0000-0000-000000000000"
+  })
+```
+
+## Install
+
+```elixir
+def deps do
+  [
+    {:notion_sdk, "~> 0.1.0"}
+  ]
+end
+```
+
+Then fetch dependencies:
+
+```bash
+mix deps.get
+```
+
+## Make one request
 
 Create a client with a bearer token:
 
@@ -20,20 +56,82 @@ Create a client with a bearer token:
 client = NotionSDK.Client.new(auth: System.fetch_env!("NOTION_TOKEN"))
 ```
 
-Or opt into OAuth-backed bearer auth explicitly for bearer-authenticated API endpoints only:
+Fetch the bot user tied to that token:
 
 ```elixir
-client =
+{:ok, me} = NotionSDK.Users.get_self(client)
+```
+
+Search the workspace:
+
+```elixir
+{:ok, result} =
+  NotionSDK.Search.search(client, %{
+    "query" => "Roadmap",
+    "page_size" => 10
+  })
+```
+
+Responses stay as JSON-shaped maps by default. Opt in to typed request/response
+validation and generated structs only when you want them:
+
+```elixir
+typed_client =
   NotionSDK.Client.new(
-    oauth2: [
-      token_source:
-        {Pristine.Adapters.TokenSource.Static,
-         token: %Pristine.OAuth2.Token{access_token: System.fetch_env!("NOTION_OAUTH_ACCESS_TOKEN")}}
-    ]
+    auth: System.fetch_env!("NOTION_TOKEN"),
+    typed_responses: true
   )
 ```
 
-That opt-in does not turn the whole SDK into an "OAuth mode". Bearer-authenticated API endpoints can use the token source, while OAuth control endpoints still require explicit Basic auth credentials or the high-level helper functions below.
+## Docs map
+
+- [Getting Started](guides/getting-started.md): install, defaults, client creation, and first calls
+- [Client Configuration](guides/client-configuration.md): client options, Foundation runtime integration, retry tuning, typed responses, and transport overrides
+- [Versioning and Compatibility](guides/versioning-and-compatibility.md): default Notion version, override rules, deprecated database messaging, and newer generated concepts
+- [Capabilities, Permissions, and Sharing](guides/capabilities-permissions-and-sharing.md): what must be enabled or shared before content, comment, and user calls succeed
+- [Pages, Blocks, and Search](guides/pages-blocks-and-search.md): read-oriented page, block, markdown, and search flows
+- [Content Creation and Mutation](guides/content-creation-and-mutation.md): create, move, update, and append content
+- [Data Sources and Databases](guides/data-sources-and-databases.md): metadata, queries, templates, and the `2025-09-03` split
+- [File Uploads, Comments, and Users](guides/file-uploads-comments-and-users.md): namespace walkthroughs and smaller edge workflows
+- [File Uploads and Page Attachments](guides/file-uploads-and-page-attachments.md): upload-complete-attach workflows for files, covers, icons, and comments
+- [OAuth and Auth Overrides](guides/oauth-and-auth-overrides.md): authorization URLs, token exchange, saved token files, and request-scoped auth
+- [Low-Level Requests](guides/low-level-requests.md): the user-facing custom-request escape hatch on `NotionSDK.Client.request/2`
+- [Pagination, Helpers, and Guards](guides/pagination-helpers-and-guards.md): helper surface around paginated responses and Notion ids
+- [Errors, Retries, and Observability](guides/errors-retries-and-observability.md): `%NotionSDK.Error{}`, retry groups, request ids, and telemetry
+- [Regeneration and Parity Workflow](guides/regeneration-and-parity.md): snapshot refresh, code generation, and the JS oracle contract
+
+## Examples map
+
+- [Live Examples README](examples/README.md): the real-service regression-proof suite, fixture requirements, mutation notes, and grouped runner commands
+- [Cookbook Examples README](examples/cookbook/README.md): task-oriented workflows that layer multiple endpoints into one runnable flow
+- `examples/run_all.sh`: run `smoke`, `content`, `data`, `files`, `mutations`, `oauth`, `cookbook`, `all`, or `everything`
+- Generated module docs on HexDocs: the source of truth for exact request/response shapes on each endpoint wrapper
+
+The live examples use `NOTION_EXAMPLE_*` environment variables for fixture ids
+and URLs. The SDK itself does not read those values unless an example passes
+them into a request.
+
+For custom requests that are not covered by a generated wrapper yet, use the
+simplified raw request shape documented in
+[Low-Level Requests](guides/low-level-requests.md). That escape hatch still runs
+through the shared `pristine` request pipeline and path-safety checks.
+
+## OAuth onboarding
+
+Most public integrations already have a registered HTTPS redirect URI in
+Notion. That is the easiest onboarding path:
+
+```bash
+export NOTION_OAUTH_CLIENT_ID="..."
+export NOTION_OAUTH_CLIENT_SECRET="..."
+export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
+
+mix notion.oauth --save --manual --no-browser
+```
+
+That flow prints the authorization URL, waits for approval in the browser, then
+exchanges the temporary code and saves the token JSON to
+`~/.config/notion_sdk/oauth/notion.json` by default.
 
 For persisted bearer auth, point the client at the generic file token source:
 
@@ -48,184 +146,49 @@ client =
   )
 ```
 
-Set `NOTION_OAUTH_TOKEN_PATH` only when you want to override that default save
-location.
+Use the full walkthrough in [OAuth and Auth Overrides](guides/oauth-and-auth-overrides.md) for loopback redirects, programmatic authorization URLs, refresh flows, and explicit Basic auth overrides on OAuth control endpoints.
 
-The client only owns runtime concerns such as auth, retries, transport, and headers. It does not require a page id, database id, or any other workspace resource id at initialization time. Those stay on each request:
+## Compatibility, API versions, and newer concepts
 
-```elixir
-{:ok, page} =
-  NotionSDK.Pages.retrieve(client, %{
-    "page_id" => "00000000-0000-0000-0000-000000000000"
-  })
-```
+The public default remains:
 
-Responses stay as JSON-shaped maps by default. Opt in to typed response materialization when you want generated structs and runtime request/response validation:
+- Notion API version header: `2025-09-03`
+- JS SDK oracle: `@notionhq/client` `5.12.0`
 
-```elixir
-typed_client =
-  NotionSDK.Client.new(
-    auth: System.fetch_env!("NOTION_TOKEN"),
-    typed_responses: true
-  )
-```
-
-The live examples use `NOTION_EXAMPLE_*` environment variables for fixture ids and URLs. The SDK itself does not read those values unless an example passes them into a request.
-
-## Production Runtime With Foundation
-
-`NotionSDK.Client` exposes a narrow `foundation:` option for production-only
-coordination. It compiles down into the shared
-`Pristine.foundation_context/1` / `Pristine.Profiles.Foundation` runtime path
-without leaking raw `pristine` wiring into your application code:
+You can override the version header per client:
 
 ```elixir
 client =
   NotionSDK.Client.new(
     auth: System.fetch_env!("NOTION_TOKEN"),
-    foundation: [
-      integration_key: {:my_app, :notion, :prod},
-      rate_limit: [registry: MyApp.NotionRateLimits],
-      circuit_breaker: [registry: MyApp.NotionBreakers],
-      telemetry: [metadata: %{service: :notion}],
-      dispatch: [enabled: true, dispatch: MyApp.ApiDispatch]
-    ]
+    notion_version: "2025-09-03"
   )
 ```
 
-Important runtime semantics:
+The vendored JS SDK README documents both `2025-09-03` and `2026-03-11`.
+`notion_sdk` does not claim a blanket `2026-03-11` default today. Its public
+contract is narrower: `2025-09-03` by default, plus additive newer schema
+concepts that are already present in the committed generated surface.
 
-- shared rate limiting is keyed per integration, not per endpoint
-- `429` responses update the shared limiter and do not count as circuit-breaker failures
-- caller-side `4xx` responses such as `401`, `404`, and `422` are ignored by the circuit breaker instead of counting as success
-- `408`/`500`/`502`/`503`/`504` and transport failures count against breaker health
-- only clearly transient transport failures are retried automatically
-- breaker names and pool routing are grouped by Notion resources such as `core_api`, `file_upload_send`, and `oauth_control`
-- generated request maps carry stable runtime metadata for resource, retry group, breaker group, and rate-limit scope; low-level ad hoc requests fall back to client inference only when those fields are omitted
-- `dispatch` is optional and expects a started `Foundation.Dispatch` process that your application owns; registered names such as `MyApp.ApiDispatch` are supported
-- Foundation registries and dispatch processes are ETS/process local, not cluster-wide coordination
+That generated surface currently includes newer concepts such as:
 
-The generic runtime wiring now lives in Pristine. `notion_sdk` keeps the
-provider-specific parts locally:
+- block append `position` with `after_block`, `start`, and `end`
+- page create `position` with `after_block`, `page_start`, and `page_end`
+- `in_trash` fields on modern page, block, database, data source, and upload responses
+- `NotionSDK.MeetingNotesBlockObjectResponse`
 
-- Notion result classification
-- Notion retry groups and breaker grouping
-- integration-key derivation rules
-- request metadata inference for low-level calls
+Use [Versioning and Compatibility](guides/versioning-and-compatibility.md) for
+the detailed support contract and migration guidance.
 
-### Telemetry Export
+## Parity and regeneration
 
-Use the client's underlying Pristine context when you want to attach a
-TelemetryReporter exporter:
+Surface proved in this package today:
 
-```elixir
-children = [
-  {Finch, name: NotionSDK.Finch},
-  Pristine.Profiles.Foundation.reporter_child_spec(
-    name: MyApp.NotionTelemetryReporter,
-    transport: MyApp.TelemetryTransport
-  )
-]
+- 35 documented endpoint definitions in the committed parity matrix
+- request building for OAuth, markdown, multipart uploads, and custom headers
+- helper behavior, retry behavior, and error mapping
 
-{:ok, handler_id} =
-  Pristine.Profiles.Foundation.attach_reporter(
-    client.context,
-    reporter: MyApp.NotionTelemetryReporter
-  )
-```
-
-That keeps NotionSDK on normal `:telemetry` events while still exporting the
-same stream externally.
-
-## Programmatic OAuth Onboarding
-
-Most public integrations already have a registered HTTPS redirect URI in
-Notion. That is the easiest path:
-
-```bash
-export NOTION_OAUTH_CLIENT_ID="..."
-export NOTION_OAUTH_CLIENT_SECRET="..."
-export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
-
-mix notion.oauth --save --manual --no-browser
-```
-
-`NOTION_OAUTH_REDIRECT_URI` is the redirect URI, also called the callback URL.
-If Notion shows you an `Authorization URL`, use the exact decoded value from its
-`redirect_uri=...` parameter.
-
-What that does:
-
-- prints the Notion authorization URL
-- waits for you to approve access in the browser
-- asks you to paste back the final redirected URL
-- exchanges the temporary code for access and refresh tokens
-- saves the token JSON to `~/.config/notion_sdk/oauth/notion.json` by default
-
-Important distinctions:
-
-- use a redirect URI already registered under your Notion integration's
-  `OAuth Domain & URIs` settings
-- the Notion `Authorization URL` is the browser-entry URL for OAuth; it is not
-  an access token
-- the Notion `Webhook URL` field is unrelated to OAuth redirect URIs
-
-If you explicitly register a literal loopback redirect URI such as
-`http://127.0.0.1:40071/callback` in Notion, you can use the automatic callback
-capture flow instead:
-
-```bash
-export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
-mix notion.oauth --save
-```
-
-Use `mix notion.oauth refresh` to explicitly refresh the saved file in place.
-`NOTION_OAUTH_TOKEN_PATH` is only needed when you want to override the default
-save location. The live OAuth examples use that same default path
-automatically.
-
-Use the helper layer on `NotionSDK.OAuth` to generate authorization URLs and exchange codes without falling back to shell or `curl` flows:
-
-```elixir
-{:ok, auth_request} =
-  NotionSDK.OAuth.authorization_request(
-    client_id: System.fetch_env!("NOTION_OAUTH_CLIENT_ID"),
-    redirect_uri: "https://example.com/callback",
-    generate_state: true
-  )
-
-{:ok, token} =
-  NotionSDK.OAuth.exchange_code("code-from-callback",
-    client_id: System.fetch_env!("NOTION_OAUTH_CLIENT_ID"),
-    client_secret: System.fetch_env!("NOTION_OAUTH_CLIENT_SECRET"),
-    redirect_uri: "https://example.com/callback"
-  )
-```
-
-Per the current Notion OAuth docs, the authorization URL should include both
-`redirect_uri` and `owner: "user"`. `NotionSDK.OAuth.authorization_request/1`
-defaults `owner=user` and fails clearly if `redirect_uri` is missing.
-`pristine` supports PKCE generically, but the current Notion docs do not
-document PKCE support, so it is omitted here.
-
-`NOTION_OAUTH_ACCESS_TOKEN` in examples is the access token returned by that
-code exchange. It is not a dashboard field shown on the Notion integration
-settings page. `NOTION_OAUTH_TOKEN_PATH` is only an optional override for the
-saved JSON token file path.
-Notion's OAuth docs do not expose expiry metadata you can rely on for
-transparent pre-expiry refresh, so `notion_sdk` keeps refresh explicit through
-`mix notion.oauth refresh` and the live refresh example instead of claiming
-automatic Notion token refresh inside bearer-authenticated requests.
-
-## Parity target
-
-- JS SDK oracle: `@notionhq/client` `5.12.0`
-- Default Notion API version: `2025-09-03`
-- Surface proved in this package: 35 documented endpoint definitions, helper behavior, retry behavior, request building, and error mapping
-
-## Regeneration
-
-The committed wrapper tasks are the supported path:
+Supported maintenance commands:
 
 ```bash
 mix notion.generate
@@ -233,51 +196,10 @@ mix notion.refresh
 mix notion.refresh --snapshots-only
 ```
 
-The script wrappers remain available as direct entry points:
+Use [Regeneration and Parity Workflow](guides/regeneration-and-parity.md) for
+the artifact map, refresh steps, and oracle details.
 
-```bash
-elixir scripts/generate_notion_sdk.exs
-elixir scripts/refresh_notion_sdk.exs
-```
-
-`mix notion.refresh` performs five steps:
-
-1. snapshots the upstream Notion docs pages and vendored JS SDK oracle files into `priv/upstream/snapshots/`
-2. extracts the OpenAPI fixtures used for generation into `priv/upstream/reference/`
-3. persists structured page-context artifacts into `priv/upstream/reference_context/`
-4. regenerates the SDK surface and bridge artifacts
-5. writes `priv/generated/refresh_report.json` with grouped diffs for review
-
-`mix notion.generate` regenerates from the committed extracted fixtures under
-`priv/upstream/reference/` and `priv/upstream/reference_context/`. A sibling
-`notion_docs` checkout is only required for `mix notion.refresh` or other flows
-that need to re-extract those fixtures from upstream markdown.
-
-## Key artifacts
-
-- `priv/upstream/reference/*.yaml`: extracted upstream OpenAPI fixtures
-- `priv/upstream/reference_context/*.json`: persisted page-context artifacts keyed by slug and `{method, path}`
-- `priv/upstream/supplemental/*.yaml`: committed supplemental specs
-- `priv/upstream/snapshots/`: raw upstream snapshot inputs for review
-- `priv/generated/manifest.json`: generated endpoint manifest
-- `priv/generated/docs_manifest.json`: shared `pristine` docs-manifest projection for generated review
-- `priv/generated/open_api_state.snapshot.term`: bridge snapshot
-- `priv/generated/refresh_report.json`: grouped refresh diff report
-
-## Oracle sources
-
-- `notion-sdk-js/`: vendored official JS SDK source and tests
-- sibling `notion_docs/reference/`: local Notion docs mirror used when refreshing upstream fixtures
-
-## Tests
-
-The parity suite lives under `test/notion_sdk/` and covers:
-
-- endpoint presence against the documented 35-operation matrix
-- request-building parity for OAuth, markdown, multipart uploads, and low-level custom headers
-- retry parity by status and method
-- helper parity for pagination, template iteration, guards, and ID extraction
-- error mapping parity including `additional_data` and `Retry-After` handling
+## Tests and maintenance
 
 Recommended verification loop:
 
@@ -286,4 +208,5 @@ mix compile --warnings-as-errors
 mix test
 mix dialyzer
 mix credo --strict
+mix docs
 ```

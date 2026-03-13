@@ -1,43 +1,48 @@
 # Live Examples
 
-These examples are for the real Notion service only.
+These examples are strict real-service proofs for the Notion API surface in
+this package.
 
-The example harness uses `NOTION_EXAMPLE_*` env vars for fixture ids and URLs. Those values are example-only; the SDK client itself only needs auth and runtime configuration.
+If you want workflow-oriented examples instead of one-operation proofs, see the
+[Cookbook README](./cookbook/README.md).
+
+The example harness uses `NOTION_EXAMPLE_*` env vars for fixture ids and URLs.
+Those values are example-only; the SDK client itself only needs auth and
+runtime configuration.
 
 Rules:
+
 - no mocks
 - no fake transports
-- no skipped runs because env was missing
 - missing setup is a hard failure
 - API errors are hard failures
+- the mutation suite assumes you are using a disposable workspace or a dedicated examples area
 
-Run every example through `mix run` from the repo root, or use [`run_all.sh`](./run_all.sh).
+Run every example through `mix run` from the repo root, or use
+[`run_all.sh`](./run_all.sh).
 
 ## What This Suite Covers
 
-The example suite is intentionally broader than a single smoke check:
-- real auth against `https://api.notion.com`
-- `users.getSelf`, `search`, and `users.list`
-- page retrieval, page property retrieval, and markdown retrieval
-- block retrieval and page-child listing
-- comment listing on a real page
-- database retrieval
-- data source retrieval, query, template listing, and template collection helper
-- file upload listing, retrieval, external URL creation, and real multipart single-part upload
-- OAuth token introspection for public integrations
+The live suite now directly covers all 35 operations in
+`test/notion_sdk/parity_endpoint_test.exs`.
+
+That includes:
+
+- auth and user retrieval flows
+- page, property, markdown, block, and comment reads
+- database and data source reads plus queries and templates
+- file upload list, retrieve, create, send, and complete flows
+- page, block, comment, database, and data source mutations
+- OAuth introspection, bearer calls, refresh, token exchange, and revoke
 
 ## Onboarding
 
-Use a disposable Notion workspace or a dedicated examples area. Some examples create file uploads. They do not mock or simulate anything.
+Use a disposable Notion workspace or a dedicated examples area. The mutation
+suite creates temporary pages, comments, databases, and data sources.
 
-### 1. Create an integration
+### 1. Create an integration and enable the right capabilities
 
 Create a Notion integration and copy its token.
-
-If you plan to run `06_list_page_comments.exs`, turn on the integration's
-`Read comments` capability first. Comment capabilities are off by default in
-Notion, and the comments endpoint returns `403 restricted_resource` until that
-capability is enabled.
 
 Export:
 
@@ -53,30 +58,35 @@ export NOTION_VERSION="2025-09-03"
 export NOTION_TIMEOUT_MS="60000"
 ```
 
-`NOTION_BASE_URL` and `NOTION_VERSION` are only needed when you want to override
-the SDK defaults. If you set `NOTION_TIMEOUT_MS`, it must be a positive integer.
+`NOTION_BASE_URL` and `NOTION_VERSION` are only needed when you want to
+override the SDK defaults. If you set `NOTION_TIMEOUT_MS`, it must be a
+positive integer.
+
+Capability checklist:
+
+- enable `Read comments` before running `06_list_page_comments.exs`
+- enable comment-insert capability before running `27_create_comment.exs` or `28_retrieve_comment.exs`
+- enable content-insert and content-update capability before running the `mutations` suite
 
 Production-oriented Foundation settings such as shared rate limiting, circuit
 breaking, telemetry, or Dispatch admission control are configured through
 `NotionSDK.Client.new(foundation: ...)` in application code. The example
-harness does not map those runtime settings from environment variables. That
-`foundation:` surface is implemented on top of Pristine's shared Foundation
-runtime profile rather than a separate example-only code path.
+harness does not map those runtime settings from environment variables.
 
-### 2. Create one example database row page
+### 2. Choose one anchor page fixture
 
-Create a database or data source with at least one row page, then share that database with the integration.
+Create a page that satisfies all of these:
 
-That single row page is the anchor fixture for most of the suite:
-- the page examples use it directly
-- the block examples derive a child block from it
-- the data examples derive the database and often the data source from it
-- the comment example lists comments for that page id
-
-The page should satisfy all of these:
 - it belongs to a database-backed data source
 - it has at least one child block
 - it has at least one property
+- it is shared with the integration
+
+That single page anchors the full regression suite:
+
+- the read examples use it directly
+- database and data source reads derive ids from it when explicit ids are unset
+- the mutation suite creates and later trashes temporary pages, comments, databases, and data sources under it
 
 Export the page URL or UUID:
 
@@ -84,11 +94,14 @@ Export the page URL or UUID:
 export NOTION_EXAMPLE_PAGE_ID="https://www.notion.so/...your-page-url..."
 ```
 
-The examples accept either raw UUIDs or full Notion URLs anywhere an env var ends in `_ID`, except for `NOTION_EXAMPLE_PROPERTY_ID`, which is a raw property id string.
+The examples accept either raw UUIDs or full Notion URLs anywhere an env var
+ends in `_ID`, except for `NOTION_EXAMPLE_PROPERTY_ID`, which is a raw property
+id string.
 
 ### 3. Optional explicit resource ids
 
-Most examples can derive these from `NOTION_EXAMPLE_PAGE_ID`, but explicit values win if you set them:
+Most examples can derive these from `NOTION_EXAMPLE_PAGE_ID`, but explicit
+values win if you set them:
 
 ```bash
 export NOTION_EXAMPLE_DATABASE_ID="https://www.notion.so/...database-url..."
@@ -100,6 +113,7 @@ export NOTION_EXAMPLE_FILE_UPLOAD_ID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
 ```
 
 Useful behavior:
+
 - if `NOTION_EXAMPLE_DATABASE_ID` is missing, examples derive it from the page parent
 - if `NOTION_EXAMPLE_DATA_SOURCE_ID` is missing, examples derive it from the page parent or the database response
 - if `NOTION_EXAMPLE_BLOCK_ID` is missing, examples derive the first child block from the page
@@ -112,13 +126,14 @@ Optional smoke search query:
 export NOTION_EXAMPLE_SEARCH_QUERY="roadmap"
 ```
 
-If `NOTION_EXAMPLE_SEARCH_QUERY` is unset, `00_smoke.exs` runs `search` with an
-empty query string.
+If `NOTION_EXAMPLE_SEARCH_QUERY` is unset, `00_smoke.exs` and the cookbook
+search example run `search` with an empty query string.
 
-### 4. External URL upload fixture for file suites
+### 4. External URL upload fixture
 
 `13_create_external_file_upload.exs` requires a real HTTPS file URL. That means
 `NOTION_EXAMPLE_FILE_URL` is required when you run:
+
 - `mix run examples/13_create_external_file_upload.exs`
 - `./examples/run_all.sh files`
 - `./examples/run_all.sh all`
@@ -133,42 +148,35 @@ export NOTION_EXAMPLE_FILE_CONTENT_TYPE="application/pdf"
 ```
 
 `NOTION_EXAMPLE_FILE_FILENAME` and `NOTION_EXAMPLE_FILE_CONTENT_TYPE` are
-optional, but setting them removes ambiguity. If you do not want to provide an
-external URL fixture, stop before the file suite and run only `smoke`,
-`content`, or `data`.
+optional, but setting them removes ambiguity.
 
-### 5. Optional OAuth fixture
+`33_complete_file_upload.exs` is different from the other upload examples: it
+proves the multipart `fileUploads.complete` endpoint and therefore requires a
+workspace plan that supports multipart uploads. Free-plan workspaces reject the
+multipart create call before the example can reach `complete`.
 
-`16_oauth_introspect.exs`, `17_oauth_bearer_get_self.exs`, and
-`18_oauth_refresh_and_get_self.exs` are for real OAuth/public-integration
-credentials.
+### 5. OAuth fixture
 
-For most public integrations, use the redirect URI already registered under the
-integration's `OAuth Domain & URIs` settings:
+`16_oauth_introspect.exs`, `17_oauth_bearer_get_self.exs`,
+`18_oauth_refresh_and_get_self.exs`, `34_oauth_token_exchange.exs`, and
+`35_oauth_revoke.exs` are for real OAuth public-integration credentials.
+
+Set:
 
 ```bash
 export NOTION_OAUTH_CLIENT_ID="..."
 export NOTION_OAUTH_CLIENT_SECRET="..."
 export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
+```
+
+If you want the saved-token flow used by `16` through `18` and the cookbook
+OAuth example:
+
+```bash
 mix notion.oauth --save --manual --no-browser
 ```
 
-`NOTION_OAUTH_REDIRECT_URI` is the redirect URI, also called the callback URL.
-If Notion shows only an `Authorization URL`, use the exact decoded value from
-its `redirect_uri=...` parameter.
-
-That flow prints the authorization URL, waits for approval in the browser, then
-asks you to paste back the final redirected URL containing the temporary code.
-
-Important distinctions:
-
-- use the redirect URI already registered under `OAuth Domain & URIs`
-- the Notion `Authorization URL` is the consent URL for OAuth
-- the Notion `Webhook URL` field is unrelated to OAuth
-- `NOTION_OAUTH_TOKEN_PATH` is only an optional override for the saved token
-  file path on your machine
-
-If you explicitly register a literal loopback redirect URI such as
+If you explicitly registered a loopback redirect URI such as
 `http://127.0.0.1:40071/callback`, you can use automatic callback capture:
 
 ```bash
@@ -185,39 +193,32 @@ By default `mix notion.oauth --save` writes the token file to:
 The OAuth examples use that same default path automatically. Set
 `NOTION_OAUTH_TOKEN_PATH` only if you want to override it.
 
-`NOTION_OAUTH_ACCESS_TOKEN` is the access token returned from
-`NotionSDK.OAuth.exchange_code/2`. It is not a value shown on the Notion
-integration settings page. `mix notion.oauth refresh` updates the saved file in
-place and preserves a rotated refresh token when Notion returns one.
+`34_oauth_token_exchange.exs` proves the raw `POST /v1/oauth/token` endpoint,
+so it needs a fresh authorization code. You can provide one up front:
 
-Programmatic onboarding path:
-
-```elixir
-{:ok, request} =
-  NotionSDK.OAuth.authorization_request(
-    client_id: System.fetch_env!("NOTION_OAUTH_CLIENT_ID"),
-    redirect_uri: "https://example.com/callback"
-  )
-
-{:ok, token} =
-  NotionSDK.OAuth.exchange_code("code-from-callback",
-    client_id: System.fetch_env!("NOTION_OAUTH_CLIENT_ID"),
-    client_secret: System.fetch_env!("NOTION_OAUTH_CLIENT_SECRET"),
-    redirect_uri: "https://example.com/callback"
-  )
+```bash
+export NOTION_OAUTH_AUTH_CODE="code-from-the-redirect"
 ```
 
-Use a redirect URI that is already registered under `OAuth Domain & URIs`. The
-current Notion docs also require `owner: "user"` on the
-authorization URL, and the generated helper defaults that value for you.
-`16_oauth_introspect.exs` can use either `NOTION_OAUTH_ACCESS_TOKEN` or the
-saved file. `17_oauth_bearer_get_self.exs` and
-`18_oauth_refresh_and_get_self.exs` use the default saved path automatically.
-Set `NOTION_OAUTH_TOKEN_PATH` only if you want to override that path.
-`18_oauth_refresh_and_get_self.exs` also requires `NOTION_OAUTH_CLIENT_ID` and
-`NOTION_OAUTH_CLIENT_SECRET`.
-Notion does not expose expiry metadata you can rely on for transparent
-pre-expiry refresh, so this suite keeps refresh explicit.
+If `NOTION_OAUTH_AUTH_CODE` is unset, `34_oauth_token_exchange.exs` falls back
+to the same manual pattern used by `mix notion.oauth --manual --no-browser`: it
+prints the authorization URL and asks you to paste either the final redirected
+URL or the raw code.
+
+That script saves the exchanged token to a separate temporary path so it does
+not overwrite the saved token file used by `16` through `18`.
+
+Optional overrides for the exchange-and-revoke pair:
+
+```bash
+export NOTION_OAUTH_EXCHANGE_TOKEN_PATH="/tmp/notion_sdk_example_oauth_exchange.json"
+export NOTION_OAUTH_REVOKE_TOKEN="access_token_to_revoke"
+```
+
+Behavior:
+
+- if `NOTION_OAUTH_REVOKE_TOKEN` is unset, `35_oauth_revoke.exs` revokes the token saved by `34_oauth_token_exchange.exs`
+- if `NOTION_OAUTH_REVOKE_TOKEN` is set, `35_oauth_revoke.exs` revokes that explicit token instead
 
 ## Running
 
@@ -225,8 +226,9 @@ Single example:
 
 ```bash
 mix run examples/00_smoke.exs
-mix run examples/03_retrieve_page_markdown.exs
-mix run examples/15_upload_small_text_file.exs
+mix run examples/23_update_page_markdown.exs
+mix run examples/33_complete_file_upload.exs
+mix run examples/cookbook/03_upload_and_attach_file.exs
 ```
 
 Grouped suites:
@@ -236,20 +238,29 @@ Grouped suites:
 ./examples/run_all.sh content
 ./examples/run_all.sh data
 ./examples/run_all.sh files
-./examples/run_all.sh all
+./examples/run_all.sh mutations
 ./examples/run_all.sh oauth
+./examples/run_all.sh cookbook
+./examples/run_all.sh all
 ./examples/run_all.sh everything
 ```
 
-`all` runs every non-OAuth example. `everything` runs `all` plus the OAuth
-examples.
+Suite behavior:
+
+- `all` runs every non-OAuth regression proof
+- `everything` runs `all` plus the OAuth proofs
+- `cookbook` runs only the task-oriented workflow examples
+- `mutations`, `all`, and `everything` include `33_complete_file_upload.exs`, so they inherit the multipart-upload plan requirement described above
 
 ## Example Inventory
 
-Core:
-- `00_smoke.exs`: `get_self`, `search`, and `list_users`
+Smoke:
 
-Content:
+- `00_smoke.exs`: `users.getSelf`, `search`, and `users.list`
+- `19_retrieve_user.exs`: `users.retrieve`
+
+Content reads:
+
 - `01_retrieve_page.exs`
 - `02_retrieve_page_property.exs`
 - `03_retrieve_page_markdown.exs`
@@ -257,7 +268,8 @@ Content:
 - `05_list_page_children.exs`
 - `06_list_page_comments.exs`
 
-Data:
+Data reads:
+
 - `07_retrieve_database.exs`
 - `08_retrieve_data_source.exs`
 - `09_query_data_source.exs`
@@ -265,21 +277,54 @@ Data:
 - `11_collect_data_source_templates.exs`
 
 Files:
+
 - `12_list_file_uploads.exs`
 - `13_create_external_file_upload.exs`
 - `14_retrieve_file_upload.exs`
 - `15_upload_small_text_file.exs`
 
+Mutations:
+
+- `20_create_page.exs`
+- `21_update_page.exs`
+- `22_move_page.exs`
+- `23_update_page_markdown.exs`
+- `24_append_block_children.exs`
+- `25_update_block.exs`
+- `26_delete_block.exs`
+- `27_create_comment.exs`
+- `28_retrieve_comment.exs`
+- `29_create_database.exs`
+- `30_update_database.exs`
+- `31_create_data_source.exs`
+- `32_update_data_source.exs`
+- `33_complete_file_upload.exs`
+
 OAuth:
+
 - `16_oauth_introspect.exs`
 - `17_oauth_bearer_get_self.exs`
 - `18_oauth_refresh_and_get_self.exs`
+- `34_oauth_token_exchange.exs`
+- `35_oauth_revoke.exs`
+
+Cookbook:
+
+- `cookbook/01_create_page_with_blocks.exs`
+- `cookbook/02_create_and_query_data_source.exs`
+- `cookbook/03_upload_and_attach_file.exs`
+- `cookbook/04_search_paginate_and_branch.exs`
+- `cookbook/05_oauth_onboard_and_call_api.exs`
 
 ## Operational Notes
 
-- `15_upload_small_text_file.exs` creates a real file upload and sends real multipart form data.
-- `13_create_external_file_upload.exs` creates a real external URL import.
-- `06_list_page_comments.exs` succeeds even when the page has zero comments; zero comments is a real service response, not a skipped case.
-- `06_list_page_comments.exs` also requires the integration's `Read comments` capability; otherwise Notion returns `403 restricted_resource`.
-- `02_retrieve_page_property.exs` is most reliable when `NOTION_EXAMPLE_PAGE_ID` points at a row page inside a database-backed data source.
-- `18_oauth_refresh_and_get_self.exs` is the explicit Notion proof flow: refresh the saved token, persist it, then call a bearer-authenticated endpoint with that saved file.
+- `15_upload_small_text_file.exs` creates a real file upload and sends real multipart form data
+- `33_complete_file_upload.exs` creates a one-part multipart upload and then finalizes it with `fileUploads.complete`
+- `33_complete_file_upload.exs` requires a workspace plan with multipart upload support; free-plan workspaces fail that example with a real `validation_error`
+- `20_create_page.exs` through `32_update_data_source.exs` create temporary resources and trash them before exit
+- `27_create_comment.exs` and `28_retrieve_comment.exs` create comments on a temporary page and then trash that page
+- `13_create_external_file_upload.exs` creates a real external URL import
+- `06_list_page_comments.exs` succeeds even when the page has zero comments; zero comments is a real service response
+- `06_list_page_comments.exs`, `27_create_comment.exs`, and `28_retrieve_comment.exs` require explicit comment capabilities
+- `34_oauth_token_exchange.exs` writes the exchanged token to `NOTION_OAUTH_EXCHANGE_TOKEN_PATH` or a temporary default path instead of the saved token file used by the other OAuth examples
+- `34_oauth_token_exchange.exs` can either read `NOTION_OAUTH_AUTH_CODE` or prompt interactively for the redirected callback URL, mirroring the existing `mix notion.oauth` manual flow

@@ -1,5 +1,7 @@
 # Pages, Blocks, and Search
 
+Related guides: `content-creation-and-mutation.md`, `capabilities-permissions-and-sharing.md`, `versioning-and-compatibility.md`.
+
 Most integrations spend their time in three modules:
 
 - `NotionSDK.Pages` for page metadata and markdown endpoints
