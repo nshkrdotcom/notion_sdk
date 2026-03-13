@@ -159,6 +159,7 @@ defmodule NotionSDK.MixProject do
          NotionSDK.Error,
          NotionSDK.Guards,
          NotionSDK.Helpers,
+         NotionSDK.OAuthTokenFile,
          NotionSDK.Pagination
        ]},
       {"API Namespaces",
@@ -180,7 +181,7 @@ defmodule NotionSDK.MixProject do
          NotionSDK.Codegen.Renderer,
          NotionSDK.Codegen.Source.Extractor,
          NotionSDK.Codegen.Source.PageContext,
-         Mix.Tasks.Notion.OAuth,
+         Mix.Tasks.Notion.Oauth,
          NotionSDK.Refresh,
          Mix.Tasks.Notion.Generate,
          Mix.Tasks.Notion.Refresh
@@ -190,6 +191,6 @@ defmodule NotionSDK.MixProject do
   end
 
   defp generated_type_module_pattern do
-    ~r/^NotionSDK\.(?!Application$|Auth(?:\.|$)|Blocks$|Client$|Codegen(?:\.|$)|Comments$|DataSources$|Databases$|Error$|FileUploads$|Guards$|Helpers$|OAuth$|Pages$|Pagination$|Refresh$|Retry$|Search$|Users$)[A-Z]/
+    ~r/^NotionSDK\.(?!Application$|Auth(?:\.|$)|Blocks$|Client$|Codegen(?:\.|$)|Comments$|DataSources$|Databases$|Error$|FileUploads$|Guards$|Helpers$|OAuth$|OAuthTokenFile$|Pages$|Pagination$|Refresh$|Retry$|Search$|Users$)[A-Z]/
   end
 end

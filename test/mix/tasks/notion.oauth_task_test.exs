@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Notion.OAuthTaskTest do
   use ExUnit.Case, async: false
 
-  alias Mix.Tasks.Notion.OAuth, as: OAuthTask
+  alias Mix.Tasks.Notion.Oauth, as: OAuthTask
 
   @moduletag :tmp_dir
 
@@ -104,6 +104,10 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
     assert opts[:redirect_uri] == "http://127.0.0.1:40123/callback"
     assert opts[:manual?] == false
     assert opts[:open_browser?] == true
+  end
+
+  test "task module maps to mix notion.oauth" do
+    assert Mix.Task.task_name(OAuthTask) == "notion.oauth"
   end
 
   test "prints token exports and token metadata" do

@@ -43,10 +43,13 @@ client =
     oauth2: [
       token_source:
         {Pristine.Adapters.TokenSource.File,
-         path: System.fetch_env!("NOTION_OAUTH_TOKEN_PATH")}
+         path: NotionSDK.OAuthTokenFile.default_path()}
     ]
   )
 ```
+
+Set `NOTION_OAUTH_TOKEN_PATH` only when you want to override that default save
+location.
 
 The client only owns runtime concerns such as auth, retries, transport, and headers. It does not require a page id, database id, or any other workspace resource id at initialization time. Those stay on each request:
 
@@ -67,36 +70,50 @@ typed_client =
   )
 ```
 
-The live examples use `NOTION_EXAMPLE_*` environment variables for fixture ids and URLs. Legacy names such as `NOTION_PAGE_ID` still work during the transition, but the SDK itself does not read those values unless an example passes them into a request.
+The live examples use `NOTION_EXAMPLE_*` environment variables for fixture ids and URLs. The SDK itself does not read those values unless an example passes them into a request.
 
 ## Programmatic OAuth Onboarding
 
-The preferred onboarding path is the interactive Mix task:
+Most public integrations already have a registered HTTPS redirect URI in
+Notion. That is the easiest path:
 
 ```bash
 export NOTION_OAUTH_CLIENT_ID="..."
 export NOTION_OAUTH_CLIENT_SECRET="..."
-export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
+export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
 
-mix notion.oauth
-mix notion.oauth --save
-mix notion.oauth --manual --no-browser
-mix notion.oauth refresh
-mix notion.oauth refresh --path="$HOME/.config/notion_sdk/oauth/notion.json"
+mix notion.oauth --save --manual --no-browser
 ```
 
-Use a redirect URI that is already registered in the Notion integration
-settings. If you use loopback, keep it exact and prefer a literal loopback IP
-such as `127.0.0.1` instead of `localhost`.
-The task does not choose a random loopback port for you.
-The task prints the access token, any refresh token, and ready-to-paste export
-commands.
-When `--save` is set, `notion_sdk` writes the generic token envelope to
-`$XDG_CONFIG_HOME/notion_sdk/oauth/notion.json`, or to
-`~/.config/notion_sdk/oauth/notion.json` when `XDG_CONFIG_HOME` is unset.
-Use `--path=...` to override that location.
-Use `mix notion.oauth refresh` to explicitly refresh that saved file in place.
-The task preserves a rotated refresh token when Notion returns one.
+What that does:
+
+- prints the Notion authorization URL
+- waits for you to approve access in the browser
+- asks you to paste back the final redirected URL
+- exchanges the temporary code for access and refresh tokens
+- saves the token JSON to `~/.config/notion_sdk/oauth/notion.json` by default
+
+Important distinctions:
+
+- use a redirect URI already registered under your Notion integration's
+  `OAuth Domain & URIs` settings
+- the Notion `Authorization URL` is the browser-entry URL for OAuth; it is not
+  an access token
+- the Notion `Webhook URL` field is unrelated to OAuth redirect URIs
+
+If you explicitly register a literal loopback redirect URI such as
+`http://127.0.0.1:40071/callback` in Notion, you can use the automatic callback
+capture flow instead:
+
+```bash
+export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
+mix notion.oauth --save
+```
+
+Use `mix notion.oauth refresh` to explicitly refresh the saved file in place.
+`NOTION_OAUTH_TOKEN_PATH` is only needed when you want to override the default
+save location. The live OAuth examples use that same default path
+automatically.
 
 Use the helper layer on `NotionSDK.OAuth` to generate authorization URLs and exchange codes without falling back to shell or `curl` flows:
 
@@ -124,8 +141,8 @@ document PKCE support, so it is omitted here.
 
 `NOTION_OAUTH_ACCESS_TOKEN` in examples is the access token returned by that
 code exchange. It is not a dashboard field shown on the Notion integration
-settings page. `NOTION_OAUTH_TOKEN_PATH` points at the saved JSON token file
-when you use `mix notion.oauth --save`.
+settings page. `NOTION_OAUTH_TOKEN_PATH` is only an optional override for the
+saved JSON token file path.
 Notion's OAuth docs do not expose expiry metadata you can rely on for
 transparent pre-expiry refresh, so `notion_sdk` keeps refresh explicit through
 `mix notion.oauth refresh` and the live refresh example instead of claiming
@@ -147,7 +164,7 @@ mix notion.refresh
 mix notion.refresh --snapshots-only
 ```
 
-Script wrappers are kept for compatibility:
+The script wrappers remain available as direct entry points:
 
 ```bash
 elixir scripts/generate_notion_sdk.exs

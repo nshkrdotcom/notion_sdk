@@ -80,7 +80,7 @@ typed_client =
   )
 ```
 
-Without `typed_responses: true`, success payloads remain maps for compatibility.
+Without `typed_responses: true`, success payloads remain JSON-shaped maps.
 
 ## Make a first request
 

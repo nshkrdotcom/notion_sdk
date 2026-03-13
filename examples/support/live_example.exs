@@ -7,25 +7,13 @@ defmodule NotionSDK.Examples.Live do
   alias NotionSDK.Databases
   alias NotionSDK.FileUploads
   alias NotionSDK.Helpers
+  alias NotionSDK.OAuthTokenFile
   alias NotionSDK.Pages
   alias NotionSDK.Search
   alias NotionSDK.Users
   alias Pristine.Adapters.TokenSource.File, as: FileTokenSource
 
   @default_page_size 10
-  @legacy_example_env_aliases %{
-    "NOTION_EXAMPLE_BLOCK_ID" => "NOTION_BLOCK_ID",
-    "NOTION_EXAMPLE_DATA_SOURCE_ID" => "NOTION_DATA_SOURCE_ID",
-    "NOTION_EXAMPLE_DATABASE_ID" => "NOTION_DATABASE_ID",
-    "NOTION_EXAMPLE_FILE_CONTENT_TYPE" => "NOTION_FILE_EXTERNAL_CONTENT_TYPE",
-    "NOTION_EXAMPLE_FILE_FILENAME" => "NOTION_FILE_EXTERNAL_FILENAME",
-    "NOTION_EXAMPLE_FILE_UPLOAD_ID" => "NOTION_FILE_UPLOAD_ID",
-    "NOTION_EXAMPLE_FILE_URL" => "NOTION_FILE_EXTERNAL_URL",
-    "NOTION_EXAMPLE_PAGE_ID" => "NOTION_PAGE_ID",
-    "NOTION_EXAMPLE_PROPERTY_ID" => "NOTION_PAGE_PROPERTY_ID",
-    "NOTION_EXAMPLE_PROPERTY_NAME" => "NOTION_PAGE_PROPERTY_NAME",
-    "NOTION_EXAMPLE_SEARCH_QUERY" => "NOTION_SEARCH_QUERY"
-  }
 
   def start! do
     Mix.Task.run("app.start")
@@ -50,7 +38,7 @@ defmodule NotionSDK.Examples.Live do
 
     Client.new(
       Keyword.put(client_opts_from_env(), :oauth2,
-        token_source: {FileTokenSource, path: oauth_token_path!()}
+        token_source: {FileTokenSource, path: oauth_token_path()}
       )
     )
   end
@@ -259,6 +247,10 @@ defmodule NotionSDK.Examples.Live do
     }
   end
 
+  def oauth_token_path do
+    OAuthTokenFile.resolve_env_or_default(get_env("NOTION_OAUTH_TOKEN_PATH"))
+  end
+
   def oauth_token! do
     case get_env("NOTION_OAUTH_ACCESS_TOKEN") do
       nil ->
@@ -423,11 +415,7 @@ defmodule NotionSDK.Examples.Live do
   end
 
   def get_env(name) when is_binary(name) do
-    System.get_env(name) ||
-      case Map.get(@legacy_example_env_aliases, name) do
-        nil -> nil
-        legacy_name -> System.get_env(legacy_name)
-      end
+    System.get_env(name)
   end
 
   def page_comments!(client) do
@@ -446,12 +434,8 @@ defmodule NotionSDK.Examples.Live do
     |> ok!("NotionSDK.Blocks.list_children/2")
   end
 
-  defp oauth_token_path! do
-    fetch_env!("NOTION_OAUTH_TOKEN_PATH")
-  end
-
   defp oauth_token_from_file! do
-    path = oauth_token_path!()
+    path = oauth_token_path()
 
     case FileTokenSource.fetch(path: path) do
       {:ok, %Pristine.OAuth2.Token{access_token: access_token}}
@@ -467,7 +451,10 @@ defmodule NotionSDK.Examples.Live do
       :error ->
         raise """
         #{path} does not exist
-        generate it with `mix notion.oauth --save`
+        generate it with `mix notion.oauth --save --manual --no-browser`
+        for a registered HTTPS redirect URI, or `mix notion.oauth --save` for a
+        registered loopback redirect URI. Set NOTION_OAUTH_TOKEN_PATH only if
+        you want to override the default saved path.
         """
 
       {:error, reason} ->

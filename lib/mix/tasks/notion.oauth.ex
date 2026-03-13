@@ -1,7 +1,27 @@
-defmodule Mix.Tasks.Notion.OAuth do
+defmodule Mix.Tasks.Notion.Oauth do
   @moduledoc """
   Runs the interactive Notion OAuth authorization-code flow and refreshes saved
   Notion OAuth tokens.
+
+  Preferred first-run path for most public integrations with a registered HTTPS
+  redirect URI under Notion's `OAuth Domain & URIs` settings:
+
+      export NOTION_OAUTH_CLIENT_ID="..."
+      export NOTION_OAUTH_CLIENT_SECRET="..."
+      export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
+      mix notion.oauth --save --manual --no-browser
+
+  The task prints the authorization URL, waits for you to approve access in the
+  browser, then asks you to paste back the final redirected URL containing the
+  temporary authorization code.
+
+  Optional loopback path if you have explicitly registered a literal loopback
+  redirect URI such as `http://127.0.0.1:40071/callback` in Notion:
+
+      export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
+      mix notion.oauth --save
+
+  `Webhook URL` settings in Notion are unrelated to OAuth redirect URIs.
 
   ## Usage
 
@@ -22,6 +42,7 @@ defmodule Mix.Tasks.Notion.OAuth do
   alias Pristine.OAuth2
   alias Pristine.OAuth2.Interactive
   alias Pristine.OAuth2.Token
+  alias NotionSDK.OAuthTokenFile
 
   @default_timeout_ms 120_000
   @interactive_switches [
@@ -265,13 +286,7 @@ defmodule Mix.Tasks.Notion.OAuth do
   end
 
   defp default_save_path do
-    config_root =
-      case System.get_env("XDG_CONFIG_HOME") do
-        value when is_binary(value) and value != "" -> value
-        _other -> Path.join(System.user_home!(), ".config")
-      end
-
-    Path.join([config_root, "notion_sdk", "oauth", "notion.json"])
+    OAuthTokenFile.default_path()
   end
 
   defp format_save_error({kind, %_{} = error}), do: "#{kind}: #{Exception.message(error)}"

@@ -8,7 +8,7 @@ alias Pristine.OAuth2.Token
 
 Live.banner!("18_oauth_refresh_and_get_self.exs")
 
-path = Live.fetch_env!("NOTION_OAUTH_TOKEN_PATH")
+path = Live.oauth_token_path()
 
 saved_token =
   case FileTokenSource.fetch(path: path) do
@@ -18,7 +18,9 @@ saved_token =
     :error ->
       raise """
       #{path} does not exist
-      generate it with `mix notion.oauth --save`
+      generate it with `mix notion.oauth --save --manual --no-browser`
+      for a registered HTTPS redirect URI, or `mix notion.oauth --save` for a
+      registered loopback redirect URI
       """
 
     {:error, reason} ->

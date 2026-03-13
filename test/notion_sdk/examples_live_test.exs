@@ -3,6 +3,8 @@ Code.require_file("../../examples/support/live_example.exs", __DIR__)
 defmodule NotionSDK.Examples.LiveTest do
   use ExUnit.Case, async: false
 
+  @moduletag :tmp_dir
+
   alias NotionSDK.Examples.Live
 
   @example_envs [
@@ -15,15 +17,8 @@ defmodule NotionSDK.Examples.LiveTest do
     "NOTION_EXAMPLE_PROPERTY_ID",
     "NOTION_EXAMPLE_PROPERTY_NAME",
     "NOTION_EXAMPLE_SEARCH_QUERY",
-    "NOTION_BLOCK_ID",
-    "NOTION_DATA_SOURCE_ID",
-    "NOTION_DATABASE_ID",
-    "NOTION_FILE_EXTERNAL_URL",
-    "NOTION_FILE_UPLOAD_ID",
-    "NOTION_PAGE_ID",
-    "NOTION_PAGE_PROPERTY_ID",
-    "NOTION_PAGE_PROPERTY_NAME",
-    "NOTION_SEARCH_QUERY"
+    "NOTION_OAUTH_TOKEN_PATH",
+    "XDG_CONFIG_HOME"
   ]
 
   setup do
@@ -55,14 +50,10 @@ defmodule NotionSDK.Examples.LiveTest do
              "https://example.com/path/to/file.pdf"
   end
 
-  test "keeps legacy example env vars working during the transition" do
-    System.put_env("NOTION_PAGE_ID", "b55c9c91-384d-452b-81db-d1ef79372b75")
-    System.put_env("NOTION_FILE_EXTERNAL_URL", "https://example.com/path/to/file.pdf")
+  test "oauth token path falls back to the default saved location", %{tmp_dir: tmp_dir} do
+    System.put_env("XDG_CONFIG_HOME", tmp_dir)
 
-    assert Live.page_id!() == "b55c9c91-384d-452b-81db-d1ef79372b75"
-    assert Live.fetch_env!("NOTION_EXAMPLE_FILE_URL") == "https://example.com/path/to/file.pdf"
-
-    assert Live.fetch_https_env!("NOTION_EXAMPLE_FILE_URL") ==
-             "https://example.com/path/to/file.pdf"
+    assert Live.oauth_token_path() ==
+             Path.join([tmp_dir, "notion_sdk", "oauth", "notion.json"])
   end
 end

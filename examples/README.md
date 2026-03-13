@@ -2,7 +2,7 @@
 
 These examples are for the real Notion service only.
 
-The example harness uses `NOTION_EXAMPLE_*` env vars for fixture ids and URLs. Those values are example-only; the SDK client itself only needs auth and runtime configuration. Legacy names such as `NOTION_PAGE_ID` still work during the transition, but the preferred names are the `NOTION_EXAMPLE_*` variants below.
+The example harness uses `NOTION_EXAMPLE_*` env vars for fixture ids and URLs. Those values are example-only; the SDK client itself only needs auth and runtime configuration.
 
 Rules:
 - no mocks
@@ -11,7 +11,7 @@ Rules:
 - missing setup is a hard failure
 - API errors are hard failures
 
-Run every example through `mix run` from the repo root, or use [`run_all.sh`](/home/home/p/g/n/jido_brainstorm/nshkrdotcom/notion_sdk/examples/run_all.sh).
+Run every example through `mix run` from the repo root, or use [`run_all.sh`](./run_all.sh).
 
 ## What This Suite Covers
 
@@ -39,6 +39,17 @@ Export:
 ```bash
 export NOTION_TOKEN="secret_..."
 ```
+
+Optional client runtime overrides:
+
+```bash
+export NOTION_BASE_URL="https://api.notion.com"
+export NOTION_VERSION="2025-09-03"
+export NOTION_TIMEOUT_MS="60000"
+```
+
+`NOTION_BASE_URL` and `NOTION_VERSION` are only needed when you want to override
+the SDK defaults. If you set `NOTION_TIMEOUT_MS`, it must be a positive integer.
 
 ### 2. Create one example database row page
 
@@ -83,6 +94,15 @@ Useful behavior:
 - if `NOTION_EXAMPLE_PROPERTY_ID` is missing, examples use `NOTION_EXAMPLE_PROPERTY_NAME` or the first page property
 - if `NOTION_EXAMPLE_FILE_UPLOAD_ID` is missing, retrieval falls back to the first result from `fileUploads.list`
 
+Optional smoke search query:
+
+```bash
+export NOTION_EXAMPLE_SEARCH_QUERY="roadmap"
+```
+
+If `NOTION_EXAMPLE_SEARCH_QUERY` is unset, `00_smoke.exs` runs `search` with an
+empty query string.
+
 ### 4. Optional external URL upload fixture
 
 `13_create_external_file_upload.exs` requires a real HTTPS file URL:
@@ -97,32 +117,52 @@ export NOTION_EXAMPLE_FILE_CONTENT_TYPE="application/pdf"
 
 ### 5. Optional OAuth fixture
 
-`16_oauth_introspect.exs` is separate from the internal-integration suite. It is for real OAuth/public-integration credentials:
+`16_oauth_introspect.exs`, `17_oauth_bearer_get_self.exs`, and
+`18_oauth_refresh_and_get_self.exs` are for real OAuth/public-integration
+credentials.
+
+For most public integrations, use the redirect URI already registered under the
+integration's `OAuth Domain & URIs` settings:
 
 ```bash
 export NOTION_OAUTH_CLIENT_ID="..."
 export NOTION_OAUTH_CLIENT_SECRET="..."
-export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
-mix notion.oauth --save
-export NOTION_OAUTH_TOKEN_PATH="$HOME/.config/notion_sdk/oauth/notion.json"
-mix notion.oauth refresh --path="$NOTION_OAUTH_TOKEN_PATH"
-```
-
-`NOTION_OAUTH_ACCESS_TOKEN` is the access token returned from `NotionSDK.OAuth.exchange_code/2`. It is not a value shown on the Notion integration settings page.
-`mix notion.oauth --save` prints ready-to-paste export commands for both
-`NOTION_OAUTH_ACCESS_TOKEN` and `NOTION_OAUTH_TOKEN_PATH`.
-`mix notion.oauth refresh` updates that saved file in place and preserves a
-rotated refresh token when Notion returns one.
-
-For headless terminals or SSH sessions:
-
-```bash
+export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
 mix notion.oauth --save --manual --no-browser
 ```
 
-If you use a loopback callback, the redirect URI must already be registered in
-Notion and must match the exact listener URI. Prefer literal loopback IPs such
-as `127.0.0.1` instead of `localhost`.
+That flow prints the authorization URL, waits for approval in the browser, then
+asks you to paste back the final redirected URL containing the temporary code.
+
+Important distinctions:
+
+- use the redirect URI already registered under `OAuth Domain & URIs`
+- the Notion `Authorization URL` is the consent URL for OAuth
+- the Notion `Webhook URL` field is unrelated to OAuth
+- `NOTION_OAUTH_TOKEN_PATH` is only an optional override for the saved token
+  file path on your machine
+
+If you explicitly register a literal loopback redirect URI such as
+`http://127.0.0.1:40071/callback`, you can use automatic callback capture:
+
+```bash
+export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
+mix notion.oauth --save
+```
+
+By default `mix notion.oauth --save` writes the token file to:
+
+```bash
+~/.config/notion_sdk/oauth/notion.json
+```
+
+The OAuth examples use that same default path automatically. Set
+`NOTION_OAUTH_TOKEN_PATH` only if you want to override it.
+
+`NOTION_OAUTH_ACCESS_TOKEN` is the access token returned from
+`NotionSDK.OAuth.exchange_code/2`. It is not a value shown on the Notion
+integration settings page. `mix notion.oauth refresh` updates the saved file in
+place and preserves a rotated refresh token when Notion returns one.
 
 Programmatic onboarding path:
 
@@ -141,13 +181,14 @@ Programmatic onboarding path:
   )
 ```
 
-Use a redirect URI that is already registered in the Notion integration
-settings. The current Notion docs also require `owner: "user"` on the
+Use a redirect URI that is already registered under `OAuth Domain & URIs`. The
+current Notion docs also require `owner: "user"` on the
 authorization URL, and the generated helper defaults that value for you.
 `16_oauth_introspect.exs` can use either `NOTION_OAUTH_ACCESS_TOKEN` or the
-saved file at `NOTION_OAUTH_TOKEN_PATH`. `17_oauth_bearer_get_self.exs`
-requires `NOTION_OAUTH_TOKEN_PATH`. `18_oauth_refresh_and_get_self.exs`
-requires `NOTION_OAUTH_TOKEN_PATH`, `NOTION_OAUTH_CLIENT_ID`, and
+saved file. `17_oauth_bearer_get_self.exs` and
+`18_oauth_refresh_and_get_self.exs` use the default saved path automatically.
+Set `NOTION_OAUTH_TOKEN_PATH` only if you want to override that path.
+`18_oauth_refresh_and_get_self.exs` also requires `NOTION_OAUTH_CLIENT_ID` and
 `NOTION_OAUTH_CLIENT_SECRET`.
 Notion does not expose expiry metadata you can rely on for transparent
 pre-expiry refresh, so this suite keeps refresh explicit.

@@ -12,7 +12,7 @@ mix notion.refresh
 mix notion.refresh --snapshots-only
 ```
 
-The script wrappers still exist for compatibility:
+The script wrappers remain available as direct entry points:
 
 ```bash
 elixir scripts/generate_notion_sdk.exs

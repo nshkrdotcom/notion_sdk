@@ -1,28 +1,43 @@
 # OAuth and Auth Overrides
 
-Normal Notion API calls use bearer auth. OAuth token exchange and token lifecycle operations use Basic auth credentials instead. `NotionSDK` supports both without forcing you to create separate client types.
+Normal Notion API calls use bearer auth. OAuth token exchange and token
+lifecycle operations use Basic auth credentials instead. `NotionSDK` supports
+both without forcing you to create separate client types.
 
-For onboarding, prefer the interactive task:
+For most public integrations, use the redirect URI already registered under the
+integration's `OAuth Domain & URIs` settings and let the CLI guide you through
+the browser step:
 
 ```bash
 export NOTION_OAUTH_CLIENT_ID="..."
 export NOTION_OAUTH_CLIENT_SECRET="..."
-export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
+export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
 
-mix notion.oauth
-mix notion.oauth --save
-mix notion.oauth --manual --no-browser
-mix notion.oauth refresh
-mix notion.oauth refresh --path="$HOME/.config/notion_sdk/oauth/notion.json"
+mix notion.oauth --save --manual --no-browser
 ```
 
-The redirect URI must already be registered in the Notion integration settings.
-If you use a loopback callback, the listener binds to that exact URI, so prefer
-literal loopback IPs such as `127.0.0.1` or `::1`.
-The task does not choose a random loopback port for you.
-When you add `--save`, `notion_sdk` stores the generic token JSON at
-`$XDG_CONFIG_HOME/notion_sdk/oauth/notion.json`, or at
-`~/.config/notion_sdk/oauth/notion.json` when `XDG_CONFIG_HOME` is unset.
+That flow prints the authorization URL, waits for you to approve access, then
+asks you to paste back the final redirected URL containing the temporary
+authorization code.
+
+Important distinctions:
+
+- the Notion `Authorization URL` is the consent URL for OAuth
+- the Notion `Webhook URL` field is unrelated to OAuth
+- `NOTION_OAUTH_TOKEN_PATH` is only an optional override for where the saved
+  token JSON lives on your machine
+
+If you explicitly register a literal loopback redirect URI such as
+`http://127.0.0.1:40071/callback`, you can use automatic callback capture:
+
+```bash
+export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
+mix notion.oauth --save
+```
+
+When you add `--save`, `notion_sdk` stores the token JSON at
+`~/.config/notion_sdk/oauth/notion.json` by default, or under
+`$XDG_CONFIG_HOME/notion_sdk/oauth/notion.json` when `XDG_CONFIG_HOME` is set.
 Use `--path=...` to override the save location.
 Use `mix notion.oauth refresh` to explicitly refresh that saved file in place.
 The command preserves a rotated refresh token when Notion returns one.
@@ -60,8 +75,8 @@ Exchange the returned authorization code programmatically:
 ```
 
 `NOTION_OAUTH_ACCESS_TOKEN` is an example input after that exchange step. It is
-not shown on the Notion integration settings page. `NOTION_OAUTH_TOKEN_PATH`
-points at the saved JSON token file when you use `mix notion.oauth --save`.
+not shown on the Notion integration settings page. `NOTION_OAUTH_TOKEN_PATH` is
+only an optional override for the saved token file path.
 Notion's OAuth docs do not expose expiry metadata you can rely on for
 transparent pre-expiry refresh, so `notion_sdk` keeps refresh explicit instead
 of claiming automatic refresh inside bearer-authenticated API calls.
@@ -96,7 +111,7 @@ These raw wrappers remain available when you need the full Notion token response
 For the saved-file workflow, prefer the explicit task:
 
 ```bash
-mix notion.oauth refresh --path="$NOTION_OAUTH_TOKEN_PATH"
+mix notion.oauth refresh
 ```
 
 That command loads the saved token JSON, sends a real
@@ -187,10 +202,13 @@ client =
     oauth2: [
       token_source:
         {Pristine.Adapters.TokenSource.File,
-         path: System.fetch_env!("NOTION_OAUTH_TOKEN_PATH")}
+         path: NotionSDK.OAuthTokenFile.default_path()}
     ]
   )
 ```
+
+Set `NOTION_OAUTH_TOKEN_PATH` only if you want to override that default save
+location.
 
 Because Notion does not publish expiry metadata in the OAuth token response, do
 not assume `Pristine.Adapters.TokenSource.Refreshable` can transparently
