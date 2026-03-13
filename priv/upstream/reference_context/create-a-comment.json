@@ -1,0 +1,57 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.comments.create({\n  parent: { page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\" },\n  rich_text: [{ text: { content: \"This is a comment\" } }]\n})"
+    }
+  ],
+  "description": "### Notes\n\nReminder: Turn on integration comment capabilities\n\nIntegration capabilities for reading and inserting comments are off by default.\nThis endpoint requires an integration to have insert comment capabilities. Attempting to call this endpoint without insert comment capabilities will return an HTTP response with a 403 status code.\nFor more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [integration dashboard](https://www.notion.so/profile/integrations)\n  * [Create comment](https://developers.notion.com/reference/create-a-comment)",
+  "errors": [
+    {
+      "body": "Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "Integration capabilities for reading and inserting comments are off by default.\nThis endpoint requires an integration to have insert comment capabilities. Attempting to call this endpoint without insert comment capabilities will return an HTTP response with a 403 status code.\nFor more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).",
+      "kind": "info",
+      "title": "Reminder: Turn on integration comment capabilities"
+    }
+  ],
+  "lead": null,
+  "limits": [],
+  "method": "post",
+  "operation_id": "create-a-comment",
+  "path": "/v1/comments",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "link",
+      "label": "integration dashboard",
+      "url": "https://www.notion.so/profile/integrations"
+    },
+    {
+      "kind": "source",
+      "label": "Create comment",
+      "url": "https://developers.notion.com/reference/create-a-comment"
+    }
+  ],
+  "sections": [],
+  "slug": "create-a-comment",
+  "source_url": "https://developers.notion.com/reference/create-a-comment",
+  "summary": null,
+  "title": "Create comment",
+  "warnings": []
+}

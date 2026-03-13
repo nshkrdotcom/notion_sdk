@@ -1,0 +1,35 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.create({\n  mode: \"single_part\",\n  filename: \"document.pdf\",\n  content_type: \"application/pdf\"\n})"
+    }
+  ],
+  "description": "Use this API to initiate the process of [uploading a file](https://developers.notion.com/guides/data-apis/working-with-files-and-media) to your Notion workspace.\n\n### Resources\n\n  * [uploading a file](https://developers.notion.com/guides/data-apis/working-with-files-and-media)\n  * [Create a file upload](https://developers.notion.com/reference/create-a-file-upload)",
+  "errors": [],
+  "info_notes": [],
+  "lead": "Use this API to initiate the process of [uploading a file](https://developers.notion.com/guides/data-apis/working-with-files-and-media) to your Notion workspace.",
+  "limits": [],
+  "method": "post",
+  "operation_id": "create-file",
+  "path": "/v1/file_uploads",
+  "resources": [
+    {
+      "kind": "guide",
+      "label": "uploading a file",
+      "url": "https://developers.notion.com/guides/data-apis/working-with-files-and-media"
+    },
+    {
+      "kind": "source",
+      "label": "Create a file upload",
+      "url": "https://developers.notion.com/reference/create-a-file-upload"
+    }
+  ],
+  "sections": [],
+  "slug": "create-a-file-upload",
+  "source_url": "https://developers.notion.com/reference/create-a-file-upload",
+  "summary": null,
+  "title": "Create a file upload",
+  "warnings": []
+}

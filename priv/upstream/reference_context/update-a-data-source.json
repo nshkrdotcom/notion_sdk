@@ -1,0 +1,94 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.dataSources.update({\n  data_source_id: \"d9824bdc-8445-4327-be8b-5b47500af6ce\",\n  title: [{ text: { content: \"Updated Data Source Name\" } }]\n})"
+    }
+  ],
+  "description": "### Warnings\n\nThe following data source properties cannot be updated via the API:\n\n  * `formula`\n  * `status`\n  * [Synced content](https://www.notion.so/help/guides/synced-databases-bridge-different-tools)\n  * `place`\n\n### Notes\n\nData source relations must be shared with your integration\n\nTo update a data source [relation](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation) property, the related database must also be shared with your integration.\n\n### How data sources property type changes work\n\nAll properties in pages are stored as rich text. Notion will convert that rich text based on the types defined in a data source's schema. When a type is changed using the API, the data will continue to be available, it is just presented differently.\nFor example, a multi select property value is represented as a comma-separated list of strings (eg. \"1, 2, 3\") and a people property value is represented as a comma-separated list of IDs. These are compatible and the type can be converted.\nNote: Not all type changes work. In some cases data will no longer be returned, such as people type → file type.\n\n### Interacting with data source rows\n\nThis endpoint cannot be used to update data source rows.\nTo update the properties of a data source row — rather than a column — use the [Update page](https://developers.notion.com/reference/patch-page) endpoint. To add a new row to a database, use the [Create a page](https://developers.notion.com/reference/post-page) endpoint.\n\n### Recommended data source schema size limit\n\nDevelopers are encouraged to keep their data source schema size to a maximum of **50KB**. To stay within this schema size limit, the number of properties (or columns) added to a data source should be managed.\nData source schema updates that are too large will be blocked by the REST API to help developers keep their data source queries performant. When a schema update is blocked, the error response includes a `validation_error` code with a message identifying the largest property by name, ID, and byte size to help you reduce your schema size.\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Update page](https://developers.notion.com/reference/patch-page)\n  * [Create a page](https://developers.notion.com/reference/post-page)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Synced content](https://www.notion.so/help/guides/synced-databases-bridge-different-tools)\n  * [relation](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation)\n  * [Update a data source](https://developers.notion.com/reference/update-a-data-source)",
+  "errors": [
+    {
+      "body": "Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "To update a data source [relation](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation) property, the related database must also be shared with your integration.",
+      "kind": "info",
+      "title": "Data source relations must be shared with your integration"
+    }
+  ],
+  "lead": null,
+  "limits": [],
+  "method": "patch",
+  "operation_id": "update-a-data-source",
+  "path": "/v1/data_sources/{data_source_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Update page",
+      "url": "https://developers.notion.com/reference/patch-page"
+    },
+    {
+      "kind": "reference",
+      "label": "Create a page",
+      "url": "https://developers.notion.com/reference/post-page"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "link",
+      "label": "Synced content",
+      "url": "https://www.notion.so/help/guides/synced-databases-bridge-different-tools"
+    },
+    {
+      "kind": "link",
+      "label": "relation",
+      "url": "https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation"
+    },
+    {
+      "kind": "source",
+      "label": "Update a data source",
+      "url": "https://developers.notion.com/reference/update-a-data-source"
+    }
+  ],
+  "sections": [
+    {
+      "body": "All properties in pages are stored as rich text. Notion will convert that rich text based on the types defined in a data source's schema. When a type is changed using the API, the data will continue to be available, it is just presented differently.\nFor example, a multi select property value is represented as a comma-separated list of strings (eg. \"1, 2, 3\") and a people property value is represented as a comma-separated list of IDs. These are compatible and the type can be converted.\nNote: Not all type changes work. In some cases data will no longer be returned, such as people type → file type.",
+      "heading": "How data sources property type changes work",
+      "level": 3
+    },
+    {
+      "body": "This endpoint cannot be used to update data source rows.\nTo update the properties of a data source row — rather than a column — use the [Update page](https://developers.notion.com/reference/patch-page) endpoint. To add a new row to a database, use the [Create a page](https://developers.notion.com/reference/post-page) endpoint.",
+      "heading": "Interacting with data source rows",
+      "level": 3
+    },
+    {
+      "body": "Developers are encouraged to keep their data source schema size to a maximum of **50KB**. To stay within this schema size limit, the number of properties (or columns) added to a data source should be managed.\nData source schema updates that are too large will be blocked by the REST API to help developers keep their data source queries performant. When a schema update is blocked, the error response includes a `validation_error` code with a message identifying the largest property by name, ID, and byte size to help you reduce your schema size.",
+      "heading": "Recommended data source schema size limit",
+      "level": 3
+    }
+  ],
+  "slug": "update-a-data-source",
+  "source_url": "https://developers.notion.com/reference/update-a-data-source",
+  "summary": null,
+  "title": "Update a data source",
+  "warnings": [
+    {
+      "items": [
+        "`formula`",
+        "`status`",
+        "[Synced content](https://www.notion.so/help/guides/synced-databases-bridge-different-tools)",
+        "`place`"
+      ],
+      "kind": "warning",
+      "title": "The following data source properties cannot be updated via the API:"
+    }
+  ]
+}

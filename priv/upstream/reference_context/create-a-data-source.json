@@ -1,0 +1,30 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.dataSources.create({\n  parent: {\n    database_id: \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\"\n  },\n  title: [{ text: { content: \"My Data Source\" } }],\n  properties: {\n    Name: { title: {} },\n    Status: {\n      select: {\n        options: [\n          { name: \"To Do\", color: \"red\" },\n          { name: \"Done\", color: \"green\" }\n        ]\n      }\n    }\n  }\n})"
+    }
+  ],
+  "description": "### Resources\n\n  * [Create a data source](https://developers.notion.com/reference/create-a-data-source)",
+  "errors": [],
+  "info_notes": [],
+  "lead": null,
+  "limits": [],
+  "method": "post",
+  "operation_id": "create-a-database",
+  "path": "/v1/data_sources",
+  "resources": [
+    {
+      "kind": "source",
+      "label": "Create a data source",
+      "url": "https://developers.notion.com/reference/create-a-data-source"
+    }
+  ],
+  "sections": [],
+  "slug": "create-a-data-source",
+  "source_url": "https://developers.notion.com/reference/create-a-data-source",
+  "summary": null,
+  "title": "Create a data source",
+  "warnings": []
+}

@@ -1,0 +1,126 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.databases.retrieve({\n  database_id: \"d9824bdc-8445-4327-be8b-5b47500af6ce\"\n})"
+    }
+  ],
+  "description": "Retrieves a [database object](https://developers.notion.com/reference/database) — information that describes the structure and columns of a database — for a provided database ID. The response adheres to any limits to an integration’s capabilities.\n\n### Warnings\n\nDeprecated as of version 2025-09-03\n\nThis page describes the API for versions up to and including `2022-06-28`. In the new `2025-09-03` version, the concepts of databases and data sources were split up, as described in [Upgrading to 2025-09-03](https://developers.notion.com/guides/get-started/upgrade-guide-2025-09-03).\nRefer to the new APIs instead:\n\n  * [Retrieve a database](https://developers.notion.com/reference/database-retrieve)\n  * [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source)\n\nThe Notion API does not support retrieving linked databases.\n\nTo fetch the information in a [linked database](https://www.notion.so/help/guides/using-linked-databases), share the original source database with your Notion integration.\n\n### Notes\n\nDatabase relations must be shared with your integration\n\nTo retrieve database properties from [database relations](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation), the related database must be shared with your integration in addition to the database being retrieved. If the related database is not shared, properties based on relations will not be included in the API response.\n\n### Overview\n\nTo fetch database rows rather than columns, use the [Query a database](https://developers.notion.com/reference/post-database-query) endpoint.\n\nTo find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.\n\n<Frame caption=\"Notion database ID\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=00a19b68b92cd013cdc0f8867427eb44\" alt=\"1340\" data-og-width=\"1340\" width=\"1340\" data-og-height=\"550\" height=\"550\" data-path=\"images/reference/image-1.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=619d6c3987ad5749bf23af7818319fa2 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=169ae1bb1ec28afc5a2a76da22509aa7 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=721d8511030842a08474ddd98a6b384f 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=7916e5aadb53f7b659e522154193debe 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=3efcdcb414a369a7835d2745d192abaf 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=dd872b0b759a00afe4d3cd4243877c8b 2500w\" />\n</Frame>\n\nRefer to the [Build your first integration guide](https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id) for more details.\n\n### Additional resources\n\n  * [How to share a database with your integration](https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions)\n  * [Working with databases guide](https://developers.notion.com/guides/data-apis/working-with-databases)\n\n### Errors\n\nErrorsEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Upgrading to 2025-09-03](https://developers.notion.com/guides/get-started/upgrade-guide-2025-09-03)\n  * [Retrieve a database](https://developers.notion.com/reference/database-retrieve)\n  * [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source)\n  * [database object](https://developers.notion.com/reference/database)\n  * [Query a database](https://developers.notion.com/reference/post-database-query)\n  * [Build your first integration guide](https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [How to share a database with your integration](https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions)\n  * [Working with databases guide](https://developers.notion.com/guides/data-apis/working-with-databases)\n  * [database relations](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation)\n  * [linked database](https://www.notion.so/help/guides/using-linked-databases)\n  * [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database)",
+  "errors": [
+    {
+      "body": "ErrorsEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "To retrieve database properties from [database relations](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation), the related database must be shared with your integration in addition to the database being retrieved. If the related database is not shared, properties based on relations will not be included in the API response.",
+      "kind": "info",
+      "title": "Database relations must be shared with your integration"
+    }
+  ],
+  "lead": "Retrieves a [database object](https://developers.notion.com/reference/database) — information that describes the structure and columns of a database — for a provided database ID. The response adheres to any limits to an integration’s capabilities.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "retrieve-database",
+  "path": "/v1/databases/{database_id}",
+  "resources": [
+    {
+      "kind": "guide",
+      "label": "Upgrading to 2025-09-03",
+      "url": "https://developers.notion.com/guides/get-started/upgrade-guide-2025-09-03"
+    },
+    {
+      "kind": "reference",
+      "label": "Retrieve a database",
+      "url": "https://developers.notion.com/reference/database-retrieve"
+    },
+    {
+      "kind": "reference",
+      "label": "Retrieve a data source",
+      "url": "https://developers.notion.com/reference/retrieve-a-data-source"
+    },
+    {
+      "kind": "reference",
+      "label": "database object",
+      "url": "https://developers.notion.com/reference/database"
+    },
+    {
+      "kind": "reference",
+      "label": "Query a database",
+      "url": "https://developers.notion.com/reference/post-database-query"
+    },
+    {
+      "kind": "guide",
+      "label": "Build your first integration guide",
+      "url": "https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "guide",
+      "label": "How to share a database with your integration",
+      "url": "https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions"
+    },
+    {
+      "kind": "guide",
+      "label": "Working with databases guide",
+      "url": "https://developers.notion.com/guides/data-apis/working-with-databases"
+    },
+    {
+      "kind": "link",
+      "label": "database relations",
+      "url": "https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation"
+    },
+    {
+      "kind": "link",
+      "label": "linked database",
+      "url": "https://www.notion.so/help/guides/using-linked-databases"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a database",
+      "url": "https://developers.notion.com/reference/retrieve-a-database"
+    }
+  ],
+  "sections": [
+    {
+      "body": "To fetch database rows rather than columns, use the [Query a database](https://developers.notion.com/reference/post-database-query) endpoint.\n\nTo find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.\n\n<Frame caption=\"Notion database ID\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=00a19b68b92cd013cdc0f8867427eb44\" alt=\"1340\" data-og-width=\"1340\" width=\"1340\" data-og-height=\"550\" height=\"550\" data-path=\"images/reference/image-1.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=619d6c3987ad5749bf23af7818319fa2 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=169ae1bb1ec28afc5a2a76da22509aa7 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=721d8511030842a08474ddd98a6b384f 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=7916e5aadb53f7b659e522154193debe 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=3efcdcb414a369a7835d2745d192abaf 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-1.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=dd872b0b759a00afe4d3cd4243877c8b 2500w\" />\n</Frame>\n\nRefer to the [Build your first integration guide](https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id) for more details.",
+      "heading": "Overview",
+      "level": 2
+    },
+    {
+      "heading": "Additional resources",
+      "items": [
+        "[How to share a database with your integration](https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions)",
+        "[Working with databases guide](https://developers.notion.com/guides/data-apis/working-with-databases)"
+      ],
+      "level": 3
+    }
+  ],
+  "slug": "retrieve-a-database",
+  "source_url": "https://developers.notion.com/reference/retrieve-a-database",
+  "summary": null,
+  "title": "Retrieve a database",
+  "warnings": [
+    {
+      "body": "This page describes the API for versions up to and including `2022-06-28`. In the new `2025-09-03` version, the concepts of databases and data sources were split up, as described in [Upgrading to 2025-09-03](https://developers.notion.com/guides/get-started/upgrade-guide-2025-09-03).\nRefer to the new APIs instead:",
+      "items": [
+        "[Retrieve a database](https://developers.notion.com/reference/database-retrieve)",
+        "[Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source)"
+      ],
+      "kind": "warning",
+      "title": "Deprecated as of version 2025-09-03"
+    },
+    {
+      "body": "To fetch the information in a [linked database](https://www.notion.so/help/guides/using-linked-databases), share the original source database with your Notion integration.",
+      "kind": "warning",
+      "title": "The Notion API does not support retrieving linked databases."
+    }
+  ]
+}

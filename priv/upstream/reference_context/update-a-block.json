@@ -1,0 +1,98 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.update({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\",\n  paragraph: {\n    rich_text: [{ text: { content: \"Updated paragraph text\" } }]\n  }\n})"
+    }
+  ],
+  "description": "### Notes\n\nUpdating `child_page` blocks\n\nTo update `child_page` type blocks, use the [Update page](https://developers.notion.com/reference/patch-page) endpoint. Updating the page's `title` updates the text displayed in the associated `child_page` block.\n\nUpdating `child_database` blocks\n\nTo update `child_database` type blocks, use the [Update database](https://developers.notion.com/reference/update-a-database) endpoint. Updating the page's `title` updates the text displayed in the associated `child_database` block.\n\nUpdating `children`\n\nA block's children *CANNOT* be directly updated with this endpoint. Instead use [Append block children](https://developers.notion.com/reference/patch-block-children) to add children.\n\nIntegration capabilities\n\nThis endpoint requires an integration to have update content capabilities. Attempting to call this API without update content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Success\n\nReturns a 200 HTTP response containing the updated [block object](https://developers.notion.com/reference/block) on success.\n\n### Errors\n\nReturns a 404 HTTP response if the block doesn't exist, is in the trash, or if the integration doesn't have access to the page.\nReturns a 400 if the `type` for the block is incorrect or the input is incorrect for a given field.\nReturns a 400 or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [Update page](https://developers.notion.com/reference/patch-page)\n  * [Update database](https://developers.notion.com/reference/update-a-database)\n  * [Append block children](https://developers.notion.com/reference/patch-block-children)\n  * [block object](https://developers.notion.com/reference/block)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Update a block](https://developers.notion.com/reference/update-a-block)",
+  "errors": [
+    {
+      "body": "Returns a 404 HTTP response if the block doesn't exist, is in the trash, or if the integration doesn't have access to the page.\nReturns a 400 if the `type` for the block is incorrect or the input is incorrect for a given field.\nReturns a 400 or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "To update `child_page` type blocks, use the [Update page](https://developers.notion.com/reference/patch-page) endpoint. Updating the page's `title` updates the text displayed in the associated `child_page` block.",
+      "kind": "info",
+      "title": "Updating `child_page` blocks"
+    },
+    {
+      "body": "To update `child_database` type blocks, use the [Update database](https://developers.notion.com/reference/update-a-database) endpoint. Updating the page's `title` updates the text displayed in the associated `child_database` block.",
+      "kind": "info",
+      "title": "Updating `child_database` blocks"
+    },
+    {
+      "body": "A block's children *CANNOT* be directly updated with this endpoint. Instead use [Append block children](https://developers.notion.com/reference/patch-block-children) to add children.",
+      "kind": "info",
+      "title": "Updating `children`"
+    },
+    {
+      "body": "This endpoint requires an integration to have update content capabilities. Attempting to call this API without update content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    }
+  ],
+  "lead": null,
+  "limits": [],
+  "method": "patch",
+  "operation_id": "update-a-block",
+  "path": "/v1/blocks/{block_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Update page",
+      "url": "https://developers.notion.com/reference/patch-page"
+    },
+    {
+      "kind": "reference",
+      "label": "Update database",
+      "url": "https://developers.notion.com/reference/update-a-database"
+    },
+    {
+      "kind": "reference",
+      "label": "Append block children",
+      "url": "https://developers.notion.com/reference/patch-block-children"
+    },
+    {
+      "kind": "reference",
+      "label": "block object",
+      "url": "https://developers.notion.com/reference/block"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "reference",
+      "label": "request limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Update a block",
+      "url": "https://developers.notion.com/reference/update-a-block"
+    }
+  ],
+  "sections": [
+    {
+      "body": "Returns a 200 HTTP response containing the updated [block object](https://developers.notion.com/reference/block) on success.",
+      "heading": "Success",
+      "level": 3
+    }
+  ],
+  "slug": "update-a-block",
+  "source_url": "https://developers.notion.com/reference/update-a-block",
+  "summary": null,
+  "title": "Update a block",
+  "warnings": []
+}

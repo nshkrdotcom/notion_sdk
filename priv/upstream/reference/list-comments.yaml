@@ -1,0 +1,1057 @@
+openapi: 3.1.0
+info:
+  title: Notion API
+  version: 1.0.0
+  termsOfService: >-
+    https://notion.notion.site/Terms-and-Privacy-28ffdd083dc3473e9c2da6ec011b58ac
+servers:
+  - url: https://api.notion.com
+security:
+  - bearerAuth: []
+tags:
+  - name: Databases
+    description: Database endpoints
+  - name: Data sources
+    description: Data source endpoints
+  - name: Pages
+    description: Page endpoints
+  - name: Blocks
+    description: Block endpoints
+  - name: Comments
+    description: Comment endpoints
+  - name: File uploads
+    description: File upload endpoints
+  - name: OAuth
+    description: OAuth endpoints (basic authentication)
+  - name: Users
+    description: User endpoints
+  - name: Search
+    description: Search endpoints
+paths:
+  /v1/comments:
+    get:
+      tags:
+        - Comments
+      summary: List comments
+      operationId: list-comments
+      parameters:
+        - name: block_id
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/idRequest'
+            description: Identifier for a Notion block or page.
+        - name: start_cursor
+          in: query
+          schema:
+            type: string
+            description: >-
+              If supplied, this endpoint will return a page of results starting
+              after the cursor provided. If not supplied, this endpoint will
+              return the first page of results.
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            description: >-
+              The number of items from the full list desired in the response.
+              Maximum: 100
+        - $ref: '#/components/parameters/notionVersion'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    const: list
+                    description: Always `list`
+                  next_cursor:
+                    oneOf:
+                      - $ref: '#/components/schemas/idResponse'
+                      - type: 'null'
+                  has_more:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/commentObjectResponse'
+                  type:
+                    type: string
+                    const: comment
+                    description: Always `comment`
+                  comment:
+                    $ref: '#/components/schemas/emptyObject'
+                required:
+                  - object
+                  - next_cursor
+                  - has_more
+                  - results
+                  - type
+                  - comment
+                additionalProperties: false
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_400'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_401'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_403'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_404'
+        '409':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_409'
+        '429':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_429'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_500'
+        '503':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_503'
+      x-codeSamples:
+        - lang: javascript
+          label: TypeScript SDK
+          source: |-
+            import { Client } from "@notionhq/client"
+
+            const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+            const response = await notion.comments.list({
+              block_id: "b55c9c91-384d-452b-81db-d1ef79372b75",
+              start_cursor: undefined,
+              page_size: 50
+            })
+components:
+  schemas:
+    idRequest:
+      type: string
+    idResponse:
+      type: string
+      format: uuid
+    commentObjectResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          const: comment
+          description: The comment object type name.
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the comment.
+        parent:
+          $ref: '#/components/schemas/commentParentResponse'
+          description: The parent of the comment.
+        discussion_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the discussion thread this comment belongs to.
+        created_time:
+          type: string
+          format: date-time
+          description: The time when the comment was created.
+        last_edited_time:
+          type: string
+          format: date-time
+          description: The time when the comment was last edited.
+        created_by:
+          $ref: '#/components/schemas/partialUserObjectResponse'
+          description: The user who created the comment.
+        rich_text:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemResponse'
+          maxItems: 100
+          description: The rich text content of the comment.
+        display_name:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - custom
+                - user
+                - integration
+              description: 'One of: `custom`, `user`, `integration`'
+            resolved_name:
+              oneOf:
+                - type: string
+                - type: 'null'
+          additionalProperties: false
+          required:
+            - type
+            - resolved_name
+          description: The display name of the comment.
+        attachments:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                enum:
+                  - audio
+                  - image
+                  - pdf
+                  - productivity
+                  - video
+                description: 'One of: `audio`, `image`, `pdf`, `productivity`, `video`'
+              file:
+                $ref: '#/components/schemas/internalFileResponse'
+            additionalProperties: false
+            required:
+              - category
+              - file
+          maxItems: 100
+          description: Any file attachments associated with the comment.
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - parent
+        - discussion_id
+        - created_time
+        - last_edited_time
+        - created_by
+        - rich_text
+        - display_name
+    emptyObject:
+      type: object
+      properties: {}
+      additionalProperties: false
+    error_api_400:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - invalid_json
+                - invalid_request_url
+                - invalid_request
+                - missing_version
+                - validation_error
+            status:
+              const: 400
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_401:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - unauthorized
+            status:
+              const: 401
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_403:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - restricted_resource
+            status:
+              const: 403
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_404:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - object_not_found
+            status:
+              const: 404
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_409:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - conflict_error
+            status:
+              const: 409
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_429:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - rate_limited
+            status:
+              const: 429
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_500:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - internal_server_error
+            status:
+              const: 500
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_503:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - service_unavailable
+            status:
+              const: 503
+          required:
+            - code
+            - status
+          additionalProperties: false
+    commentParentResponse:
+      oneOf:
+        - $ref: '#/components/schemas/pageIdCommentParentResponse'
+        - $ref: '#/components/schemas/blockIdCommentParentResponse'
+    partialUserObjectResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+        object:
+          type: string
+          const: user
+          description: Always `user`
+      additionalProperties: false
+      required:
+        - id
+        - object
+    richTextItemResponse:
+      allOf:
+        - $ref: '#/components/schemas/richTextItemResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/textRichTextItemResponse'
+            - $ref: '#/components/schemas/mentionRichTextItemResponse'
+            - $ref: '#/components/schemas/equationRichTextItemResponse'
+    internalFileResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL of the file.
+        expiry_time:
+          type: string
+          format: date-time
+          description: The time when the URL will expire.
+      additionalProperties: false
+      required:
+        - url
+        - expiry_time
+    publicApiCommonErrorResponse:
+      type: object
+      properties:
+        object:
+          const: error
+        message:
+          type: string
+        additional_data:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+      required:
+        - object
+        - message
+    pageIdCommentParentResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: page_id
+          description: Always `page_id`
+        page_id:
+          $ref: '#/components/schemas/idResponse'
+      additionalProperties: false
+      required:
+        - type
+        - page_id
+      title: Page Id
+    blockIdCommentParentResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: block_id
+          description: Always `block_id`
+        block_id:
+          $ref: '#/components/schemas/idResponse'
+      additionalProperties: false
+      required:
+        - type
+        - block_id
+      title: Block Id
+    richTextItemResponseCommon:
+      type: object
+      properties:
+        plain_text:
+          type: string
+          description: The plain text content of the rich text object, without any styling.
+        href:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: A URL that the rich text object links to or mentions.
+        annotations:
+          $ref: '#/components/schemas/annotationResponse'
+          description: >-
+            All rich text objects contain an annotations object that sets the
+            styling for the rich text.
+      additionalProperties: false
+      required:
+        - plain_text
+        - href
+        - annotations
+    textRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: text
+          description: Always `text`
+        text:
+          type: object
+          properties:
+            content:
+              type: string
+              maxLength: 2000
+              description: The actual text content of the text.
+            link:
+              oneOf:
+                - type: object
+                  properties:
+                    url:
+                      type: string
+                      examples:
+                        - https://www.notion.com
+                      description: The URL of the link.
+                  additionalProperties: false
+                  required:
+                    - url
+                - type: 'null'
+              description: >-
+                An object with information about any inline link in this text,
+                if included.
+          additionalProperties: false
+          required:
+            - content
+            - link
+          description: >-
+            If a rich text object's type value is `text`, then the corresponding
+            text field contains an object including the text content and any
+            inline link.
+      required:
+        - type
+        - text
+      title: Text
+    mentionRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: mention
+          description: Always `mention`
+        mention:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  $ref: '#/components/schemas/userValueResponse'
+                  description: Details of the user mention.
+              additionalProperties: false
+              required:
+                - type
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: date
+                  description: Always `date`
+                date:
+                  $ref: '#/components/schemas/dateResponse'
+                  description: Details of the date mention.
+              additionalProperties: false
+              required:
+                - type
+                - date
+              title: Date
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: link_preview
+                  description: Always `link_preview`
+                link_preview:
+                  $ref: '#/components/schemas/linkPreviewMentionResponse'
+                  description: Details of the link preview mention.
+              additionalProperties: false
+              required:
+                - type
+                - link_preview
+              title: Link Preview
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: link_mention
+                  description: Always `link_mention`
+                link_mention:
+                  $ref: '#/components/schemas/linkMentionResponse'
+                  description: Details of the link mention.
+              additionalProperties: false
+              required:
+                - type
+                - link_mention
+              title: Link Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: page
+                  description: Always `page`
+                page:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idResponse'
+                      description: The ID of the page in the mention.
+                  additionalProperties: false
+                  required:
+                    - id
+                  description: Details of the page mention.
+              additionalProperties: false
+              required:
+                - type
+                - page
+              title: Page
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: database
+                  description: Always `database`
+                database:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idResponse'
+                      description: The ID of the database in the mention.
+                  additionalProperties: false
+                  required:
+                    - id
+                  description: Details of the database mention.
+              additionalProperties: false
+              required:
+                - type
+                - database
+              title: Database
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: template_mention
+                  description: Always `template_mention`
+                template_mention:
+                  $ref: '#/components/schemas/templateMentionResponse'
+                  description: Details of the template mention.
+              additionalProperties: false
+              required:
+                - type
+                - template_mention
+              title: Template Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: custom_emoji
+                  description: Always `custom_emoji`
+                custom_emoji:
+                  $ref: '#/components/schemas/customEmojiResponse'
+                  description: Details of the custom emoji mention.
+              additionalProperties: false
+              required:
+                - type
+                - custom_emoji
+              title: Custom Emoji
+          description: >-
+            Mention objects represent an inline mention of a database, date,
+            link preview mention, page, template mention, or user. A mention is
+            created in the Notion UI when a user types `@` followed by the name
+            of the reference.
+      required:
+        - type
+        - mention
+      title: Mention
+    equationRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: equation
+          description: Always `equation`
+        equation:
+          type: object
+          properties:
+            expression:
+              type: string
+              examples:
+                - e=mc^2
+              description: A KaTeX compatible string.
+          additionalProperties: false
+          required:
+            - expression
+          description: >-
+            Notion supports inline LaTeX equations as rich text objects with a
+            type value of `equation`.
+      required:
+        - type
+        - equation
+      title: Equation
+    annotationResponse:
+      type: object
+      properties:
+        bold:
+          type: boolean
+        italic:
+          type: boolean
+        strikethrough:
+          type: boolean
+        underline:
+          type: boolean
+        code:
+          type: boolean
+        color:
+          $ref: '#/components/schemas/apiColor'
+      additionalProperties: false
+      required:
+        - bold
+        - italic
+        - strikethrough
+        - underline
+        - code
+        - color
+    userValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/partialUserObjectResponse'
+        - $ref: '#/components/schemas/userObjectResponse'
+    dateResponse:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          description: The start date of the date object.
+        end:
+          oneOf:
+            - type: string
+              format: date
+            - type: 'null'
+          description: The end date of the date object, if any.
+        time_zone:
+          oneOf:
+            - $ref: '#/components/schemas/timeZoneRequest'
+            - type: 'null'
+          description: The time zone of the date object.
+      additionalProperties: false
+      required:
+        - start
+        - end
+        - time_zone
+    linkPreviewMentionResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL of the link preview mention.
+      additionalProperties: false
+      required:
+        - url
+    linkMentionResponse:
+      type: object
+      properties:
+        href:
+          type: string
+          description: The href of the link mention.
+        title:
+          type: string
+          description: The title of the link.
+        description:
+          type: string
+          description: The description of the link.
+        link_author:
+          type: string
+          description: The author of the link.
+        link_provider:
+          type: string
+          description: The provider of the link.
+        thumbnail_url:
+          type: string
+          description: The thumbnail URL of the link.
+        icon_url:
+          type: string
+          description: The icon URL of the link.
+        iframe_url:
+          type: string
+          description: The iframe URL of the link.
+        height:
+          type: integer
+          description: The height of the link preview iframe.
+        padding:
+          type: integer
+          description: The padding of the link preview iframe.
+        padding_top:
+          type: integer
+          description: The top padding of the link preview iframe.
+      additionalProperties: false
+      required:
+        - href
+    templateMentionResponse:
+      oneOf:
+        - $ref: '#/components/schemas/templateMentionDateTemplateMentionResponse'
+        - $ref: '#/components/schemas/templateMentionUserTemplateMentionResponse'
+    customEmojiResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the custom emoji.
+        name:
+          type: string
+          description: The name of the custom emoji.
+        url:
+          type: string
+          description: The URL of the custom emoji.
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - url
+    apiColor:
+      type: string
+      enum:
+        - default
+        - gray
+        - brown
+        - orange
+        - yellow
+        - green
+        - blue
+        - purple
+        - pink
+        - red
+        - default_background
+        - gray_background
+        - brown_background
+        - orange_background
+        - yellow_background
+        - green_background
+        - blue_background
+        - purple_background
+        - pink_background
+        - red_background
+      description: >-
+        One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`,
+        `purple`, `pink`, `red`, `default_background`, `gray_background`,
+        `brown_background`, `orange_background`, `yellow_background`,
+        `green_background`, `blue_background`, `purple_background`,
+        `pink_background`, `red_background`
+    userObjectResponse:
+      allOf:
+        - $ref: '#/components/schemas/userObjectResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/personUserObjectResponse'
+            - $ref: '#/components/schemas/botUserObjectResponse'
+    timeZoneRequest:
+      type: string
+    templateMentionDateTemplateMentionResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_date
+          description: Always `template_mention_date`
+        template_mention_date:
+          type: string
+          enum:
+            - today
+            - now
+          description: The date of the template mention.
+      additionalProperties: false
+      required:
+        - type
+        - template_mention_date
+      title: Template Mention Date
+    templateMentionUserTemplateMentionResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_user
+          description: Always `template_mention_user`
+        template_mention_user:
+          type: string
+          const: me
+          description: The user of the template mention.
+      additionalProperties: false
+      required:
+        - type
+        - template_mention_user
+      title: Template Mention User
+    userObjectResponseCommon:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the user.
+        object:
+          type: string
+          const: user
+          description: The user object type name.
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The name of the user.
+        avatar_url:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The avatar URL of the user.
+      additionalProperties: false
+      required:
+        - id
+        - object
+        - name
+        - avatar_url
+    personUserObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: person
+          description: Indicates this user is a person.
+        person:
+          type: object
+          properties:
+            email:
+              type: string
+              description: The email of the person.
+          additionalProperties: false
+          description: Details about the person, when the `type` of the user is `person`.
+      required:
+        - type
+        - person
+      title: Person
+    botUserObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: bot
+          description: Indicates this user is a bot.
+        bot:
+          oneOf:
+            - $ref: '#/components/schemas/emptyObject'
+            - $ref: '#/components/schemas/botInfoResponse'
+          description: Details about the bot, when the `type` of the user is `bot`.
+      required:
+        - type
+        - bot
+      title: Bot
+    botInfoResponse:
+      type: object
+      properties:
+        owner:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  oneOf:
+                    - type: object
+                      properties:
+                        id:
+                          $ref: '#/components/schemas/idResponse'
+                          description: The ID of the user.
+                        object:
+                          type: string
+                          const: user
+                          description: The user object type name.
+                        name:
+                          oneOf:
+                            - type: string
+                            - type: 'null'
+                          description: The name of the user.
+                        avatar_url:
+                          oneOf:
+                            - type: string
+                            - type: 'null'
+                          description: The avatar URL of the user.
+                        type:
+                          type: string
+                          const: person
+                          description: The type of the user.
+                        person:
+                          type: object
+                          properties:
+                            email:
+                              type: string
+                              description: The email of the person.
+                          additionalProperties: false
+                          description: The person info of the user.
+                      additionalProperties: false
+                      required:
+                        - id
+                        - object
+                        - name
+                        - avatar_url
+                        - type
+                        - person
+                    - $ref: '#/components/schemas/partialUserObjectResponse'
+                  description: >-
+                    Details about the owner of the bot, when the `type` of the
+                    owner is `user`. This means the bot is for a integration.
+              additionalProperties: false
+              required:
+                - type
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: workspace
+                  description: Always `workspace`
+                workspace:
+                  type: boolean
+                  const: true
+                  description: >-
+                    Details about the owner of the bot, when the `type` of the
+                    owner is `workspace`. This means the bot is for an internal
+                    integration.
+              additionalProperties: false
+              required:
+                - type
+                - workspace
+              title: Workspace
+          description: Details about the owner of the bot.
+        workspace_id:
+          type: string
+          description: The ID of the bot's workspace.
+        workspace_limits:
+          type: object
+          properties:
+            max_file_upload_size_in_bytes:
+              type: integer
+              minimum: 0
+              description: The maximum allowable size of a file upload, in bytes
+          additionalProperties: false
+          required:
+            - max_file_upload_size_in_bytes
+          description: Limits and restrictions that apply to the bot's workspace
+        workspace_name:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The name of the bot's workspace.
+      additionalProperties: false
+      required:
+        - owner
+        - workspace_id
+        - workspace_limits
+        - workspace_name
+  parameters:
+    notionVersion:
+      name: Notion-Version
+      in: header
+      required: true
+      schema:
+        enum:
+          - '2025-09-03'
+      description: >-
+        The [API version](/reference/versioning) to use for this request. The
+        latest version is `2025-09-03`.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

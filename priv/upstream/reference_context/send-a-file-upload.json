@@ -1,0 +1,76 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nimport { readFile } from \"fs/promises\"\nimport { basename } from \"path\"\n\nconst filePath = \"./document.pdf\"\n\nconst response = await notion.fileUploads.send({\n  file_upload_id: \"a02fc1d3-db8b-45c5-a222-27595b15aea7\",\n  file: {\n    filename: basename(filePath),\n    data: new Blob([await readFile(filePath)], {\n      type: \"application/pdf\"\n    })\n  }\n})"
+    }
+  ],
+  "description": "When `mode=multi_part`, each part must include a form field `part_number` to indicate which part is being sent. Parts may be sent concurrently up to standard Notion API [rate limits](https://developers.notion.com/reference/request-limits), and may be sent out of order as long as all parts (1, ..., `part_number`) are successfully sent before calling the [complete file upload API](https://developers.notion.com/reference/complete-a-file-upload).\n\n### Notes\n\nThe use of multipart form data is unique to this endpoint. Other Notion APIs, including [Create a file upload](https://developers.notion.com/reference/create-a-file-upload) and [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload), use JSON parameters.\nInclude a `boundary` with the `Content-Type` header of your request as per [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388). Most request libraries (e.g. `fetch`, `ky`) automatically handle this as long as you provide a form data object but don't overwrite the `Content-Type` explicitly.\nFor more tips and examples, view the [file upload guide](https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents).\n\n### Overview\n\nThe maximum allowed length of a file name is 900 bytes, including any file extension included in the file name or inferred based on the `content_type`. However, we recommend using shorter names for performance and easier file management and lookup using the [List file uploads](https://developers.notion.com/reference/list-file-uploads) API.\n\n### Resources\n\n  * [Create a file upload](https://developers.notion.com/reference/create-a-file-upload)\n  * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)\n  * [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388)\n  * [file upload guide](https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents)\n  * [rate limits](https://developers.notion.com/reference/request-limits)\n  * [complete file upload API](https://developers.notion.com/reference/complete-a-file-upload)\n  * [List file uploads](https://developers.notion.com/reference/list-file-uploads)\n  * [Send a file upload](https://developers.notion.com/reference/send-a-file-upload)",
+  "errors": [],
+  "info_notes": [
+    {
+      "body": "The use of multipart form data is unique to this endpoint. Other Notion APIs, including [Create a file upload](https://developers.notion.com/reference/create-a-file-upload) and [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload), use JSON parameters.\nInclude a `boundary` with the `Content-Type` header of your request as per [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388). Most request libraries (e.g. `fetch`, `ky`) automatically handle this as long as you provide a form data object but don't overwrite the `Content-Type` explicitly.\nFor more tips and examples, view the [file upload guide](https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents).",
+      "kind": "info"
+    }
+  ],
+  "lead": "When `mode=multi_part`, each part must include a form field `part_number` to indicate which part is being sent. Parts may be sent concurrently up to standard Notion API [rate limits](https://developers.notion.com/reference/request-limits), and may be sent out of order as long as all parts (1, ..., `part_number`) are successfully sent before calling the [complete file upload API](https://developers.notion.com/reference/complete-a-file-upload).",
+  "limits": [],
+  "method": "post",
+  "operation_id": "upload-file",
+  "path": "/v1/file_uploads/{file_upload_id}/send",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Create a file upload",
+      "url": "https://developers.notion.com/reference/create-a-file-upload"
+    },
+    {
+      "kind": "reference",
+      "label": "Complete a file upload",
+      "url": "https://developers.notion.com/reference/complete-a-file-upload"
+    },
+    {
+      "kind": "link",
+      "label": "RFC 2388",
+      "url": "https://datatracker.ietf.org/doc/html/rfc2388"
+    },
+    {
+      "kind": "guide",
+      "label": "file upload guide",
+      "url": "https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents"
+    },
+    {
+      "kind": "reference",
+      "label": "rate limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "complete file upload API",
+      "url": "https://developers.notion.com/reference/complete-a-file-upload"
+    },
+    {
+      "kind": "reference",
+      "label": "List file uploads",
+      "url": "https://developers.notion.com/reference/list-file-uploads"
+    },
+    {
+      "kind": "source",
+      "label": "Send a file upload",
+      "url": "https://developers.notion.com/reference/send-a-file-upload"
+    }
+  ],
+  "sections": [
+    {
+      "body": "The maximum allowed length of a file name is 900 bytes, including any file extension included in the file name or inferred based on the `content_type`. However, we recommend using shorter names for performance and easier file management and lookup using the [List file uploads](https://developers.notion.com/reference/list-file-uploads) API.",
+      "heading": "Overview",
+      "level": 2
+    }
+  ],
+  "slug": "send-a-file-upload",
+  "source_url": "https://developers.notion.com/reference/send-a-file-upload",
+  "summary": null,
+  "title": "Send a file upload",
+  "warnings": []
+}

@@ -1,0 +1,30 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client()\n\nconst response = await notion.oauth.revoke({\n  client_id: process.env.OAUTH_CLIENT_ID,\n  client_secret: process.env.OAUTH_CLIENT_SECRET,\n  token: \"access_token_to_revoke\"\n})"
+    }
+  ],
+  "description": "Revoke an access token.\n\n### Resources\n\n  * [Revoke a token](https://developers.notion.com/reference/revoke-token)",
+  "errors": [],
+  "info_notes": [],
+  "lead": "Revoke an access token.",
+  "limits": [],
+  "method": "post",
+  "operation_id": "revoke-token",
+  "path": "/v1/oauth/revoke",
+  "resources": [
+    {
+      "kind": "source",
+      "label": "Revoke a token",
+      "url": "https://developers.notion.com/reference/revoke-token"
+    }
+  ],
+  "sections": [],
+  "slug": "revoke-token",
+  "source_url": "https://developers.notion.com/reference/revoke-token",
+  "summary": null,
+  "title": "Revoke a token",
+  "warnings": []
+}

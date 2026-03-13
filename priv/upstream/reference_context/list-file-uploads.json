@@ -1,0 +1,35 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.list({\n  start_cursor: undefined,\n  page_size: 50\n})"
+    }
+  ],
+  "description": "Use this API to retrieve [file uploads](https://developers.notion.com/reference/file-upload) for the current bot integration, sorted by most recent first.\n\n### Resources\n\n  * [file uploads](https://developers.notion.com/reference/file-upload)\n  * [List file uploads](https://developers.notion.com/reference/list-file-uploads)",
+  "errors": [],
+  "info_notes": [],
+  "lead": "Use this API to retrieve [file uploads](https://developers.notion.com/reference/file-upload) for the current bot integration, sorted by most recent first.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "list-file-uploads",
+  "path": "/v1/file_uploads",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "file uploads",
+      "url": "https://developers.notion.com/reference/file-upload"
+    },
+    {
+      "kind": "source",
+      "label": "List file uploads",
+      "url": "https://developers.notion.com/reference/list-file-uploads"
+    }
+  ],
+  "sections": [],
+  "slug": "list-file-uploads",
+  "source_url": "https://developers.notion.com/reference/list-file-uploads",
+  "summary": null,
+  "title": "List file uploads",
+  "warnings": []
+}

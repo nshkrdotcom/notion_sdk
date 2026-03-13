@@ -1,0 +1,205 @@
+openapi: 3.1.0
+info:
+  title: Notion API
+  version: 1.0.0
+  termsOfService: >-
+    https://notion.notion.site/Terms-and-Privacy-28ffdd083dc3473e9c2da6ec011b58ac
+servers:
+  - url: https://api.notion.com
+security:
+  - bearerAuth: []
+tags:
+  - name: Databases
+    description: Database endpoints
+  - name: Data sources
+    description: Data source endpoints
+  - name: Pages
+    description: Page endpoints
+  - name: Blocks
+    description: Block endpoints
+  - name: Comments
+    description: Comment endpoints
+  - name: File uploads
+    description: File upload endpoints
+  - name: OAuth
+    description: OAuth endpoints (basic authentication)
+  - name: Users
+    description: User endpoints
+  - name: Search
+    description: Search endpoints
+paths:
+  /v1/oauth/introspect:
+    post:
+      tags:
+        - OAuth
+      summary: Introspect a token
+      operationId: introspect-token
+      parameters:
+        - $ref: '#/components/parameters/notionVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required:
+                - token
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  active:
+                    type: boolean
+                  scope:
+                    type: string
+                  iat:
+                    type: integer
+                  request_id:
+                    type: string
+                    format: uuid
+                required:
+                  - active
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_oauth_400'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_oauth_401'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_oauth_403'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_oauth_500'
+      security:
+        - basicAuth: []
+      x-codeSamples:
+        - lang: javascript
+          label: TypeScript SDK
+          source: |-
+            import { Client } from "@notionhq/client"
+
+            const notion = new Client()
+
+            const response = await notion.oauth.introspect({
+              client_id: process.env.OAUTH_CLIENT_ID,
+              client_secret: process.env.OAUTH_CLIENT_SECRET,
+              token: "access_token_to_introspect"
+            })
+components:
+  parameters:
+    notionVersion:
+      name: Notion-Version
+      in: header
+      required: true
+      schema:
+        enum:
+          - '2025-09-03'
+      description: >-
+        The [API version](/reference/versioning) to use for this request. The
+        latest version is `2025-09-03`.
+  schemas:
+    error_oauth_400:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - invalid_request
+                - invalid_grant
+                - unauthorized_client
+                - unsupported_grant_type
+                - invalid_scope
+            status:
+              const: 400
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_oauth_401:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - invalid_client
+            status:
+              const: 401
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_oauth_403:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - test_env_error
+            status:
+              const: 403
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_oauth_500:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - internal_server_error
+            status:
+              const: 500
+          required:
+            - code
+            - status
+          additionalProperties: false
+    publicApiCommonErrorResponse:
+      type: object
+      properties:
+        object:
+          const: error
+        message:
+          type: string
+        additional_data:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+      required:
+        - object
+        - message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    basicAuth:
+      type: http
+      scheme: basic

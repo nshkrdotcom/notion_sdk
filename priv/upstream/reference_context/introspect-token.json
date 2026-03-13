@@ -1,0 +1,30 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client()\n\nconst response = await notion.oauth.introspect({\n  client_id: process.env.OAUTH_CLIENT_ID,\n  client_secret: process.env.OAUTH_CLIENT_SECRET,\n  token: \"access_token_to_introspect\"\n})"
+    }
+  ],
+  "description": "Get a token's active status, scope, and issued time.\n\n### Resources\n\n  * [Introspect a token](https://developers.notion.com/reference/introspect-token)",
+  "errors": [],
+  "info_notes": [],
+  "lead": "Get a token's active status, scope, and issued time.",
+  "limits": [],
+  "method": "post",
+  "operation_id": "introspect-token",
+  "path": "/v1/oauth/introspect",
+  "resources": [
+    {
+      "kind": "source",
+      "label": "Introspect a token",
+      "url": "https://developers.notion.com/reference/introspect-token"
+    }
+  ],
+  "sections": [],
+  "slug": "introspect-token",
+  "source_url": "https://developers.notion.com/reference/introspect-token",
+  "summary": null,
+  "title": "Introspect a token",
+  "warnings": []
+}

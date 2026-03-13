@@ -1,0 +1,30 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.complete({\n  file_upload_id: \"a02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})"
+    }
+  ],
+  "description": "### Resources\n\n  * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)",
+  "errors": [],
+  "info_notes": [],
+  "lead": null,
+  "limits": [],
+  "method": "post",
+  "operation_id": "complete-file-upload",
+  "path": "/v1/file_uploads/{file_upload_id}/complete",
+  "resources": [
+    {
+      "kind": "source",
+      "label": "Complete a file upload",
+      "url": "https://developers.notion.com/reference/complete-a-file-upload"
+    }
+  ],
+  "sections": [],
+  "slug": "complete-a-file-upload",
+  "source_url": "https://developers.notion.com/reference/complete-a-file-upload",
+  "summary": null,
+  "title": "Complete a file upload",
+  "warnings": []
+}

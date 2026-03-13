@@ -1,0 +1,73 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.children.append({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\",\n  children: [\n    {\n      type: \"paragraph\",\n      paragraph: {\n        rich_text: [{ text: { content: \"Hello, world!\" } }]\n      }\n    }\n  ]\n})"
+    }
+  ],
+  "description": "Creates and appends new children blocks to the parent `block_id` specified. Blocks can be parented by other blocks, pages, or databases.\n\n### Warnings\n\nDeprecated parameter\n\nThe `after` parameter is deprecated. Use the `position` parameter instead, which provides more flexibility including inserting at the start of the children list.\nIf you're currently using `after`, migrate to `position` with type `after_block`:\nYou cannot specify both `after` and `position` in the same request.\n\n  * **Before:** `{ \"children\": [...], \"after\": \"<block_id>\" }`\n  * **After:** `{ \"children\": [...], \"position\": { \"type\": \"after_block\", \"after_block\": { \"id\": \"<block_id>\" } } }`\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have insert content capabilities. Attempting to call this API without insert content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Controlling insert position\n\nBy default, blocks are appended to the end of the parent block's children. Use the `position` parameter to insert blocks at a specific location:\n| Position type                                                      | Description                                                   |\n| ------------------------------------------------------------------ | ------------------------------------------------------------- |\n| `{ \"type\": \"end\" }`                                                | Insert at the end of the parent's children (default behavior) |\n| `{ \"type\": \"start\" }`                                              | Insert at the beginning of the parent's children              |\n| `{ \"type\": \"after_block\", \"after_block\": { \"id\": \"<block_id>\" } }` | Insert after the specified block                              |\n<CodeGroup>\n```json Insert at start theme={null}\n{\n\"children\": [/* blocks */],\n\"position\": { \"type\": \"start\" }\n}\n```\n```json Insert after specific block theme={null}\n{\n\"children\": [/* blocks */],\n\"position\": {\n\"type\": \"after_block\",\n\"after_block\": { \"id\": \"12345678-1234-1234-1234-123456789abc\" }\n}\n}\n```\n</CodeGroup>\n\n### Errors\n\nReturns a 404 HTTP response if the block specified by `id` doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*\n\n### Resources\n\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Append block children](https://developers.notion.com/reference/patch-block-children)",
+  "errors": [
+    {
+      "body": "Returns a 404 HTTP response if the block specified by `id` doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "This endpoint requires an integration to have insert content capabilities. Attempting to call this API without insert content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    }
+  ],
+  "lead": "Creates and appends new children blocks to the parent `block_id` specified. Blocks can be parented by other blocks, pages, or databases.",
+  "limits": [],
+  "method": "patch",
+  "operation_id": "patch-block-children",
+  "path": "/v1/blocks/{block_id}/children",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "reference",
+      "label": "request limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Append block children",
+      "url": "https://developers.notion.com/reference/patch-block-children"
+    }
+  ],
+  "sections": [
+    {
+      "body": "By default, blocks are appended to the end of the parent block's children. Use the `position` parameter to insert blocks at a specific location:\n| Position type                                                      | Description                                                   |\n| ------------------------------------------------------------------ | ------------------------------------------------------------- |\n| `{ \"type\": \"end\" }`                                                | Insert at the end of the parent's children (default behavior) |\n| `{ \"type\": \"start\" }`                                              | Insert at the beginning of the parent's children              |\n| `{ \"type\": \"after_block\", \"after_block\": { \"id\": \"<block_id>\" } }` | Insert after the specified block                              |\n<CodeGroup>\n```json Insert at start theme={null}\n{\n\"children\": [/* blocks */],\n\"position\": { \"type\": \"start\" }\n}\n```\n```json Insert after specific block theme={null}\n{\n\"children\": [/* blocks */],\n\"position\": {\n\"type\": \"after_block\",\n\"after_block\": { \"id\": \"12345678-1234-1234-1234-123456789abc\" }\n}\n}\n```\n</CodeGroup>",
+      "heading": "Controlling insert position",
+      "level": 3
+    }
+  ],
+  "slug": "patch-block-children",
+  "source_url": "https://developers.notion.com/reference/patch-block-children",
+  "summary": null,
+  "title": "Append block children",
+  "warnings": [
+    {
+      "body": "The `after` parameter is deprecated. Use the `position` parameter instead, which provides more flexibility including inserting at the start of the children list.\nIf you're currently using `after`, migrate to `position` with type `after_block`:\nYou cannot specify both `after` and `position` in the same request.",
+      "items": [
+        "**Before:** `{ \"children\": [...], \"after\": \"<block_id>\" }`",
+        "**After:** `{ \"children\": [...], \"position\": { \"type\": \"after_block\", \"after_block\": { \"id\": \"<block_id>\" } } }`"
+      ],
+      "kind": "warning",
+      "title": "Deprecated parameter"
+    }
+  ]
+}

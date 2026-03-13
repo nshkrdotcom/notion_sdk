@@ -1,0 +1,93 @@
+defmodule NotionSDK.GeneratedCompileTest do
+  use ExUnit.Case, async: true
+
+  @manifest_path Path.expand("../../priv/generated/manifest.json", __DIR__)
+  @docs_manifest_path Path.expand("../../priv/generated/docs_manifest.json", __DIR__)
+
+  test "all generated operations are present and compiled" do
+    manifest = Jason.decode!(File.read!(@manifest_path))
+
+    assert manifest["operation_count"] == 35
+    assert length(manifest["operations"]) == 35
+
+    Enum.each(manifest["operations"], fn %{"function" => function_name, "module" => module_name} ->
+      module = Module.concat([NotionSDK, module_name])
+
+      function = String.to_atom(function_name)
+
+      assert Code.ensure_loaded?(module)
+      assert function_exported?(module, function, 1)
+      assert function_exported?(module, function, 2)
+    end)
+  end
+
+  test "markdown, file upload lifecycle, and oauth functions are exported" do
+    assert Code.ensure_loaded?(NotionSDK.Pages)
+    assert function_exported?(NotionSDK.Pages, :retrieve_markdown, 2)
+    assert function_exported?(NotionSDK.Pages, :update_markdown, 2)
+
+    assert Code.ensure_loaded?(NotionSDK.FileUploads)
+    assert function_exported?(NotionSDK.FileUploads, :create, 2)
+    assert function_exported?(NotionSDK.FileUploads, :list, 2)
+    assert function_exported?(NotionSDK.FileUploads, :send, 2)
+    assert function_exported?(NotionSDK.FileUploads, :complete, 2)
+    assert function_exported?(NotionSDK.FileUploads, :retrieve, 2)
+
+    assert Code.ensure_loaded?(NotionSDK.OAuth)
+    assert function_exported?(NotionSDK.OAuth, :token, 2)
+    assert function_exported?(NotionSDK.OAuth, :revoke, 2)
+    assert function_exported?(NotionSDK.OAuth, :introspect, 2)
+    assert function_exported?(NotionSDK.OAuth, :provider, 0)
+    assert function_exported?(NotionSDK.OAuth, :authorization_request, 1)
+    assert function_exported?(NotionSDK.OAuth, :authorize_url, 1)
+    assert function_exported?(NotionSDK.OAuth, :exchange_code, 2)
+    assert function_exported?(NotionSDK.OAuth, :refresh_token, 2)
+  end
+
+  test "oauth owner schema modules are emitted and compiled" do
+    manifest =
+      @manifest_path
+      |> File.read!()
+      |> Jason.decode!()
+      |> update_in(["generated_files"], fn generated_files ->
+        Enum.reject(generated_files || [], fn path -> is_nil(path) end)
+      end)
+
+    assert Enum.any?(manifest["generated_files"], &String.ends_with?(&1, "/user.ex"))
+    assert Enum.any?(manifest["generated_files"], &String.ends_with?(&1, "/workspace.ex"))
+
+    assert Code.ensure_loaded?(NotionSDK.User)
+    assert Code.ensure_loaded?(NotionSDK.Workspace)
+    assert function_exported?(NotionSDK.User, :__schema__, 1)
+    assert function_exported?(NotionSDK.Workspace, :__schema__, 1)
+    assert {:ok, user_types} = Code.Typespec.fetch_types(NotionSDK.User)
+    assert {:ok, workspace_types} = Code.Typespec.fetch_types(NotionSDK.Workspace)
+    assert Enum.any?(user_types, &match?({:type, {:t, _, _}}, &1))
+    assert Enum.any?(workspace_types, &match?({:type, {:t, _, _}}, &1))
+  end
+
+  test "docs manifest and runtime metadata helpers are materially richer" do
+    docs_manifest_source = File.read!(@docs_manifest_path)
+    docs_manifest = Jason.decode!(File.read!(@docs_manifest_path))
+
+    retrieve_entry =
+      Enum.find(docs_manifest["operations"], &(&1["path"] == "/v1/pages/{page_id}"))
+
+    assert retrieve_entry["doc"] =~ "## Source Context"
+    assert retrieve_entry["doc"] =~ "### Limits"
+    assert retrieve_entry["doc"] =~ "## Code Samples"
+    assert retrieve_entry["source_context"]["metadata"]["slug"] == "retrieve-a-page"
+    refute docs_manifest_source =~ "#Reference<"
+
+    [field | _rest] = NotionSDK.PageObjectResponse.__openapi_fields__()
+
+    assert Map.has_key?(field, :description)
+    assert Map.has_key?(field, :deprecated)
+    assert Map.has_key?(field, :example)
+    assert Map.has_key?(field, :examples)
+    assert Map.has_key?(field, :external_docs)
+    assert Map.has_key?(field, :extensions)
+    assert Map.has_key?(field, :read_only)
+    assert Map.has_key?(field, :write_only)
+  end
+end

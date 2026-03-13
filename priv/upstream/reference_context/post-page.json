@@ -1,0 +1,145 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.pages.create({\n  parent: {\n    data_source_id: \"d9824bdc-8445-4327-be8b-5b47500af6ce\"\n  },\n  properties: {\n    Name: {\n      title: [{ text: { content: \"New Page Title\" } }]\n    }\n  }\n})"
+    }
+  ],
+  "description": "Use this API to create a new [page](https://developers.notion.com/reference/page) as a child of an existing page or [data source](https://developers.notion.com/reference/data-source).\n\n### Warnings\n\nSome page `properties` are not supported via the API\n\nA request body that includes `rollup`, `created_by`, `created_time`, `last_edited_by`, or `last_edited_time` values in the properties object returns an error. These Notion-generated values cannot be created or updated via the API. If the `parent` contains any of these properties, then the new page’s corresponding values are automatically created.\n\n### Notes\n\nNewlines in markdown content\n\nWhen using the `markdown` body parameter, newlines must be encoded as `\\n` in the JSON string — for example, `\"# Heading\\n\\nParagraph\"`. The interactive API explorer on this page does not support multiline input, so use cURL, an SDK, or any HTTP client that sends properly encoded JSON. When using cURL, wrap the `--data` body in **single quotes** (`'...'`) so that `\\n` is preserved for the JSON parser.\n\nRequirements\n\nYour integration must have [Insert Content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target parent page or database in order to call this endpoint. To update your integrations capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting a query without update content capabilities returns an HTTP response with a 403 status code.\n\n### Use cases\n\n### Choosing a parent\n\nIn most cases, provide a `page_id` or `data_source` under the `parent` parameter to create a page under an existing [page](https://developers.notion.com/reference/page), or [data source](https://developers.notion.com/reference/data-source), respectively.\nThere is a 3rd option, available only for bots of [public integrations](https://developers.notion.com/guides/get-started/getting-started#internal-vs-public-integrations): creating a private page at the workspace level. To do this, omit the `parent` parameter, or provide `parent[workspace]=true`. This can be useful for quickly creating pages that can then be organized manually in the Notion app later, helping you get to your life's work faster.\nFor internal integrations, a page or data source parent is currently required in the API, because there is no one specific Notion user associated with them that could be used as the \"owner\" of the new private page.\n\n### Setting up page properties\n\nIf the new page is a child of an existing page,`title` is the only valid property in the `properties` body parameter.\nIf the new page is a child of an existing [data source](https://developers.notion.com/reference/data-source), the keys of the `properties` object body param must match the parent [data source's properties](https://developers.notion.com/reference/property-object).\n\n### Setting up page content\n\nThis endpoint can be used to create a new page with or without content using the `children` option. To add content to a page after creating it, use the [Append block children](https://developers.notion.com/reference/patch-block-children) endpoint.\n**Templates**: As an alternative to building up page content manually, the `template` body parameter can be used to specify an existing data source template to be used to populate the content and properties of the new page.\nWhen omitted, the default is `template[type]=none`, which means no template is applied. The other options for `template[type]` are:\nWhen using `default` or `template_id`, you can optionally provide `template[timezone]` — an [IANA timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) string (e.g. `America/New_York`) — to control the timezone used when resolving template variables like `@now` and `@today`. If omitted, the authorizing user's timezone is used for public integrations, or UTC for internal integrations. An invalid timezone returns a `validation_error`.\nWhen applying a template, the `children` parameter is **not** allowed. The page is returned as blank initially in the API response, and then Notion's systems apply the template asynchronously after the API request finishes. For more information, see our full guide on [creating pages from templates](https://developers.notion.com/guides/data-apis/creating-pages-from-templates).\n\n  * `default`: Apply the data source's default template.\n  * This is only allowed for pages created under a data source that has a default template configured in the Notion app.\n  * `template_id`: Provide a specific `template_id` to use as the blueprint for your page.\n  * The API bot must have access to the template page, and it must be within the same workspace.\n  * Although any valid page ID can be used as the `template[template_id]`, we recommend only using pages that are configured as actual [database templates](https://www.notion.com/help/database-templates) under the same data source as the parent of your new page to make sure that page properties can get merged in correctly.\n\n### General behavior\n\nReturns a new [page object](https://developers.notion.com/reference/page).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [page](https://developers.notion.com/reference/page)\n  * [data source](https://developers.notion.com/reference/data-source)\n  * [public integrations](https://developers.notion.com/guides/get-started/getting-started#internal-vs-public-integrations)\n  * [data source's properties](https://developers.notion.com/reference/property-object)\n  * [Append block children](https://developers.notion.com/reference/patch-block-children)\n  * [database templates](https://www.notion.com/help/database-templates)\n  * [IANA timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)\n  * [creating pages from templates](https://developers.notion.com/guides/data-apis/creating-pages-from-templates)\n  * [page object](https://developers.notion.com/reference/page)\n  * [Insert Content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities)\n  * [My integrations](https://www.notion.so/profile/integrations)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Create a page](https://developers.notion.com/reference/post-page)",
+  "errors": [
+    {
+      "body": "Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "When using the `markdown` body parameter, newlines must be encoded as `\\n` in the JSON string — for example, `\"# Heading\\n\\nParagraph\"`. The interactive API explorer on this page does not support multiline input, so use cURL, an SDK, or any HTTP client that sends properly encoded JSON. When using cURL, wrap the `--data` body in **single quotes** (`'...'`) so that `\\n` is preserved for the JSON parser.",
+      "kind": "info",
+      "title": "Newlines in markdown content"
+    },
+    {
+      "body": "Your integration must have [Insert Content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target parent page or database in order to call this endpoint. To update your integrations capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting a query without update content capabilities returns an HTTP response with a 403 status code.",
+      "kind": "info",
+      "title": "Requirements"
+    }
+  ],
+  "lead": "Use this API to create a new [page](https://developers.notion.com/reference/page) as a child of an existing page or [data source](https://developers.notion.com/reference/data-source).",
+  "limits": [],
+  "method": "post",
+  "operation_id": "post-page",
+  "path": "/v1/pages",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "page",
+      "url": "https://developers.notion.com/reference/page"
+    },
+    {
+      "kind": "reference",
+      "label": "data source",
+      "url": "https://developers.notion.com/reference/data-source"
+    },
+    {
+      "kind": "guide",
+      "label": "public integrations",
+      "url": "https://developers.notion.com/guides/get-started/getting-started#internal-vs-public-integrations"
+    },
+    {
+      "kind": "reference",
+      "label": "data source's properties",
+      "url": "https://developers.notion.com/reference/property-object"
+    },
+    {
+      "kind": "reference",
+      "label": "Append block children",
+      "url": "https://developers.notion.com/reference/patch-block-children"
+    },
+    {
+      "kind": "link",
+      "label": "database templates",
+      "url": "https://www.notion.com/help/database-templates"
+    },
+    {
+      "kind": "link",
+      "label": "IANA timezone",
+      "url": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+    },
+    {
+      "kind": "guide",
+      "label": "creating pages from templates",
+      "url": "https://developers.notion.com/guides/data-apis/creating-pages-from-templates"
+    },
+    {
+      "kind": "reference",
+      "label": "page object",
+      "url": "https://developers.notion.com/reference/page"
+    },
+    {
+      "kind": "reference",
+      "label": "Insert Content capabilities",
+      "url": "https://developers.notion.com/reference/capabilities#content-capabilities"
+    },
+    {
+      "kind": "link",
+      "label": "My integrations",
+      "url": "https://www.notion.so/profile/integrations"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Create a page",
+      "url": "https://developers.notion.com/reference/post-page"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Use cases",
+      "level": 3
+    },
+    {
+      "body": "In most cases, provide a `page_id` or `data_source` under the `parent` parameter to create a page under an existing [page](https://developers.notion.com/reference/page), or [data source](https://developers.notion.com/reference/data-source), respectively.\nThere is a 3rd option, available only for bots of [public integrations](https://developers.notion.com/guides/get-started/getting-started#internal-vs-public-integrations): creating a private page at the workspace level. To do this, omit the `parent` parameter, or provide `parent[workspace]=true`. This can be useful for quickly creating pages that can then be organized manually in the Notion app later, helping you get to your life's work faster.\nFor internal integrations, a page or data source parent is currently required in the API, because there is no one specific Notion user associated with them that could be used as the \"owner\" of the new private page.",
+      "heading": "Choosing a parent",
+      "level": 4
+    },
+    {
+      "body": "If the new page is a child of an existing page,`title` is the only valid property in the `properties` body parameter.\nIf the new page is a child of an existing [data source](https://developers.notion.com/reference/data-source), the keys of the `properties` object body param must match the parent [data source's properties](https://developers.notion.com/reference/property-object).",
+      "heading": "Setting up page properties",
+      "level": 4
+    },
+    {
+      "body": "This endpoint can be used to create a new page with or without content using the `children` option. To add content to a page after creating it, use the [Append block children](https://developers.notion.com/reference/patch-block-children) endpoint.\n**Templates**: As an alternative to building up page content manually, the `template` body parameter can be used to specify an existing data source template to be used to populate the content and properties of the new page.\nWhen omitted, the default is `template[type]=none`, which means no template is applied. The other options for `template[type]` are:\nWhen using `default` or `template_id`, you can optionally provide `template[timezone]` — an [IANA timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) string (e.g. `America/New_York`) — to control the timezone used when resolving template variables like `@now` and `@today`. If omitted, the authorizing user's timezone is used for public integrations, or UTC for internal integrations. An invalid timezone returns a `validation_error`.\nWhen applying a template, the `children` parameter is **not** allowed. The page is returned as blank initially in the API response, and then Notion's systems apply the template asynchronously after the API request finishes. For more information, see our full guide on [creating pages from templates](https://developers.notion.com/guides/data-apis/creating-pages-from-templates).",
+      "heading": "Setting up page content",
+      "items": [
+        "`default`: Apply the data source's default template.",
+        "This is only allowed for pages created under a data source that has a default template configured in the Notion app.",
+        "`template_id`: Provide a specific `template_id` to use as the blueprint for your page.",
+        "The API bot must have access to the template page, and it must be within the same workspace.",
+        "Although any valid page ID can be used as the `template[template_id]`, we recommend only using pages that are configured as actual [database templates](https://www.notion.com/help/database-templates) under the same data source as the parent of your new page to make sure that page properties can get merged in correctly."
+      ],
+      "level": 4
+    },
+    {
+      "body": "Returns a new [page object](https://developers.notion.com/reference/page).",
+      "heading": "General behavior",
+      "level": 3
+    }
+  ],
+  "slug": "post-page",
+  "source_url": "https://developers.notion.com/reference/post-page",
+  "summary": null,
+  "title": "Create a page",
+  "warnings": [
+    {
+      "body": "A request body that includes `rollup`, `created_by`, `created_time`, `last_edited_by`, or `last_edited_time` values in the properties object returns an error. These Notion-generated values cannot be created or updated via the API. If the `parent` contains any of these properties, then the new page’s corresponding values are automatically created.",
+      "kind": "warning",
+      "title": "Some page `properties` are not supported via the API"
+    }
+  ]
+}

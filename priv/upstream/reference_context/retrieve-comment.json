@@ -1,0 +1,62 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.comments.retrieve({\n  comment_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})"
+    }
+  ],
+  "description": "Retrieves a [Comment object](https://developers.notion.com/reference/comment-object) from its `comment_id`.\n\n### Notes\n\nReminder: Turn on integration comment capabilities\n\nIntegration capabilities for reading and inserting comments are off by default.\nThis endpoint requires an integration to have read comment capabilities. Attempting to call this endpoint without read comment capabilities will return an HTTP response with a 403 status code.\nFor more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Comment object](https://developers.notion.com/reference/comment-object)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [integration dashboard](https://www.notion.so/profile/integrations)\n  * [Retrieve a comment](https://developers.notion.com/reference/retrieve-comment)",
+  "errors": [
+    {
+      "body": "Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "Integration capabilities for reading and inserting comments are off by default.\nThis endpoint requires an integration to have read comment capabilities. Attempting to call this endpoint without read comment capabilities will return an HTTP response with a 403 status code.\nFor more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).",
+      "kind": "info",
+      "title": "Reminder: Turn on integration comment capabilities"
+    }
+  ],
+  "lead": "Retrieves a [Comment object](https://developers.notion.com/reference/comment-object) from its `comment_id`.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "retrieve-comment",
+  "path": "/v1/comments/{comment_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Comment object",
+      "url": "https://developers.notion.com/reference/comment-object"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "link",
+      "label": "integration dashboard",
+      "url": "https://www.notion.so/profile/integrations"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a comment",
+      "url": "https://developers.notion.com/reference/retrieve-comment"
+    }
+  ],
+  "sections": [],
+  "slug": "retrieve-comment",
+  "source_url": "https://developers.notion.com/reference/retrieve-comment",
+  "summary": null,
+  "title": "Retrieve a comment",
+  "warnings": []
+}

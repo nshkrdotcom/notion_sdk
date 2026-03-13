@@ -1,0 +1,76 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client()\n\nconst response = await notion.oauth.token({\n  client_id: process.env.OAUTH_CLIENT_ID,\n  client_secret: process.env.OAUTH_CLIENT_SECRET,\n  grant_type: \"authorization_code\",\n  code: \"abc123-authorization-code\",\n  redirect_uri: \"https://example.com/callback\"\n})"
+    }
+  ],
+  "description": "### Warnings\n\nRedirect URI requirements for public integrations\n\nThe `redirect_uri` is a *required* field in the request body for this endpoint if:\nIn most cases, the `redirect_uri` field is required.\nThis field is not allowed in the request body if:\nLearn more in the public integration section of the [Authorization Guide](https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up).\n*Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*\n\n  * the `redirect_uri` query parameter was set in the [Authorization URL](https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url) provided to users, *or*;\n  * there are more than one `redirect_uri`s included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**.\n  * there is one `redirect_uri` included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**, *and* the `redirect_uri` query parameter was not included in the Authorization URL.\n\n### Notes\n\nFor step-by-step instructions on how to use this endpoint to create a public integration, check out the [Authorization guide](https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration). To walkthrough how to create tokens for Link Previews, refer to the [Link Previews guide](https://developers.notion.com/guides/link-previews/build-a-link-preview-integration).\n\n### Resources\n\n  * [Authorization guide](https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration)\n  * [Link Previews guide](https://developers.notion.com/guides/link-previews/build-a-link-preview-integration)\n  * [Authorization URL](https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url)\n  * [integration's settings](https://www.notion.so/profile/integrations)\n  * [Authorization Guide](https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Create a token](https://developers.notion.com/reference/create-a-token)",
+  "errors": [],
+  "info_notes": [
+    {
+      "body": "For step-by-step instructions on how to use this endpoint to create a public integration, check out the [Authorization guide](https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration). To walkthrough how to create tokens for Link Previews, refer to the [Link Previews guide](https://developers.notion.com/guides/link-previews/build-a-link-preview-integration).",
+      "kind": "info"
+    }
+  ],
+  "lead": null,
+  "limits": [],
+  "method": "post",
+  "operation_id": "create-a-token",
+  "path": "/v1/oauth/token",
+  "resources": [
+    {
+      "kind": "guide",
+      "label": "Authorization guide",
+      "url": "https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration"
+    },
+    {
+      "kind": "guide",
+      "label": "Link Previews guide",
+      "url": "https://developers.notion.com/guides/link-previews/build-a-link-preview-integration"
+    },
+    {
+      "kind": "guide",
+      "label": "Authorization URL",
+      "url": "https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url"
+    },
+    {
+      "kind": "link",
+      "label": "integration's settings",
+      "url": "https://www.notion.so/profile/integrations"
+    },
+    {
+      "kind": "guide",
+      "label": "Authorization Guide",
+      "url": "https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Create a token",
+      "url": "https://developers.notion.com/reference/create-a-token"
+    }
+  ],
+  "sections": [],
+  "slug": "create-a-token",
+  "source_url": "https://developers.notion.com/reference/create-a-token",
+  "summary": null,
+  "title": "Create a token",
+  "warnings": [
+    {
+      "body": "The `redirect_uri` is a *required* field in the request body for this endpoint if:\nIn most cases, the `redirect_uri` field is required.\nThis field is not allowed in the request body if:\nLearn more in the public integration section of the [Authorization Guide](https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up).\n*Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*",
+      "items": [
+        "the `redirect_uri` query parameter was set in the [Authorization URL](https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url) provided to users, *or*;",
+        "there are more than one `redirect_uri`s included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**.",
+        "there is one `redirect_uri` included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**, *and* the `redirect_uri` query parameter was not included in the Authorization URL."
+      ],
+      "kind": "warning",
+      "title": "Redirect URI requirements for public integrations"
+    }
+  ]
+}

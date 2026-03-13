@@ -1,0 +1,151 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.pages.update({\n  page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\",\n  properties: {\n    Name: {\n      title: [{ text: { content: \"Updated Title\" } }]\n    }\n  }\n})"
+    }
+  ],
+  "description": "Use this API to modify attributes of a Notion page, such as its properties, icon, or cover.\n\n### Warnings\n\nLimitations\n\n  * Updating [rollup property values](https://developers.notion.com/reference/property-value-object#rollup-property-values) is not supported.\n  * A page’s `parent` cannot be changed.\n\n### Notes\n\nRequirements\n\nYour integration must have [update content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target page in order to call this endpoint. To update your integrations capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting a query without update content capabilities returns an HTTP response with a 403 status code.\n\n### Use cases\n\n### Updating properties\n\nTo change the `properties` of a page in a data source, use the `properties` body parameter. This parameter can only be used if the page's parent is a [data source](https://developers.notion.com/reference/data-source), aside from updating the `title` of a page outside of a data source.\nThe page’s `properties` schema must match the parent [data source's properties](https://developers.notion.com/reference/property-object).\n\n### Setting the icon, cover, or \"in trash\" status\n\nThis endpoint can be used to update any page `icon` or `cover`, and can be used to [trash](https://developers.notion.com/reference/trash-page) or restore any page.\n\n### Locking and unlocking a page\n\nUse the `is_locked` boolean parameter to lock or unlock the page from being further edited in the Notion app UI. Note that this setting doesn't affect the ability to update the page using the API.\n\n### Applying a page template\n\nUse the `template` body parameter object to apply a [template](https://developers.notion.com/guides/data-apis/creating-pages-from-templates) to an existing page. This can either be the parent data source's default template (`type=default`), or a specific template (`type=template_id`).\nYou can optionally provide `template[timezone]` — an [IANA timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) string (e.g. `America/New_York`) — to control the timezone used when resolving template variables like `@now` and `@today`. If omitted, the authorizing user's timezone is used for public integrations, or UTC for internal integrations.\nAfter the API request finishes, Notion's systems merge the content and properties from your chosen template into the current page.\nFor more information, visit our related guide: [Creating pages from templates](https://developers.notion.com/guides/data-apis/creating-pages-from-templates).\n\n### Erasing content from a page\n\nUse the `erase_content` flag to delete all block children of the current page. **Use caution** with this parameter, since this is a destructive action that **cannot** be reversed using the API.\nThe main use case is for applying a `template` in scenarios where it makes sense to clear all of the existing page content and replace it with the template page's content, instead of appending the template content to what's already on the page.\n\n### Adding content to a page\n\nTo add content, use the [append block children](https://developers.notion.com/reference/patch-block-children) API instead. The `page_id` can be passed as the `block_id` when adding block children to the page.\n\n### General behavior\n\nReturns the updated [page object](https://developers.notion.com/reference/page).\n\n### Errors\n\nErrorsEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [data source](https://developers.notion.com/reference/data-source)\n  * [data source's properties](https://developers.notion.com/reference/property-object)\n  * [trash](https://developers.notion.com/reference/trash-page)\n  * [template](https://developers.notion.com/guides/data-apis/creating-pages-from-templates)\n  * [IANA timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)\n  * [Creating pages from templates](https://developers.notion.com/guides/data-apis/creating-pages-from-templates)\n  * [append block children](https://developers.notion.com/reference/patch-block-children)\n  * [page object](https://developers.notion.com/reference/page)\n  * [update content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities)\n  * [My integrations](https://www.notion.so/profile/integrations)\n  * [rollup property values](https://developers.notion.com/reference/property-value-object#rollup-property-values)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Update page](https://developers.notion.com/reference/patch-page)",
+  "errors": [
+    {
+      "body": "ErrorsEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "Your integration must have [update content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target page in order to call this endpoint. To update your integrations capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting a query without update content capabilities returns an HTTP response with a 403 status code.",
+      "kind": "info",
+      "title": "Requirements"
+    }
+  ],
+  "lead": "Use this API to modify attributes of a Notion page, such as its properties, icon, or cover.",
+  "limits": [],
+  "method": "patch",
+  "operation_id": "patch-page",
+  "path": "/v1/pages/{page_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "data source",
+      "url": "https://developers.notion.com/reference/data-source"
+    },
+    {
+      "kind": "reference",
+      "label": "data source's properties",
+      "url": "https://developers.notion.com/reference/property-object"
+    },
+    {
+      "kind": "reference",
+      "label": "trash",
+      "url": "https://developers.notion.com/reference/trash-page"
+    },
+    {
+      "kind": "guide",
+      "label": "template",
+      "url": "https://developers.notion.com/guides/data-apis/creating-pages-from-templates"
+    },
+    {
+      "kind": "link",
+      "label": "IANA timezone",
+      "url": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+    },
+    {
+      "kind": "guide",
+      "label": "Creating pages from templates",
+      "url": "https://developers.notion.com/guides/data-apis/creating-pages-from-templates"
+    },
+    {
+      "kind": "reference",
+      "label": "append block children",
+      "url": "https://developers.notion.com/reference/patch-block-children"
+    },
+    {
+      "kind": "reference",
+      "label": "page object",
+      "url": "https://developers.notion.com/reference/page"
+    },
+    {
+      "kind": "reference",
+      "label": "update content capabilities",
+      "url": "https://developers.notion.com/reference/capabilities#content-capabilities"
+    },
+    {
+      "kind": "link",
+      "label": "My integrations",
+      "url": "https://www.notion.so/profile/integrations"
+    },
+    {
+      "kind": "reference",
+      "label": "rollup property values",
+      "url": "https://developers.notion.com/reference/property-value-object#rollup-property-values"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Update page",
+      "url": "https://developers.notion.com/reference/patch-page"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Use cases",
+      "level": 3
+    },
+    {
+      "body": "To change the `properties` of a page in a data source, use the `properties` body parameter. This parameter can only be used if the page's parent is a [data source](https://developers.notion.com/reference/data-source), aside from updating the `title` of a page outside of a data source.\nThe page’s `properties` schema must match the parent [data source's properties](https://developers.notion.com/reference/property-object).",
+      "heading": "Updating properties",
+      "level": 4
+    },
+    {
+      "body": "This endpoint can be used to update any page `icon` or `cover`, and can be used to [trash](https://developers.notion.com/reference/trash-page) or restore any page.",
+      "heading": "Setting the icon, cover, or \"in trash\" status",
+      "level": 4
+    },
+    {
+      "body": "Use the `is_locked` boolean parameter to lock or unlock the page from being further edited in the Notion app UI. Note that this setting doesn't affect the ability to update the page using the API.",
+      "heading": "Locking and unlocking a page",
+      "level": 4
+    },
+    {
+      "body": "Use the `template` body parameter object to apply a [template](https://developers.notion.com/guides/data-apis/creating-pages-from-templates) to an existing page. This can either be the parent data source's default template (`type=default`), or a specific template (`type=template_id`).\nYou can optionally provide `template[timezone]` — an [IANA timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) string (e.g. `America/New_York`) — to control the timezone used when resolving template variables like `@now` and `@today`. If omitted, the authorizing user's timezone is used for public integrations, or UTC for internal integrations.\nAfter the API request finishes, Notion's systems merge the content and properties from your chosen template into the current page.\nFor more information, visit our related guide: [Creating pages from templates](https://developers.notion.com/guides/data-apis/creating-pages-from-templates).",
+      "heading": "Applying a page template",
+      "level": 4
+    },
+    {
+      "body": "Use the `erase_content` flag to delete all block children of the current page. **Use caution** with this parameter, since this is a destructive action that **cannot** be reversed using the API.\nThe main use case is for applying a `template` in scenarios where it makes sense to clear all of the existing page content and replace it with the template page's content, instead of appending the template content to what's already on the page.",
+      "heading": "Erasing content from a page",
+      "level": 4
+    },
+    {
+      "body": "To add content, use the [append block children](https://developers.notion.com/reference/patch-block-children) API instead. The `page_id` can be passed as the `block_id` when adding block children to the page.",
+      "heading": "Adding content to a page",
+      "level": 4
+    },
+    {
+      "body": "Returns the updated [page object](https://developers.notion.com/reference/page).",
+      "heading": "General behavior",
+      "level": 3
+    }
+  ],
+  "slug": "patch-page",
+  "source_url": "https://developers.notion.com/reference/patch-page",
+  "summary": null,
+  "title": "Update page",
+  "warnings": [
+    {
+      "items": [
+        "Updating [rollup property values](https://developers.notion.com/reference/property-value-object#rollup-property-values) is not supported.",
+        "A page’s `parent` cannot be changed."
+      ],
+      "kind": "warning",
+      "title": "Limitations"
+    }
+  ]
+}

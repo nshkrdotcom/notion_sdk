@@ -1,0 +1,62 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.users.me()"
+    }
+  ],
+  "description": "Retrieves the bot [User](https://developers.notion.com/reference/user) associated with the API token provided in the authorization header. The bot will have an `owner` field with information about the person who authorized the integration.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint is accessible from by integrations with any level of capabilities. The [user object](https://developers.notion.com/reference/user) returned will adhere to the limitations of the integration's capabilities. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [User](https://developers.notion.com/reference/user)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [user object](https://developers.notion.com/reference/user)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [Retrieve your token's bot user](https://developers.notion.com/reference/get-self)",
+  "errors": [
+    {
+      "body": "Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "This endpoint is accessible from by integrations with any level of capabilities. The [user object](https://developers.notion.com/reference/user) returned will adhere to the limitations of the integration's capabilities. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    }
+  ],
+  "lead": "Retrieves the bot [User](https://developers.notion.com/reference/user) associated with the API token provided in the authorization header. The bot will have an `owner` field with information about the person who authorized the integration.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "get-self",
+  "path": "/v1/users/me",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "User",
+      "url": "https://developers.notion.com/reference/user"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "reference",
+      "label": "user object",
+      "url": "https://developers.notion.com/reference/user"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve your token's bot user",
+      "url": "https://developers.notion.com/reference/get-self"
+    }
+  ],
+  "sections": [],
+  "slug": "get-self",
+  "source_url": "https://developers.notion.com/reference/get-self",
+  "summary": null,
+  "title": "Retrieve your token's bot user",
+  "warnings": []
+}

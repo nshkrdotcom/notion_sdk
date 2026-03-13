@@ -1,0 +1,146 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.pages.retrieve({\n  page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\"\n})"
+    }
+  ],
+  "description": "Retrieves a [Page object](https://developers.notion.com/reference/page) using the ID specified.\n\n### Warnings\n\nThis endpoint will not accurately return properties that exceed 25 references\n\nDo **not** use this endpoint if a page property includes more than 25 references to receive the full list of references. Instead, use the [Retrieve a page property endpoint](https://developers.notion.com/reference/retrieve-a-page-property) for the specific property to get its complete reference list.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Overview\n\nResponses contains page **properties**, not page content. To fetch page content, use the [Retrieve block children](https://developers.notion.com/reference/get-block-children) endpoint.\n\nPage properties are limited to up to **25 references** per page property. To retrieve data related to properties that have more than 25 references, use the [Retrieve a page property](https://developers.notion.com/reference/retrieve-a-page-property#rollup-properties) endpoint. (See [Limits](https://developers.notion.com/reference/retrieve-a-page#limits) below for additional information.)\n\n### Parent objects: Pages vs. databases\n\nIf a page’s [Parent object](https://developers.notion.com/reference/parent-object) is a database, then the property values will conform to the [database property schema](https://developers.notion.com/reference/property-object).\nIf a page object is not part of a database, then the only property value available for that page is its `title`.\n\n### Limits\n\nThe endpoint returns a maximum of 25 page or person references per [page property](https://developers.notion.com/reference/property-value-object). If a page property includes more than 25 references, then the 26th reference and beyond might be returned as `Untitled`, `Anonymous`, or not be returned at all.\nThis limit affects the following properties:\n\n  * [`people`](https://developers.notion.com/reference/property-value-object#people-property-values): response object can’t be guaranteed to return more than 25 people.\n  * [`relation`](https://developers.notion.com/reference/property-value-object#relation-property-values): the `has_more` value of the `relation` in the response object is `true` if a `relation` contains more than 25 related pages. Otherwise, `has_more` is false.\n  * [`rich_text`](https://developers.notion.com/reference/property-value-object#rich-text-property-values): response object includes a maximum of 25 populated inline page or person mentions.\n  * [`title`](https://developers.notion.com/reference/property-value-object#title-property-values): response object includes a maximum of 25 inline page or person mentions.\n\n### Errors\n\nReturns a 404 HTTP response if the page doesn't exist, or if the integration doesn't have access to the page.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [Retrieve a page property endpoint](https://developers.notion.com/reference/retrieve-a-page-property)\n  * [Page object](https://developers.notion.com/reference/page)\n  * [Retrieve block children](https://developers.notion.com/reference/get-block-children)\n  * [Retrieve a page property](https://developers.notion.com/reference/retrieve-a-page-property#rollup-properties)\n  * [Limits](https://developers.notion.com/reference/retrieve-a-page#limits)\n  * [Parent object](https://developers.notion.com/reference/parent-object)\n  * [database property schema](https://developers.notion.com/reference/property-object)\n  * [page property](https://developers.notion.com/reference/property-value-object)\n  * [people](https://developers.notion.com/reference/property-value-object#people-property-values)\n  * [relation](https://developers.notion.com/reference/property-value-object#relation-property-values)\n  * [rich_text](https://developers.notion.com/reference/property-value-object#rich-text-property-values)\n  * [title](https://developers.notion.com/reference/property-value-object#title-property-values)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page)",
+  "errors": [
+    {
+      "body": "Returns a 404 HTTP response if the page doesn't exist, or if the integration doesn't have access to the page.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "This endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    }
+  ],
+  "lead": "Retrieves a [Page object](https://developers.notion.com/reference/page) using the ID specified.",
+  "limits": [
+    {
+      "body": "The endpoint returns a maximum of 25 page or person references per [page property](https://developers.notion.com/reference/property-value-object). If a page property includes more than 25 references, then the 26th reference and beyond might be returned as `Untitled`, `Anonymous`, or not be returned at all.\nThis limit affects the following properties:",
+      "heading": "Limits",
+      "items": [
+        "[`people`](https://developers.notion.com/reference/property-value-object#people-property-values): response object can’t be guaranteed to return more than 25 people.",
+        "[`relation`](https://developers.notion.com/reference/property-value-object#relation-property-values): the `has_more` value of the `relation` in the response object is `true` if a `relation` contains more than 25 related pages. Otherwise, `has_more` is false.",
+        "[`rich_text`](https://developers.notion.com/reference/property-value-object#rich-text-property-values): response object includes a maximum of 25 populated inline page or person mentions.",
+        "[`title`](https://developers.notion.com/reference/property-value-object#title-property-values): response object includes a maximum of 25 inline page or person mentions."
+      ],
+      "level": 3
+    }
+  ],
+  "method": "get",
+  "operation_id": "retrieve-a-page",
+  "path": "/v1/pages/{page_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Retrieve a page property endpoint",
+      "url": "https://developers.notion.com/reference/retrieve-a-page-property"
+    },
+    {
+      "kind": "reference",
+      "label": "Page object",
+      "url": "https://developers.notion.com/reference/page"
+    },
+    {
+      "kind": "reference",
+      "label": "Retrieve block children",
+      "url": "https://developers.notion.com/reference/get-block-children"
+    },
+    {
+      "kind": "reference",
+      "label": "Retrieve a page property",
+      "url": "https://developers.notion.com/reference/retrieve-a-page-property#rollup-properties"
+    },
+    {
+      "kind": "reference",
+      "label": "Limits",
+      "url": "https://developers.notion.com/reference/retrieve-a-page#limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Parent object",
+      "url": "https://developers.notion.com/reference/parent-object"
+    },
+    {
+      "kind": "reference",
+      "label": "database property schema",
+      "url": "https://developers.notion.com/reference/property-object"
+    },
+    {
+      "kind": "reference",
+      "label": "page property",
+      "url": "https://developers.notion.com/reference/property-value-object"
+    },
+    {
+      "kind": "reference",
+      "label": "people",
+      "url": "https://developers.notion.com/reference/property-value-object#people-property-values"
+    },
+    {
+      "kind": "reference",
+      "label": "relation",
+      "url": "https://developers.notion.com/reference/property-value-object#relation-property-values"
+    },
+    {
+      "kind": "reference",
+      "label": "rich_text",
+      "url": "https://developers.notion.com/reference/property-value-object#rich-text-property-values"
+    },
+    {
+      "kind": "reference",
+      "label": "title",
+      "url": "https://developers.notion.com/reference/property-value-object#title-property-values"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "reference",
+      "label": "request limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a page",
+      "url": "https://developers.notion.com/reference/retrieve-a-page"
+    }
+  ],
+  "sections": [
+    {
+      "body": "Responses contains page **properties**, not page content. To fetch page content, use the [Retrieve block children](https://developers.notion.com/reference/get-block-children) endpoint.\n\nPage properties are limited to up to **25 references** per page property. To retrieve data related to properties that have more than 25 references, use the [Retrieve a page property](https://developers.notion.com/reference/retrieve-a-page-property#rollup-properties) endpoint. (See [Limits](https://developers.notion.com/reference/retrieve-a-page#limits) below for additional information.)",
+      "heading": "Overview",
+      "level": 2
+    },
+    {
+      "body": "If a page’s [Parent object](https://developers.notion.com/reference/parent-object) is a database, then the property values will conform to the [database property schema](https://developers.notion.com/reference/property-object).\nIf a page object is not part of a database, then the only property value available for that page is its `title`.",
+      "heading": "Parent objects: Pages vs. databases",
+      "level": 3
+    }
+  ],
+  "slug": "retrieve-a-page",
+  "source_url": "https://developers.notion.com/reference/retrieve-a-page",
+  "summary": null,
+  "title": "Retrieve a page",
+  "warnings": [
+    {
+      "body": "Do **not** use this endpoint if a page property includes more than 25 references to receive the full list of references. Instead, use the [Retrieve a page property endpoint](https://developers.notion.com/reference/retrieve-a-page-property) for the specific property to get its complete reference list.",
+      "kind": "warning",
+      "title": "This endpoint will not accurately return properties that exceed 25 references"
+    }
+  ]
+}

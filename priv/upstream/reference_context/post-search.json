@@ -1,0 +1,61 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.search({\n  query: \"meeting notes\",\n  filter: {\n    property: \"object\",\n    value: \"page\"\n  },\n  sort: {\n    direction: \"descending\",\n    timestamp: \"last_edited_time\"\n  }\n})"
+    }
+  ],
+  "description": "Searches all parent or child pages and data_sources that have been shared with an integration.\n\n### Warnings\n\nTo search a specific data\\_source — not all sources shared with the integration — use the [Query a data\\_source](https://developers.notion.com/reference/query-a-data-source) endpoint instead.\n\n### Notes\n\nThe Search endpoint supports pagination. To learn more about working with [paginated](https://developers.notion.com/reference/intro#pagination) responses, see the pagination section of the Notion API Introduction.\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [paginated](https://developers.notion.com/reference/intro#pagination)\n  * [Query a data\\_source](https://developers.notion.com/reference/query-a-data-source)\n  * [Search by title](https://developers.notion.com/reference/post-search)",
+  "errors": [
+    {
+      "body": "Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "The Search endpoint supports pagination. To learn more about working with [paginated](https://developers.notion.com/reference/intro#pagination) responses, see the pagination section of the Notion API Introduction.",
+      "kind": "info"
+    }
+  ],
+  "lead": "Searches all parent or child pages and data_sources that have been shared with an integration.",
+  "limits": [],
+  "method": "post",
+  "operation_id": "post-search",
+  "path": "/v1/search",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "reference",
+      "label": "paginated",
+      "url": "https://developers.notion.com/reference/intro#pagination"
+    },
+    {
+      "kind": "reference",
+      "label": "Query a data\\_source",
+      "url": "https://developers.notion.com/reference/query-a-data-source"
+    },
+    {
+      "kind": "source",
+      "label": "Search by title",
+      "url": "https://developers.notion.com/reference/post-search"
+    }
+  ],
+  "sections": [],
+  "slug": "post-search",
+  "source_url": "https://developers.notion.com/reference/post-search",
+  "summary": null,
+  "title": "Search by title",
+  "warnings": [
+    {
+      "body": "To search a specific data\\_source — not all sources shared with the integration — use the [Query a data\\_source](https://developers.notion.com/reference/query-a-data-source) endpoint instead.",
+      "kind": "warning"
+    }
+  ]
+}

@@ -1,0 +1,492 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://developers.notion.com/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Send a file upload
+
+> Use this API to transmit file contents to Notion for a [file upload](/reference/file-upload).
+
+For this endpoint, use a `Content-Type` of `multipart/form-data`, and provide your file contents under the `file` key.
+
+<Info>
+  The use of multipart form data is unique to this endpoint. Other Notion APIs, including [Create a file upload](/reference/create-a-file-upload) and [Complete a file upload](/reference/complete-a-file-upload), use JSON parameters.
+
+  Include a `boundary` with the `Content-Type` header of your request as per [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388). Most request libraries (e.g. `fetch`, `ky`) automatically handle this as long as you provide a form data object but don't overwrite the `Content-Type` explicitly.
+
+  For more tips and examples, view the [file upload guide](/guides/data-apis/uploading-small-files#step-2-upload-file-contents).
+</Info>
+
+When `mode=multi_part`, each part must include a form field `part_number` to indicate which part is being sent. Parts may be sent concurrently up to standard Notion API [rate limits](/reference/request-limits), and may be sent out of order as long as all parts (1, ..., `part_number`) are successfully sent before calling the [complete file upload API](/reference/complete-a-file-upload).
+
+The maximum allowed length of a file name is 900 bytes, including any file extension included in the file name or inferred based on the `content_type`. However, we recommend using shorter names for performance and easier file management and lookup using the [List file uploads](/reference/list-file-uploads) API.
+
+
+## OpenAPI
+
+````yaml post /v1/file_uploads/{file_upload_id}/send
+openapi: 3.1.0
+info:
+  title: Notion API
+  version: 1.0.0
+  termsOfService: >-
+    https://notion.notion.site/Terms-and-Privacy-28ffdd083dc3473e9c2da6ec011b58ac
+servers:
+  - url: https://api.notion.com
+security:
+  - bearerAuth: []
+tags:
+  - name: Databases
+    description: Database endpoints
+  - name: Data sources
+    description: Data source endpoints
+  - name: Pages
+    description: Page endpoints
+  - name: Blocks
+    description: Block endpoints
+  - name: Comments
+    description: Comment endpoints
+  - name: File uploads
+    description: File upload endpoints
+  - name: OAuth
+    description: OAuth endpoints (basic authentication)
+  - name: Users
+    description: User endpoints
+  - name: Search
+    description: Search endpoints
+paths:
+  /v1/file_uploads/{file_upload_id}/send:
+    post:
+      tags:
+        - File uploads
+      summary: Upload a file
+      operationId: upload-file
+      parameters:
+        - name: file_upload_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/idRequest'
+            description: Identifier for a Notion file upload object.
+        - $ref: '#/components/parameters/notionVersion'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: object
+                  properties: {}
+                  description: The raw binary file contents to upload.
+                part_number:
+                  type: string
+                  description: >-
+                    When uploading files greater than 20MB in parts, this is the
+                    current part number. Must be an integer between 1 and 1,000.
+              required:
+                - file
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fileUploadObjectResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_400'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_401'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_403'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_404'
+        '409':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_409'
+        '429':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_429'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_500'
+        '503':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_503'
+      x-codeSamples:
+        - lang: javascript
+          label: TypeScript SDK
+          source: |-
+            import { Client } from "@notionhq/client"
+
+            const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+            import { readFile } from "fs/promises"
+            import { basename } from "path"
+
+            const filePath = "./document.pdf"
+
+            const response = await notion.fileUploads.send({
+              file_upload_id: "a02fc1d3-db8b-45c5-a222-27595b15aea7",
+              file: {
+                filename: basename(filePath),
+                data: new Blob([await readFile(filePath)], {
+                  type: "application/pdf"
+                })
+              }
+            })
+components:
+  schemas:
+    idRequest:
+      type: string
+    fileUploadObjectResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          const: file_upload
+          description: Always `file_upload`
+        id:
+          $ref: '#/components/schemas/idResponse'
+        created_time:
+          type: string
+          format: date-time
+        created_by:
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/idResponse'
+            type:
+              type: string
+              enum:
+                - person
+                - bot
+                - agent
+              description: 'One of: `person`, `bot`, `agent`'
+          additionalProperties: false
+          required:
+            - id
+            - type
+        last_edited_time:
+          type: string
+          format: date-time
+        in_trash:
+          type: boolean
+        expiry_time:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        status:
+          type: string
+          enum:
+            - pending
+            - uploaded
+            - expired
+            - failed
+          description: 'One of: `pending`, `uploaded`, `expired`, `failed`'
+        filename:
+          oneOf:
+            - type: string
+            - type: 'null'
+        content_type:
+          oneOf:
+            - type: string
+            - type: 'null'
+        content_length:
+          oneOf:
+            - type: integer
+              minimum: 0
+            - type: 'null'
+        upload_url:
+          type: string
+        complete_url:
+          type: string
+        file_import_result:
+          allOf:
+            - type: object
+              properties:
+                imported_time:
+                  type: string
+                  format: date-time
+                  description: The time the file was imported into Notion. ISO 8601 format.
+              additionalProperties: false
+              required:
+                - imported_time
+            - oneOf:
+                - type: object
+                  properties:
+                    type:
+                      type: string
+                      const: success
+                      description: Indicates a successful import.
+                    success:
+                      $ref: '#/components/schemas/emptyObject'
+                      description: Empty object for success type.
+                  required:
+                    - type
+                    - success
+                  title: Success
+                - type: object
+                  properties:
+                    type:
+                      type: string
+                      const: error
+                      description: Indicates an error occurred during import.
+                    error:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                            - validation_error
+                            - internal_system_error
+                            - download_error
+                            - upload_error
+                          description: The type of error that occurred during file import.
+                        code:
+                          type: string
+                          description: A short string code representing the error.
+                        message:
+                          type: string
+                          description: A human-readable message describing the error.
+                        parameter:
+                          oneOf:
+                            - type: string
+                            - type: 'null'
+                          description: >-
+                            The parameter related to the error, if applicable.
+                            Null if not applicable.
+                        status_code:
+                          oneOf:
+                            - type: integer
+                            - type: 'null'
+                          description: >-
+                            The HTTP status code associated with the error, if
+                            available. Null if not applicable.
+                      additionalProperties: false
+                      required:
+                        - type
+                        - code
+                        - message
+                        - parameter
+                        - status_code
+                      description: >-
+                        Details about the error that occurred during file
+                        import.
+                  required:
+                    - type
+                    - error
+                  title: Error
+        number_of_parts:
+          type: object
+          properties:
+            total:
+              type: integer
+              minimum: 0
+            sent:
+              type: integer
+              minimum: 0
+          additionalProperties: false
+          required:
+            - total
+            - sent
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - created_time
+        - created_by
+        - last_edited_time
+        - in_trash
+        - expiry_time
+        - status
+        - filename
+        - content_type
+        - content_length
+    error_api_400:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - invalid_json
+                - invalid_request_url
+                - invalid_request
+                - missing_version
+                - validation_error
+            status:
+              const: 400
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_401:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - unauthorized
+            status:
+              const: 401
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_403:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - restricted_resource
+            status:
+              const: 403
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_404:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - object_not_found
+            status:
+              const: 404
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_409:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - conflict_error
+            status:
+              const: 409
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_429:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - rate_limited
+            status:
+              const: 429
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_500:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - internal_server_error
+            status:
+              const: 500
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_503:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - service_unavailable
+            status:
+              const: 503
+          required:
+            - code
+            - status
+          additionalProperties: false
+    idResponse:
+      type: string
+      format: uuid
+    emptyObject:
+      type: object
+      properties: {}
+      additionalProperties: false
+    publicApiCommonErrorResponse:
+      type: object
+      properties:
+        object:
+          const: error
+        message:
+          type: string
+        additional_data:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+      required:
+        - object
+        - message
+  parameters:
+    notionVersion:
+      name: Notion-Version
+      in: header
+      required: true
+      schema:
+        enum:
+          - '2025-09-03'
+      description: >-
+        The [API version](/reference/versioning) to use for this request. The
+        latest version is `2025-09-03`.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+````

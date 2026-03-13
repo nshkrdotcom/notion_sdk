@@ -1,0 +1,89 @@
+defmodule NotionSDK.GeneratedSourceTest do
+  use ExUnit.Case, async: true
+
+  @generated_dir Path.expand("../../lib/notion_sdk/generated", __DIR__)
+  @oauth_source Path.join(@generated_dir, "o_auth.ex")
+  @pages_source Path.join(@generated_dir, "pages.ex")
+  @page_schema_source Path.join(@generated_dir, "schemas/page_object_response.ex")
+  @todo_schema_source Path.join(@generated_dir, "schemas/to_do_to_do.ex")
+
+  test "generated modules alias the pristine runtime helper instead of calling it fully qualified" do
+    sources =
+      @generated_dir
+      |> Path.join("**/*.ex")
+      |> Path.wildcard()
+      |> Enum.map(&File.read!/1)
+
+    assert Enum.any?(
+             sources,
+             &String.contains?(&1, "alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime")
+           )
+
+    assert Enum.any?(sources, &String.contains?(&1, "OpenAPIRuntime.build_schema"))
+    assert Enum.any?(sources, &String.contains?(&1, "OpenAPIRuntime.decode_module_type"))
+    refute Enum.any?(sources, &String.contains?(&1, "Pristine.OpenAPI.Runtime.build_schema"))
+
+    refute Enum.any?(
+             sources,
+             &String.contains?(&1, "Pristine.OpenAPI.Runtime.decode_module_type")
+           )
+  end
+
+  test "generated oauth helpers alias Pristine.OAuth2" do
+    source = File.read!(@oauth_source)
+
+    assert source =~ "alias Pristine.OAuth2, as: OAuth2"
+    assert source =~ "OAuth2.Provider.new("
+    assert source =~ "with {:ok, authorization_opts} <- authorization_opts(opts) do"
+    assert source =~ "OAuth2.authorization_request(authorization_opts)"
+    assert source =~ "OAuth2.authorize_url(authorization_opts)"
+    assert source =~ "OAuth2.exchange_code(code, oauth_runtime_opts(opts))"
+    assert source =~ "OAuth2.refresh_token(refresh_token, oauth_runtime_opts(opts))"
+    assert source =~ "Keyword.put_new(params, :owner, \"user\")"
+    assert source =~ "OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)"
+    refute source =~ "Pristine.OAuth2.Provider.new("
+    refute source =~ "Pristine.OAuth2.authorization_request("
+  end
+
+  test "generated operation docs include persisted source context and code samples" do
+    source = File.read!(@pages_source)
+
+    assert source =~ "## Source Context"
+    assert source =~ "### Warnings"
+    assert source =~ "### Limits"
+    assert source =~ "### Errors"
+    assert source =~ "## Code Samples"
+    assert source =~ "const response = await notion.pages.retrieve({"
+    assert source =~ "https://developers.notion.com/reference/retrieve-a-page"
+  end
+
+  test "generated schema runtime metadata exposes richer doc fields" do
+    source = File.read!(@page_schema_source)
+
+    refute source =~ "Provides struct and types for PageObjectResponse"
+    assert source =~ "@moduledoc \"\"\"\n  PageObjectResponse"
+    assert source =~ "description:"
+    assert source =~ "deprecated:"
+    assert source =~ "example:"
+    assert source =~ "examples:"
+    assert source =~ "external_docs:"
+    assert source =~ "extensions:"
+    assert source =~ "read_only:"
+    assert source =~ "write_only:"
+  end
+
+  test "generated source avoids credo-triggering blank lines and todo labels" do
+    sources =
+      @generated_dir
+      |> Path.join("**/*.ex")
+      |> Path.wildcard()
+      |> Enum.map(&File.read!/1)
+
+    refute Enum.any?(sources, &String.contains?(&1, "\n\n\n"))
+
+    source = File.read!(@todo_schema_source)
+
+    assert source =~ "@moduledoc \"\"\"\n  To Do To Do"
+    refute source =~ "@moduledoc \"\"\"\n  ToDoToDo"
+  end
+end

@@ -1,0 +1,57 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.users.retrieve({\n  user_id: \"e79a0b74-3aba-4149-9f74-0bb5791a6ee6\"\n})"
+    }
+  ],
+  "description": "Retrieves a [User](https://developers.notion.com/reference/user) using the ID specified.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have user information capabilities. Attempting to call this API without user information capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [User](https://developers.notion.com/reference/user)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [Retrieve a user](https://developers.notion.com/reference/get-user)",
+  "errors": [
+    {
+      "body": "Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 2
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "This endpoint requires an integration to have user information capabilities. Attempting to call this API without user information capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    }
+  ],
+  "lead": "Retrieves a [User](https://developers.notion.com/reference/user) using the ID specified.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "get-user",
+  "path": "/v1/users/{user_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "User",
+      "url": "https://developers.notion.com/reference/user"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a user",
+      "url": "https://developers.notion.com/reference/get-user"
+    }
+  ],
+  "sections": [],
+  "slug": "get-user",
+  "source_url": "https://developers.notion.com/reference/get-user",
+  "summary": null,
+  "title": "Retrieve a user",
+  "warnings": []
+}

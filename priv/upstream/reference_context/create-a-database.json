@@ -1,0 +1,63 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.databases.create({\n  parent: {\n    type: \"page_id\",\n    page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\"\n  },\n  title: [{ text: { content: \"My Database\" } }]\n})"
+    }
+  ],
+  "description": "### Warnings\n\nLimitations\n\nCreating new `status` database properties is currently not supported.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have insert content capabilities. Attempting to call this API without insert content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nReturns a 404 if the specified parent page does not exist, or if the integration does not have access to the parent page.\nReturns a 400 if the request is incorrectly formatted, or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Create a database](https://developers.notion.com/reference/create-a-database)",
+  "errors": [
+    {
+      "body": "Returns a 404 if the specified parent page does not exist, or if the integration does not have access to the parent page.\nReturns a 400 if the request is incorrectly formatted, or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "This endpoint requires an integration to have insert content capabilities. Attempting to call this API without insert content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    }
+  ],
+  "lead": null,
+  "limits": [],
+  "method": "post",
+  "operation_id": "create-database",
+  "path": "/v1/databases",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "reference",
+      "label": "request limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Create a database",
+      "url": "https://developers.notion.com/reference/create-a-database"
+    }
+  ],
+  "sections": [],
+  "slug": "create-a-database",
+  "source_url": "https://developers.notion.com/reference/create-a-database",
+  "summary": null,
+  "title": "Create a database",
+  "warnings": [
+    {
+      "body": "Creating new `status` database properties is currently not supported.",
+      "kind": "warning",
+      "title": "Limitations"
+    }
+  ]
+}

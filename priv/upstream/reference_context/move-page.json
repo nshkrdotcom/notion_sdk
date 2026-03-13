@@ -1,0 +1,121 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.pages.move({\n  page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\",\n  parent: {\n    page_id: \"3c357473-a281-49a4-88c0-10d2b245a589\"\n  }\n})"
+    }
+  ],
+  "description": "Use this API to move an existing Notion page to a new parent.\n\n### Warnings\n\nPage parent must be a regular Notion page\n\nThe `parent[page_id]` parameter must be a page and cannot be any other type of [block](https://developers.notion.com/reference/block).\nOne limited exception: for databases that only have a single [data source](https://developers.notion.com/reference/data-source) , the `database_id` *can* be provided under `page_id`, but this is not recommended, since your integration will start encountering HTTP 400 errors if a second data source is added to the database.\n\n### Authentication\n\nRequires [bearer token authentication](https://developers.notion.com/reference/authentication) with appropriate [page edit permissions](https://developers.notion.com/reference/capabilities#content-capabilities).\n\n### Path parameters\n\n**`page_id`** (required)\n\n  * **Type**: `string` (UUIDv4)\n  * **Description**: The ID of the page to move\n  * This must be a regular Notion page, and not a database. Moving databases or other block types in the API is not currently supported.\n  * **Format**: UUIDs can be provided with or without dashes\n  * **Example**: `195de9221179449fab8075a27c979105` or `195de922-1179-449f-ab80-75a27c979105`\n\n### Body parameters\n\n**`parent`** (required)\nThe `parent` object can be one of two types:\n\n  * **Type**: `object`\n  * **Description**: The new parent location for the page.\n  * The bot must have edit access to the new parent.\n\n### Page parent\n\nMove the page under another page:\n```json JSON theme={null}\n{\n\"parent\": {\n\"type\": \"page_id\",\n\"page_id\": \"<parent-page-id>\"\n}\n}\n```\n\n  * **`type`**: Always `\"page_id\"`\n  * **`page_id`**: UUID of the parent page (with or without dashes)\n\n### Database parent\n\nMove the page into a database:\n```json JSON theme={null}\n{\n\"parent\": {\n\"type\": \"data_source_id\",\n\"data_source_id\": \"<database-data-source-id>\"\n}\n}\n```\n**Note**: You must use `data_source_id` rather than `database_id`. Use the [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database) endpoint to get the child data source ID(s) from the database.\n\n  * **`type`**: Always `\"data_source_id\"`\n  * **`data_source_id`**: UUID of the database's data source (with or without dashes)\n\n### Example requests\n\n### Move page under another page\n\n```bash cURL theme={null}\ncurl -X POST https://api.notion.com/v1/pages/195de9221179449fab8075a27c979105/move \\\n-H \"Authorization: Bearer secret_xxx\" \\\n-H \"Notion-Version: 2025-09-03\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n\"parent\": {\n\"type\": \"page_id\",\n\"page_id\": \"f336d0bc-b841-465b-8045-024475c079dd\"\n}\n}'\n```\n\n### Move page into a database\n\n```bash cURL theme={null}\ncurl -X POST https://api.notion.com/v1/pages/195de9221179449fab8075a27c979105/move \\\n-H \"Authorization: Bearer secret_xxx\" \\\n-H \"Notion-Version: 2025-09-03\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n\"parent\": {\n\"type\": \"data_source_id\",\n\"data_source_id\": \"1c7b35e6-e67f-8096-bf3f-000ba938459e\"\n}\n}'\n```\n\n### Resources\n\n  * [bearer token authentication](https://developers.notion.com/reference/authentication)\n  * [page edit permissions](https://developers.notion.com/reference/capabilities#content-capabilities)\n  * [block](https://developers.notion.com/reference/block)\n  * [data source](https://developers.notion.com/reference/data-source)\n  * [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database)\n  * [Move a page](https://developers.notion.com/reference/move-page)",
+  "errors": [],
+  "info_notes": [],
+  "lead": "Use this API to move an existing Notion page to a new parent.",
+  "limits": [],
+  "method": "post",
+  "operation_id": "move-page",
+  "path": "/v1/pages/{page_id}/move",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "bearer token authentication",
+      "url": "https://developers.notion.com/reference/authentication"
+    },
+    {
+      "kind": "reference",
+      "label": "page edit permissions",
+      "url": "https://developers.notion.com/reference/capabilities#content-capabilities"
+    },
+    {
+      "kind": "reference",
+      "label": "block",
+      "url": "https://developers.notion.com/reference/block"
+    },
+    {
+      "kind": "reference",
+      "label": "data source",
+      "url": "https://developers.notion.com/reference/data-source"
+    },
+    {
+      "kind": "reference",
+      "label": "Retrieve a database",
+      "url": "https://developers.notion.com/reference/retrieve-a-database"
+    },
+    {
+      "kind": "source",
+      "label": "Move a page",
+      "url": "https://developers.notion.com/reference/move-page"
+    }
+  ],
+  "sections": [
+    {
+      "body": "Requires [bearer token authentication](https://developers.notion.com/reference/authentication) with appropriate [page edit permissions](https://developers.notion.com/reference/capabilities#content-capabilities).",
+      "heading": "Authentication",
+      "level": 2
+    },
+    {
+      "body": "**`page_id`** (required)",
+      "heading": "Path parameters",
+      "items": [
+        "**Type**: `string` (UUIDv4)",
+        "**Description**: The ID of the page to move",
+        "This must be a regular Notion page, and not a database. Moving databases or other block types in the API is not currently supported.",
+        "**Format**: UUIDs can be provided with or without dashes",
+        "**Example**: `195de9221179449fab8075a27c979105` or `195de922-1179-449f-ab80-75a27c979105`"
+      ],
+      "level": 2
+    },
+    {
+      "body": "**`parent`** (required)\nThe `parent` object can be one of two types:",
+      "heading": "Body parameters",
+      "items": [
+        "**Type**: `object`",
+        "**Description**: The new parent location for the page.",
+        "The bot must have edit access to the new parent."
+      ],
+      "level": 2
+    },
+    {
+      "body": "Move the page under another page:\n```json JSON theme={null}\n{\n\"parent\": {\n\"type\": \"page_id\",\n\"page_id\": \"<parent-page-id>\"\n}\n}\n```",
+      "heading": "Page parent",
+      "items": [
+        "**`type`**: Always `\"page_id\"`",
+        "**`page_id`**: UUID of the parent page (with or without dashes)"
+      ],
+      "level": 3
+    },
+    {
+      "body": "Move the page into a database:\n```json JSON theme={null}\n{\n\"parent\": {\n\"type\": \"data_source_id\",\n\"data_source_id\": \"<database-data-source-id>\"\n}\n}\n```\n**Note**: You must use `data_source_id` rather than `database_id`. Use the [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database) endpoint to get the child data source ID(s) from the database.",
+      "heading": "Database parent",
+      "items": [
+        "**`type`**: Always `\"data_source_id\"`",
+        "**`data_source_id`**: UUID of the database's data source (with or without dashes)"
+      ],
+      "level": 3
+    },
+    {
+      "heading": "Example requests",
+      "level": 2
+    },
+    {
+      "body": "```bash cURL theme={null}\ncurl -X POST https://api.notion.com/v1/pages/195de9221179449fab8075a27c979105/move \\\n-H \"Authorization: Bearer secret_xxx\" \\\n-H \"Notion-Version: 2025-09-03\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n\"parent\": {\n\"type\": \"page_id\",\n\"page_id\": \"f336d0bc-b841-465b-8045-024475c079dd\"\n}\n}'\n```",
+      "heading": "Move page under another page",
+      "level": 3
+    },
+    {
+      "body": "```bash cURL theme={null}\ncurl -X POST https://api.notion.com/v1/pages/195de9221179449fab8075a27c979105/move \\\n-H \"Authorization: Bearer secret_xxx\" \\\n-H \"Notion-Version: 2025-09-03\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n\"parent\": {\n\"type\": \"data_source_id\",\n\"data_source_id\": \"1c7b35e6-e67f-8096-bf3f-000ba938459e\"\n}\n}'\n```",
+      "heading": "Move page into a database",
+      "level": 3
+    }
+  ],
+  "slug": "move-page",
+  "source_url": "https://developers.notion.com/reference/move-page",
+  "summary": null,
+  "title": "Move a page",
+  "warnings": [
+    {
+      "body": "The `parent[page_id]` parameter must be a page and cannot be any other type of [block](https://developers.notion.com/reference/block).\nOne limited exception: for databases that only have a single [data source](https://developers.notion.com/reference/data-source) , the `database_id` *can* be provided under `page_id`, but this is not recommended, since your integration will start encountering HTTP 400 errors if a second data source is added to the database.",
+      "kind": "warning",
+      "title": "Page parent must be a regular Notion page"
+    }
+  ]
+}

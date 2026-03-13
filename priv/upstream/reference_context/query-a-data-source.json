@@ -1,0 +1,203 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.dataSources.query({\n  data_source_id: \"d9824bdc-8445-4327-be8b-5b47500af6ce\",\n  filter: {\n    property: \"Status\",\n    select: { equals: \"Done\" }\n  },\n  sorts: [\n    {\n      property: \"Created\",\n      direction: \"descending\"\n    }\n  ]\n})"
+    }
+  ],
+  "description": "### Warnings\n\nFormula and rollup limitations\n\n  * If a formula depends on a page property that is a relation, and that relation has more than 25 references, only 25 will be evaluated as part of the formula.\n  * Rollups and formulas that depend on multiple layers of relations may not return correct results.\n  * Notion recommends individually [retrieving each page property item](https://developers.notion.com/reference/retrieve-a-page-property) to get the most accurate result.\n\n### Notes\n\nDatabases, data sources, and wikis\n\n[Wiki](https://www.notion.so/help/wikis-and-verified-pages) data sources can contain either pages or databases as children. In all other cases, the children can only be pages.\nFor wikis, instead of directly returning any [database](https://developers.notion.com/reference/database) results, this API returns all [data sources](https://developers.notion.com/reference/data-source) that are children of *that* database. Surfacing the data source instead of the direct database child helps make it easier to craft your next API request (for example, retrieving the data source or listing its children.)\nAnother tip for wikis is to use the `result_type` filter of `\"page\"` or `\"data_source\"` if you're only looking for query results that are one of those two types instead of both.\n\nPermissions\n\nBefore an integration can query a data source, its parent database must be shared with the integration. Attempting to query a data source in a database that has not been shared will return an HTTP response with a 404 status code.\nTo share a database with an integration, click the ••• menu at the top right of a database page, scroll to `Add connections`, and use the search bar to find and select the integration from the dropdown list.\n\nIntegration capabilities\n\nThis endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\nTo display the page titles of related pages rather than just the ID:\n\n1. Add a rollup property to the data source which uses a formula to get the related page's title. This works well if you have access to [update](https://developers.notion.com/reference/update-a-data-source) the data source's schema.\n2. Otherwise, [retrieve the individual related pages](https://developers.notion.com/reference/retrieve-a-page) using each page ID.\n\n### Overview\n\nGets a list of [pages](https://developers.notion.com/reference/page) contained in the data source, filtered and ordered according to the filter conditions and sort criteria provided in the request. The response may contain fewer than `page_size` of results. If the response includes a `next_cursor` value, refer to the [pagination reference](https://developers.notion.com/reference/intro#pagination) for details about how to use a cursor to iterate through the list.\n\n### Filtering\n\n[**Filters**](https://developers.notion.com/reference/filter-data-source-entries) are similar to the [filters provided in the Notion UI](https://www.notion.so/help/views-filters-and-sorts) where the set of filters and filter groups chained by \"And\" in the UI is equivalent to having each filter in the array of the compound `\"and\"` filter. Similar a set of filters chained by \"Or\" in the UI would be represented as filters in the array of the `\"or\"` compound filter.\nFilters operate on data source properties and can be combined. If no filter is provided, all the pages in the data source will be returned with pagination.\n<Frame caption=\"The above filters in the UI can be represented as the following filter object\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=27e3bc94089d8d763ae7de032ded2fa3\" data-og-width=\"1340\" width=\"1340\" data-og-height=\"550\" height=\"550\" data-path=\"images/reference/image-6.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=2dcdbadbb7eaa7bd76053d90d278a3b5 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=94c06afb0597c0918824a50fcc008f06 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=c45c398eed6f94836fc524b30a1413b5 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=cabfb7bfd5f8e7f7c51d55dfbcdad761 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=53a3e9415432646840cc79b3aaf56499 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=6dbd0353198b49128ab62c186fe22318 2500w\" />\n</Frame>\n```json Filter object expandable theme={null}\n{\n\"and\": [\n{\n\"property\": \"Done\",\n\"checkbox\": {\n\"equals\": true\n}\n},\n{\n\"or\": [\n{\n\"property\": \"Tags\",\n\"contains\": \"A\"\n},\n{\n\"property\": \"Tags\",\n\"contains\": \"B\"\n}\n]\n}\n]\n}\n```\nIn addition to chained filters, data sources can be queried with single filters.\n```json JSON theme={null}\n{\n\"property\": \"Done\",\n\"checkbox\": {\n\"equals\": true\n}\n}\n```\n\n### Sorting\n\n[**Sorts**](https://developers.notion.com/reference/sort-data-source-entries) are similar to the [sorts provided in the Notion UI](https://notion.so/notion/Intro-to-databases-fd8cd2d212f74c50954c11086d85997e#0eb303043b1742468e5aff2f3f670505). Sorts operate on database properties or page timestamps and can be combined. The order of the sorts in the request matter, with earlier sorts taking precedence over later ones.\nNotion doesn't guarantee any particular sort order when no sort parameters are provided.\n\n### Recommendations for performance\n\nUse the `filter_properties` query parameter to filter only the properties of the data source schema you need from the response items. For example:\n```bash  theme={null}\nhttps://api.notion.com/v1/data_sources/[DATA_SOURCE_ID]/query?filter_properties[]=title\n```\nMultiple filter properties can be provided by chaining the `filter_properties` query param. For example:\n```bash  theme={null}\nhttps://api.notion.com/v1/data_sources/[DATA_SOURCE_ID]/query?filter_properties[]=title&filter_properties[]=status\n```\nThis parameter accepts property IDs or property names. Property IDs can be determined with the [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source) endpoint.\nIf you are using the [Notion JavaScript SDK](https://github.com/makenotion/notion-sdk-js), the `filter_properties` endpoint expects an array of strings. For example:\n```typescript TypeScript theme={null}\nnotion.dataSources.query({\ndata_source_id: id,\nfilter_properties: [\"title\", \"status\"]\n})\n```\nUsing `filter_properties` can make a significant improvement to the speed of the API and size of the JSON objects in the results, especially for databases with lots of properties, some of which might be rollups, relations, or formulas. If you need additional properties from each returned page, you can make subsequent calls to the [Retrieve page property item](https://developers.notion.com/changelog/retrieve-page-property-values) or [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page) APIs.\nIf you're still running into long query times with this API, other tips include:\nFor more information, visit our [help center article on optimizing database load times](https://www.notion.com/help/optimize-database-load-times-and-performance).\n\n  * Using more specific filter conditions to reduce the result set, e.g. a more specific title query or a shorter time window.\n  * Dividing large data sources (ones with more than several dozen thousand pages) into multiple; e.g. splitting a \"tasks\" database into \"Tasks\" and \"Bugs\".\n  * Pruning data source schemas to remove any complex formulas, rollups, two-way relations, or other properties that are no longer in use.\n  * Setting up [integration webhooks](https://developers.notion.com/reference/webhooks) to reduce the need for polling this API by instead automatically notifying your system of incremental workspace events.\n\n### Other important details and tips\n\n### Errors\n\nReturns a 404 HTTP response if the data source doesn't exist, or if the integration doesn't have access to the data source.\nReturns a 400 or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\nReturns a 503 HTTP response if the data source query is temporarily unavailable due to backend datastore timeouts. The response body includes an `additional_data` object with retry guidance:\n```json 503 response example theme={null}\n{\n\"object\": \"error\",\n\"status\": 503,\n\"code\": \"service_unavailable\",\n\"message\": \"Public API data source query is temporarily unavailable due to backend datastore timeouts. Retry with exponential backoff; if retries continue to fail, reduce page_size or narrow filters/sorts.\",\n\"additional_data\": {\n\"endpoint_name\": \"public_queryDataSource\",\n\"notion_error_name\": \"PgPoolWaitConnectionTimeout\",\n\"retry_guidance\": [\n\"Use exponential backoff with jitter\",\n\"Reduce page_size\",\n\"Narrow query filters/sorts\"\n]\n}\n}\n```\n<Danger>\n**Note**: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n</Danger>\n\n### Resources\n\n  * [pages](https://developers.notion.com/reference/page)\n  * [pagination reference](https://developers.notion.com/reference/intro#pagination)\n  * [Wiki](https://www.notion.so/help/wikis-and-verified-pages)\n  * [database](https://developers.notion.com/reference/database)\n  * [data sources](https://developers.notion.com/reference/data-source)\n  * [**Filters**](https://developers.notion.com/reference/filter-data-source-entries)\n  * [filters provided in the Notion UI](https://www.notion.so/help/views-filters-and-sorts)\n  * [**Sorts**](https://developers.notion.com/reference/sort-data-source-entries)\n  * [sorts provided in the Notion UI](https://notion.so/notion/Intro-to-databases-fd8cd2d212f74c50954c11086d85997e#0eb303043b1742468e5aff2f3f670505)\n  * [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source)\n  * [Notion JavaScript SDK](https://github.com/makenotion/notion-sdk-js)\n  * [Retrieve page property item](https://developers.notion.com/changelog/retrieve-page-property-values)\n  * [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page)\n  * [integration webhooks](https://developers.notion.com/reference/webhooks)\n  * [help center article on optimizing database load times](https://www.notion.com/help/optimize-database-load-times-and-performance)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [update](https://developers.notion.com/reference/update-a-data-source)\n  * [retrieve the individual related pages](https://developers.notion.com/reference/retrieve-a-page)\n  * [retrieving each page property item](https://developers.notion.com/reference/retrieve-a-page-property)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Query a data source](https://developers.notion.com/reference/query-a-data-source)",
+  "errors": [
+    {
+      "body": "Returns a 404 HTTP response if the data source doesn't exist, or if the integration doesn't have access to the data source.\nReturns a 400 or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\nReturns a 503 HTTP response if the data source query is temporarily unavailable due to backend datastore timeouts. The response body includes an `additional_data` object with retry guidance:\n```json 503 response example theme={null}\n{\n\"object\": \"error\",\n\"status\": 503,\n\"code\": \"service_unavailable\",\n\"message\": \"Public API data source query is temporarily unavailable due to backend datastore timeouts. Retry with exponential backoff; if retries continue to fail, reduce page_size or narrow filters/sorts.\",\n\"additional_data\": {\n\"endpoint_name\": \"public_queryDataSource\",\n\"notion_error_name\": \"PgPoolWaitConnectionTimeout\",\n\"retry_guidance\": [\n\"Use exponential backoff with jitter\",\n\"Reduce page_size\",\n\"Narrow query filters/sorts\"\n]\n}\n}\n```\n<Danger>\n**Note**: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n</Danger>",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "[Wiki](https://www.notion.so/help/wikis-and-verified-pages) data sources can contain either pages or databases as children. In all other cases, the children can only be pages.\nFor wikis, instead of directly returning any [database](https://developers.notion.com/reference/database) results, this API returns all [data sources](https://developers.notion.com/reference/data-source) that are children of *that* database. Surfacing the data source instead of the direct database child helps make it easier to craft your next API request (for example, retrieving the data source or listing its children.)\nAnother tip for wikis is to use the `result_type` filter of `\"page\"` or `\"data_source\"` if you're only looking for query results that are one of those two types instead of both.",
+      "kind": "info",
+      "title": "Databases, data sources, and wikis"
+    },
+    {
+      "body": "Before an integration can query a data source, its parent database must be shared with the integration. Attempting to query a data source in a database that has not been shared will return an HTTP response with a 404 status code.\nTo share a database with an integration, click the ••• menu at the top right of a database page, scroll to `Add connections`, and use the search bar to find and select the integration from the dropdown list.",
+      "kind": "info",
+      "title": "Permissions"
+    },
+    {
+      "body": "This endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    },
+    {
+      "body": "1. Add a rollup property to the data source which uses a formula to get the related page's title. This works well if you have access to [update](https://developers.notion.com/reference/update-a-data-source) the data source's schema.\n2. Otherwise, [retrieve the individual related pages](https://developers.notion.com/reference/retrieve-a-page) using each page ID.",
+      "kind": "info",
+      "title": "To display the page titles of related pages rather than just the ID:"
+    }
+  ],
+  "lead": null,
+  "limits": [],
+  "method": "post",
+  "operation_id": "post-database-query",
+  "path": "/v1/data_sources/{data_source_id}/query",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "pages",
+      "url": "https://developers.notion.com/reference/page"
+    },
+    {
+      "kind": "reference",
+      "label": "pagination reference",
+      "url": "https://developers.notion.com/reference/intro#pagination"
+    },
+    {
+      "kind": "link",
+      "label": "Wiki",
+      "url": "https://www.notion.so/help/wikis-and-verified-pages"
+    },
+    {
+      "kind": "reference",
+      "label": "database",
+      "url": "https://developers.notion.com/reference/database"
+    },
+    {
+      "kind": "reference",
+      "label": "data sources",
+      "url": "https://developers.notion.com/reference/data-source"
+    },
+    {
+      "kind": "reference",
+      "label": "**Filters**",
+      "url": "https://developers.notion.com/reference/filter-data-source-entries"
+    },
+    {
+      "kind": "link",
+      "label": "filters provided in the Notion UI",
+      "url": "https://www.notion.so/help/views-filters-and-sorts"
+    },
+    {
+      "kind": "reference",
+      "label": "**Sorts**",
+      "url": "https://developers.notion.com/reference/sort-data-source-entries"
+    },
+    {
+      "kind": "link",
+      "label": "sorts provided in the Notion UI",
+      "url": "https://notion.so/notion/Intro-to-databases-fd8cd2d212f74c50954c11086d85997e#0eb303043b1742468e5aff2f3f670505"
+    },
+    {
+      "kind": "reference",
+      "label": "Retrieve a data source",
+      "url": "https://developers.notion.com/reference/retrieve-a-data-source"
+    },
+    {
+      "kind": "link",
+      "label": "Notion JavaScript SDK",
+      "url": "https://github.com/makenotion/notion-sdk-js"
+    },
+    {
+      "kind": "link",
+      "label": "Retrieve page property item",
+      "url": "https://developers.notion.com/changelog/retrieve-page-property-values"
+    },
+    {
+      "kind": "reference",
+      "label": "Retrieve a page",
+      "url": "https://developers.notion.com/reference/retrieve-a-page"
+    },
+    {
+      "kind": "reference",
+      "label": "integration webhooks",
+      "url": "https://developers.notion.com/reference/webhooks"
+    },
+    {
+      "kind": "link",
+      "label": "help center article on optimizing database load times",
+      "url": "https://www.notion.com/help/optimize-database-load-times-and-performance"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "reference",
+      "label": "update",
+      "url": "https://developers.notion.com/reference/update-a-data-source"
+    },
+    {
+      "kind": "reference",
+      "label": "retrieve the individual related pages",
+      "url": "https://developers.notion.com/reference/retrieve-a-page"
+    },
+    {
+      "kind": "reference",
+      "label": "retrieving each page property item",
+      "url": "https://developers.notion.com/reference/retrieve-a-page-property"
+    },
+    {
+      "kind": "reference",
+      "label": "request limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Query a data source",
+      "url": "https://developers.notion.com/reference/query-a-data-source"
+    }
+  ],
+  "sections": [
+    {
+      "body": "Gets a list of [pages](https://developers.notion.com/reference/page) contained in the data source, filtered and ordered according to the filter conditions and sort criteria provided in the request. The response may contain fewer than `page_size` of results. If the response includes a `next_cursor` value, refer to the [pagination reference](https://developers.notion.com/reference/intro#pagination) for details about how to use a cursor to iterate through the list.",
+      "heading": "Overview",
+      "level": 3
+    },
+    {
+      "body": "[**Filters**](https://developers.notion.com/reference/filter-data-source-entries) are similar to the [filters provided in the Notion UI](https://www.notion.so/help/views-filters-and-sorts) where the set of filters and filter groups chained by \"And\" in the UI is equivalent to having each filter in the array of the compound `\"and\"` filter. Similar a set of filters chained by \"Or\" in the UI would be represented as filters in the array of the `\"or\"` compound filter.\nFilters operate on data source properties and can be combined. If no filter is provided, all the pages in the data source will be returned with pagination.\n<Frame caption=\"The above filters in the UI can be represented as the following filter object\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=27e3bc94089d8d763ae7de032ded2fa3\" data-og-width=\"1340\" width=\"1340\" data-og-height=\"550\" height=\"550\" data-path=\"images/reference/image-6.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=2dcdbadbb7eaa7bd76053d90d278a3b5 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=94c06afb0597c0918824a50fcc008f06 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=c45c398eed6f94836fc524b30a1413b5 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=cabfb7bfd5f8e7f7c51d55dfbcdad761 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=53a3e9415432646840cc79b3aaf56499 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-6.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=6dbd0353198b49128ab62c186fe22318 2500w\" />\n</Frame>\n```json Filter object expandable theme={null}\n{\n\"and\": [\n{\n\"property\": \"Done\",\n\"checkbox\": {\n\"equals\": true\n}\n},\n{\n\"or\": [\n{\n\"property\": \"Tags\",\n\"contains\": \"A\"\n},\n{\n\"property\": \"Tags\",\n\"contains\": \"B\"\n}\n]\n}\n]\n}\n```\nIn addition to chained filters, data sources can be queried with single filters.\n```json JSON theme={null}\n{\n\"property\": \"Done\",\n\"checkbox\": {\n\"equals\": true\n}\n}\n```",
+      "heading": "Filtering",
+      "level": 3
+    },
+    {
+      "body": "[**Sorts**](https://developers.notion.com/reference/sort-data-source-entries) are similar to the [sorts provided in the Notion UI](https://notion.so/notion/Intro-to-databases-fd8cd2d212f74c50954c11086d85997e#0eb303043b1742468e5aff2f3f670505). Sorts operate on database properties or page timestamps and can be combined. The order of the sorts in the request matter, with earlier sorts taking precedence over later ones.\nNotion doesn't guarantee any particular sort order when no sort parameters are provided.",
+      "heading": "Sorting",
+      "level": 3
+    },
+    {
+      "body": "Use the `filter_properties` query parameter to filter only the properties of the data source schema you need from the response items. For example:\n```bash  theme={null}\nhttps://api.notion.com/v1/data_sources/[DATA_SOURCE_ID]/query?filter_properties[]=title\n```\nMultiple filter properties can be provided by chaining the `filter_properties` query param. For example:\n```bash  theme={null}\nhttps://api.notion.com/v1/data_sources/[DATA_SOURCE_ID]/query?filter_properties[]=title&filter_properties[]=status\n```\nThis parameter accepts property IDs or property names. Property IDs can be determined with the [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source) endpoint.\nIf you are using the [Notion JavaScript SDK](https://github.com/makenotion/notion-sdk-js), the `filter_properties` endpoint expects an array of strings. For example:\n```typescript TypeScript theme={null}\nnotion.dataSources.query({\ndata_source_id: id,\nfilter_properties: [\"title\", \"status\"]\n})\n```\nUsing `filter_properties` can make a significant improvement to the speed of the API and size of the JSON objects in the results, especially for databases with lots of properties, some of which might be rollups, relations, or formulas. If you need additional properties from each returned page, you can make subsequent calls to the [Retrieve page property item](https://developers.notion.com/changelog/retrieve-page-property-values) or [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page) APIs.\nIf you're still running into long query times with this API, other tips include:\nFor more information, visit our [help center article on optimizing database load times](https://www.notion.com/help/optimize-database-load-times-and-performance).",
+      "heading": "Recommendations for performance",
+      "items": [
+        "Using more specific filter conditions to reduce the result set, e.g. a more specific title query or a shorter time window.",
+        "Dividing large data sources (ones with more than several dozen thousand pages) into multiple; e.g. splitting a \"tasks\" database into \"Tasks\" and \"Bugs\".",
+        "Pruning data source schemas to remove any complex formulas, rollups, two-way relations, or other properties that are no longer in use.",
+        "Setting up [integration webhooks](https://developers.notion.com/reference/webhooks) to reduce the need for polling this API by instead automatically notifying your system of incremental workspace events."
+      ],
+      "level": 3
+    },
+    {
+      "heading": "Other important details and tips",
+      "level": 3
+    }
+  ],
+  "slug": "query-a-data-source",
+  "source_url": "https://developers.notion.com/reference/query-a-data-source",
+  "summary": null,
+  "title": "Query a data source",
+  "warnings": [
+    {
+      "items": [
+        "If a formula depends on a page property that is a relation, and that relation has more than 25 references, only 25 will be evaluated as part of the formula.",
+        "Rollups and formulas that depend on multiple layers of relations may not return correct results.",
+        "Notion recommends individually [retrieving each page property item](https://developers.notion.com/reference/retrieve-a-page-property) to get the most accurate result."
+      ],
+      "kind": "warning",
+      "title": "Formula and rollup limitations"
+    }
+  ]
+}

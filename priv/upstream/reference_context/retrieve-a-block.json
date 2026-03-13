@@ -1,0 +1,62 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.retrieve({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})"
+    }
+  ],
+  "description": "Retrieves a [Block object](https://developers.notion.com/reference/block) using the ID specified.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nReturns a 404 HTTP response if the block doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [Block object](https://developers.notion.com/reference/block)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Retrieve a block](https://developers.notion.com/reference/retrieve-a-block)",
+  "errors": [
+    {
+      "body": "Returns a 404 HTTP response if the block doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "This endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).",
+      "kind": "info",
+      "title": "Integration capabilities"
+    }
+  ],
+  "lead": "Retrieves a [Block object](https://developers.notion.com/reference/block) using the ID specified.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "retrieve-a-block",
+  "path": "/v1/blocks/{block_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Block object",
+      "url": "https://developers.notion.com/reference/block"
+    },
+    {
+      "kind": "reference",
+      "label": "capabilities guide",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "kind": "reference",
+      "label": "request limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a block",
+      "url": "https://developers.notion.com/reference/retrieve-a-block"
+    }
+  ],
+  "sections": [],
+  "slug": "retrieve-a-block",
+  "source_url": "https://developers.notion.com/reference/retrieve-a-block",
+  "summary": null,
+  "title": "Retrieve a block",
+  "warnings": []
+}

@@ -1,0 +1,97 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.dataSources.retrieve({\n  data_source_id: \"d9824bdc-8445-4327-be8b-5b47500af6ce\"\n})"
+    }
+  ],
+  "description": "### Warnings\n\nThe Notion API does not support retrieving linked data sources\n\nTo fetch the information in a [linked data source](https://www.notion.so/help/guides/using-linked-databases), share the original source database with your Notion integration.\n\n### Notes\n\nData source relations must be shared with your integration\n\nTo retrieve data source properties from [database relations](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation), the related database must be shared with your integration in addition to the database being retrieved. If the related database is not shared, properties based on relations will not be included in the API response.\n\n### Finding a data source ID\n\nNavigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.\n<Frame caption=\"Notion database ID\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=051ded818c1263e52bb87f66a3d05ce5\" data-og-width=\"1502\" width=\"1502\" data-og-height=\"128\" height=\"128\" data-path=\"images/reference/image-3.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=9c0940d5759546d98cf4021dad370923 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=2cae9af78a3a05afb501745ea56ab824 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=26b23946e58081a1fc2555a2fcda4695 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=d401b28ebf9c711b04f5eaf15079dc41 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=41d67937b3a95718678068820b37bc66 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=b77afa7fac33cc6147689247c6535c5a 2500w\" />\n</Frame>\nThen, use the [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database) API to get a list of `data_sources` for that database. There is often only one data source, but when there are multiple, you may have the ID or name of the one you want to retrieve in mind (or you can retrieve each of them). Use that data source ID with this endpoint to get its `properties`.\nTo get a data source ID from the Notion app directly, the settings menu for a database includes a \"Copy data source ID\" button under \"Manage data sources\":\n<Frame caption=\"Screenshot of the 'Manage data sources' menu for a database in Notion, with 'Copy data source ID' button.\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=292ed34c84b1b7161b282444678c3bc6\" data-og-width=\"570\" width=\"570\" data-og-height=\"458\" height=\"458\" data-path=\"images/reference/image-4.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=5b9c76b48507780d83e621211f008f78 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=177ae36df6c163decf77ade220b57b2e 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=0e0ac98a4d5a722aab667dd83a59d86e 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=45d964c2c0893b7c1da0585e125cc606 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=f320150188cf17e69e4ea4ad2e5118c9 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=02948f93889722aa8adfce042bdd8b54 2500w\" />\n</Frame>\nRefer to the [Build your first integration guide](https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id) for more details.\n\n### Additional resources\n\n  * [How to share a database with your integration](https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions)\n  * [Working with databases guide](https://developers.notion.com/guides/data-apis/working-with-databases)\n\n### Errors\n\nErrorsEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database)\n  * [Build your first integration guide](https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [How to share a database with your integration](https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions)\n  * [Working with databases guide](https://developers.notion.com/guides/data-apis/working-with-databases)\n  * [database relations](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation)\n  * [linked data source](https://www.notion.so/help/guides/using-linked-databases)\n  * [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source)",
+  "errors": [
+    {
+      "body": "ErrorsEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "To retrieve data source properties from [database relations](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation), the related database must be shared with your integration in addition to the database being retrieved. If the related database is not shared, properties based on relations will not be included in the API response.",
+      "kind": "info",
+      "title": "Data source relations must be shared with your integration"
+    }
+  ],
+  "lead": null,
+  "limits": [],
+  "method": "get",
+  "operation_id": "retrieve-a-data-source",
+  "path": "/v1/data_sources/{data_source_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "Retrieve a database",
+      "url": "https://developers.notion.com/reference/retrieve-a-database"
+    },
+    {
+      "kind": "guide",
+      "label": "Build your first integration guide",
+      "url": "https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "guide",
+      "label": "How to share a database with your integration",
+      "url": "https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions"
+    },
+    {
+      "kind": "guide",
+      "label": "Working with databases guide",
+      "url": "https://developers.notion.com/guides/data-apis/working-with-databases"
+    },
+    {
+      "kind": "link",
+      "label": "database relations",
+      "url": "https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation"
+    },
+    {
+      "kind": "link",
+      "label": "linked data source",
+      "url": "https://www.notion.so/help/guides/using-linked-databases"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a data source",
+      "url": "https://developers.notion.com/reference/retrieve-a-data-source"
+    }
+  ],
+  "sections": [
+    {
+      "body": "Navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.\n<Frame caption=\"Notion database ID\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=051ded818c1263e52bb87f66a3d05ce5\" data-og-width=\"1502\" width=\"1502\" data-og-height=\"128\" height=\"128\" data-path=\"images/reference/image-3.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=9c0940d5759546d98cf4021dad370923 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=2cae9af78a3a05afb501745ea56ab824 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=26b23946e58081a1fc2555a2fcda4695 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=d401b28ebf9c711b04f5eaf15079dc41 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=41d67937b3a95718678068820b37bc66 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-3.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=b77afa7fac33cc6147689247c6535c5a 2500w\" />\n</Frame>\nThen, use the [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database) API to get a list of `data_sources` for that database. There is often only one data source, but when there are multiple, you may have the ID or name of the one you want to retrieve in mind (or you can retrieve each of them). Use that data source ID with this endpoint to get its `properties`.\nTo get a data source ID from the Notion app directly, the settings menu for a database includes a \"Copy data source ID\" button under \"Manage data sources\":\n<Frame caption=\"Screenshot of the 'Manage data sources' menu for a database in Notion, with 'Copy data source ID' button.\">\n<img src=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=292ed34c84b1b7161b282444678c3bc6\" data-og-width=\"570\" width=\"570\" data-og-height=\"458\" height=\"458\" data-path=\"images/reference/image-4.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=280&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=5b9c76b48507780d83e621211f008f78 280w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=560&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=177ae36df6c163decf77ade220b57b2e 560w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=840&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=0e0ac98a4d5a722aab667dd83a59d86e 840w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=1100&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=45d964c2c0893b7c1da0585e125cc606 1100w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=1650&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=f320150188cf17e69e4ea4ad2e5118c9 1650w, https://mintcdn.com/notion-demo/S-I3qLQnwRa7HjdK/images/reference/image-4.png?w=2500&fit=max&auto=format&n=S-I3qLQnwRa7HjdK&q=85&s=02948f93889722aa8adfce042bdd8b54 2500w\" />\n</Frame>\nRefer to the [Build your first integration guide](https://developers.notion.com/guides/get-started/create-a-notion-integration#step-3-save-the-database-id) for more details.",
+      "heading": "Finding a data source ID",
+      "level": 3
+    },
+    {
+      "heading": "Additional resources",
+      "items": [
+        "[How to share a database with your integration](https://developers.notion.com/guides/get-started/create-a-notion-integration#give-your-integration-page-permissions)",
+        "[Working with databases guide](https://developers.notion.com/guides/data-apis/working-with-databases)"
+      ],
+      "level": 3
+    }
+  ],
+  "slug": "retrieve-a-data-source",
+  "source_url": "https://developers.notion.com/reference/retrieve-a-data-source",
+  "summary": null,
+  "title": "Retrieve a data source",
+  "warnings": [
+    {
+      "body": "To fetch the information in a [linked data source](https://www.notion.so/help/guides/using-linked-databases), share the original source database with your Notion integration.",
+      "kind": "warning",
+      "title": "The Notion API does not support retrieving linked data sources"
+    }
+  ]
+}

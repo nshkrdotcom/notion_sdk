@@ -1,0 +1,112 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.pages.retrieveMarkdown({\n  page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\"\n})\n\nconsole.log(response.markdown)"
+    }
+  ],
+  "description": "Retrieve the content of a page rendered as enhanced markdown.\n\n### Notes\n\nRequirements\n\nYour integration must have [read content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target page in order to call this endpoint. To update your integration's capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting to call this endpoint without read content capabilities returns an HTTP response with a 403 status code.\n\nThe `unknown_block_ids` array does not distinguish between truncated and inaccessible blocks. Handle `object_not_found` errors gracefully when re-fetching unknown block IDs.\n\n### Overview\n\nFor unsupported block types, use the [block-based API](https://developers.notion.com/reference/retrieve-a-block) to retrieve the full structured data.\n\n### Use cases\n\nUse this endpoint to retrieve the full content of a Notion page as [enhanced markdown](https://developers.notion.com/guides/data-apis/enhanced-markdown), instead of working with the [block-based API](https://developers.notion.com/reference/get-block-children). This is especially useful for agentic systems and developer tools that work natively with markdown.\nThe endpoint also accepts non-navigable block IDs returned in `unknown_block_ids` from a previous truncated response. Pass these IDs to fetch additional subtrees of a large page.\n\n### General behavior\n\nReturns a `page_markdown` object containing the page content as an enhanced markdown string.\n\n### Unknown blocks\n\nSome blocks may appear as `<unknown url=\"...\" alt=\"...\"/>` tags in the markdown output. This happens when:\nWhen truncation or permissions cause unknown blocks, the `truncated` field is set to `true` and the `unknown_block_ids` array contains the affected block IDs.\nYou can attempt to fetch unloaded blocks by passing their IDs back to this same endpoint as the `page_id` path parameter. Blocks that are unknown due to permissions will return a 404 error since the integration does not have access.\n\n  * **Truncation**: The page exceeds the record limit (approximately 20,000 blocks) and some blocks could not be loaded.\n  * **Permissions**: The page contains child pages or other content that is not shared with the integration.\n  * **Unsupported block types**: Certain block types (such as bookmarks, embeds, and link previews) are [not yet supported](https://developers.notion.com/guides/data-apis/working-with-markdown-content#unsupported-block-types) in the markdown format.\n\n### Errors\n\nReturns a 404 HTTP response if the page doesn't exist, or if the integration doesn't have access to the page.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [enhanced markdown](https://developers.notion.com/guides/data-apis/enhanced-markdown)\n  * [block-based API](https://developers.notion.com/reference/get-block-children)\n  * [read content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities)\n  * [My integrations](https://www.notion.so/profile/integrations)\n  * [not yet supported](https://developers.notion.com/guides/data-apis/working-with-markdown-content#unsupported-block-types)\n  * [block-based API](https://developers.notion.com/reference/retrieve-a-block)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Retrieve a page as markdown](https://developers.notion.com/reference/retrieve-page-markdown)",
+  "errors": [
+    {
+      "body": "Returns a 404 HTTP response if the page doesn't exist, or if the integration doesn't have access to the page.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "Your integration must have [read content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target page in order to call this endpoint. To update your integration's capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting to call this endpoint without read content capabilities returns an HTTP response with a 403 status code.",
+      "kind": "info",
+      "title": "Requirements"
+    },
+    {
+      "body": "The `unknown_block_ids` array does not distinguish between truncated and inaccessible blocks. Handle `object_not_found` errors gracefully when re-fetching unknown block IDs.",
+      "kind": "info"
+    }
+  ],
+  "lead": "Retrieve the content of a page rendered as enhanced markdown.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "retrieve-page-markdown",
+  "path": "/v1/pages/{page_id}/markdown",
+  "resources": [
+    {
+      "kind": "guide",
+      "label": "enhanced markdown",
+      "url": "https://developers.notion.com/guides/data-apis/enhanced-markdown"
+    },
+    {
+      "kind": "reference",
+      "label": "block-based API",
+      "url": "https://developers.notion.com/reference/get-block-children"
+    },
+    {
+      "kind": "reference",
+      "label": "read content capabilities",
+      "url": "https://developers.notion.com/reference/capabilities#content-capabilities"
+    },
+    {
+      "kind": "link",
+      "label": "My integrations",
+      "url": "https://www.notion.so/profile/integrations"
+    },
+    {
+      "kind": "guide",
+      "label": "not yet supported",
+      "url": "https://developers.notion.com/guides/data-apis/working-with-markdown-content#unsupported-block-types"
+    },
+    {
+      "kind": "reference",
+      "label": "block-based API",
+      "url": "https://developers.notion.com/reference/retrieve-a-block"
+    },
+    {
+      "kind": "reference",
+      "label": "request limits",
+      "url": "https://developers.notion.com/reference/request-limits"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a page as markdown",
+      "url": "https://developers.notion.com/reference/retrieve-page-markdown"
+    }
+  ],
+  "sections": [
+    {
+      "body": "For unsupported block types, use the [block-based API](https://developers.notion.com/reference/retrieve-a-block) to retrieve the full structured data.",
+      "heading": "Overview",
+      "level": 2
+    },
+    {
+      "body": "Use this endpoint to retrieve the full content of a Notion page as [enhanced markdown](https://developers.notion.com/guides/data-apis/enhanced-markdown), instead of working with the [block-based API](https://developers.notion.com/reference/get-block-children). This is especially useful for agentic systems and developer tools that work natively with markdown.\nThe endpoint also accepts non-navigable block IDs returned in `unknown_block_ids` from a previous truncated response. Pass these IDs to fetch additional subtrees of a large page.",
+      "heading": "Use cases",
+      "level": 3
+    },
+    {
+      "body": "Returns a `page_markdown` object containing the page content as an enhanced markdown string.",
+      "heading": "General behavior",
+      "level": 3
+    },
+    {
+      "body": "Some blocks may appear as `<unknown url=\"...\" alt=\"...\"/>` tags in the markdown output. This happens when:\nWhen truncation or permissions cause unknown blocks, the `truncated` field is set to `true` and the `unknown_block_ids` array contains the affected block IDs.\nYou can attempt to fetch unloaded blocks by passing their IDs back to this same endpoint as the `page_id` path parameter. Blocks that are unknown due to permissions will return a 404 error since the integration does not have access.",
+      "heading": "Unknown blocks",
+      "items": [
+        "**Truncation**: The page exceeds the record limit (approximately 20,000 blocks) and some blocks could not be loaded.",
+        "**Permissions**: The page contains child pages or other content that is not shared with the integration.",
+        "**Unsupported block types**: Certain block types (such as bookmarks, embeds, and link previews) are [not yet supported](https://developers.notion.com/guides/data-apis/working-with-markdown-content#unsupported-block-types) in the markdown format."
+      ],
+      "level": 3
+    }
+  ],
+  "slug": "retrieve-page-markdown",
+  "source_url": "https://developers.notion.com/reference/retrieve-page-markdown",
+  "summary": null,
+  "title": "Retrieve a page as markdown",
+  "warnings": []
+}

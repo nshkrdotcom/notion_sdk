@@ -1,0 +1,30 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.dataSources.listTemplates({\n  data_source_id: \"d9824bdc-8445-4327-be8b-5b47500af6ce\"\n})"
+    }
+  ],
+  "description": "### Resources\n\n  * [List data source templates](https://developers.notion.com/reference/list-data-source-templates)",
+  "errors": [],
+  "info_notes": [],
+  "lead": null,
+  "limits": [],
+  "method": "get",
+  "operation_id": "list-data-source-templates",
+  "path": "/v1/data_sources/{data_source_id}/templates",
+  "resources": [
+    {
+      "kind": "source",
+      "label": "List data source templates",
+      "url": "https://developers.notion.com/reference/list-data-source-templates"
+    }
+  ],
+  "sections": [],
+  "slug": "list-data-source-templates",
+  "source_url": "https://developers.notion.com/reference/list-data-source-templates",
+  "summary": null,
+  "title": "List data source templates",
+  "warnings": []
+}

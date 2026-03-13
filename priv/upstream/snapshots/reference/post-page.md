@@ -1,0 +1,5033 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://developers.notion.com/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+> Use this API to create a new [page](/reference/page) as a child of an existing page or [data source](/reference/data-source).
+
+# Create a page
+
+export const integrationsDashboardUrl = "https://www.notion.so/profile/integrations";
+
+### Use cases
+
+#### Choosing a parent
+
+In most cases, provide a `page_id` or `data_source` under the `parent` parameter to create a page under an existing [page](/reference/page), or [data source](/reference/data-source), respectively.
+
+There is a 3rd option, available only for bots of [public integrations](/guides/get-started/getting-started#internal-vs-public-integrations): creating a private page at the workspace level. To do this, omit the `parent` parameter, or provide `parent[workspace]=true`. This can be useful for quickly creating pages that can then be organized manually in the Notion app later, helping you get to your life's work faster.
+
+For internal integrations, a page or data source parent is currently required in the API, because there is no one specific Notion user associated with them that could be used as the "owner" of the new private page.
+
+#### Setting up page properties
+
+If the new page is a child of an existing page,`title` is the only valid property in the `properties` body parameter.
+
+If the new page is a child of an existing [data source](/reference/data-source), the keys of the `properties` object body param must match the parent [data source's properties](/reference/property-object).
+
+#### Setting up page content
+
+This endpoint can be used to create a new page with or without content using the `children` option. To add content to a page after creating it, use the [Append block children](/reference/patch-block-children) endpoint.
+
+**Templates**: As an alternative to building up page content manually, the `template` body parameter can be used to specify an existing data source template to be used to populate the content and properties of the new page.
+
+When omitted, the default is `template[type]=none`, which means no template is applied. The other options for `template[type]` are:
+
+* `default`: Apply the data source's default template.
+  * This is only allowed for pages created under a data source that has a default template configured in the Notion app.
+* `template_id`: Provide a specific `template_id` to use as the blueprint for your page.
+  * The API bot must have access to the template page, and it must be within the same workspace.
+  * Although any valid page ID can be used as the `template[template_id]`, we recommend only using pages that are configured as actual [database templates](https://www.notion.com/help/database-templates) under the same data source as the parent of your new page to make sure that page properties can get merged in correctly.
+
+When using `default` or `template_id`, you can optionally provide `template[timezone]` — an [IANA timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) string (e.g. `America/New_York`) — to control the timezone used when resolving template variables like `@now` and `@today`. If omitted, the authorizing user's timezone is used for public integrations, or UTC for internal integrations. An invalid timezone returns a `validation_error`.
+
+When applying a template, the `children` parameter is **not** allowed. The page is returned as blank initially in the API response, and then Notion's systems apply the template asynchronously after the API request finishes. For more information, see our full guide on [creating pages from templates](/guides/data-apis/creating-pages-from-templates).
+
+### General behavior
+
+Returns a new [page object](/reference/page).
+
+<Tip>
+  **Newlines in markdown content**
+
+  When using the `markdown` body parameter, newlines must be encoded as `\n` in the JSON string — for example, `"# Heading\n\nParagraph"`. The interactive API explorer on this page does not support multiline input, so use cURL, an SDK, or any HTTP client that sends properly encoded JSON. When using cURL, wrap the `--data` body in **single quotes** (`'...'`) so that `\n` is preserved for the JSON parser.
+</Tip>
+
+<Warning>
+  **Some page `properties` are not supported via the API**
+
+  A request body that includes `rollup`, `created_by`, `created_time`, `last_edited_by`, or `last_edited_time` values in the properties object returns an error. These Notion-generated values cannot be created or updated via the API. If the `parent` contains any of these properties, then the new page’s corresponding values are automatically created.
+</Warning>
+
+<Info>
+  **Requirements**
+
+  Your integration must have [Insert Content capabilities](/reference/capabilities#content-capabilities) on the target parent page or database in order to call this endpoint. To update your integrations capabilities, navigate to the <a href={integrationsDashboardUrl}>My integrations</a> dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.
+
+  Attempting a query without update content capabilities returns an HTTP response with a 403 status code.
+</Info>
+
+### Errors
+
+Each Public API endpoint can return several possible error codes. See the [Error codes section](/reference/status-codes#error-codes) of the Status codes documentation for more information.
+
+
+## OpenAPI
+
+````yaml post /v1/pages
+openapi: 3.1.0
+info:
+  title: Notion API
+  version: 1.0.0
+  termsOfService: >-
+    https://notion.notion.site/Terms-and-Privacy-28ffdd083dc3473e9c2da6ec011b58ac
+servers:
+  - url: https://api.notion.com
+security:
+  - bearerAuth: []
+tags:
+  - name: Databases
+    description: Database endpoints
+  - name: Data sources
+    description: Data source endpoints
+  - name: Pages
+    description: Page endpoints
+  - name: Blocks
+    description: Block endpoints
+  - name: Comments
+    description: Comment endpoints
+  - name: File uploads
+    description: File upload endpoints
+  - name: OAuth
+    description: OAuth endpoints (basic authentication)
+  - name: Users
+    description: User endpoints
+  - name: Search
+    description: Search endpoints
+paths:
+  /v1/pages:
+    post:
+      tags:
+        - Pages
+      summary: Create a page
+      operationId: post-page
+      parameters:
+        - $ref: '#/components/parameters/notionVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parent:
+                  anyOf:
+                    - title: Page Id
+                      type: object
+                      properties:
+                        page_id:
+                          $ref: '#/components/schemas/idRequest'
+                        type:
+                          type: string
+                          const: page_id
+                      additionalProperties: false
+                      required:
+                        - page_id
+                    - title: Database Id
+                      type: object
+                      properties:
+                        database_id:
+                          $ref: '#/components/schemas/idRequest'
+                        type:
+                          type: string
+                          const: database_id
+                      additionalProperties: false
+                      required:
+                        - database_id
+                    - title: Data Source Id
+                      type: object
+                      properties:
+                        data_source_id:
+                          $ref: '#/components/schemas/idRequest'
+                        type:
+                          type: string
+                          const: data_source_id
+                      additionalProperties: false
+                      required:
+                        - data_source_id
+                    - title: Workspace
+                      type: object
+                      properties:
+                        workspace:
+                          type: boolean
+                          const: true
+                        type:
+                          type: string
+                          const: workspace
+                      additionalProperties: false
+                      required:
+                        - workspace
+                properties:
+                  type: object
+                  additionalProperties:
+                    anyOf:
+                      - title: Title
+                        type: object
+                        properties:
+                          title:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/richTextItemRequest'
+                            maxItems: 100
+                          type:
+                            type: string
+                            const: title
+                        additionalProperties: false
+                        required:
+                          - title
+                      - title: Rich Text
+                        type: object
+                        properties:
+                          rich_text:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/richTextItemRequest'
+                            maxItems: 100
+                          type:
+                            type: string
+                            const: rich_text
+                        additionalProperties: false
+                        required:
+                          - rich_text
+                      - title: Number
+                        type: object
+                        properties:
+                          number:
+                            type:
+                              - number
+                              - 'null'
+                          type:
+                            type: string
+                            const: number
+                        additionalProperties: false
+                        required:
+                          - number
+                      - title: Url
+                        type: object
+                        properties:
+                          url:
+                            anyOf:
+                              - $ref: '#/components/schemas/textRequest'
+                              - type: 'null'
+                          type:
+                            type: string
+                            const: url
+                        additionalProperties: false
+                        required:
+                          - url
+                      - title: Select
+                        type: object
+                        properties:
+                          select:
+                            anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    $ref: '#/components/schemas/stringRequest'
+                                  name:
+                                    $ref: '#/components/schemas/textRequest'
+                                  color:
+                                    $ref: '#/components/schemas/selectColor'
+                                  description:
+                                    anyOf:
+                                      - $ref: '#/components/schemas/textRequest'
+                                      - type: 'null'
+                                additionalProperties: false
+                                required:
+                                  - id
+                              - type: object
+                                properties:
+                                  name:
+                                    $ref: '#/components/schemas/textRequest'
+                                  id:
+                                    $ref: '#/components/schemas/stringRequest'
+                                  color:
+                                    $ref: '#/components/schemas/selectColor'
+                                  description:
+                                    anyOf:
+                                      - $ref: '#/components/schemas/textRequest'
+                                      - type: 'null'
+                                additionalProperties: false
+                                required:
+                                  - name
+                              - type: 'null'
+                          type:
+                            type: string
+                            const: select
+                        additionalProperties: false
+                        required:
+                          - select
+                      - title: Multi Select
+                        type: object
+                        properties:
+                          multi_select:
+                            type: array
+                            items:
+                              anyOf:
+                                - type: object
+                                  properties:
+                                    id:
+                                      $ref: '#/components/schemas/stringRequest'
+                                    name:
+                                      $ref: '#/components/schemas/textRequest'
+                                    color:
+                                      $ref: '#/components/schemas/selectColor'
+                                    description:
+                                      anyOf:
+                                        - $ref: '#/components/schemas/textRequest'
+                                        - type: 'null'
+                                  additionalProperties: false
+                                  required:
+                                    - id
+                                - type: object
+                                  properties:
+                                    name:
+                                      $ref: '#/components/schemas/textRequest'
+                                    id:
+                                      $ref: '#/components/schemas/stringRequest'
+                                    color:
+                                      $ref: '#/components/schemas/selectColor'
+                                    description:
+                                      anyOf:
+                                        - $ref: '#/components/schemas/textRequest'
+                                        - type: 'null'
+                                  additionalProperties: false
+                                  required:
+                                    - name
+                            maxItems: 100
+                          type:
+                            type: string
+                            const: multi_select
+                        additionalProperties: false
+                        required:
+                          - multi_select
+                      - title: People
+                        type: object
+                        properties:
+                          people:
+                            type: array
+                            items:
+                              anyOf:
+                                - $ref: >-
+                                    #/components/schemas/partialUserObjectRequest
+                                - $ref: '#/components/schemas/groupObjectRequest'
+                            maxItems: 100
+                          type:
+                            type: string
+                            const: people
+                        additionalProperties: false
+                        required:
+                          - people
+                      - title: Email
+                        type: object
+                        properties:
+                          email:
+                            anyOf:
+                              - $ref: '#/components/schemas/stringRequest'
+                              - type: 'null'
+                          type:
+                            type: string
+                            const: email
+                        additionalProperties: false
+                        required:
+                          - email
+                      - title: Phone Number
+                        type: object
+                        properties:
+                          phone_number:
+                            anyOf:
+                              - $ref: '#/components/schemas/stringRequest'
+                              - type: 'null'
+                          type:
+                            type: string
+                            const: phone_number
+                        additionalProperties: false
+                        required:
+                          - phone_number
+                      - title: Date
+                        type: object
+                        properties:
+                          date:
+                            anyOf:
+                              - $ref: '#/components/schemas/dateRequest'
+                              - type: 'null'
+                          type:
+                            type: string
+                            const: date
+                        additionalProperties: false
+                        required:
+                          - date
+                      - title: Checkbox
+                        type: object
+                        properties:
+                          checkbox:
+                            type: boolean
+                          type:
+                            type: string
+                            const: checkbox
+                        additionalProperties: false
+                        required:
+                          - checkbox
+                      - title: Relation
+                        type: object
+                        properties:
+                          relation:
+                            type: array
+                            items:
+                              $ref: >-
+                                #/components/schemas/relationItemPropertyValueResponse
+                            maxItems: 100
+                          type:
+                            type: string
+                            const: relation
+                        additionalProperties: false
+                        required:
+                          - relation
+                      - title: Files
+                        type: object
+                        properties:
+                          files:
+                            type: array
+                            items:
+                              anyOf:
+                                - $ref: >-
+                                    #/components/schemas/internalOrExternalFileWithNameRequest
+                                - $ref: >-
+                                    #/components/schemas/fileUploadWithOptionalNameRequest
+                            maxItems: 100
+                          type:
+                            type: string
+                            const: files
+                        additionalProperties: false
+                        required:
+                          - files
+                      - title: Status
+                        type: object
+                        properties:
+                          status:
+                            anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    $ref: '#/components/schemas/stringRequest'
+                                  name:
+                                    $ref: '#/components/schemas/textRequest'
+                                  color:
+                                    $ref: '#/components/schemas/selectColor'
+                                  description:
+                                    anyOf:
+                                      - $ref: '#/components/schemas/textRequest'
+                                      - type: 'null'
+                                additionalProperties: false
+                                required:
+                                  - id
+                              - type: object
+                                properties:
+                                  name:
+                                    $ref: '#/components/schemas/textRequest'
+                                  id:
+                                    $ref: '#/components/schemas/stringRequest'
+                                  color:
+                                    $ref: '#/components/schemas/selectColor'
+                                  description:
+                                    anyOf:
+                                      - $ref: '#/components/schemas/textRequest'
+                                      - type: 'null'
+                                additionalProperties: false
+                                required:
+                                  - name
+                              - type: 'null'
+                          type:
+                            type: string
+                            const: status
+                        additionalProperties: false
+                        required:
+                          - status
+                      - title: Place
+                        type: object
+                        properties:
+                          place:
+                            type:
+                              - object
+                              - 'null'
+                            properties:
+                              lat:
+                                type: number
+                              lon:
+                                type: number
+                              name:
+                                type:
+                                  - string
+                                  - 'null'
+                              address:
+                                type:
+                                  - string
+                                  - 'null'
+                              aws_place_id:
+                                type:
+                                  - string
+                                  - 'null'
+                              google_place_id:
+                                type:
+                                  - string
+                                  - 'null'
+                            required:
+                              - lat
+                              - lon
+                          type:
+                            type: string
+                            const: place
+                        additionalProperties: false
+                        required:
+                          - place
+                icon:
+                  anyOf:
+                    - $ref: '#/components/schemas/pageIconRequest'
+                    - type: 'null'
+                cover:
+                  anyOf:
+                    - $ref: '#/components/schemas/pageCoverRequest'
+                    - type: 'null'
+                content:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/blockObjectRequest'
+                  maxItems: 100
+                children:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/blockObjectRequest'
+                  maxItems: 100
+                markdown:
+                  description: >-
+                    Page content as Notion-flavored Markdown. Mutually exclusive
+                    with content/children.
+                  type: string
+                template:
+                  anyOf:
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          const: none
+                      required:
+                        - type
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          const: default
+                        timezone:
+                          $ref: '#/components/schemas/templateTimezone'
+                      required:
+                        - type
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          const: template_id
+                        template_id:
+                          $ref: '#/components/schemas/idRequest'
+                        timezone:
+                          $ref: '#/components/schemas/templateTimezone'
+                      required:
+                        - type
+                        - template_id
+                position:
+                  $ref: '#/components/schemas/pagePositionSchema'
+              additionalProperties: false
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/pageObjectResponse'
+                  - $ref: '#/components/schemas/partialPageObjectResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_400'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_401'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_403'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_404'
+        '409':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_409'
+        '429':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_429'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_500'
+        '503':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_503'
+      x-codeSamples:
+        - lang: javascript
+          label: TypeScript SDK
+          source: |-
+            import { Client } from "@notionhq/client"
+
+            const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+            const response = await notion.pages.create({
+              parent: {
+                data_source_id: "d9824bdc-8445-4327-be8b-5b47500af6ce"
+              },
+              properties: {
+                Name: {
+                  title: [{ text: { content: "New Page Title" } }]
+                }
+              }
+            })
+components:
+  parameters:
+    notionVersion:
+      name: Notion-Version
+      in: header
+      required: true
+      schema:
+        enum:
+          - '2025-09-03'
+      description: >-
+        The [API version](/reference/versioning) to use for this request. The
+        latest version is `2025-09-03`.
+  schemas:
+    idRequest:
+      type: string
+    richTextItemRequest:
+      allOf:
+        - $ref: '#/components/schemas/richTextItemRequestCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/textRichTextItemRequest'
+            - $ref: '#/components/schemas/mentionRichTextItemRequest'
+            - $ref: '#/components/schemas/equationRichTextItemRequest'
+    textRequest:
+      type: string
+      maxLength: 2000
+      minLength: 1
+    stringRequest:
+      type: string
+      maxLength: 100
+      minLength: 1
+    selectColor:
+      type: string
+      enum:
+        - default
+        - gray
+        - brown
+        - orange
+        - yellow
+        - green
+        - blue
+        - purple
+        - pink
+        - red
+      description: >-
+        One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`,
+        `purple`, `pink`, `red`
+    partialUserObjectRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idRequest'
+          description: The ID of the user.
+        object:
+          type: string
+          const: user
+          description: The user object type name.
+      required:
+        - id
+    groupObjectRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idRequest'
+        name:
+          type:
+            - string
+            - 'null'
+        object:
+          type: string
+          const: group
+      additionalProperties: false
+      required:
+        - id
+    dateRequest:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          description: The start date of the date object.
+        end:
+          oneOf:
+            - type: string
+              format: date
+            - type: 'null'
+          description: The end date of the date object, if any.
+        time_zone:
+          oneOf:
+            - $ref: '#/components/schemas/timeZoneRequest'
+            - type: 'null'
+          description: >-
+            The time zone of the date object, if any. E.g. America/Los_Angeles,
+            Europe/London, etc.
+      additionalProperties: false
+      required:
+        - start
+    relationItemPropertyValueResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idRequest'
+      required:
+        - id
+    internalOrExternalFileWithNameRequest:
+      anyOf:
+        - title: File
+          type: object
+          properties:
+            file:
+              $ref: '#/components/schemas/internalFileRequest'
+            name:
+              $ref: '#/components/schemas/stringRequest'
+            type:
+              type: string
+              const: file
+          additionalProperties: false
+          required:
+            - file
+            - name
+        - title: External
+          type: object
+          properties:
+            external:
+              $ref: '#/components/schemas/externalFileRequest'
+            name:
+              $ref: '#/components/schemas/stringRequest'
+            type:
+              type: string
+              const: external
+          additionalProperties: false
+          required:
+            - external
+            - name
+    fileUploadWithOptionalNameRequest:
+      type: object
+      properties:
+        file_upload:
+          $ref: '#/components/schemas/fileUploadIdRequest'
+        type:
+          type: string
+          const: file_upload
+        name:
+          $ref: '#/components/schemas/stringRequest'
+      additionalProperties: false
+      required:
+        - file_upload
+    pageIconRequest:
+      oneOf:
+        - $ref: '#/components/schemas/fileUploadPageIconRequest'
+        - $ref: '#/components/schemas/emojiPageIconRequest'
+        - $ref: '#/components/schemas/externalPageIconRequest'
+        - $ref: '#/components/schemas/customEmojiPageIconRequest'
+    pageCoverRequest:
+      oneOf:
+        - $ref: '#/components/schemas/fileUploadPageCoverRequest'
+        - $ref: '#/components/schemas/externalPageCoverRequest'
+    blockObjectRequest:
+      anyOf:
+        - title: Embed
+          type: object
+          properties:
+            embed:
+              $ref: '#/components/schemas/mediaContentWithUrlAndCaptionRequest'
+            type:
+              type: string
+              const: embed
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - embed
+        - title: Bookmark
+          type: object
+          properties:
+            bookmark:
+              $ref: '#/components/schemas/mediaContentWithUrlAndCaptionRequest'
+            type:
+              type: string
+              const: bookmark
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - bookmark
+        - title: Image
+          type: object
+          properties:
+            image:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: image
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - image
+        - title: Video
+          type: object
+          properties:
+            video:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: video
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - video
+        - title: Pdf
+          type: object
+          properties:
+            pdf:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: pdf
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - pdf
+        - title: File
+          type: object
+          properties:
+            file:
+              $ref: '#/components/schemas/mediaContentWithFileNameAndCaptionRequest'
+            type:
+              type: string
+              const: file
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - file
+        - title: Audio
+          type: object
+          properties:
+            audio:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: audio
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - audio
+        - title: Code
+          type: object
+          properties:
+            code:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                language:
+                  $ref: '#/components/schemas/languageRequest'
+                caption:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+                - language
+            type:
+              type: string
+              const: code
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - code
+        - title: Equation
+          type: object
+          properties:
+            equation:
+              $ref: '#/components/schemas/contentWithExpressionRequest'
+            type:
+              type: string
+              const: equation
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - equation
+        - title: Divider
+          type: object
+          properties:
+            divider:
+              $ref: '#/components/schemas/emptyObject'
+            type:
+              type: string
+              const: divider
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - divider
+        - title: Breadcrumb
+          type: object
+          properties:
+            breadcrumb:
+              $ref: '#/components/schemas/emptyObject'
+            type:
+              type: string
+              const: breadcrumb
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - breadcrumb
+        - title: Table Of Contents
+          type: object
+          properties:
+            table_of_contents:
+              type: object
+              properties:
+                color:
+                  $ref: '#/components/schemas/apiColor'
+              additionalProperties: false
+            type:
+              type: string
+              const: table_of_contents
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table_of_contents
+        - title: Link To Page
+          type: object
+          properties:
+            link_to_page:
+              anyOf:
+                - title: Page Id
+                  type: object
+                  properties:
+                    page_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: page_id
+                  additionalProperties: false
+                  required:
+                    - page_id
+                - title: Database Id
+                  type: object
+                  properties:
+                    database_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: database_id
+                  additionalProperties: false
+                  required:
+                    - database_id
+                - title: Comment Id
+                  type: object
+                  properties:
+                    comment_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: comment_id
+                  additionalProperties: false
+                  required:
+                    - comment_id
+            type:
+              type: string
+              const: link_to_page
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - link_to_page
+        - title: Table Row
+          type: object
+          properties:
+            table_row:
+              $ref: '#/components/schemas/contentWithTableRowRequest'
+            type:
+              type: string
+              const: table_row
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table_row
+        - title: Table
+          type: object
+          properties:
+            table:
+              $ref: '#/components/schemas/tableRequestWithTableRowChildren'
+            type:
+              type: string
+              const: table
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table
+        - title: Column List
+          type: object
+          properties:
+            column_list:
+              $ref: '#/components/schemas/columnListRequest'
+            type:
+              type: string
+              const: column_list
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - column_list
+        - title: Column
+          type: object
+          properties:
+            column:
+              $ref: '#/components/schemas/columnWithChildrenRequest'
+            type:
+              type: string
+              const: column
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - column
+        - title: Heading 1
+          type: object
+          properties:
+            heading_1:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                is_toggleable:
+                  type: boolean
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: heading_1
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_1
+        - title: Heading 2
+          type: object
+          properties:
+            heading_2:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                is_toggleable:
+                  type: boolean
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: heading_2
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_2
+        - title: Heading 3
+          type: object
+          properties:
+            heading_3:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                is_toggleable:
+                  type: boolean
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: heading_3
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_3
+        - title: Paragraph
+          type: object
+          properties:
+            paragraph:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: paragraph
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - paragraph
+        - title: Bulleted List Item
+          type: object
+          properties:
+            bulleted_list_item:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: bulleted_list_item
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - bulleted_list_item
+        - title: Numbered List Item
+          type: object
+          properties:
+            numbered_list_item:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: numbered_list_item
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - numbered_list_item
+        - title: Quote
+          type: object
+          properties:
+            quote:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: quote
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - quote
+        - title: To Do
+          type: object
+          properties:
+            to_do:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+                checked:
+                  type: boolean
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: to_do
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - to_do
+        - title: Toggle
+          type: object
+          properties:
+            toggle:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: toggle
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - toggle
+        - title: Template
+          type: object
+          properties:
+            template:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: template
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - template
+        - title: Callout
+          type: object
+          properties:
+            callout:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+                icon:
+                  $ref: '#/components/schemas/pageIconRequest'
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: callout
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - callout
+        - title: Synced Block
+          type: object
+          properties:
+            synced_block:
+              type: object
+              properties:
+                synced_from:
+                  title: Block Id
+                  type:
+                    - object
+                    - 'null'
+                  properties:
+                    block_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: block_id
+                  additionalProperties: false
+                  required:
+                    - block_id
+                children:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/blockObjectWithSingleLevelOfChildrenRequest
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - synced_from
+            type:
+              type: string
+              const: synced_block
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - synced_block
+    templateTimezone:
+      description: >-
+        IANA timezone to use when resolving template variables like @now and
+        @today (e.g. 'America/New_York'). Defaults to the authorizing user's
+        timezone for public integrations, or UTC for internal integrations.
+      examples:
+        - America/New_York
+        - Europe/London
+        - Asia/Tokyo
+      type: string
+    pagePositionSchema:
+      anyOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              const: after_block
+            after_block:
+              type: object
+              properties:
+                id:
+                  $ref: '#/components/schemas/idRequest'
+              required:
+                - id
+          required:
+            - type
+            - after_block
+        - type: object
+          properties:
+            type:
+              type: string
+              const: page_start
+          required:
+            - type
+        - type: object
+          properties:
+            type:
+              type: string
+              const: page_end
+          required:
+            - type
+    pageObjectResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          const: page
+          description: The page object type name.
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the page.
+        created_time:
+          type: string
+          format: date-time
+          description: Date and time when this page was created.
+        last_edited_time:
+          type: string
+          format: date-time
+          description: Date and time when this page was last edited.
+        in_trash:
+          type: boolean
+          description: Whether the page is in trash.
+        is_locked:
+          type: boolean
+          description: Whether the page is locked from editing in the Notion app UI.
+        url:
+          type: string
+          description: The URL of the Notion page.
+        public_url:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: >-
+            The public URL of the Notion page, if it has been published to the
+            web.
+        parent:
+          $ref: '#/components/schemas/parentForBlockBasedObjectResponse'
+          description: Information about the page's parent.
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/pagePropertyValueWithIdResponse'
+          description: Property values of this page.
+        icon:
+          oneOf:
+            - $ref: '#/components/schemas/pageIconResponse'
+            - type: 'null'
+          description: Page icon.
+        cover:
+          oneOf:
+            - $ref: '#/components/schemas/pageCoverResponse'
+            - type: 'null'
+          description: Page cover image.
+        created_by:
+          $ref: '#/components/schemas/partialUserObjectResponse'
+          description: User who created the page.
+        last_edited_by:
+          $ref: '#/components/schemas/partialUserObjectResponse'
+          description: User who last edited the page.
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - created_time
+        - last_edited_time
+        - in_trash
+        - is_locked
+        - url
+        - public_url
+        - parent
+        - properties
+        - icon
+        - cover
+        - created_by
+        - last_edited_by
+    partialPageObjectResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          const: page
+          description: The page object type name.
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the page.
+      additionalProperties: false
+      required:
+        - object
+        - id
+    error_api_400:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - invalid_json
+                - invalid_request_url
+                - invalid_request
+                - missing_version
+                - validation_error
+            status:
+              const: 400
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_401:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - unauthorized
+            status:
+              const: 401
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_403:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - restricted_resource
+            status:
+              const: 403
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_404:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - object_not_found
+            status:
+              const: 404
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_409:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - conflict_error
+            status:
+              const: 409
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_429:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - rate_limited
+            status:
+              const: 429
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_500:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - internal_server_error
+            status:
+              const: 500
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_503:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - service_unavailable
+            status:
+              const: 503
+          required:
+            - code
+            - status
+          additionalProperties: false
+    richTextItemRequestCommon:
+      type: object
+      properties:
+        annotations:
+          $ref: '#/components/schemas/annotationRequest'
+          description: >-
+            All rich text objects contain an annotations object that sets the
+            styling for the rich text.
+    textRichTextItemRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: text
+          description: Always `text`
+        text:
+          type: object
+          properties:
+            content:
+              type: string
+              maxLength: 2000
+              description: The actual text content of the text.
+            link:
+              oneOf:
+                - type: object
+                  properties:
+                    url:
+                      type: string
+                      examples:
+                        - https://www.notion.com
+                      description: The URL of the link.
+                  required:
+                    - url
+                - type: 'null'
+              description: >-
+                An object with information about any inline link in this text,
+                if included.
+          additionalProperties: false
+          required:
+            - content
+          description: >-
+            If a rich text object's type value is `text`, then the corresponding
+            text field contains an object including the text content and any
+            inline link.
+      required:
+        - text
+      title: Text
+    mentionRichTextItemRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: mention
+          description: Always `mention`
+        mention:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  $ref: '#/components/schemas/partialUserObjectRequest'
+                  description: Details of the user mention.
+              required:
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: date
+                  description: Always `date`
+                date:
+                  $ref: '#/components/schemas/dateRequest'
+                  description: Details of the date mention.
+              required:
+                - date
+              title: Date
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: page
+                  description: Always `page`
+                page:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idRequest'
+                      description: The ID of the page in the mention.
+                  required:
+                    - id
+                  description: Details of the page mention.
+              required:
+                - page
+              title: Page
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: database
+                  description: Always `database`
+                database:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idRequest'
+                      description: The ID of the database in the mention.
+                  required:
+                    - id
+                  description: Details of the database mention.
+              required:
+                - database
+              title: Database
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: template_mention
+                  description: Always `template_mention`
+                template_mention:
+                  $ref: '#/components/schemas/templateMentionRequest'
+                  description: Details of the template mention.
+              required:
+                - template_mention
+              title: Template Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: custom_emoji
+                  description: Always `custom_emoji`
+                custom_emoji:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idRequest'
+                      description: The ID of the custom emoji.
+                    name:
+                      type: string
+                      description: The name of the custom emoji.
+                    url:
+                      type: string
+                      description: The URL of the custom emoji.
+                  required:
+                    - id
+                  description: Details of the custom emoji mention.
+              required:
+                - custom_emoji
+              title: Custom Emoji
+          description: >-
+            Mention objects represent an inline mention of a database, date,
+            link preview mention, page, template mention, or user. A mention is
+            created in the Notion UI when a user types `@` followed by the name
+            of the reference.
+      required:
+        - mention
+      title: Mention
+    equationRichTextItemRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: equation
+          description: Always `equation`
+        equation:
+          type: object
+          properties:
+            expression:
+              type: string
+              examples:
+                - e=mc^2
+              description: A KaTeX compatible string.
+          required:
+            - expression
+          description: >-
+            Notion supports inline LaTeX equations as rich text objects with a
+            type value of `equation`.
+      required:
+        - equation
+      title: Equation
+    timeZoneRequest:
+      type: string
+    internalFileRequest:
+      type: object
+      properties:
+        url:
+          type: string
+        expiry_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+        - url
+    externalFileRequest:
+      type: object
+      properties:
+        url:
+          $ref: '#/components/schemas/textRequest'
+      additionalProperties: false
+      required:
+        - url
+    fileUploadIdRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idRequest'
+      additionalProperties: false
+      required:
+        - id
+    fileUploadPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file_upload
+          description: Always `file_upload`
+        file_upload:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID of a FileUpload object that has the status `uploaded`.
+          required:
+            - id
+      required:
+        - file_upload
+      title: File Upload
+    emojiPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: emoji
+          description: Always `emoji`
+        emoji:
+          $ref: '#/components/schemas/emojiRequest'
+          description: An emoji character.
+      required:
+        - emoji
+      title: Emoji
+    externalPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Always `external`
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file.
+          required:
+            - url
+      required:
+        - external
+      title: External
+    customEmojiPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: custom_emoji
+          description: Always `custom_emoji`
+        custom_emoji:
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/idRequest'
+              description: The ID of the custom emoji.
+            name:
+              type: string
+              description: The name of the custom emoji.
+            url:
+              type: string
+              description: The URL of the custom emoji.
+          required:
+            - id
+      required:
+        - custom_emoji
+      title: Custom Emoji
+    fileUploadPageCoverRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file_upload
+          description: Always `file_upload`
+        file_upload:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID of a FileUpload object that has the status `uploaded`.
+          required:
+            - id
+          description: The file upload for the cover.
+      required:
+        - file_upload
+      title: File Upload
+    externalPageCoverRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Always `external`
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file.
+          required:
+            - url
+          description: External URL for the cover.
+      required:
+        - external
+      title: External
+    mediaContentWithUrlAndCaptionRequest:
+      type: object
+      properties:
+        url:
+          type: string
+        caption:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemRequest'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - url
+    mediaContentWithFileAndCaptionRequest:
+      anyOf:
+        - title: External
+          type: object
+          properties:
+            external:
+              $ref: '#/components/schemas/externalFileRequest'
+            type:
+              type: string
+              const: external
+            caption:
+              type: array
+              items:
+                $ref: '#/components/schemas/richTextItemRequest'
+              maxItems: 100
+          additionalProperties: false
+          required:
+            - external
+        - title: File Upload
+          type: object
+          properties:
+            file_upload:
+              $ref: '#/components/schemas/fileUploadIdRequest'
+            type:
+              type: string
+              const: file_upload
+            caption:
+              type: array
+              items:
+                $ref: '#/components/schemas/richTextItemRequest'
+              maxItems: 100
+          additionalProperties: false
+          required:
+            - file_upload
+    mediaContentWithFileNameAndCaptionRequest:
+      anyOf:
+        - title: External
+          type: object
+          properties:
+            external:
+              $ref: '#/components/schemas/externalFileRequest'
+            type:
+              type: string
+              const: external
+            caption:
+              type: array
+              items:
+                $ref: '#/components/schemas/richTextItemRequest'
+              maxItems: 100
+            name:
+              $ref: '#/components/schemas/stringRequest'
+          additionalProperties: false
+          required:
+            - external
+        - title: File Upload
+          type: object
+          properties:
+            file_upload:
+              $ref: '#/components/schemas/fileUploadIdRequest'
+            type:
+              type: string
+              const: file_upload
+            caption:
+              type: array
+              items:
+                $ref: '#/components/schemas/richTextItemRequest'
+              maxItems: 100
+            name:
+              $ref: '#/components/schemas/stringRequest'
+          additionalProperties: false
+          required:
+            - file_upload
+    languageRequest:
+      type: string
+      enum:
+        - abap
+        - abc
+        - agda
+        - arduino
+        - ascii art
+        - assembly
+        - bash
+        - basic
+        - bnf
+        - c
+        - c#
+        - c++
+        - clojure
+        - coffeescript
+        - coq
+        - css
+        - dart
+        - dhall
+        - diff
+        - docker
+        - ebnf
+        - elixir
+        - elm
+        - erlang
+        - f#
+        - flow
+        - fortran
+        - gherkin
+        - glsl
+        - go
+        - graphql
+        - groovy
+        - haskell
+        - hcl
+        - html
+        - idris
+        - java
+        - javascript
+        - json
+        - julia
+        - kotlin
+        - latex
+        - less
+        - lisp
+        - livescript
+        - llvm ir
+        - lua
+        - makefile
+        - markdown
+        - markup
+        - matlab
+        - mathematica
+        - mermaid
+        - nix
+        - notion formula
+        - objective-c
+        - ocaml
+        - pascal
+        - perl
+        - php
+        - plain text
+        - powershell
+        - prolog
+        - protobuf
+        - purescript
+        - python
+        - r
+        - racket
+        - reason
+        - ruby
+        - rust
+        - sass
+        - scala
+        - scheme
+        - scss
+        - shell
+        - smalltalk
+        - solidity
+        - sql
+        - swift
+        - toml
+        - typescript
+        - vb.net
+        - verilog
+        - vhdl
+        - visual basic
+        - webassembly
+        - xml
+        - yaml
+        - java/c/c++/c#
+    contentWithExpressionRequest:
+      type: object
+      properties:
+        expression:
+          type: string
+      additionalProperties: false
+      required:
+        - expression
+    emptyObject:
+      type: object
+      properties: {}
+      additionalProperties: false
+    apiColor:
+      type: string
+      enum:
+        - default
+        - gray
+        - brown
+        - orange
+        - yellow
+        - green
+        - blue
+        - purple
+        - pink
+        - red
+        - default_background
+        - gray_background
+        - brown_background
+        - orange_background
+        - yellow_background
+        - green_background
+        - blue_background
+        - purple_background
+        - pink_background
+        - red_background
+      description: >-
+        One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`,
+        `purple`, `pink`, `red`, `default_background`, `gray_background`,
+        `brown_background`, `orange_background`, `yellow_background`,
+        `green_background`, `blue_background`, `purple_background`,
+        `pink_background`, `red_background`
+    contentWithTableRowRequest:
+      type: object
+      properties:
+        cells:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/richTextItemRequest'
+            maxItems: 100
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - cells
+    tableRequestWithTableRowChildren:
+      type: object
+      properties:
+        table_width:
+          type: integer
+          minimum: 1
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/tableRowRequest'
+          maxItems: 100
+          minItems: 1
+        has_column_header:
+          type: boolean
+        has_row_header:
+          type: boolean
+      additionalProperties: false
+      required:
+        - table_width
+        - children
+    columnListRequest:
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/columnBlockWithChildrenRequest'
+          maxItems: 100
+          minItems: 2
+      additionalProperties: false
+      required:
+        - children
+    columnWithChildrenRequest:
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/blockObjectWithSingleLevelOfChildrenRequest'
+          maxItems: 100
+        width_ratio:
+          description: >-
+            Ratio between 0 and 1 of the width of this column relative to all
+            columns in the list. If not provided, uses an equal width.
+          examples:
+            - 0.5
+          type: number
+          exclusiveMinimum: 0
+          exclusiveMaximum: 1
+      additionalProperties: false
+      required:
+        - children
+    blockObjectWithSingleLevelOfChildrenRequest:
+      anyOf:
+        - title: Embed
+          type: object
+          properties:
+            embed:
+              $ref: '#/components/schemas/mediaContentWithUrlAndCaptionRequest'
+            type:
+              type: string
+              const: embed
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - embed
+        - title: Bookmark
+          type: object
+          properties:
+            bookmark:
+              $ref: '#/components/schemas/mediaContentWithUrlAndCaptionRequest'
+            type:
+              type: string
+              const: bookmark
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - bookmark
+        - title: Image
+          type: object
+          properties:
+            image:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: image
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - image
+        - title: Video
+          type: object
+          properties:
+            video:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: video
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - video
+        - title: Pdf
+          type: object
+          properties:
+            pdf:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: pdf
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - pdf
+        - title: File
+          type: object
+          properties:
+            file:
+              $ref: '#/components/schemas/mediaContentWithFileNameAndCaptionRequest'
+            type:
+              type: string
+              const: file
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - file
+        - title: Audio
+          type: object
+          properties:
+            audio:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: audio
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - audio
+        - title: Code
+          type: object
+          properties:
+            code:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                language:
+                  $ref: '#/components/schemas/languageRequest'
+                caption:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+                - language
+            type:
+              type: string
+              const: code
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - code
+        - title: Equation
+          type: object
+          properties:
+            equation:
+              $ref: '#/components/schemas/contentWithExpressionRequest'
+            type:
+              type: string
+              const: equation
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - equation
+        - title: Divider
+          type: object
+          properties:
+            divider:
+              $ref: '#/components/schemas/emptyObject'
+            type:
+              type: string
+              const: divider
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - divider
+        - title: Breadcrumb
+          type: object
+          properties:
+            breadcrumb:
+              $ref: '#/components/schemas/emptyObject'
+            type:
+              type: string
+              const: breadcrumb
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - breadcrumb
+        - title: Table Of Contents
+          type: object
+          properties:
+            table_of_contents:
+              type: object
+              properties:
+                color:
+                  $ref: '#/components/schemas/apiColor'
+              additionalProperties: false
+            type:
+              type: string
+              const: table_of_contents
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table_of_contents
+        - title: Link To Page
+          type: object
+          properties:
+            link_to_page:
+              anyOf:
+                - title: Page Id
+                  type: object
+                  properties:
+                    page_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: page_id
+                  additionalProperties: false
+                  required:
+                    - page_id
+                - title: Database Id
+                  type: object
+                  properties:
+                    database_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: database_id
+                  additionalProperties: false
+                  required:
+                    - database_id
+                - title: Comment Id
+                  type: object
+                  properties:
+                    comment_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: comment_id
+                  additionalProperties: false
+                  required:
+                    - comment_id
+            type:
+              type: string
+              const: link_to_page
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - link_to_page
+        - title: Table Row
+          type: object
+          properties:
+            table_row:
+              $ref: '#/components/schemas/contentWithTableRowRequest'
+            type:
+              type: string
+              const: table_row
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table_row
+        - title: Heading 1
+          type: object
+          properties:
+            heading_1:
+              $ref: >-
+                #/components/schemas/headerContentWithSingleLevelOfChildrenRequest
+            type:
+              type: string
+              const: heading_1
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_1
+        - title: Heading 2
+          type: object
+          properties:
+            heading_2:
+              $ref: >-
+                #/components/schemas/headerContentWithSingleLevelOfChildrenRequest
+            type:
+              type: string
+              const: heading_2
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_2
+        - title: Heading 3
+          type: object
+          properties:
+            heading_3:
+              $ref: >-
+                #/components/schemas/headerContentWithSingleLevelOfChildrenRequest
+            type:
+              type: string
+              const: heading_3
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_3
+        - title: Paragraph
+          type: object
+          properties:
+            paragraph:
+              $ref: '#/components/schemas/contentWithSingleLevelOfChildrenRequest'
+            type:
+              type: string
+              const: paragraph
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - paragraph
+        - title: Bulleted List Item
+          type: object
+          properties:
+            bulleted_list_item:
+              $ref: '#/components/schemas/contentWithSingleLevelOfChildrenRequest'
+            type:
+              type: string
+              const: bulleted_list_item
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - bulleted_list_item
+        - title: Numbered List Item
+          type: object
+          properties:
+            numbered_list_item:
+              $ref: '#/components/schemas/contentWithSingleLevelOfChildrenRequest'
+            type:
+              type: string
+              const: numbered_list_item
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - numbered_list_item
+        - title: Quote
+          type: object
+          properties:
+            quote:
+              $ref: '#/components/schemas/contentWithSingleLevelOfChildrenRequest'
+            type:
+              type: string
+              const: quote
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - quote
+        - title: Table
+          type: object
+          properties:
+            table:
+              $ref: '#/components/schemas/tableRequestWithTableRowChildren'
+            type:
+              type: string
+              const: table
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table
+        - title: To Do
+          type: object
+          properties:
+            to_do:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/blockObjectRequestWithoutChildren'
+                  maxItems: 100
+                checked:
+                  type: boolean
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: to_do
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - to_do
+        - title: Toggle
+          type: object
+          properties:
+            toggle:
+              $ref: '#/components/schemas/contentWithSingleLevelOfChildrenRequest'
+            type:
+              type: string
+              const: toggle
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - toggle
+        - title: Template
+          type: object
+          properties:
+            template:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                children:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/blockObjectRequestWithoutChildren'
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: template
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - template
+        - title: Callout
+          type: object
+          properties:
+            callout:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                color:
+                  $ref: '#/components/schemas/apiColor'
+                children:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/blockObjectRequestWithoutChildren'
+                  maxItems: 100
+                icon:
+                  $ref: '#/components/schemas/pageIconRequest'
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: callout
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - callout
+        - title: Synced Block
+          type: object
+          properties:
+            synced_block:
+              type: object
+              properties:
+                synced_from:
+                  title: Block Id
+                  type:
+                    - object
+                    - 'null'
+                  properties:
+                    block_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: block_id
+                  additionalProperties: false
+                  required:
+                    - block_id
+                children:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/blockObjectRequestWithoutChildren'
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - synced_from
+            type:
+              type: string
+              const: synced_block
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - synced_block
+    idResponse:
+      type: string
+      format: uuid
+    parentForBlockBasedObjectResponse:
+      oneOf:
+        - $ref: '#/components/schemas/databaseParentResponse'
+        - $ref: '#/components/schemas/dataSourceParentResponse'
+        - $ref: '#/components/schemas/pageIdParentForBlockBasedObjectResponse'
+        - $ref: '#/components/schemas/blockIdParentForBlockBasedObjectResponse'
+        - $ref: '#/components/schemas/workspaceParentForBlockBasedObjectResponse'
+    pagePropertyValueWithIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/idObjectResponse'
+        - oneOf:
+            - $ref: '#/components/schemas/simpleOrArrayPropertyValueResponse'
+            - $ref: '#/components/schemas/partialRollupPropertyResponse'
+    pageIconResponse:
+      oneOf:
+        - $ref: '#/components/schemas/emojiPageIconResponse'
+        - $ref: '#/components/schemas/filePageIconResponse'
+        - $ref: '#/components/schemas/externalPageIconResponse'
+        - $ref: '#/components/schemas/customEmojiPageIconResponse'
+    pageCoverResponse:
+      oneOf:
+        - $ref: '#/components/schemas/filePageCoverResponse'
+        - $ref: '#/components/schemas/externalPageCoverResponse'
+    partialUserObjectResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+        object:
+          type: string
+          const: user
+          description: Always `user`
+      additionalProperties: false
+      required:
+        - id
+        - object
+    publicApiCommonErrorResponse:
+      type: object
+      properties:
+        object:
+          const: error
+        message:
+          type: string
+        additional_data:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+      required:
+        - object
+        - message
+    annotationRequest:
+      type: object
+      properties:
+        bold:
+          type: boolean
+          description: Whether the text is formatted as bold.
+        italic:
+          type: boolean
+          description: Whether the text is formatted as italic.
+        strikethrough:
+          type: boolean
+          description: Whether the text is formatted with a strikethrough.
+        underline:
+          type: boolean
+          description: Whether the text is formatted with an underline.
+        code:
+          type: boolean
+          description: Whether the text is formatted as code.
+        color:
+          $ref: '#/components/schemas/apiColor'
+          description: The color of the text.
+    templateMentionRequest:
+      oneOf:
+        - $ref: '#/components/schemas/templateMentionDateTemplateMentionRequest'
+        - $ref: '#/components/schemas/templateMentionUserTemplateMentionRequest'
+    emojiRequest:
+      type: string
+    tableRowRequest:
+      title: Table Row
+      type: object
+      properties:
+        table_row:
+          $ref: '#/components/schemas/contentWithTableRowRequest'
+        type:
+          type: string
+          const: table_row
+        object:
+          type: string
+          const: block
+      additionalProperties: false
+      required:
+        - table_row
+    columnBlockWithChildrenRequest:
+      title: Column
+      type: object
+      properties:
+        column:
+          $ref: '#/components/schemas/columnWithChildrenRequest'
+        type:
+          type: string
+          const: column
+        object:
+          type: string
+          const: block
+      additionalProperties: false
+      required:
+        - column
+    headerContentWithSingleLevelOfChildrenRequest:
+      type: object
+      properties:
+        rich_text:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemRequest'
+          maxItems: 100
+        color:
+          $ref: '#/components/schemas/apiColor'
+        is_toggleable:
+          type: boolean
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/blockObjectRequestWithoutChildren'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - rich_text
+    contentWithSingleLevelOfChildrenRequest:
+      type: object
+      properties:
+        rich_text:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemRequest'
+          maxItems: 100
+        color:
+          $ref: '#/components/schemas/apiColor'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/blockObjectRequestWithoutChildren'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - rich_text
+    blockObjectRequestWithoutChildren:
+      anyOf:
+        - title: Embed
+          type: object
+          properties:
+            embed:
+              $ref: '#/components/schemas/mediaContentWithUrlAndCaptionRequest'
+            type:
+              type: string
+              const: embed
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - embed
+        - title: Bookmark
+          type: object
+          properties:
+            bookmark:
+              $ref: '#/components/schemas/mediaContentWithUrlAndCaptionRequest'
+            type:
+              type: string
+              const: bookmark
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - bookmark
+        - title: Image
+          type: object
+          properties:
+            image:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: image
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - image
+        - title: Video
+          type: object
+          properties:
+            video:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: video
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - video
+        - title: Pdf
+          type: object
+          properties:
+            pdf:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: pdf
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - pdf
+        - title: File
+          type: object
+          properties:
+            file:
+              $ref: '#/components/schemas/mediaContentWithFileNameAndCaptionRequest'
+            type:
+              type: string
+              const: file
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - file
+        - title: Audio
+          type: object
+          properties:
+            audio:
+              $ref: '#/components/schemas/mediaContentWithFileAndCaptionRequest'
+            type:
+              type: string
+              const: audio
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - audio
+        - title: Code
+          type: object
+          properties:
+            code:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                language:
+                  $ref: '#/components/schemas/languageRequest'
+                caption:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+              additionalProperties: false
+              required:
+                - rich_text
+                - language
+            type:
+              type: string
+              const: code
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - code
+        - title: Equation
+          type: object
+          properties:
+            equation:
+              $ref: '#/components/schemas/contentWithExpressionRequest'
+            type:
+              type: string
+              const: equation
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - equation
+        - title: Divider
+          type: object
+          properties:
+            divider:
+              $ref: '#/components/schemas/emptyObject'
+            type:
+              type: string
+              const: divider
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - divider
+        - title: Breadcrumb
+          type: object
+          properties:
+            breadcrumb:
+              $ref: '#/components/schemas/emptyObject'
+            type:
+              type: string
+              const: breadcrumb
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - breadcrumb
+        - title: Table Of Contents
+          type: object
+          properties:
+            table_of_contents:
+              type: object
+              properties:
+                color:
+                  $ref: '#/components/schemas/apiColor'
+              additionalProperties: false
+            type:
+              type: string
+              const: table_of_contents
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table_of_contents
+        - title: Link To Page
+          type: object
+          properties:
+            link_to_page:
+              anyOf:
+                - title: Page Id
+                  type: object
+                  properties:
+                    page_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: page_id
+                  additionalProperties: false
+                  required:
+                    - page_id
+                - title: Database Id
+                  type: object
+                  properties:
+                    database_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: database_id
+                  additionalProperties: false
+                  required:
+                    - database_id
+                - title: Comment Id
+                  type: object
+                  properties:
+                    comment_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: comment_id
+                  additionalProperties: false
+                  required:
+                    - comment_id
+            type:
+              type: string
+              const: link_to_page
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - link_to_page
+        - title: Table Row
+          type: object
+          properties:
+            table_row:
+              $ref: '#/components/schemas/contentWithTableRowRequest'
+            type:
+              type: string
+              const: table_row
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - table_row
+        - title: Heading 1
+          type: object
+          properties:
+            heading_1:
+              $ref: '#/components/schemas/headerContentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: heading_1
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_1
+        - title: Heading 2
+          type: object
+          properties:
+            heading_2:
+              $ref: '#/components/schemas/headerContentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: heading_2
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_2
+        - title: Heading 3
+          type: object
+          properties:
+            heading_3:
+              $ref: '#/components/schemas/headerContentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: heading_3
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - heading_3
+        - title: Paragraph
+          type: object
+          properties:
+            paragraph:
+              $ref: '#/components/schemas/contentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: paragraph
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - paragraph
+        - title: Bulleted List Item
+          type: object
+          properties:
+            bulleted_list_item:
+              $ref: '#/components/schemas/contentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: bulleted_list_item
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - bulleted_list_item
+        - title: Numbered List Item
+          type: object
+          properties:
+            numbered_list_item:
+              $ref: '#/components/schemas/contentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: numbered_list_item
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - numbered_list_item
+        - title: Quote
+          type: object
+          properties:
+            quote:
+              $ref: '#/components/schemas/contentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: quote
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - quote
+        - title: To Do
+          type: object
+          properties:
+            to_do:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                checked:
+                  type: boolean
+                color:
+                  $ref: '#/components/schemas/apiColor'
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: to_do
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - to_do
+        - title: Toggle
+          type: object
+          properties:
+            toggle:
+              $ref: '#/components/schemas/contentWithRichTextAndColorRequest'
+            type:
+              type: string
+              const: toggle
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - toggle
+        - title: Template
+          type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/contentWithRichTextRequest'
+            type:
+              type: string
+              const: template
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - template
+        - title: Callout
+          type: object
+          properties:
+            callout:
+              type: object
+              properties:
+                rich_text:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                icon:
+                  $ref: '#/components/schemas/pageIconRequest'
+                color:
+                  $ref: '#/components/schemas/apiColor'
+              additionalProperties: false
+              required:
+                - rich_text
+            type:
+              type: string
+              const: callout
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - callout
+        - title: Synced Block
+          type: object
+          properties:
+            synced_block:
+              type: object
+              properties:
+                synced_from:
+                  title: Block Id
+                  type:
+                    - object
+                    - 'null'
+                  properties:
+                    block_id:
+                      $ref: '#/components/schemas/idRequest'
+                    type:
+                      type: string
+                      const: block_id
+                  additionalProperties: false
+                  required:
+                    - block_id
+              additionalProperties: false
+              required:
+                - synced_from
+            type:
+              type: string
+              const: synced_block
+            object:
+              type: string
+              const: block
+          additionalProperties: false
+          required:
+            - synced_block
+    databaseParentResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: database_id
+          description: The parent type.
+        database_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent database.
+      additionalProperties: false
+      required:
+        - type
+        - database_id
+    dataSourceParentResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: data_source_id
+          description: The parent type.
+        data_source_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent data source.
+        database_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the data source's parent database.
+      additionalProperties: false
+      required:
+        - type
+        - data_source_id
+        - database_id
+    pageIdParentForBlockBasedObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: page_id
+          description: The parent type.
+        page_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent page.
+      additionalProperties: false
+      required:
+        - type
+        - page_id
+    blockIdParentForBlockBasedObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: block_id
+          description: The parent type.
+        block_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent block.
+      additionalProperties: false
+      required:
+        - type
+        - block_id
+    workspaceParentForBlockBasedObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: workspace
+          description: The parent type.
+        workspace:
+          type: boolean
+          const: true
+          description: Always true for workspace parent.
+      additionalProperties: false
+      required:
+        - type
+        - workspace
+    idObjectResponse:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    simpleOrArrayPropertyValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/simplePropertyValueResponse'
+        - $ref: '#/components/schemas/arrayBasedPropertyValueResponse'
+    partialRollupPropertyResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: rollup
+          description: Always `rollup`
+        rollup:
+          $ref: '#/components/schemas/partialRollupValueResponse'
+      additionalProperties: false
+      required:
+        - type
+        - rollup
+    emojiPageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: emoji
+          description: Type of icon. In this case, an emoji.
+        emoji:
+          $ref: '#/components/schemas/emojiRequest'
+          description: The emoji character used as the icon.
+      additionalProperties: false
+      required:
+        - type
+        - emoji
+      title: Emoji
+    filePageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file
+          description: Type of icon. In this case, a file.
+        file:
+          $ref: '#/components/schemas/internalFileResponse'
+          description: The file URL for the icon.
+      additionalProperties: false
+      required:
+        - type
+        - file
+      title: File
+    externalPageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Type of icon. In this case, an external URL.
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file or resource.
+          additionalProperties: false
+          required:
+            - url
+          description: The external URL for the icon.
+      additionalProperties: false
+      required:
+        - type
+        - external
+      title: External
+    customEmojiPageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: custom_emoji
+          description: Type of icon. In this case, a custom emoji.
+        custom_emoji:
+          $ref: '#/components/schemas/customEmojiResponse'
+          description: The custom emoji details for the icon.
+      additionalProperties: false
+      required:
+        - type
+        - custom_emoji
+      title: Custom Emoji
+    filePageCoverResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file
+          description: Type of cover. In this case, a file.
+        file:
+          $ref: '#/components/schemas/internalFileResponse'
+          description: The file URL for the cover.
+      additionalProperties: false
+      required:
+        - type
+        - file
+      title: File
+    externalPageCoverResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Type of cover. In this case, an external URL.
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file or resource.
+          additionalProperties: false
+          required:
+            - url
+          description: The external URL for the cover.
+      additionalProperties: false
+      required:
+        - type
+        - external
+      title: External
+    templateMentionDateTemplateMentionRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_date
+          description: Always `template_mention_date`
+        template_mention_date:
+          type: string
+          enum:
+            - today
+            - now
+          description: The date of the template mention.
+      additionalProperties: false
+      required:
+        - template_mention_date
+      title: Template Mention Date
+    templateMentionUserTemplateMentionRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_user
+          description: Always `template_mention_user`
+        template_mention_user:
+          type: string
+          const: me
+          description: The user of the template mention.
+      additionalProperties: false
+      required:
+        - template_mention_user
+      title: Template Mention User
+    headerContentWithRichTextAndColorRequest:
+      type: object
+      properties:
+        rich_text:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemRequest'
+          maxItems: 100
+        color:
+          $ref: '#/components/schemas/apiColor'
+        is_toggleable:
+          type: boolean
+      additionalProperties: false
+      required:
+        - rich_text
+    contentWithRichTextAndColorRequest:
+      type: object
+      properties:
+        rich_text:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemRequest'
+          maxItems: 100
+        color:
+          $ref: '#/components/schemas/apiColor'
+      additionalProperties: false
+      required:
+        - rich_text
+    contentWithRichTextRequest:
+      type: object
+      properties:
+        rich_text:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemRequest'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - rich_text
+    simplePropertyValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/numberSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/urlSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/selectSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/multiSelectSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/statusSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/dateSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/emailSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/phoneNumberSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/checkboxSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/filesSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/createdBySimplePropertyValueResponse'
+        - $ref: '#/components/schemas/createdTimeSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/lastEditedBySimplePropertyValueResponse'
+        - $ref: '#/components/schemas/lastEditedTimeSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/formulaSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/buttonSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/uniqueIdSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/verificationSimplePropertyValueResponse'
+        - $ref: '#/components/schemas/placeSimplePropertyValueResponse'
+    arrayBasedPropertyValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/titleArrayBasedPropertyValueResponse'
+        - $ref: '#/components/schemas/richTextArrayBasedPropertyValueResponse'
+        - $ref: '#/components/schemas/peopleArrayBasedPropertyValueResponse'
+        - $ref: '#/components/schemas/relationArrayBasedPropertyValueResponse'
+    partialRollupValueResponse:
+      allOf:
+        - $ref: '#/components/schemas/partialRollupValueResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/numberPartialRollupValueResponse'
+            - $ref: '#/components/schemas/datePartialRollupValueResponse'
+            - $ref: '#/components/schemas/arrayPartialRollupValueResponse'
+    internalFileResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL of the file.
+        expiry_time:
+          type: string
+          format: date-time
+          description: The time when the URL will expire.
+      additionalProperties: false
+      required:
+        - url
+        - expiry_time
+    customEmojiResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the custom emoji.
+        name:
+          type: string
+          description: The name of the custom emoji.
+        url:
+          type: string
+          description: The URL of the custom emoji.
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - url
+    numberSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: number
+          description: Always `number`
+        number:
+          oneOf:
+            - type: number
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - number
+      title: Number
+    urlSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: url
+          description: Always `url`
+        url:
+          oneOf:
+            - type: string
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - url
+      title: Url
+    selectSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: select
+          description: Always `select`
+        select:
+          oneOf:
+            - $ref: '#/components/schemas/partialSelectPropertyValueResponse'
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - select
+      title: Select
+    multiSelectSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: multi_select
+          description: Always `multi_select`
+        multi_select:
+          type: array
+          items:
+            $ref: '#/components/schemas/partialSelectPropertyValueResponse'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - type
+        - multi_select
+      title: Multi Select
+    statusSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: status
+          description: Always `status`
+        status:
+          oneOf:
+            - $ref: '#/components/schemas/partialSelectPropertyValueResponse'
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - status
+      title: Status
+    dateSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: date
+          description: Always `date`
+        date:
+          oneOf:
+            - $ref: '#/components/schemas/dateResponse'
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - date
+      title: Date
+    emailSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: email
+          description: Always `email`
+        email:
+          oneOf:
+            - type: string
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - email
+      title: Email
+    phoneNumberSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: phone_number
+          description: Always `phone_number`
+        phone_number:
+          oneOf:
+            - type: string
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - phone_number
+      title: Phone Number
+    checkboxSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: checkbox
+          description: Always `checkbox`
+        checkbox:
+          type: boolean
+      additionalProperties: false
+      required:
+        - type
+        - checkbox
+      title: Checkbox
+    filesSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: files
+          description: Always `files`
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/internalOrExternalFileWithNameResponse'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - type
+        - files
+      title: Files
+    createdBySimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: created_by
+          description: Always `created_by`
+        created_by:
+          $ref: '#/components/schemas/userValueResponse'
+      additionalProperties: false
+      required:
+        - type
+        - created_by
+      title: Created By
+    createdTimeSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: created_time
+          description: Always `created_time`
+        created_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+        - type
+        - created_time
+      title: Created Time
+    lastEditedBySimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: last_edited_by
+          description: Always `last_edited_by`
+        last_edited_by:
+          $ref: '#/components/schemas/userValueResponse'
+      additionalProperties: false
+      required:
+        - type
+        - last_edited_by
+      title: Last Edited By
+    lastEditedTimeSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: last_edited_time
+          description: Always `last_edited_time`
+        last_edited_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+        - type
+        - last_edited_time
+      title: Last Edited Time
+    formulaSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: formula
+          description: Always `formula`
+        formula:
+          $ref: '#/components/schemas/formulaPropertyValueResponse'
+      additionalProperties: false
+      required:
+        - type
+        - formula
+      title: Formula
+    buttonSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: button
+          description: Always `button`
+        button:
+          $ref: '#/components/schemas/emptyObject'
+      additionalProperties: false
+      required:
+        - type
+        - button
+      title: Button
+    uniqueIdSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: unique_id
+          description: Always `unique_id`
+        unique_id:
+          $ref: '#/components/schemas/uniqueIdPropertyValueResponse'
+      additionalProperties: false
+      required:
+        - type
+        - unique_id
+      title: Unique Id
+    verificationSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: verification
+          description: Always `verification`
+        verification:
+          oneOf:
+            - $ref: '#/components/schemas/verificationPropertyValueResponse'
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - verification
+      title: Verification
+    placeSimplePropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: place
+          description: Always `place`
+        place:
+          oneOf:
+            - $ref: '#/components/schemas/placePropertyValueResponse'
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - place
+      title: Place
+    titleArrayBasedPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: title
+          description: Always `title`
+        title:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemResponse'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - type
+        - title
+      title: Title
+    richTextArrayBasedPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: rich_text
+          description: Always `rich_text`
+        rich_text:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemResponse'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - type
+        - rich_text
+      title: Rich Text
+    peopleArrayBasedPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: people
+          description: Always `people`
+        people:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/userValueResponse'
+              - $ref: '#/components/schemas/groupObjectResponse'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - type
+        - people
+      title: People
+    relationArrayBasedPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: relation
+          description: Always `relation`
+        relation:
+          type: array
+          items:
+            $ref: '#/components/schemas/relationItemPropertyValueResponse'
+          maxItems: 100
+      additionalProperties: false
+      required:
+        - type
+        - relation
+      title: Relation
+    partialRollupValueResponseCommon:
+      type: object
+      properties:
+        function:
+          $ref: '#/components/schemas/rollupFunction'
+          description: >-
+            The function used for the rollup, e.g. count, count_values,
+            percent_not_empty, max.
+      additionalProperties: false
+      required:
+        - function
+    numberPartialRollupValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: number
+          description: Always `number`
+        number:
+          oneOf:
+            - type: number
+            - type: 'null'
+      required:
+        - type
+        - number
+      title: Number
+    datePartialRollupValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: date
+          description: Always `date`
+        date:
+          oneOf:
+            - $ref: '#/components/schemas/dateResponse'
+            - type: 'null'
+      required:
+        - type
+        - date
+      title: Date
+    arrayPartialRollupValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: array
+          description: Always `array`
+        array:
+          type: array
+          items:
+            $ref: '#/components/schemas/simpleOrArrayPropertyValueResponse'
+          maxItems: 100
+      required:
+        - type
+        - array
+      title: Array
+    partialSelectPropertyValueResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+          enum:
+            - default
+            - gray
+            - brown
+            - orange
+            - yellow
+            - green
+            - blue
+            - purple
+            - pink
+            - red
+          description: >-
+            One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`,
+            `blue`, `purple`, `pink`, `red`
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - color
+    dateResponse:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          description: The start date of the date object.
+        end:
+          oneOf:
+            - type: string
+              format: date
+            - type: 'null'
+          description: The end date of the date object, if any.
+        time_zone:
+          oneOf:
+            - $ref: '#/components/schemas/timeZoneRequest'
+            - type: 'null'
+          description: The time zone of the date object.
+      additionalProperties: false
+      required:
+        - start
+        - end
+        - time_zone
+    internalOrExternalFileWithNameResponse:
+      allOf:
+        - $ref: '#/components/schemas/internalOrExternalFileWithNameResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/fileInternalOrExternalFileWithNameResponse'
+            - $ref: >-
+                #/components/schemas/externalInternalOrExternalFileWithNameResponse
+    userValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/partialUserObjectResponse'
+        - $ref: '#/components/schemas/userObjectResponse'
+    formulaPropertyValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/booleanFormulaPropertyValueResponse'
+        - $ref: '#/components/schemas/dateFormulaPropertyValueResponse'
+        - $ref: '#/components/schemas/numberFormulaPropertyValueResponse'
+        - $ref: '#/components/schemas/stringFormulaPropertyValueResponse'
+    uniqueIdPropertyValueResponse:
+      type: object
+      properties:
+        prefix:
+          oneOf:
+            - type: string
+            - type: 'null'
+        number:
+          oneOf:
+            - type: number
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - prefix
+        - number
+    verificationPropertyValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/verificationPropertyUnverifiedResponse'
+        - $ref: '#/components/schemas/verificationPropertyResponse'
+    placePropertyValueResponse:
+      type: object
+      properties:
+        lat:
+          type: number
+        lon:
+          type: number
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+        address:
+          oneOf:
+            - type: string
+            - type: 'null'
+        aws_place_id:
+          oneOf:
+            - type: string
+            - type: 'null'
+        google_place_id:
+          oneOf:
+            - type: string
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - lat
+        - lon
+    richTextItemResponse:
+      allOf:
+        - $ref: '#/components/schemas/richTextItemResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/textRichTextItemResponse'
+            - $ref: '#/components/schemas/mentionRichTextItemResponse'
+            - $ref: '#/components/schemas/equationRichTextItemResponse'
+    groupObjectResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the group.
+        object:
+          type: string
+          const: group
+          description: The group object type name.
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The name of the group.
+      additionalProperties: false
+      required:
+        - id
+        - object
+        - name
+    rollupFunction:
+      type: string
+      enum:
+        - count
+        - count_values
+        - empty
+        - not_empty
+        - unique
+        - show_unique
+        - percent_empty
+        - percent_not_empty
+        - sum
+        - average
+        - median
+        - min
+        - max
+        - range
+        - earliest_date
+        - latest_date
+        - date_range
+        - checked
+        - unchecked
+        - percent_checked
+        - percent_unchecked
+        - count_per_group
+        - percent_per_group
+        - show_original
+    internalOrExternalFileWithNameResponseCommon:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+      additionalProperties: false
+      required:
+        - name
+    fileInternalOrExternalFileWithNameResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file
+          description: >-
+            Type of attachment. In this case, a file uploaded to a Notion
+            workspace.
+        file:
+          $ref: '#/components/schemas/internalFileResponse'
+          description: The file URL.
+      required:
+        - type
+        - file
+      title: File
+    externalInternalOrExternalFileWithNameResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Type of attachment. In this case, an external URL.
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file or resource.
+          additionalProperties: false
+          required:
+            - url
+          description: The external URL.
+      required:
+        - type
+        - external
+      title: External
+    userObjectResponse:
+      allOf:
+        - $ref: '#/components/schemas/userObjectResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/personUserObjectResponse'
+            - $ref: '#/components/schemas/botUserObjectResponse'
+    booleanFormulaPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: boolean
+          description: Always `boolean`
+        boolean:
+          oneOf:
+            - type: boolean
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - boolean
+      title: Boolean
+    dateFormulaPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: date
+          description: Always `date`
+        date:
+          oneOf:
+            - $ref: '#/components/schemas/dateResponse'
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - date
+      title: Date
+    numberFormulaPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: number
+          description: Always `number`
+        number:
+          oneOf:
+            - type: number
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - number
+      title: Number
+    stringFormulaPropertyValueResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: string
+          description: Always `string`
+        string:
+          oneOf:
+            - type: string
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - type
+        - string
+      title: String
+    verificationPropertyUnverifiedResponse:
+      type: object
+      properties:
+        state:
+          type: string
+          const: unverified
+          description: Always `unverified`
+        date:
+          type: 'null'
+        verified_by:
+          type: 'null'
+      additionalProperties: false
+      required:
+        - state
+        - date
+        - verified_by
+      title: Unverified
+    verificationPropertyResponse:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+            - verified
+            - expired
+          description: 'One of: `verified`, `expired`'
+        date:
+          oneOf:
+            - $ref: '#/components/schemas/dateResponse'
+            - type: 'null'
+        verified_by:
+          oneOf:
+            - $ref: '#/components/schemas/partialUserObjectResponse'
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - state
+        - date
+        - verified_by
+      title: Verified
+    richTextItemResponseCommon:
+      type: object
+      properties:
+        plain_text:
+          type: string
+          description: The plain text content of the rich text object, without any styling.
+        href:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: A URL that the rich text object links to or mentions.
+        annotations:
+          $ref: '#/components/schemas/annotationResponse'
+          description: >-
+            All rich text objects contain an annotations object that sets the
+            styling for the rich text.
+      additionalProperties: false
+      required:
+        - plain_text
+        - href
+        - annotations
+    textRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: text
+          description: Always `text`
+        text:
+          type: object
+          properties:
+            content:
+              type: string
+              maxLength: 2000
+              description: The actual text content of the text.
+            link:
+              oneOf:
+                - type: object
+                  properties:
+                    url:
+                      type: string
+                      examples:
+                        - https://www.notion.com
+                      description: The URL of the link.
+                  additionalProperties: false
+                  required:
+                    - url
+                - type: 'null'
+              description: >-
+                An object with information about any inline link in this text,
+                if included.
+          additionalProperties: false
+          required:
+            - content
+            - link
+          description: >-
+            If a rich text object's type value is `text`, then the corresponding
+            text field contains an object including the text content and any
+            inline link.
+      required:
+        - type
+        - text
+      title: Text
+    mentionRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: mention
+          description: Always `mention`
+        mention:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  $ref: '#/components/schemas/userValueResponse'
+                  description: Details of the user mention.
+              additionalProperties: false
+              required:
+                - type
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: date
+                  description: Always `date`
+                date:
+                  $ref: '#/components/schemas/dateResponse'
+                  description: Details of the date mention.
+              additionalProperties: false
+              required:
+                - type
+                - date
+              title: Date
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: link_preview
+                  description: Always `link_preview`
+                link_preview:
+                  $ref: '#/components/schemas/linkPreviewMentionResponse'
+                  description: Details of the link preview mention.
+              additionalProperties: false
+              required:
+                - type
+                - link_preview
+              title: Link Preview
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: link_mention
+                  description: Always `link_mention`
+                link_mention:
+                  $ref: '#/components/schemas/linkMentionResponse'
+                  description: Details of the link mention.
+              additionalProperties: false
+              required:
+                - type
+                - link_mention
+              title: Link Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: page
+                  description: Always `page`
+                page:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idResponse'
+                      description: The ID of the page in the mention.
+                  additionalProperties: false
+                  required:
+                    - id
+                  description: Details of the page mention.
+              additionalProperties: false
+              required:
+                - type
+                - page
+              title: Page
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: database
+                  description: Always `database`
+                database:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idResponse'
+                      description: The ID of the database in the mention.
+                  additionalProperties: false
+                  required:
+                    - id
+                  description: Details of the database mention.
+              additionalProperties: false
+              required:
+                - type
+                - database
+              title: Database
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: template_mention
+                  description: Always `template_mention`
+                template_mention:
+                  $ref: '#/components/schemas/templateMentionResponse'
+                  description: Details of the template mention.
+              additionalProperties: false
+              required:
+                - type
+                - template_mention
+              title: Template Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: custom_emoji
+                  description: Always `custom_emoji`
+                custom_emoji:
+                  $ref: '#/components/schemas/customEmojiResponse'
+                  description: Details of the custom emoji mention.
+              additionalProperties: false
+              required:
+                - type
+                - custom_emoji
+              title: Custom Emoji
+          description: >-
+            Mention objects represent an inline mention of a database, date,
+            link preview mention, page, template mention, or user. A mention is
+            created in the Notion UI when a user types `@` followed by the name
+            of the reference.
+      required:
+        - type
+        - mention
+      title: Mention
+    equationRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: equation
+          description: Always `equation`
+        equation:
+          type: object
+          properties:
+            expression:
+              type: string
+              examples:
+                - e=mc^2
+              description: A KaTeX compatible string.
+          additionalProperties: false
+          required:
+            - expression
+          description: >-
+            Notion supports inline LaTeX equations as rich text objects with a
+            type value of `equation`.
+      required:
+        - type
+        - equation
+      title: Equation
+    userObjectResponseCommon:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the user.
+        object:
+          type: string
+          const: user
+          description: The user object type name.
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The name of the user.
+        avatar_url:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The avatar URL of the user.
+      additionalProperties: false
+      required:
+        - id
+        - object
+        - name
+        - avatar_url
+    personUserObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: person
+          description: Indicates this user is a person.
+        person:
+          type: object
+          properties:
+            email:
+              type: string
+              description: The email of the person.
+          additionalProperties: false
+          description: Details about the person, when the `type` of the user is `person`.
+      required:
+        - type
+        - person
+      title: Person
+    botUserObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: bot
+          description: Indicates this user is a bot.
+        bot:
+          oneOf:
+            - $ref: '#/components/schemas/emptyObject'
+            - $ref: '#/components/schemas/botInfoResponse'
+          description: Details about the bot, when the `type` of the user is `bot`.
+      required:
+        - type
+        - bot
+      title: Bot
+    annotationResponse:
+      type: object
+      properties:
+        bold:
+          type: boolean
+        italic:
+          type: boolean
+        strikethrough:
+          type: boolean
+        underline:
+          type: boolean
+        code:
+          type: boolean
+        color:
+          $ref: '#/components/schemas/apiColor'
+      additionalProperties: false
+      required:
+        - bold
+        - italic
+        - strikethrough
+        - underline
+        - code
+        - color
+    linkPreviewMentionResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL of the link preview mention.
+      additionalProperties: false
+      required:
+        - url
+    linkMentionResponse:
+      type: object
+      properties:
+        href:
+          type: string
+          description: The href of the link mention.
+        title:
+          type: string
+          description: The title of the link.
+        description:
+          type: string
+          description: The description of the link.
+        link_author:
+          type: string
+          description: The author of the link.
+        link_provider:
+          type: string
+          description: The provider of the link.
+        thumbnail_url:
+          type: string
+          description: The thumbnail URL of the link.
+        icon_url:
+          type: string
+          description: The icon URL of the link.
+        iframe_url:
+          type: string
+          description: The iframe URL of the link.
+        height:
+          type: integer
+          description: The height of the link preview iframe.
+        padding:
+          type: integer
+          description: The padding of the link preview iframe.
+        padding_top:
+          type: integer
+          description: The top padding of the link preview iframe.
+      additionalProperties: false
+      required:
+        - href
+    templateMentionResponse:
+      oneOf:
+        - $ref: '#/components/schemas/templateMentionDateTemplateMentionResponse'
+        - $ref: '#/components/schemas/templateMentionUserTemplateMentionResponse'
+    botInfoResponse:
+      type: object
+      properties:
+        owner:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  oneOf:
+                    - type: object
+                      properties:
+                        id:
+                          $ref: '#/components/schemas/idResponse'
+                          description: The ID of the user.
+                        object:
+                          type: string
+                          const: user
+                          description: The user object type name.
+                        name:
+                          oneOf:
+                            - type: string
+                            - type: 'null'
+                          description: The name of the user.
+                        avatar_url:
+                          oneOf:
+                            - type: string
+                            - type: 'null'
+                          description: The avatar URL of the user.
+                        type:
+                          type: string
+                          const: person
+                          description: The type of the user.
+                        person:
+                          type: object
+                          properties:
+                            email:
+                              type: string
+                              description: The email of the person.
+                          additionalProperties: false
+                          description: The person info of the user.
+                      additionalProperties: false
+                      required:
+                        - id
+                        - object
+                        - name
+                        - avatar_url
+                        - type
+                        - person
+                    - $ref: '#/components/schemas/partialUserObjectResponse'
+                  description: >-
+                    Details about the owner of the bot, when the `type` of the
+                    owner is `user`. This means the bot is for a integration.
+              additionalProperties: false
+              required:
+                - type
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: workspace
+                  description: Always `workspace`
+                workspace:
+                  type: boolean
+                  const: true
+                  description: >-
+                    Details about the owner of the bot, when the `type` of the
+                    owner is `workspace`. This means the bot is for an internal
+                    integration.
+              additionalProperties: false
+              required:
+                - type
+                - workspace
+              title: Workspace
+          description: Details about the owner of the bot.
+        workspace_id:
+          type: string
+          description: The ID of the bot's workspace.
+        workspace_limits:
+          type: object
+          properties:
+            max_file_upload_size_in_bytes:
+              type: integer
+              minimum: 0
+              description: The maximum allowable size of a file upload, in bytes
+          additionalProperties: false
+          required:
+            - max_file_upload_size_in_bytes
+          description: Limits and restrictions that apply to the bot's workspace
+        workspace_name:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The name of the bot's workspace.
+      additionalProperties: false
+      required:
+        - owner
+        - workspace_id
+        - workspace_limits
+        - workspace_name
+    templateMentionDateTemplateMentionResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_date
+          description: Always `template_mention_date`
+        template_mention_date:
+          type: string
+          enum:
+            - today
+            - now
+          description: The date of the template mention.
+      additionalProperties: false
+      required:
+        - type
+        - template_mention_date
+      title: Template Mention Date
+    templateMentionUserTemplateMentionResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_user
+          description: Always `template_mention_user`
+        template_mention_user:
+          type: string
+          const: me
+          description: The user of the template mention.
+      additionalProperties: false
+      required:
+        - type
+        - template_mention_user
+      title: Template Mention User
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+````

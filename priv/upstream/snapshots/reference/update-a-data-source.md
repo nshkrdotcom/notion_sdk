@@ -1,0 +1,2668 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://developers.notion.com/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Update a data source
+
+Updates the [data source](/reference/data-source) object — the properties, title, description, or whether it's in the trash — of a specified data source under a database.
+
+Returns the updated data source object.
+
+Use the `parent` parameter to move the data source to a different `database_id`. If you do so, any existing views that refer to the data source in the current database continue to exist, but become *linked* views. A new standard "table" view for the moved data source is created under the new (destination) database. Use the Notion app to make any further changes to the views; managing views using the API is not currently supported.
+
+Data source properties represent the columns (or schema) of a data source. To update the properties of a data source, use the `properties` [body param](/reference/update-data-source-properties) with this endpoint. Learn more about data source properties in the [data source properties](/reference/property-object) and [Update data source properties](/reference/update-data-source-properties) docs.
+
+To update a `relation` data source property, share the related database with the integration. Learn more about relations in the [data source properties](/reference/property-object#relation) page.
+
+For an overview of how to use the REST API with databases, refer to the [Working with databases](/guides/data-apis/working-with-databases) guide.
+
+### How data sources property type changes work
+
+All properties in pages are stored as rich text. Notion will convert that rich text based on the types defined in a data source's schema. When a type is changed using the API, the data will continue to be available, it is just presented differently.
+
+For example, a multi select property value is represented as a comma-separated list of strings (eg. "1, 2, 3") and a people property value is represented as a comma-separated list of IDs. These are compatible and the type can be converted.
+
+Note: Not all type changes work. In some cases data will no longer be returned, such as people type → file type.
+
+### Interacting with data source rows
+
+This endpoint cannot be used to update data source rows.
+
+To update the properties of a data source row — rather than a column — use the [Update page](/reference/patch-page) endpoint. To add a new row to a database, use the [Create a page](/reference/post-page) endpoint.
+
+### Recommended data source schema size limit
+
+Developers are encouraged to keep their data source schema size to a maximum of **50KB**. To stay within this schema size limit, the number of properties (or columns) added to a data source should be managed.
+
+Data source schema updates that are too large will be blocked by the REST API to help developers keep their data source queries performant. When a schema update is blocked, the error response includes a `validation_error` code with a message identifying the largest property by name, ID, and byte size to help you reduce your schema size.
+
+### Errors
+
+Each Public API endpoint can return several possible error codes. See the [Error codes section](/reference/status-codes#error-codes) of the Status codes documentation for more information.
+
+<Warning>
+  **The following data source properties cannot be updated via the API:**
+
+  * `formula`
+  * `status`
+  * [Synced content](https://www.notion.so/help/guides/synced-databases-bridge-different-tools)
+  * `place`
+</Warning>
+
+<Info>
+  **Data source relations must be shared with your integration**
+
+  To update a data source [relation](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation) property, the related database must also be shared with your integration.
+</Info>
+
+
+## OpenAPI
+
+````yaml patch /v1/data_sources/{data_source_id}
+openapi: 3.1.0
+info:
+  title: Notion API
+  version: 1.0.0
+  termsOfService: >-
+    https://notion.notion.site/Terms-and-Privacy-28ffdd083dc3473e9c2da6ec011b58ac
+servers:
+  - url: https://api.notion.com
+security:
+  - bearerAuth: []
+tags:
+  - name: Databases
+    description: Database endpoints
+  - name: Data sources
+    description: Data source endpoints
+  - name: Pages
+    description: Page endpoints
+  - name: Blocks
+    description: Block endpoints
+  - name: Comments
+    description: Comment endpoints
+  - name: File uploads
+    description: File upload endpoints
+  - name: OAuth
+    description: OAuth endpoints (basic authentication)
+  - name: Users
+    description: User endpoints
+  - name: Search
+    description: Search endpoints
+paths:
+  /v1/data_sources/{data_source_id}:
+    patch:
+      tags:
+        - Data sources
+      summary: Update a data source
+      operationId: update-a-data-source
+      parameters:
+        - name: data_source_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/idRequest'
+            description: ID of a Notion data source.
+        - $ref: '#/components/parameters/notionVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/richTextItemRequest'
+                  maxItems: 100
+                  description: Title of data source as it appears in Notion.
+                icon:
+                  oneOf:
+                    - $ref: '#/components/schemas/pageIconRequest'
+                    - type: 'null'
+                  description: Page icon.
+                properties:
+                  type: object
+                  additionalProperties:
+                    oneOf:
+                      - allOf:
+                          - type: object
+                            properties:
+                              name:
+                                type: string
+                                description: The name of the property.
+                              description:
+                                oneOf:
+                                  - $ref: >-
+                                      #/components/schemas/propertyDescriptionRequest
+                                  - type: 'null'
+                                description: The description of the property.
+                          - oneOf:
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: number
+                                    description: Always `number`
+                                  number:
+                                    type: object
+                                    properties:
+                                      format:
+                                        $ref: '#/components/schemas/numberFormat'
+                                required:
+                                  - number
+                                title: Number
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: formula
+                                    description: Always `formula`
+                                  formula:
+                                    type: object
+                                    properties:
+                                      expression:
+                                        type: string
+                                required:
+                                  - formula
+                                title: Formula
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: select
+                                    description: Always `select`
+                                  select:
+                                    type: object
+                                    properties:
+                                      options:
+                                        type: array
+                                        items:
+                                          allOf:
+                                            - type: object
+                                              properties:
+                                                color:
+                                                  $ref: '#/components/schemas/selectColor'
+                                                description:
+                                                  oneOf:
+                                                    - type: string
+                                                    - type: 'null'
+                                            - oneOf:
+                                                - type: object
+                                                  properties:
+                                                    name:
+                                                      type: string
+                                                    id:
+                                                      type: string
+                                                  required:
+                                                    - name
+                                                - type: object
+                                                  properties:
+                                                    id:
+                                                      type: string
+                                                    name:
+                                                      type: string
+                                                  required:
+                                                    - id
+                                        maxItems: 100
+                                required:
+                                  - select
+                                title: Select
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: multi_select
+                                    description: Always `multi_select`
+                                  multi_select:
+                                    type: object
+                                    properties:
+                                      options:
+                                        type: array
+                                        items:
+                                          allOf:
+                                            - type: object
+                                              properties:
+                                                color:
+                                                  $ref: '#/components/schemas/selectColor'
+                                                description:
+                                                  oneOf:
+                                                    - type: string
+                                                    - type: 'null'
+                                            - oneOf:
+                                                - type: object
+                                                  properties:
+                                                    name:
+                                                      type: string
+                                                    id:
+                                                      type: string
+                                                  required:
+                                                    - name
+                                                - type: object
+                                                  properties:
+                                                    id:
+                                                      type: string
+                                                    name:
+                                                      type: string
+                                                  required:
+                                                    - id
+                                        maxItems: 100
+                                required:
+                                  - multi_select
+                                title: Multi Select
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: status
+                                    description: Always `status`
+                                  status:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - status
+                                title: Status
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: relation
+                                    description: Always `relation`
+                                  relation:
+                                    allOf:
+                                      - type: object
+                                        properties:
+                                          data_source_id:
+                                            $ref: '#/components/schemas/idRequest'
+                                        required:
+                                          - data_source_id
+                                      - oneOf:
+                                          - type: object
+                                            properties:
+                                              type:
+                                                type: string
+                                                const: single_property
+                                                description: Always `single_property`
+                                              single_property:
+                                                $ref: '#/components/schemas/emptyObject'
+                                            required:
+                                              - single_property
+                                            title: Single Property
+                                          - type: object
+                                            properties:
+                                              type:
+                                                type: string
+                                                const: dual_property
+                                                description: Always `dual_property`
+                                              dual_property:
+                                                type: object
+                                                properties:
+                                                  synced_property_id:
+                                                    type: string
+                                                  synced_property_name:
+                                                    type: string
+                                            required:
+                                              - dual_property
+                                            title: Dual Property
+                                required:
+                                  - relation
+                                title: Relation
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: rollup
+                                    description: Always `rollup`
+                                  rollup:
+                                    allOf:
+                                      - type: object
+                                        properties:
+                                          function:
+                                            $ref: '#/components/schemas/rollupFunction'
+                                            description: >-
+                                              The function to use for the rollup, e.g.
+                                              count, count_values, percent_not_empty,
+                                              max.
+                                        required:
+                                          - function
+                                      - oneOf:
+                                          - type: object
+                                            properties:
+                                              relation_property_name:
+                                                type: string
+                                              rollup_property_name:
+                                                type: string
+                                            required:
+                                              - relation_property_name
+                                              - rollup_property_name
+                                          - type: object
+                                            properties:
+                                              relation_property_id:
+                                                type: string
+                                              rollup_property_name:
+                                                type: string
+                                            required:
+                                              - relation_property_id
+                                              - rollup_property_name
+                                          - type: object
+                                            properties:
+                                              relation_property_name:
+                                                type: string
+                                              rollup_property_id:
+                                                type: string
+                                            required:
+                                              - relation_property_name
+                                              - rollup_property_id
+                                          - type: object
+                                            properties:
+                                              relation_property_id:
+                                                type: string
+                                              rollup_property_id:
+                                                type: string
+                                            required:
+                                              - relation_property_id
+                                              - rollup_property_id
+                                required:
+                                  - rollup
+                                title: Rollup
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: unique_id
+                                    description: Always `unique_id`
+                                  unique_id:
+                                    type: object
+                                    properties:
+                                      prefix:
+                                        oneOf:
+                                          - type: string
+                                          - type: 'null'
+                                required:
+                                  - unique_id
+                                title: Unique Id
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: title
+                                    description: Always `title`
+                                  title:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - title
+                                title: Title
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: rich_text
+                                    description: Always `rich_text`
+                                  rich_text:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - rich_text
+                                title: Rich Text
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: url
+                                    description: Always `url`
+                                  url:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - url
+                                title: Url
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: people
+                                    description: Always `people`
+                                  people:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - people
+                                title: People
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: files
+                                    description: Always `files`
+                                  files:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - files
+                                title: Files
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: email
+                                    description: Always `email`
+                                  email:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - email
+                                title: Email
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: phone_number
+                                    description: Always `phone_number`
+                                  phone_number:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - phone_number
+                                title: Phone Number
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: date
+                                    description: Always `date`
+                                  date:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - date
+                                title: Date
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: checkbox
+                                    description: Always `checkbox`
+                                  checkbox:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - checkbox
+                                title: Checkbox
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: created_by
+                                    description: Always `created_by`
+                                  created_by:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - created_by
+                                title: Created By
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: created_time
+                                    description: Always `created_time`
+                                  created_time:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - created_time
+                                title: Created Time
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: last_edited_by
+                                    description: Always `last_edited_by`
+                                  last_edited_by:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - last_edited_by
+                                title: Last Edited By
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: last_edited_time
+                                    description: Always `last_edited_time`
+                                  last_edited_time:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - last_edited_time
+                                title: Last Edited Time
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    const: place
+                                    description: Always `place`
+                                  place:
+                                    $ref: '#/components/schemas/emptyObject'
+                                required:
+                                  - place
+                                title: Place
+                      - type: object
+                        properties:
+                          name:
+                            type: string
+                            description: The new name of the property.
+                        required:
+                          - name
+                      - type: 'null'
+                  description: >-
+                    The property schema of the data source. The keys are
+                    property names or IDs, and the values are property
+                    configuration objects. Properties set to null will be
+                    removed.
+                in_trash:
+                  type: boolean
+                  description: >-
+                    Whether the database should be moved to or from the trash.
+                    If not provided, the trash status will not be updated.
+                parent:
+                  $ref: '#/components/schemas/parentOfDataSourceRequest'
+                  description: >-
+                    The parent of the data source, when moving it to a different
+                    database. If not provided, the parent will not be updated.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/partialDataSourceObjectResponse'
+                  - $ref: '#/components/schemas/dataSourceObjectResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_400'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_401'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_403'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_404'
+        '409':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_409'
+        '429':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_429'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_500'
+        '503':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_api_503'
+      x-codeSamples:
+        - lang: javascript
+          label: TypeScript SDK
+          source: |-
+            import { Client } from "@notionhq/client"
+
+            const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+            const response = await notion.dataSources.update({
+              data_source_id: "d9824bdc-8445-4327-be8b-5b47500af6ce",
+              title: [{ text: { content: "Updated Data Source Name" } }]
+            })
+components:
+  schemas:
+    idRequest:
+      type: string
+    richTextItemRequest:
+      allOf:
+        - $ref: '#/components/schemas/richTextItemRequestCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/textRichTextItemRequest'
+            - $ref: '#/components/schemas/mentionRichTextItemRequest'
+            - $ref: '#/components/schemas/equationRichTextItemRequest'
+    pageIconRequest:
+      oneOf:
+        - $ref: '#/components/schemas/fileUploadPageIconRequest'
+        - $ref: '#/components/schemas/emojiPageIconRequest'
+        - $ref: '#/components/schemas/externalPageIconRequest'
+        - $ref: '#/components/schemas/customEmojiPageIconRequest'
+    propertyDescriptionRequest:
+      type: string
+      minLength: 1
+      maxLength: 280
+    numberFormat:
+      type: string
+    selectColor:
+      type: string
+      enum:
+        - default
+        - gray
+        - brown
+        - orange
+        - yellow
+        - green
+        - blue
+        - purple
+        - pink
+        - red
+      description: >-
+        One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`,
+        `purple`, `pink`, `red`
+    emptyObject:
+      type: object
+      properties: {}
+      additionalProperties: false
+    rollupFunction:
+      type: string
+      enum:
+        - count
+        - count_values
+        - empty
+        - not_empty
+        - unique
+        - show_unique
+        - percent_empty
+        - percent_not_empty
+        - sum
+        - average
+        - median
+        - min
+        - max
+        - range
+        - earliest_date
+        - latest_date
+        - date_range
+        - checked
+        - unchecked
+        - percent_checked
+        - percent_unchecked
+        - count_per_group
+        - percent_per_group
+        - show_original
+    parentOfDataSourceRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: database_id
+          description: Always `database_id`
+        database_id:
+          $ref: '#/components/schemas/idRequest'
+          description: >-
+            The ID of the parent database (with or without dashes), for example,
+            195de9221179449fab8075a27c979105
+      required:
+        - database_id
+      title: Database Id
+    partialDataSourceObjectResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          const: data_source
+          description: The data source object type name.
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the data source.
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/databasePropertyConfigResponse'
+          description: The properties schema of the data source.
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - properties
+    dataSourceObjectResponse:
+      type: object
+      properties:
+        object:
+          type: string
+          const: data_source
+          description: The data source object type name.
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the data source.
+        title:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemResponse'
+          maxItems: 100
+          description: The title of the data source.
+        description:
+          type: array
+          items:
+            $ref: '#/components/schemas/richTextItemResponse'
+          maxItems: 100
+          description: The description of the data source.
+        parent:
+          $ref: '#/components/schemas/parentOfDataSourceResponse'
+          description: The parent of the data source.
+        database_parent:
+          $ref: '#/components/schemas/parentOfDatabaseResponse'
+          description: >-
+            The parent of the data source's containing database. This is
+            typically a page, block, or workspace, but can be another database
+            in the case of wikis.
+        is_inline:
+          type: boolean
+          description: Whether the data source is inline.
+        in_trash:
+          type: boolean
+          description: Whether the data source is in the trash.
+        created_time:
+          type: string
+          format: date-time
+          description: The time when the data source was created.
+        last_edited_time:
+          type: string
+          format: date-time
+          description: The time when the data source was last edited.
+        created_by:
+          $ref: '#/components/schemas/partialUserObjectResponse'
+          description: The user who created the data source.
+        last_edited_by:
+          $ref: '#/components/schemas/partialUserObjectResponse'
+          description: The user who last edited the data source.
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/databasePropertyConfigResponse'
+          description: The properties schema of the data source.
+        icon:
+          oneOf:
+            - $ref: '#/components/schemas/pageIconResponse'
+            - type: 'null'
+          description: The icon of the data source.
+        cover:
+          oneOf:
+            - $ref: '#/components/schemas/pageCoverResponse'
+            - type: 'null'
+          description: The cover of the data source.
+        url:
+          type: string
+          description: The URL of the data source.
+        public_url:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The public URL of the data source if it is publicly accessible.
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - title
+        - description
+        - parent
+        - database_parent
+        - is_inline
+        - in_trash
+        - created_time
+        - last_edited_time
+        - created_by
+        - last_edited_by
+        - properties
+        - icon
+        - cover
+        - url
+        - public_url
+    error_api_400:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - invalid_json
+                - invalid_request_url
+                - invalid_request
+                - missing_version
+                - validation_error
+            status:
+              const: 400
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_401:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - unauthorized
+            status:
+              const: 401
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_403:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - restricted_resource
+            status:
+              const: 403
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_404:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - object_not_found
+            status:
+              const: 404
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_409:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - conflict_error
+            status:
+              const: 409
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_429:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - rate_limited
+            status:
+              const: 429
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_500:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - internal_server_error
+            status:
+              const: 500
+          required:
+            - code
+            - status
+          additionalProperties: false
+    error_api_503:
+      allOf:
+        - $ref: '#/components/schemas/publicApiCommonErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum:
+                - service_unavailable
+            status:
+              const: 503
+          required:
+            - code
+            - status
+          additionalProperties: false
+    richTextItemRequestCommon:
+      type: object
+      properties:
+        annotations:
+          $ref: '#/components/schemas/annotationRequest'
+          description: >-
+            All rich text objects contain an annotations object that sets the
+            styling for the rich text.
+    textRichTextItemRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: text
+          description: Always `text`
+        text:
+          type: object
+          properties:
+            content:
+              type: string
+              maxLength: 2000
+              description: The actual text content of the text.
+            link:
+              oneOf:
+                - type: object
+                  properties:
+                    url:
+                      type: string
+                      examples:
+                        - https://www.notion.com
+                      description: The URL of the link.
+                  required:
+                    - url
+                - type: 'null'
+              description: >-
+                An object with information about any inline link in this text,
+                if included.
+          additionalProperties: false
+          required:
+            - content
+          description: >-
+            If a rich text object's type value is `text`, then the corresponding
+            text field contains an object including the text content and any
+            inline link.
+      required:
+        - text
+      title: Text
+    mentionRichTextItemRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: mention
+          description: Always `mention`
+        mention:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  $ref: '#/components/schemas/partialUserObjectRequest'
+                  description: Details of the user mention.
+              required:
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: date
+                  description: Always `date`
+                date:
+                  $ref: '#/components/schemas/dateRequest'
+                  description: Details of the date mention.
+              required:
+                - date
+              title: Date
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: page
+                  description: Always `page`
+                page:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idRequest'
+                      description: The ID of the page in the mention.
+                  required:
+                    - id
+                  description: Details of the page mention.
+              required:
+                - page
+              title: Page
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: database
+                  description: Always `database`
+                database:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idRequest'
+                      description: The ID of the database in the mention.
+                  required:
+                    - id
+                  description: Details of the database mention.
+              required:
+                - database
+              title: Database
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: template_mention
+                  description: Always `template_mention`
+                template_mention:
+                  $ref: '#/components/schemas/templateMentionRequest'
+                  description: Details of the template mention.
+              required:
+                - template_mention
+              title: Template Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: custom_emoji
+                  description: Always `custom_emoji`
+                custom_emoji:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idRequest'
+                      description: The ID of the custom emoji.
+                    name:
+                      type: string
+                      description: The name of the custom emoji.
+                    url:
+                      type: string
+                      description: The URL of the custom emoji.
+                  required:
+                    - id
+                  description: Details of the custom emoji mention.
+              required:
+                - custom_emoji
+              title: Custom Emoji
+          description: >-
+            Mention objects represent an inline mention of a database, date,
+            link preview mention, page, template mention, or user. A mention is
+            created in the Notion UI when a user types `@` followed by the name
+            of the reference.
+      required:
+        - mention
+      title: Mention
+    equationRichTextItemRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: equation
+          description: Always `equation`
+        equation:
+          type: object
+          properties:
+            expression:
+              type: string
+              examples:
+                - e=mc^2
+              description: A KaTeX compatible string.
+          required:
+            - expression
+          description: >-
+            Notion supports inline LaTeX equations as rich text objects with a
+            type value of `equation`.
+      required:
+        - equation
+      title: Equation
+    fileUploadPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file_upload
+          description: Always `file_upload`
+        file_upload:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID of a FileUpload object that has the status `uploaded`.
+          required:
+            - id
+      required:
+        - file_upload
+      title: File Upload
+    emojiPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: emoji
+          description: Always `emoji`
+        emoji:
+          $ref: '#/components/schemas/emojiRequest'
+          description: An emoji character.
+      required:
+        - emoji
+      title: Emoji
+    externalPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Always `external`
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file.
+          required:
+            - url
+      required:
+        - external
+      title: External
+    customEmojiPageIconRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: custom_emoji
+          description: Always `custom_emoji`
+        custom_emoji:
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/idRequest'
+              description: The ID of the custom emoji.
+            name:
+              type: string
+              description: The name of the custom emoji.
+            url:
+              type: string
+              description: The URL of the custom emoji.
+          required:
+            - id
+      required:
+        - custom_emoji
+      title: Custom Emoji
+    idResponse:
+      type: string
+      format: uuid
+    databasePropertyConfigResponse:
+      allOf:
+        - $ref: '#/components/schemas/databasePropertyConfigResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/numberDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/formulaDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/selectDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/multiSelectDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/statusDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/relationDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/rollupDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/uniqueIdDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/titleDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/richTextDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/urlDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/peopleDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/filesDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/emailDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/phoneNumberDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/dateDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/checkboxDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/createdByDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/createdTimeDatabasePropertyConfigResponse'
+            - $ref: '#/components/schemas/lastEditedByDatabasePropertyConfigResponse'
+            - $ref: >-
+                #/components/schemas/lastEditedTimeDatabasePropertyConfigResponse
+    richTextItemResponse:
+      allOf:
+        - $ref: '#/components/schemas/richTextItemResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/textRichTextItemResponse'
+            - $ref: '#/components/schemas/mentionRichTextItemResponse'
+            - $ref: '#/components/schemas/equationRichTextItemResponse'
+    parentOfDataSourceResponse:
+      oneOf:
+        - $ref: '#/components/schemas/databaseParentResponse'
+        - $ref: '#/components/schemas/dataSourceParentResponse'
+      description: >-
+        The parent of the data source. This is typically a database
+        (`database_id`), but for externally synced data sources, can be another
+        data source (`data_source_id`).
+    parentOfDatabaseResponse:
+      oneOf:
+        - $ref: '#/components/schemas/pageIdParentForBlockBasedObjectResponse'
+        - $ref: '#/components/schemas/workspaceParentForBlockBasedObjectResponse'
+        - $ref: '#/components/schemas/databaseParentResponse'
+        - $ref: '#/components/schemas/blockIdParentForBlockBasedObjectResponse'
+    partialUserObjectResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+        object:
+          type: string
+          const: user
+          description: Always `user`
+      additionalProperties: false
+      required:
+        - id
+        - object
+    pageIconResponse:
+      oneOf:
+        - $ref: '#/components/schemas/emojiPageIconResponse'
+        - $ref: '#/components/schemas/filePageIconResponse'
+        - $ref: '#/components/schemas/externalPageIconResponse'
+        - $ref: '#/components/schemas/customEmojiPageIconResponse'
+    pageCoverResponse:
+      oneOf:
+        - $ref: '#/components/schemas/filePageCoverResponse'
+        - $ref: '#/components/schemas/externalPageCoverResponse'
+    publicApiCommonErrorResponse:
+      type: object
+      properties:
+        object:
+          const: error
+        message:
+          type: string
+        additional_data:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+      required:
+        - object
+        - message
+    annotationRequest:
+      type: object
+      properties:
+        bold:
+          type: boolean
+          description: Whether the text is formatted as bold.
+        italic:
+          type: boolean
+          description: Whether the text is formatted as italic.
+        strikethrough:
+          type: boolean
+          description: Whether the text is formatted with a strikethrough.
+        underline:
+          type: boolean
+          description: Whether the text is formatted with an underline.
+        code:
+          type: boolean
+          description: Whether the text is formatted as code.
+        color:
+          $ref: '#/components/schemas/apiColor'
+          description: The color of the text.
+    partialUserObjectRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idRequest'
+          description: The ID of the user.
+        object:
+          type: string
+          const: user
+          description: The user object type name.
+      required:
+        - id
+    dateRequest:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          description: The start date of the date object.
+        end:
+          oneOf:
+            - type: string
+              format: date
+            - type: 'null'
+          description: The end date of the date object, if any.
+        time_zone:
+          oneOf:
+            - $ref: '#/components/schemas/timeZoneRequest'
+            - type: 'null'
+          description: >-
+            The time zone of the date object, if any. E.g. America/Los_Angeles,
+            Europe/London, etc.
+      additionalProperties: false
+      required:
+        - start
+    templateMentionRequest:
+      oneOf:
+        - $ref: '#/components/schemas/templateMentionDateTemplateMentionRequest'
+        - $ref: '#/components/schemas/templateMentionUserTemplateMentionRequest'
+    emojiRequest:
+      type: string
+    databasePropertyConfigResponseCommon:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the property.
+        name:
+          type: string
+          description: The name of the property.
+        description:
+          oneOf:
+            - $ref: '#/components/schemas/propertyDescriptionRequest'
+            - type: 'null'
+          description: The description of the property.
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - description
+    numberDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: number
+          description: Always `number`
+        number:
+          type: object
+          properties:
+            format:
+              $ref: '#/components/schemas/numberFormat'
+              description: The number format for the property.
+          additionalProperties: false
+          required:
+            - format
+      required:
+        - type
+        - number
+      title: Number
+    formulaDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: formula
+          description: Always `formula`
+        formula:
+          type: object
+          properties:
+            expression:
+              type: string
+          additionalProperties: false
+          required:
+            - expression
+      required:
+        - type
+        - formula
+      title: Formula
+    selectDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: select
+          description: Always `select`
+        select:
+          type: object
+          properties:
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/selectPropertyResponse'
+              maxItems: 100
+          additionalProperties: false
+          required:
+            - options
+      required:
+        - type
+        - select
+      title: Select
+    multiSelectDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: multi_select
+          description: Always `multi_select`
+        multi_select:
+          type: object
+          properties:
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/selectPropertyResponse'
+              maxItems: 100
+          additionalProperties: false
+          required:
+            - options
+      required:
+        - type
+        - multi_select
+      title: Multi Select
+    statusDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: status
+          description: Always `status`
+        status:
+          type: object
+          properties:
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/statusPropertyResponse'
+              maxItems: 100
+              description: The options for the status property.
+            groups:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the status group.
+                  name:
+                    type: string
+                    description: The name of the status group.
+                  color:
+                    $ref: '#/components/schemas/selectColor'
+                    description: The color of the status group.
+                  option_ids:
+                    type: array
+                    items:
+                      type: string
+                    maxItems: 100
+                    description: The IDs of the status options in this group.
+                additionalProperties: false
+                required:
+                  - id
+                  - name
+                  - color
+                  - option_ids
+              maxItems: 100
+              description: The groups for the status property.
+          additionalProperties: false
+          required:
+            - options
+            - groups
+      required:
+        - type
+        - status
+      title: Status
+    relationDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: relation
+          description: Always `relation`
+        relation:
+          $ref: '#/components/schemas/databasePropertyRelationConfigResponse'
+      required:
+        - type
+        - relation
+      title: Relation
+    rollupDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: rollup
+          description: Always `rollup`
+        rollup:
+          type: object
+          properties:
+            function:
+              $ref: '#/components/schemas/rollupFunction'
+              description: >-
+                The function to use for the rollup, e.g. count, count_values,
+                percent_not_empty, max.
+            rollup_property_name:
+              type: string
+            relation_property_name:
+              type: string
+            rollup_property_id:
+              type: string
+            relation_property_id:
+              type: string
+          additionalProperties: false
+          required:
+            - function
+            - rollup_property_name
+            - relation_property_name
+            - rollup_property_id
+            - relation_property_id
+      required:
+        - type
+        - rollup
+      title: Rollup
+    uniqueIdDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: unique_id
+          description: Always `unique_id`
+        unique_id:
+          type: object
+          properties:
+            prefix:
+              oneOf:
+                - type: string
+                - type: 'null'
+              description: The prefix for the unique ID.
+          additionalProperties: false
+          required:
+            - prefix
+      required:
+        - type
+        - unique_id
+      title: Unique Id
+    titleDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: title
+          description: Always `title`
+        title:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - title
+      title: Title
+    richTextDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: rich_text
+          description: Always `rich_text`
+        rich_text:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - rich_text
+      title: Rich Text
+    urlDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: url
+          description: Always `url`
+        url:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - url
+      title: Url
+    peopleDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: people
+          description: Always `people`
+        people:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - people
+      title: People
+    filesDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: files
+          description: Always `files`
+        files:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - files
+      title: Files
+    emailDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: email
+          description: Always `email`
+        email:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - email
+      title: Email
+    phoneNumberDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: phone_number
+          description: Always `phone_number`
+        phone_number:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - phone_number
+      title: Phone Number
+    dateDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: date
+          description: Always `date`
+        date:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - date
+      title: Date
+    checkboxDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: checkbox
+          description: Always `checkbox`
+        checkbox:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - checkbox
+      title: Checkbox
+    createdByDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: created_by
+          description: Always `created_by`
+        created_by:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - created_by
+      title: Created By
+    createdTimeDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: created_time
+          description: Always `created_time`
+        created_time:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - created_time
+      title: Created Time
+    lastEditedByDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: last_edited_by
+          description: Always `last_edited_by`
+        last_edited_by:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - last_edited_by
+      title: Last Edited By
+    lastEditedTimeDatabasePropertyConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: last_edited_time
+          description: Always `last_edited_time`
+        last_edited_time:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - last_edited_time
+      title: Last Edited Time
+    richTextItemResponseCommon:
+      type: object
+      properties:
+        plain_text:
+          type: string
+          description: The plain text content of the rich text object, without any styling.
+        href:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: A URL that the rich text object links to or mentions.
+        annotations:
+          $ref: '#/components/schemas/annotationResponse'
+          description: >-
+            All rich text objects contain an annotations object that sets the
+            styling for the rich text.
+      additionalProperties: false
+      required:
+        - plain_text
+        - href
+        - annotations
+    textRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: text
+          description: Always `text`
+        text:
+          type: object
+          properties:
+            content:
+              type: string
+              maxLength: 2000
+              description: The actual text content of the text.
+            link:
+              oneOf:
+                - type: object
+                  properties:
+                    url:
+                      type: string
+                      examples:
+                        - https://www.notion.com
+                      description: The URL of the link.
+                  additionalProperties: false
+                  required:
+                    - url
+                - type: 'null'
+              description: >-
+                An object with information about any inline link in this text,
+                if included.
+          additionalProperties: false
+          required:
+            - content
+            - link
+          description: >-
+            If a rich text object's type value is `text`, then the corresponding
+            text field contains an object including the text content and any
+            inline link.
+      required:
+        - type
+        - text
+      title: Text
+    mentionRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: mention
+          description: Always `mention`
+        mention:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  $ref: '#/components/schemas/userValueResponse'
+                  description: Details of the user mention.
+              additionalProperties: false
+              required:
+                - type
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: date
+                  description: Always `date`
+                date:
+                  $ref: '#/components/schemas/dateResponse'
+                  description: Details of the date mention.
+              additionalProperties: false
+              required:
+                - type
+                - date
+              title: Date
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: link_preview
+                  description: Always `link_preview`
+                link_preview:
+                  $ref: '#/components/schemas/linkPreviewMentionResponse'
+                  description: Details of the link preview mention.
+              additionalProperties: false
+              required:
+                - type
+                - link_preview
+              title: Link Preview
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: link_mention
+                  description: Always `link_mention`
+                link_mention:
+                  $ref: '#/components/schemas/linkMentionResponse'
+                  description: Details of the link mention.
+              additionalProperties: false
+              required:
+                - type
+                - link_mention
+              title: Link Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: page
+                  description: Always `page`
+                page:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idResponse'
+                      description: The ID of the page in the mention.
+                  additionalProperties: false
+                  required:
+                    - id
+                  description: Details of the page mention.
+              additionalProperties: false
+              required:
+                - type
+                - page
+              title: Page
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: database
+                  description: Always `database`
+                database:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/idResponse'
+                      description: The ID of the database in the mention.
+                  additionalProperties: false
+                  required:
+                    - id
+                  description: Details of the database mention.
+              additionalProperties: false
+              required:
+                - type
+                - database
+              title: Database
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: template_mention
+                  description: Always `template_mention`
+                template_mention:
+                  $ref: '#/components/schemas/templateMentionResponse'
+                  description: Details of the template mention.
+              additionalProperties: false
+              required:
+                - type
+                - template_mention
+              title: Template Mention
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: custom_emoji
+                  description: Always `custom_emoji`
+                custom_emoji:
+                  $ref: '#/components/schemas/customEmojiResponse'
+                  description: Details of the custom emoji mention.
+              additionalProperties: false
+              required:
+                - type
+                - custom_emoji
+              title: Custom Emoji
+          description: >-
+            Mention objects represent an inline mention of a database, date,
+            link preview mention, page, template mention, or user. A mention is
+            created in the Notion UI when a user types `@` followed by the name
+            of the reference.
+      required:
+        - type
+        - mention
+      title: Mention
+    equationRichTextItemResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: equation
+          description: Always `equation`
+        equation:
+          type: object
+          properties:
+            expression:
+              type: string
+              examples:
+                - e=mc^2
+              description: A KaTeX compatible string.
+          additionalProperties: false
+          required:
+            - expression
+          description: >-
+            Notion supports inline LaTeX equations as rich text objects with a
+            type value of `equation`.
+      required:
+        - type
+        - equation
+      title: Equation
+    databaseParentResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: database_id
+          description: The parent type.
+        database_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent database.
+      additionalProperties: false
+      required:
+        - type
+        - database_id
+    dataSourceParentResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: data_source_id
+          description: The parent type.
+        data_source_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent data source.
+        database_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the data source's parent database.
+      additionalProperties: false
+      required:
+        - type
+        - data_source_id
+        - database_id
+    pageIdParentForBlockBasedObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: page_id
+          description: The parent type.
+        page_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent page.
+      additionalProperties: false
+      required:
+        - type
+        - page_id
+    workspaceParentForBlockBasedObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: workspace
+          description: The parent type.
+        workspace:
+          type: boolean
+          const: true
+          description: Always true for workspace parent.
+      additionalProperties: false
+      required:
+        - type
+        - workspace
+    blockIdParentForBlockBasedObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: block_id
+          description: The parent type.
+        block_id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the parent block.
+      additionalProperties: false
+      required:
+        - type
+        - block_id
+    emojiPageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: emoji
+          description: Type of icon. In this case, an emoji.
+        emoji:
+          $ref: '#/components/schemas/emojiRequest'
+          description: The emoji character used as the icon.
+      additionalProperties: false
+      required:
+        - type
+        - emoji
+      title: Emoji
+    filePageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file
+          description: Type of icon. In this case, a file.
+        file:
+          $ref: '#/components/schemas/internalFileResponse'
+          description: The file URL for the icon.
+      additionalProperties: false
+      required:
+        - type
+        - file
+      title: File
+    externalPageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Type of icon. In this case, an external URL.
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file or resource.
+          additionalProperties: false
+          required:
+            - url
+          description: The external URL for the icon.
+      additionalProperties: false
+      required:
+        - type
+        - external
+      title: External
+    customEmojiPageIconResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: custom_emoji
+          description: Type of icon. In this case, a custom emoji.
+        custom_emoji:
+          $ref: '#/components/schemas/customEmojiResponse'
+          description: The custom emoji details for the icon.
+      additionalProperties: false
+      required:
+        - type
+        - custom_emoji
+      title: Custom Emoji
+    filePageCoverResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: file
+          description: Type of cover. In this case, a file.
+        file:
+          $ref: '#/components/schemas/internalFileResponse'
+          description: The file URL for the cover.
+      additionalProperties: false
+      required:
+        - type
+        - file
+      title: File
+    externalPageCoverResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: external
+          description: Type of cover. In this case, an external URL.
+        external:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The URL of the external file or resource.
+          additionalProperties: false
+          required:
+            - url
+          description: The external URL for the cover.
+      additionalProperties: false
+      required:
+        - type
+        - external
+      title: External
+    apiColor:
+      type: string
+      enum:
+        - default
+        - gray
+        - brown
+        - orange
+        - yellow
+        - green
+        - blue
+        - purple
+        - pink
+        - red
+        - default_background
+        - gray_background
+        - brown_background
+        - orange_background
+        - yellow_background
+        - green_background
+        - blue_background
+        - purple_background
+        - pink_background
+        - red_background
+      description: >-
+        One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`,
+        `purple`, `pink`, `red`, `default_background`, `gray_background`,
+        `brown_background`, `orange_background`, `yellow_background`,
+        `green_background`, `blue_background`, `purple_background`,
+        `pink_background`, `red_background`
+    timeZoneRequest:
+      type: string
+    templateMentionDateTemplateMentionRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_date
+          description: Always `template_mention_date`
+        template_mention_date:
+          type: string
+          enum:
+            - today
+            - now
+          description: The date of the template mention.
+      additionalProperties: false
+      required:
+        - template_mention_date
+      title: Template Mention Date
+    templateMentionUserTemplateMentionRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_user
+          description: Always `template_mention_user`
+        template_mention_user:
+          type: string
+          const: me
+          description: The user of the template mention.
+      additionalProperties: false
+      required:
+        - template_mention_user
+      title: Template Mention User
+    selectPropertyResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        color:
+          $ref: '#/components/schemas/selectColor'
+        description:
+          oneOf:
+            - type: string
+            - type: 'null'
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - color
+        - description
+    statusPropertyResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the status option.
+        name:
+          type: string
+          description: The name of the status option.
+        color:
+          $ref: '#/components/schemas/selectColor'
+          description: The color of the status option.
+        description:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The description of the status option.
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - color
+        - description
+    databasePropertyRelationConfigResponse:
+      allOf:
+        - $ref: '#/components/schemas/databasePropertyRelationConfigResponseCommon'
+        - oneOf:
+            - $ref: >-
+                #/components/schemas/singlePropertyDatabasePropertyRelationConfigResponse
+            - $ref: >-
+                #/components/schemas/dualPropertyDatabasePropertyRelationConfigResponse
+    annotationResponse:
+      type: object
+      properties:
+        bold:
+          type: boolean
+        italic:
+          type: boolean
+        strikethrough:
+          type: boolean
+        underline:
+          type: boolean
+        code:
+          type: boolean
+        color:
+          $ref: '#/components/schemas/apiColor'
+      additionalProperties: false
+      required:
+        - bold
+        - italic
+        - strikethrough
+        - underline
+        - code
+        - color
+    userValueResponse:
+      oneOf:
+        - $ref: '#/components/schemas/partialUserObjectResponse'
+        - $ref: '#/components/schemas/userObjectResponse'
+    dateResponse:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          description: The start date of the date object.
+        end:
+          oneOf:
+            - type: string
+              format: date
+            - type: 'null'
+          description: The end date of the date object, if any.
+        time_zone:
+          oneOf:
+            - $ref: '#/components/schemas/timeZoneRequest'
+            - type: 'null'
+          description: The time zone of the date object.
+      additionalProperties: false
+      required:
+        - start
+        - end
+        - time_zone
+    linkPreviewMentionResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL of the link preview mention.
+      additionalProperties: false
+      required:
+        - url
+    linkMentionResponse:
+      type: object
+      properties:
+        href:
+          type: string
+          description: The href of the link mention.
+        title:
+          type: string
+          description: The title of the link.
+        description:
+          type: string
+          description: The description of the link.
+        link_author:
+          type: string
+          description: The author of the link.
+        link_provider:
+          type: string
+          description: The provider of the link.
+        thumbnail_url:
+          type: string
+          description: The thumbnail URL of the link.
+        icon_url:
+          type: string
+          description: The icon URL of the link.
+        iframe_url:
+          type: string
+          description: The iframe URL of the link.
+        height:
+          type: integer
+          description: The height of the link preview iframe.
+        padding:
+          type: integer
+          description: The padding of the link preview iframe.
+        padding_top:
+          type: integer
+          description: The top padding of the link preview iframe.
+      additionalProperties: false
+      required:
+        - href
+    templateMentionResponse:
+      oneOf:
+        - $ref: '#/components/schemas/templateMentionDateTemplateMentionResponse'
+        - $ref: '#/components/schemas/templateMentionUserTemplateMentionResponse'
+    customEmojiResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the custom emoji.
+        name:
+          type: string
+          description: The name of the custom emoji.
+        url:
+          type: string
+          description: The URL of the custom emoji.
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - url
+    internalFileResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL of the file.
+        expiry_time:
+          type: string
+          format: date-time
+          description: The time when the URL will expire.
+      additionalProperties: false
+      required:
+        - url
+        - expiry_time
+    databasePropertyRelationConfigResponseCommon:
+      type: object
+      properties:
+        database_id:
+          $ref: '#/components/schemas/idResponse'
+        data_source_id:
+          $ref: '#/components/schemas/idResponse'
+      additionalProperties: false
+      required:
+        - database_id
+        - data_source_id
+    singlePropertyDatabasePropertyRelationConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: single_property
+          description: Always `single_property`
+        single_property:
+          $ref: '#/components/schemas/emptyObject'
+      required:
+        - type
+        - single_property
+      title: Single Property
+    dualPropertyDatabasePropertyRelationConfigResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: dual_property
+          description: Always `dual_property`
+        dual_property:
+          type: object
+          properties:
+            synced_property_id:
+              type: string
+            synced_property_name:
+              type: string
+          additionalProperties: false
+          required:
+            - synced_property_id
+            - synced_property_name
+      required:
+        - dual_property
+      title: Dual Property
+    userObjectResponse:
+      allOf:
+        - $ref: '#/components/schemas/userObjectResponseCommon'
+        - oneOf:
+            - $ref: '#/components/schemas/personUserObjectResponse'
+            - $ref: '#/components/schemas/botUserObjectResponse'
+    templateMentionDateTemplateMentionResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_date
+          description: Always `template_mention_date`
+        template_mention_date:
+          type: string
+          enum:
+            - today
+            - now
+          description: The date of the template mention.
+      additionalProperties: false
+      required:
+        - type
+        - template_mention_date
+      title: Template Mention Date
+    templateMentionUserTemplateMentionResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: template_mention_user
+          description: Always `template_mention_user`
+        template_mention_user:
+          type: string
+          const: me
+          description: The user of the template mention.
+      additionalProperties: false
+      required:
+        - type
+        - template_mention_user
+      title: Template Mention User
+    userObjectResponseCommon:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/idResponse'
+          description: The ID of the user.
+        object:
+          type: string
+          const: user
+          description: The user object type name.
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The name of the user.
+        avatar_url:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The avatar URL of the user.
+      additionalProperties: false
+      required:
+        - id
+        - object
+        - name
+        - avatar_url
+    personUserObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: person
+          description: Indicates this user is a person.
+        person:
+          type: object
+          properties:
+            email:
+              type: string
+              description: The email of the person.
+          additionalProperties: false
+          description: Details about the person, when the `type` of the user is `person`.
+      required:
+        - type
+        - person
+      title: Person
+    botUserObjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          const: bot
+          description: Indicates this user is a bot.
+        bot:
+          oneOf:
+            - $ref: '#/components/schemas/emptyObject'
+            - $ref: '#/components/schemas/botInfoResponse'
+          description: Details about the bot, when the `type` of the user is `bot`.
+      required:
+        - type
+        - bot
+      title: Bot
+    botInfoResponse:
+      type: object
+      properties:
+        owner:
+          oneOf:
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: user
+                  description: Always `user`
+                user:
+                  oneOf:
+                    - type: object
+                      properties:
+                        id:
+                          $ref: '#/components/schemas/idResponse'
+                          description: The ID of the user.
+                        object:
+                          type: string
+                          const: user
+                          description: The user object type name.
+                        name:
+                          oneOf:
+                            - type: string
+                            - type: 'null'
+                          description: The name of the user.
+                        avatar_url:
+                          oneOf:
+                            - type: string
+                            - type: 'null'
+                          description: The avatar URL of the user.
+                        type:
+                          type: string
+                          const: person
+                          description: The type of the user.
+                        person:
+                          type: object
+                          properties:
+                            email:
+                              type: string
+                              description: The email of the person.
+                          additionalProperties: false
+                          description: The person info of the user.
+                      additionalProperties: false
+                      required:
+                        - id
+                        - object
+                        - name
+                        - avatar_url
+                        - type
+                        - person
+                    - $ref: '#/components/schemas/partialUserObjectResponse'
+                  description: >-
+                    Details about the owner of the bot, when the `type` of the
+                    owner is `user`. This means the bot is for a integration.
+              additionalProperties: false
+              required:
+                - type
+                - user
+              title: User
+            - type: object
+              properties:
+                type:
+                  type: string
+                  const: workspace
+                  description: Always `workspace`
+                workspace:
+                  type: boolean
+                  const: true
+                  description: >-
+                    Details about the owner of the bot, when the `type` of the
+                    owner is `workspace`. This means the bot is for an internal
+                    integration.
+              additionalProperties: false
+              required:
+                - type
+                - workspace
+              title: Workspace
+          description: Details about the owner of the bot.
+        workspace_id:
+          type: string
+          description: The ID of the bot's workspace.
+        workspace_limits:
+          type: object
+          properties:
+            max_file_upload_size_in_bytes:
+              type: integer
+              minimum: 0
+              description: The maximum allowable size of a file upload, in bytes
+          additionalProperties: false
+          required:
+            - max_file_upload_size_in_bytes
+          description: Limits and restrictions that apply to the bot's workspace
+        workspace_name:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: The name of the bot's workspace.
+      additionalProperties: false
+      required:
+        - owner
+        - workspace_id
+        - workspace_limits
+        - workspace_name
+  parameters:
+    notionVersion:
+      name: Notion-Version
+      in: header
+      required: true
+      schema:
+        enum:
+          - '2025-09-03'
+      description: >-
+        The [API version](/reference/versioning) to use for this request. The
+        latest version is `2025-09-03`.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+````

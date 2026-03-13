@@ -1,0 +1,88 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.pages.updateMarkdown({\n  page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\",\n  type: \"insert_content\",\n  insert_content: {\n    content: \"## New Section\\n\\nInserted content here.\",\n    after: \"# Heading...end of section\"\n  }\n})"
+    }
+  ],
+  "description": "Insert or replace content in a page using enhanced markdown.\n\n### Warnings\n\nProtecting child pages and databases\n\nBy default, this endpoint refuses to delete child pages or databases. If an operation would remove them, a `validation_error` is returned listing the affected items. Set `allow_deleting_content` to `true` in the `replace_content_range` body to permit deletion.\n\n### Notes\n\nRequirements\n\nYour integration must have [update content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target page in order to call this endpoint. To update your integration's capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting to call this endpoint without update content capabilities returns an HTTP response with a 403 status code.\n\nNewlines in content\n\nThe `content` field expects standard markdown with actual newline characters. In JSON, `\\n` is the escape sequence for a newline — for example, `\"## Heading\\n\\nParagraph\"` creates a heading followed by a paragraph.\nWhen using cURL, wrap the `--data` body in **single quotes** (`'...'`) so that `\\n` is passed through to the JSON parser. Avoid `$'...'` quoting, which converts `\\n` into a literal newline and produces invalid JSON.\nNote that the interactive API explorer on this page does not support multiline input. To test with newlines, use cURL, an SDK, or any HTTP client that sends properly encoded JSON.\n\n### Use cases\n\n### Inserting content\n\nUse the `insert_content` command to add new markdown content to a page. Provide an `after` selection to insert at a specific point, or omit it to append to the end of the page.\nThe `after` parameter uses an **ellipsis-based selection** format: `\"start text...end text\"`. This matches a range from the first occurrence of the start text to the end text.\n\n### Replacing content\n\nUse the `replace_content_range` command to replace a matched range of existing content with new markdown. The `content_range` parameter uses the same ellipsis-based selection format as `after`.\n\n### General behavior\n\nReturns a `page_markdown` object containing the full page content as enhanced markdown after the update, including `truncated` and `unknown_block_ids` fields for large pages.\n\n### Errors\n\n| Error code         | Condition                                                                                       |\n| ------------------ | ----------------------------------------------------------------------------------------------- |\n| `validation_error` | The `content_range` or `after` selection does not match any content in the page.                |\n| `validation_error` | The operation would delete child pages or databases and `allow_deleting_content` is not `true`. |\n| `validation_error` | The provided ID is a database or non-page block.                                                |\n| `validation_error` | The target page is a synced page. Synced pages cannot be updated.                               |\n| `object_not_found` | The page does not exist or the integration does not have access to it.                          |\n*Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [update content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities)\n  * [My integrations](https://www.notion.so/profile/integrations)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Update a page's content as markdown](https://developers.notion.com/reference/update-page-markdown)",
+  "errors": [
+    {
+      "body": "| Error code         | Condition                                                                                       |\n| ------------------ | ----------------------------------------------------------------------------------------------- |\n| `validation_error` | The `content_range` or `after` selection does not match any content in the page.                |\n| `validation_error` | The operation would delete child pages or databases and `allow_deleting_content` is not `true`. |\n| `validation_error` | The provided ID is a database or non-page block.                                                |\n| `validation_error` | The target page is a synced page. Synced pages cannot be updated.                               |\n| `object_not_found` | The page does not exist or the integration does not have access to it.                          |\n*Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*",
+      "heading": "Errors",
+      "level": 3
+    }
+  ],
+  "info_notes": [
+    {
+      "body": "Your integration must have [update content capabilities](https://developers.notion.com/reference/capabilities#content-capabilities) on the target page in order to call this endpoint. To update your integration's capabilities, navigate to the [My integrations](https://www.notion.so/profile/integrations) dashboard, select your integration, go to the **Capabilities** tab, and update your settings as needed.\nAttempting to call this endpoint without update content capabilities returns an HTTP response with a 403 status code.",
+      "kind": "info",
+      "title": "Requirements"
+    },
+    {
+      "body": "The `content` field expects standard markdown with actual newline characters. In JSON, `\\n` is the escape sequence for a newline — for example, `\"## Heading\\n\\nParagraph\"` creates a heading followed by a paragraph.\nWhen using cURL, wrap the `--data` body in **single quotes** (`'...'`) so that `\\n` is passed through to the JSON parser. Avoid `$'...'` quoting, which converts `\\n` into a literal newline and produces invalid JSON.\nNote that the interactive API explorer on this page does not support multiline input. To test with newlines, use cURL, an SDK, or any HTTP client that sends properly encoded JSON.",
+      "kind": "info",
+      "title": "Newlines in content"
+    }
+  ],
+  "lead": "Insert or replace content in a page using enhanced markdown.",
+  "limits": [],
+  "method": "patch",
+  "operation_id": "update-page-markdown",
+  "path": "/v1/pages/{page_id}/markdown",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "update content capabilities",
+      "url": "https://developers.notion.com/reference/capabilities#content-capabilities"
+    },
+    {
+      "kind": "link",
+      "label": "My integrations",
+      "url": "https://www.notion.so/profile/integrations"
+    },
+    {
+      "kind": "reference",
+      "label": "Error codes section",
+      "url": "https://developers.notion.com/reference/status-codes#error-codes"
+    },
+    {
+      "kind": "source",
+      "label": "Update a page's content as markdown",
+      "url": "https://developers.notion.com/reference/update-page-markdown"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Use cases",
+      "level": 3
+    },
+    {
+      "body": "Use the `insert_content` command to add new markdown content to a page. Provide an `after` selection to insert at a specific point, or omit it to append to the end of the page.\nThe `after` parameter uses an **ellipsis-based selection** format: `\"start text...end text\"`. This matches a range from the first occurrence of the start text to the end text.",
+      "heading": "Inserting content",
+      "level": 4
+    },
+    {
+      "body": "Use the `replace_content_range` command to replace a matched range of existing content with new markdown. The `content_range` parameter uses the same ellipsis-based selection format as `after`.",
+      "heading": "Replacing content",
+      "level": 4
+    },
+    {
+      "body": "Returns a `page_markdown` object containing the full page content as enhanced markdown after the update, including `truncated` and `unknown_block_ids` fields for large pages.",
+      "heading": "General behavior",
+      "level": 3
+    }
+  ],
+  "slug": "update-page-markdown",
+  "source_url": "https://developers.notion.com/reference/update-page-markdown",
+  "summary": null,
+  "title": "Update a page's content as markdown",
+  "warnings": [
+    {
+      "body": "By default, this endpoint refuses to delete child pages or databases. If an operation would remove them, a `validation_error` is returned listing the affected items. Set `allow_deleting_content` to `true` in the `replace_content_range` body to permit deletion.",
+      "kind": "warning",
+      "title": "Protecting child pages and databases"
+    }
+  ]
+}

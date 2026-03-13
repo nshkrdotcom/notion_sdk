@@ -1,0 +1,35 @@
+{
+  "code_samples": [
+    {
+      "label": "TypeScript SDK",
+      "language": "javascript",
+      "source": "import { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.retrieve({\n  file_upload_id: \"a02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})"
+    }
+  ],
+  "description": "Use this API to get the details of a [File Upload](https://developers.notion.com/reference/file-upload) object.\n\n### Resources\n\n  * [File Upload](https://developers.notion.com/reference/file-upload)\n  * [Retrieve a file upload](https://developers.notion.com/reference/retrieve-a-file-upload)",
+  "errors": [],
+  "info_notes": [],
+  "lead": "Use this API to get the details of a [File Upload](https://developers.notion.com/reference/file-upload) object.",
+  "limits": [],
+  "method": "get",
+  "operation_id": "retrieve-file-upload",
+  "path": "/v1/file_uploads/{file_upload_id}",
+  "resources": [
+    {
+      "kind": "reference",
+      "label": "File Upload",
+      "url": "https://developers.notion.com/reference/file-upload"
+    },
+    {
+      "kind": "source",
+      "label": "Retrieve a file upload",
+      "url": "https://developers.notion.com/reference/retrieve-a-file-upload"
+    }
+  ],
+  "sections": [],
+  "slug": "retrieve-a-file-upload",
+  "source_url": "https://developers.notion.com/reference/retrieve-a-file-upload",
+  "summary": null,
+  "title": "Retrieve a file upload",
+  "warnings": []
+}
