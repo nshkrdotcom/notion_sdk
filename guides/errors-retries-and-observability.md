@@ -53,9 +53,11 @@ If Notion omits a body code, the SDK falls back to the HTTP status code.
 
 Retries are configured on the client, not per endpoint module. By default the SDK retries:
 
-- `429` for all HTTP methods
-- `500` and `503` for `GET`
-- `500` and `503` for `DELETE`
+- `429` for all request groups
+- `408`, `500`, `502`, `503`, and `504` for `notion.read`
+- `408`, `500`, `502`, `503`, and `504` for `notion.delete`
+- `408`, `500`, `502`, `503`, and `504` for `notion.file_upload_send`
+- `409` for `notion.file_upload_send`
 
 The default configuration is:
 
@@ -96,6 +98,11 @@ The retry adapter parses both:
 
 The parsed value is copied into `%NotionSDK.Error{retry_after_ms: ...}` when available, which makes it straightforward to hand off scheduling decisions to your own job system.
 
+When you enable the Foundation-backed rate limiter through `foundation:`, the
+same classified `429` result also updates the shared backoff window for the
+integration key. Concurrent callers on the same node then learn that backoff
+without waiting for their own `429`.
+
 ## Connection and validation failures
 
 The SDK also creates `NotionSDK.Error` values for non-HTTP failures:
@@ -117,3 +124,33 @@ When Notion returns a request ID in the body or headers, the SDK keeps it on the
 
 Logger.error("notion request failed", request_id: request_id, error: Exception.message(error))
 ```
+
+## Foundation-backed observability and circuit health
+
+With `foundation:` enabled on the client:
+
+- `429` responses set shared limiter backoff and are ignored by the circuit breaker
+- `408`/`500`/`502`/`503`/`504` and transport failures count as breaker failures
+- telemetry defaults to `[:notion_sdk, :request, :start|:stop|:exception]`
+- telemetry metadata includes safe runtime fields such as `resource`, `retry_group`, `breaker_name`, and classified outcome metadata
+
+Example:
+
+```elixir
+client =
+  NotionSDK.Client.new(
+    auth: token,
+    foundation: [
+      integration_key: {:my_app, :notion, :prod},
+      rate_limit: [registry: MyApp.NotionRateLimits],
+      circuit_breaker: [registry: MyApp.NotionBreakers],
+      telemetry: [metadata: %{service: :notion}]
+    ]
+  )
+```
+
+If you also provide `dispatch: [enabled: true, dispatch: pid]`, classified
+Notion backoff is forwarded into that shared `Foundation.Dispatch` process.
+
+Foundation registries are ETS-backed and node-local. Shared backoff and breaker
+state coordinate callers on one node unless you add your own cross-node layer.

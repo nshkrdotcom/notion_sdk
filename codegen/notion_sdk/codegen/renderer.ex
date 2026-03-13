@@ -481,6 +481,7 @@ defmodule NotionSDK.Codegen.Renderer do
       @oauth_client_opts [
         :base_url,
         :finch,
+        :foundation,
         :log_level,
         :logger,
         :notion_version,

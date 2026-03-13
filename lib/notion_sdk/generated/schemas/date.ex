@@ -26,7 +26,7 @@ defmodule NotionSDK.Date do
 
   def __fields__(:t) do
     [
-      date: {:union, [:null, {NotionSDK.DateResponse, :t}, :map]},
+      date: {:union, [:null, :map, {NotionSDK.DateResponse, :t}]},
       function:
         {:enum,
          [
@@ -81,7 +81,7 @@ defmodule NotionSDK.Date do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:null, {NotionSDK.DateResponse, :t}, :map]},
+        type: {:union, [:null, :map, {NotionSDK.DateResponse, :t}]},
         write_only: false
       },
       %{

@@ -116,8 +116,14 @@ defmodule NotionSDK.Codegen do
   @spec generate!(path_options()) :: state()
   def generate!(opts \\ []) when is_list(opts) do
     paths = paths(opts)
-    prepare_dirs!(paths)
-    extract_upstream!(opts)
+    extract_upstream? = extract_upstream?(paths)
+    prepare_dirs!(paths, extract_upstream?: extract_upstream?)
+
+    if extract_upstream? do
+      extract_upstream!(opts)
+    else
+      ensure_extracted_upstream!(paths)
+    end
 
     state =
       Bridge.run(
@@ -201,9 +207,12 @@ defmodule NotionSDK.Codegen do
     end)
   end
 
-  defp prepare_dirs!(paths) do
-    File.rm_rf!(paths.reference_dir)
-    File.rm_rf!(paths.reference_context_dir)
+  defp prepare_dirs!(paths, opts) do
+    if Keyword.get(opts, :extract_upstream?, true) do
+      File.rm_rf!(paths.reference_dir)
+      File.rm_rf!(paths.reference_context_dir)
+    end
+
     File.mkdir_p!(paths.reference_dir)
     File.mkdir_p!(paths.reference_context_dir)
     File.mkdir_p!(paths.supplemental_dir)
@@ -211,6 +220,29 @@ defmodule NotionSDK.Codegen do
     File.mkdir_p!(paths.generated_dir)
     File.rm_rf!(paths.generated_artifact_dir)
     File.mkdir_p!(paths.generated_artifact_dir)
+  end
+
+  defp extract_upstream?(paths) do
+    Enum.all?(paths.reference_pages, fn page ->
+      File.exists?(Path.join(paths.reference_root, page))
+    end)
+  end
+
+  defp ensure_extracted_upstream!(paths) do
+    missing_specs =
+      Enum.reject(paths.reference_pages, fn page ->
+        File.exists?(reference_spec_path(paths, page))
+      end)
+
+    missing_contexts =
+      Enum.reject(paths.reference_pages, fn page ->
+        File.exists?(reference_context_path(paths, page))
+      end)
+
+    if missing_specs != [] or missing_contexts != [] do
+      raise ArgumentError,
+            "missing committed upstream fixtures; run mix notion.refresh with a local notion_docs checkout or restore priv/upstream/reference and priv/upstream/reference_context"
+    end
   end
 
   defp reference_spec_path(paths, page) do

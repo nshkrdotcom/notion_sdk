@@ -23,6 +23,46 @@ defmodule NotionSDK.ClientTest do
              }
     end
 
+    test "builds a curated foundation-backed runtime surface" do
+      rate_limit_registry = Foundation.RateLimit.BackoffWindow.new_registry()
+      breaker_registry = Foundation.CircuitBreaker.Registry.new_registry()
+
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          foundation: [
+            integration_key: {:integration, :demo},
+            rate_limit: [registry: rate_limit_registry],
+            circuit_breaker: [registry: breaker_registry],
+            telemetry: [metadata: %{service: :notion_test}]
+          ]
+        )
+
+      assert client.context.result_classifier == NotionSDK.ResultClassifier
+      assert client.context.rate_limiter == Pristine.Adapters.RateLimit.BackoffWindow
+      assert client.context.rate_limit_opts[:key] == {:integration, :demo}
+      assert client.context.rate_limit_opts[:registry] == rate_limit_registry
+      assert client.context.circuit_breaker == Pristine.Adapters.CircuitBreaker.Foundation
+      assert client.context.circuit_breaker_opts[:registry] == breaker_registry
+      assert client.context.telemetry == Pristine.Adapters.Telemetry.Foundation
+      assert client.context.telemetry_events.request_stop == [:notion_sdk, :request, :stop]
+      assert client.context.telemetry_metadata.service == :notion_test
+    end
+
+    test "derives a safe fallback integration key from a static bearer token" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          foundation: [
+            rate_limit: [enabled: true],
+            circuit_breaker: [enabled: false],
+            telemetry: [enabled: false]
+          ]
+        )
+
+      assert client.context.rate_limit_opts[:key] == {:notion, "16217f0c786e10bc"}
+    end
+
     test "normalizes legacy retry option names" do
       client =
         Client.new(
@@ -189,6 +229,7 @@ defmodule NotionSDK.ClientTest do
     test "oauth-backed bearer auth is explicit and only applies to bearer-authenticated endpoints" do
       client =
         Client.new(
+          retry: false,
           oauth2: [
             token_source:
               {Pristine.Adapters.TokenSource.Static,
@@ -246,6 +287,7 @@ defmodule NotionSDK.ClientTest do
 
       client =
         Client.new(
+          retry: false,
           oauth2: [
             token_source: {Pristine.Adapters.TokenSource.File, path: path}
           ],
@@ -275,6 +317,7 @@ defmodule NotionSDK.ClientTest do
 
       client =
         Client.new(
+          retry: false,
           oauth2: [
             token_source: {Pristine.Adapters.TokenSource.File, path: path}
           ],
@@ -679,6 +722,254 @@ defmodule NotionSDK.ClientTest do
     end
   end
 
+  describe "foundation runtime" do
+    test "derives endpoint metadata for resilience, telemetry, and pool routing" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          foundation: [
+            integration_key: {:integration, :demo},
+            rate_limit: [enabled: false],
+            circuit_breaker: [enabled: false],
+            telemetry: [enabled: false]
+          ],
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} = NotionSDK.Users.get_self(client)
+      assert_receive {:transport_request, core_request, _context}
+      assert core_request.metadata.endpoint.resource == "core_api"
+      assert core_request.metadata.endpoint.retry == "notion.read"
+      assert core_request.metadata.endpoint.circuit_breaker == "notion:api.notion.com:core_api"
+      assert core_request.metadata.pool_type == "core_api"
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(client, %{
+                 call: {__MODULE__, :send_upload},
+                 method: :post,
+                 path_template: "/v1/file_uploads/{file_upload_id}/send",
+                 url: "/v1/file_uploads/{file_upload_id}/send",
+                 path_params: %{"file_upload_id" => "upload-123"},
+                 query: %{},
+                 body: %{},
+                 form_data: %{"file" => {"test.txt", "payload", "text/plain"}}
+               })
+
+      assert_receive {:transport_request, upload_request, _context}
+      assert upload_request.metadata.endpoint.resource == "file_upload_send"
+      assert upload_request.metadata.endpoint.retry == "notion.file_upload_send"
+
+      assert upload_request.metadata.endpoint.circuit_breaker ==
+               "notion:api.notion.com:file_upload_send"
+
+      oauth_client =
+        Client.new(
+          auth: "secret_test_token",
+          foundation: [
+            integration_key: {:integration, :demo},
+            rate_limit: [enabled: false],
+            circuit_breaker: [enabled: false],
+            telemetry: [enabled: false]
+          ],
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} =
+               NotionSDK.OAuth.introspect(oauth_client, %{
+                 "client_id" => "client-id",
+                 "client_secret" => "client-secret",
+                 "token" => "token-123"
+               })
+
+      assert_receive {:transport_request, oauth_request, _context}
+      assert oauth_request.metadata.endpoint.resource == "oauth_control"
+      assert oauth_request.metadata.endpoint.retry == "notion.oauth_control"
+
+      assert oauth_request.metadata.endpoint.circuit_breaker ==
+               "notion:api.notion.com:oauth_control"
+    end
+
+    test "shares rate-limit learning across endpoints for one integration" do
+      parent = self()
+      registry = Foundation.RateLimit.BackoffWindow.new_registry()
+
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          retry: false,
+          foundation: [
+            integration_key: {:integration, :demo},
+            rate_limit: [
+              registry: registry,
+              sleep_fun: fn ms -> send(parent, {:rate_limit_sleep, ms}) end
+            ],
+            circuit_breaker: [enabled: false],
+            telemetry: [enabled: false]
+          ],
+          transport: TestTransport,
+          transport_opts: [
+            test_pid: self(),
+            response: fn request, _context ->
+              case request.url do
+                "https://api.notion.com/v1/search" ->
+                  error_response(
+                    429,
+                    %{"code" => "rate_limited", "message" => "Slow down"},
+                    %{"retry-after" => "7"}
+                  )
+
+                _other ->
+                  ok_response(%{"ok" => true})
+              end
+            end
+          ]
+        )
+
+      assert {:error, %NotionSDK.Error{code: :rate_limited}} =
+               NotionSDK.Search.search(client, %{"query" => "docs"})
+
+      assert_receive {:transport_request, first_request, first_context}
+      assert first_request.url == "https://api.notion.com/v1/search"
+      assert first_context.rate_limit_opts[:key] == {:integration, :demo}
+
+      assert {:ok, %{"ok" => true}} = NotionSDK.Users.get_self(client)
+
+      assert_receive {:rate_limit_sleep, sleep_ms} when is_integer(sleep_ms) and sleep_ms > 0
+      assert_receive {:transport_request, second_request, second_context}
+      assert second_request.url == "https://api.notion.com/v1/users/me"
+      assert second_context.rate_limit_opts[:key] == {:integration, :demo}
+    end
+
+    test "opens the circuit breaker for classified HTTP failures" do
+      registry = Foundation.CircuitBreaker.Registry.new_registry()
+
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          retry: false,
+          foundation: [
+            integration_key: {:integration, :demo},
+            rate_limit: [enabled: false],
+            circuit_breaker: [registry: registry, failure_threshold: 1, reset_timeout_ms: 60_000],
+            telemetry: [enabled: false]
+          ],
+          transport: TestTransport,
+          transport_opts: [
+            test_pid: self(),
+            response:
+              error_response(503, %{
+                "code" => "service_unavailable",
+                "message" => "Later"
+              })
+          ]
+        )
+
+      assert {:error, %NotionSDK.Error{code: :service_unavailable}} =
+               NotionSDK.Users.get_self(client)
+
+      assert_receive {:transport_request, _request, _context}
+
+      assert Foundation.CircuitBreaker.Registry.state(registry, "notion:api.notion.com:core_api") ==
+               :open
+
+      assert {:error, %NotionSDK.Error{code: :api_connection}} = NotionSDK.Users.get_self(client)
+      refute_receive {:transport_request, _request, _context}
+    end
+
+    test "emits structured notion telemetry events" do
+      handler_id = attach_telemetry([:notion_sdk, :request, :stop])
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          foundation: [
+            integration_key: {:integration, :demo},
+            rate_limit: [enabled: false],
+            circuit_breaker: [enabled: false],
+            telemetry: [metadata: %{service: :notion_test}]
+          ],
+          transport: TestTransport,
+          transport_opts: [response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} = NotionSDK.Users.get_self(client)
+
+      assert_receive {:telemetry, [:notion_sdk, :request, :stop], measurements, metadata}
+      assert is_integer(measurements.duration)
+      assert metadata.service == :notion_test
+      assert metadata.resource == "core_api"
+      assert metadata.retry_group == "notion.read"
+      assert metadata.classification == :success
+      refute Map.has_key?(metadata, :auth)
+    end
+
+    test "supports optional dispatch-based admission control" do
+      parent = self()
+      limiter_registry = Foundation.RateLimit.BackoffWindow.new_registry()
+
+      limiter =
+        Foundation.RateLimit.BackoffWindow.for_key(limiter_registry, {:integration, :dispatch})
+
+      {:ok, dispatch} =
+        Foundation.Dispatch.start_link(
+          limiter: limiter,
+          key: {:integration, :dispatch},
+          sleep_fun: fn ms -> send(parent, {:dispatch_sleep, ms}) end,
+          concurrency: 2,
+          throttled_concurrency: 1,
+          byte_budget: 1024 * 1024
+        )
+
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          retry: false,
+          foundation: [
+            integration_key: {:integration, :dispatch},
+            rate_limit: [enabled: false],
+            circuit_breaker: [enabled: false],
+            telemetry: [enabled: false],
+            dispatch: [enabled: true, dispatch: dispatch]
+          ],
+          transport: TestTransport,
+          transport_opts: [
+            test_pid: self(),
+            response: fn request, _context ->
+              case request.url do
+                "https://api.notion.com/v1/search" ->
+                  error_response(
+                    429,
+                    %{"code" => "rate_limited", "message" => "Slow down"},
+                    %{"retry-after" => "7"}
+                  )
+
+                _other ->
+                  ok_response(%{"ok" => true})
+              end
+            end
+          ]
+        )
+
+      assert {:error, %NotionSDK.Error{code: :rate_limited}} =
+               NotionSDK.Search.search(client, %{"query" => "docs"})
+
+      assert_receive {:transport_request, _request, first_context}
+      assert first_context.admission_control == Pristine.Adapters.AdmissionControl.Dispatch
+      assert first_context.admission_opts[:dispatch] == dispatch
+      assert Foundation.Dispatch.snapshot(dispatch).backoff_active?
+
+      assert {:ok, %{"ok" => true}} = NotionSDK.Users.get_self(client)
+
+      assert_receive {:transport_request, _request, second_context}
+      assert second_context.admission_control == Pristine.Adapters.AdmissionControl.Dispatch
+      assert second_context.admission_opts[:dispatch] == dispatch
+    end
+  end
+
   defp ok_response(body, headers \\ %{}) do
     {:ok, %Response{status: 200, headers: headers, body: Jason.encode!(body)}}
   end
@@ -713,5 +1004,22 @@ defmodule NotionSDK.ClientTest do
       "public_url" => nil,
       "url" => "https://www.notion.so/example-page"
     }
+  end
+
+  defp attach_telemetry(event) do
+    handler_id = {__MODULE__, make_ref()}
+    parent = self()
+
+    :ok =
+      :telemetry.attach(
+        handler_id,
+        event,
+        fn event_name, measurements, metadata, _config ->
+          send(parent, {:telemetry, event_name, measurements, metadata})
+        end,
+        nil
+      )
+
+    handler_id
   end
 end

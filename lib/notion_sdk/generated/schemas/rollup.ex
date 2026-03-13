@@ -40,12 +40,12 @@ defmodule NotionSDK.Rollup do
       rollup:
         {:union,
          [
+           {NotionSDK.RollupRollup, :t},
            {NotionSDK.Number, :t},
            {NotionSDK.Date, :t},
            {NotionSDK.Array, :t},
            {NotionSDK.Unsupported, :t},
-           {NotionSDK.Incomplete, :t},
-           {NotionSDK.RollupRollup, :t}
+           {NotionSDK.Incomplete, :t}
          ]},
       type: {:const, "rollup"}
     ]
@@ -120,12 +120,12 @@ defmodule NotionSDK.Rollup do
         type:
           {:union,
            [
+             {NotionSDK.RollupRollup, :t},
              {NotionSDK.Number, :t},
              {NotionSDK.Date, :t},
              {NotionSDK.Array, :t},
              {NotionSDK.Unsupported, :t},
-             {NotionSDK.Incomplete, :t},
-             {NotionSDK.RollupRollup, :t}
+             {NotionSDK.Incomplete, :t}
            ]},
         write_only: false
       },

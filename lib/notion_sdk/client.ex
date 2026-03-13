@@ -11,16 +11,19 @@ defmodule NotionSDK.Client do
   @default_log_level :warn
   @default_notion_version "2025-09-03"
   @default_timeout_ms 60_000
+  @default_breaker_group "core_api"
   @default_retry %{
     max_retries: 2,
     initial_retry_delay_ms: 1_000,
     max_retry_delay_ms: 60_000
   }
-  @retryable_statuses_by_method %{
-    all: [429],
-    delete: [500, 503],
-    get: [500, 503]
-  }
+  @retry_groups [
+    "notion.read",
+    "notion.delete",
+    "notion.write",
+    "notion.file_upload_send",
+    "notion.oauth_control"
+  ]
 
   @type retry_config ::
           false
@@ -47,16 +50,24 @@ defmodule NotionSDK.Client do
           required(:body) => term(),
           required(:form_data) => term(),
           optional(:auth) => term(),
+          optional(:circuit_breaker) => String.t(),
           optional(:security) => [map()] | nil,
           optional(:headers) => map(),
+          optional(:rate_limit) => String.t(),
+          optional(:resource) => String.t(),
           optional(:request) => [{String.t(), term()}],
-          optional(:response) => [{integer() | :default, term()}]
+          optional(:response) => [{integer() | :default, term()}],
+          optional(:retry) => String.t(),
+          optional(:retry_opts) => keyword(),
+          optional(:telemetry) => String.t(),
+          optional(:timeout) => pos_integer()
         }
 
   @type t :: %__MODULE__{
           auth: String.t() | nil,
           base_url: String.t(),
           context: Context.t(),
+          foundation: map() | nil,
           log_level: :debug | :info | :warn | :error | nil,
           logger: (atom(), String.t(), map() -> term()) | nil,
           notion_version: String.t(),
@@ -73,6 +84,7 @@ defmodule NotionSDK.Client do
     :auth,
     :base_url,
     :context,
+    :foundation,
     :log_level,
     :logger,
     :notion_version,
@@ -117,6 +129,7 @@ defmodule NotionSDK.Client do
     user_agent = Keyword.get(opts, :user_agent, config(:user_agent, default_user_agent()))
     retry = normalize_retry(Keyword.get(opts, :retry, config(:retry, @default_retry)))
     oauth2 = normalize_oauth2(Keyword.get(opts, :oauth2))
+    foundation = normalize_foundation(Keyword.get(opts, :foundation), auth, oauth2)
 
     client = %__MODULE__{
       auth: auth,
@@ -124,6 +137,7 @@ defmodule NotionSDK.Client do
       log_level: log_level,
       logger: logger,
       notion_version: notion_version,
+      foundation: foundation,
       retry: retry,
       timeout_ms: timeout_ms,
       transport: transport,
@@ -139,7 +153,7 @@ defmodule NotionSDK.Client do
   @spec request(t(), request_t()) :: {:ok, term()} | {:error, NotionSDK.Error.t()}
   def request(%__MODULE__{} = client, request) when is_map(request) do
     typed_runtime? = typed_runtime_enabled?(client, request)
-    endpoint = build_endpoint(request, typed_runtime?)
+    endpoint = build_endpoint(client, request, typed_runtime?)
     {payload, body_type, content_type} = request_payload(request, endpoint.method)
 
     execute_opts =
@@ -149,7 +163,7 @@ defmodule NotionSDK.Client do
       |> maybe_put(:auth, request[:auth])
       |> maybe_put(:headers, request[:headers])
       |> maybe_put(:query, normalize_map(request[:query]))
-      |> maybe_put(:retry_opts, retry_opts(client, endpoint.method))
+      |> maybe_put(:retry_opts, request[:retry_opts])
       |> maybe_put(:body_type, body_type)
       |> maybe_put(:content_type, content_type)
       |> maybe_put(:typed_responses, typed_runtime?)
@@ -169,10 +183,15 @@ defmodule NotionSDK.Client do
         NotionSDK.Retry
       end
 
+    foundation = client.foundation
+
     Pristine.context(
       auth: default_auth(client.auth, client.oauth2),
+      admission_control: admission_control_adapter(foundation),
+      admission_opts: admission_opts(foundation),
       base_url: client.base_url,
-      circuit_breaker: Pristine.Adapters.CircuitBreaker.Noop,
+      circuit_breaker: circuit_breaker_adapter(foundation),
+      circuit_breaker_opts: circuit_breaker_opts(foundation),
       default_timeout: client.timeout_ms,
       error_module: NotionSDK.Error,
       headers: %{
@@ -183,23 +202,40 @@ defmodule NotionSDK.Client do
       logger: client.logger,
       package_version: package_version(),
       retry: retry_adapter,
+      retry_policies: retry_policies(client.retry),
+      result_classifier: NotionSDK.ResultClassifier,
+      rate_limiter: rate_limiter_adapter(foundation),
+      rate_limit_opts: rate_limit_opts(foundation),
       serializer: Pristine.Adapters.Serializer.JSON,
-      telemetry: Pristine.Adapters.Telemetry.Noop,
+      telemetry: telemetry_adapter(foundation),
+      telemetry_events: telemetry_events(foundation),
+      telemetry_metadata: telemetry_metadata(foundation),
+      pool_base: foundation_value(foundation, :pool_base),
+      pool_manager: foundation_value(foundation, :pool_manager),
       transport: client.transport,
       transport_opts: client.transport_opts
     )
   end
 
-  defp build_endpoint(request, typed_runtime?) do
+  defp build_endpoint(%__MODULE__{} = client, request, typed_runtime?) do
+    resource = request[:resource] || resource_group(request)
+    retry_group = request[:retry] || retry_group(request, resource)
+
     %Endpoint{
       id: request_id(request),
       method: request[:method],
       path: request[:path_template] || request[:url],
       body_type: nil,
+      circuit_breaker: request[:circuit_breaker] || circuit_breaker_name(client, resource),
       content_type: nil,
       headers: %{},
       query: %{},
+      rate_limit: request[:rate_limit] || "notion.integration",
+      resource: resource,
       security: request[:security],
+      retry: retry_group,
+      telemetry: request[:telemetry],
+      timeout: request[:timeout],
       request: maybe_request_schema(request, typed_runtime?),
       response: maybe_response_schema(request, typed_runtime?)
     }
@@ -295,44 +331,6 @@ defmodule NotionSDK.Client do
     end
   end
 
-  defp retry_opts(%__MODULE__{retry: false}, _method), do: nil
-
-  defp retry_opts(%__MODULE__{retry: retry}, method) do
-    backoff =
-      NotionSDK.Retry.build_backoff(
-        base_delay_ms: retry.initial_retry_delay_ms,
-        jitter: 0.25,
-        jitter_strategy: :factor,
-        max_delay_ms: retry.max_retry_delay_ms,
-        strategy: :exponential
-      )
-
-    policy =
-      NotionSDK.Retry.build_policy(
-        backoff: backoff,
-        max_attempts: retry.max_retries,
-        retry_after_ms_fun: &retry_after_ms/1,
-        retry_on: &should_retry?(&1, method)
-      )
-
-    [policy: policy]
-  end
-
-  defp should_retry?({:ok, %{status: status}}, method) when is_integer(status) do
-    retryable_statuses =
-      @retryable_statuses_by_method
-      |> Map.get(:all, [])
-      |> Kernel.++(Map.get(@retryable_statuses_by_method, method, []))
-
-    status in retryable_statuses
-  end
-
-  defp should_retry?(_result, _method), do: false
-
-  defp retry_after_ms({:ok, %{headers: headers}}), do: NotionSDK.Retry.parse_retry_after(headers)
-
-  defp retry_after_ms(_result), do: nil
-
   @doc false
   @spec oauth_request_auth(map()) :: map() | nil
   def oauth_request_auth(params) when is_map(params) do
@@ -420,6 +418,23 @@ defmodule NotionSDK.Client do
   defp normalize_retry_key(:max_retry_delay_ms), do: :max_retry_delay_ms
   defp normalize_retry_key(key), do: key
 
+  defp retry_policies(false), do: %{}
+
+  defp retry_policies(retry) do
+    policy_opts = [
+      max_attempts: retry.max_retries,
+      backoff_opts: [
+        base_delay_ms: retry.initial_retry_delay_ms,
+        jitter: 0.25,
+        jitter_strategy: :factor,
+        max_delay_ms: retry.max_retry_delay_ms,
+        strategy: :exponential
+      ]
+    ]
+
+    Map.new(@retry_groups, &{&1, policy_opts})
+  end
+
   defp normalize_transport_opts(Pristine.Adapters.Transport.Finch, opts, finch)
        when is_list(opts) do
     Keyword.put_new(opts, :finch, finch)
@@ -484,6 +499,207 @@ defmodule NotionSDK.Client do
 
   defp default_user_agent do
     "notion-sdk-elixir/#{package_version()}"
+  end
+
+  defp normalize_foundation(nil, _auth, _oauth2), do: nil
+
+  defp normalize_foundation(opts, auth, oauth2) when is_list(opts) do
+    rate_limit = normalize_foundation_feature(Keyword.get(opts, :rate_limit, []), enabled: true)
+
+    circuit_breaker =
+      normalize_foundation_feature(Keyword.get(opts, :circuit_breaker, []),
+        enabled: true,
+        failure_threshold: 5,
+        reset_timeout_ms: 30_000,
+        half_open_max_calls: 1
+      )
+
+    telemetry = normalize_foundation_feature(Keyword.get(opts, :telemetry, []), enabled: true)
+    dispatch = normalize_foundation_feature(Keyword.get(opts, :dispatch), enabled: false)
+
+    %{
+      integration_key:
+        Keyword.get(opts, :integration_key) || derived_integration_key(auth, oauth2, rate_limit),
+      pool_base: Keyword.get(opts, :pool_base),
+      pool_manager: Keyword.get(opts, :pool_manager),
+      rate_limit: rate_limit,
+      circuit_breaker: circuit_breaker,
+      telemetry: telemetry,
+      dispatch: dispatch
+    }
+  end
+
+  defp normalize_foundation(_other, _auth, _oauth2) do
+    raise ArgumentError, "foundation must be a keyword list"
+  end
+
+  defp normalize_foundation_feature(false, defaults) do
+    defaults |> Map.new() |> Map.put(:enabled, false)
+  end
+
+  defp normalize_foundation_feature(nil, defaults), do: Map.new(defaults)
+
+  defp normalize_foundation_feature(opts, defaults) when is_list(opts) do
+    defaults
+    |> Map.new()
+    |> Map.merge(Map.new(opts))
+    |> Map.put_new(:enabled, true)
+  end
+
+  defp normalize_foundation_feature(_opts, _defaults) do
+    raise ArgumentError, "foundation feature options must be false or a keyword list"
+  end
+
+  defp derived_integration_key(auth, _oauth2, %{enabled: true}) when is_binary(auth) do
+    {:notion, hashed_secret(auth)}
+  end
+
+  defp derived_integration_key(_auth, nil, %{enabled: false}), do: nil
+
+  defp derived_integration_key(_auth, _oauth2, %{enabled: true}) do
+    raise ArgumentError,
+          "foundation integration_key is required when shared rate limiting is enabled without a static bearer token"
+  end
+
+  defp derived_integration_key(_auth, _oauth2, _rate_limit), do: nil
+
+  defp hashed_secret(secret) do
+    secret
+    |> then(&:crypto.hash(:sha256, &1))
+    |> Base.encode16(case: :lower)
+    |> binary_part(0, 16)
+  end
+
+  defp rate_limiter_adapter(nil), do: Pristine.Adapters.RateLimit.Noop
+
+  defp rate_limiter_adapter(%{rate_limit: %{enabled: true}}),
+    do: Pristine.Adapters.RateLimit.BackoffWindow
+
+  defp rate_limiter_adapter(_foundation), do: Pristine.Adapters.RateLimit.Noop
+
+  defp rate_limit_opts(nil), do: []
+
+  defp rate_limit_opts(%{integration_key: integration_key, rate_limit: rate_limit}) do
+    rate_limit
+    |> Map.delete(:enabled)
+    |> Map.put(:key, integration_key)
+    |> Enum.into([])
+  end
+
+  defp admission_control_adapter(nil), do: Pristine.Adapters.AdmissionControl.Noop
+
+  defp admission_control_adapter(%{dispatch: %{enabled: true}}),
+    do: Pristine.Adapters.AdmissionControl.Dispatch
+
+  defp admission_control_adapter(_foundation), do: Pristine.Adapters.AdmissionControl.Noop
+
+  defp admission_opts(nil), do: []
+
+  defp admission_opts(%{dispatch: %{enabled: true} = dispatch}) do
+    dispatch
+    |> Map.delete(:enabled)
+    |> Enum.into([])
+  end
+
+  defp admission_opts(_foundation), do: []
+
+  defp circuit_breaker_adapter(nil), do: Pristine.Adapters.CircuitBreaker.Noop
+
+  defp circuit_breaker_adapter(%{circuit_breaker: %{enabled: true}}),
+    do: Pristine.Adapters.CircuitBreaker.Foundation
+
+  defp circuit_breaker_adapter(_foundation), do: Pristine.Adapters.CircuitBreaker.Noop
+
+  defp circuit_breaker_opts(nil), do: []
+
+  defp circuit_breaker_opts(%{circuit_breaker: circuit_breaker}) do
+    circuit_breaker
+    |> Map.delete(:enabled)
+    |> Enum.into([])
+  end
+
+  defp telemetry_adapter(nil), do: Pristine.Adapters.Telemetry.Noop
+
+  defp telemetry_adapter(%{telemetry: %{enabled: true}}),
+    do: Pristine.Adapters.Telemetry.Foundation
+
+  defp telemetry_adapter(_foundation), do: Pristine.Adapters.Telemetry.Noop
+
+  defp telemetry_events(nil), do: %{}
+
+  defp telemetry_events(%{telemetry: %{enabled: true} = telemetry}) do
+    default_events()
+    |> Map.merge(Map.get(telemetry, :events, %{}))
+  end
+
+  defp telemetry_events(_foundation), do: %{}
+
+  defp telemetry_metadata(nil), do: %{}
+
+  defp telemetry_metadata(%{telemetry: %{enabled: true} = telemetry}) do
+    Map.get(telemetry, :metadata, %{})
+  end
+
+  defp telemetry_metadata(_foundation), do: %{}
+
+  defp default_events do
+    %{
+      request_start: [:notion_sdk, :request, :start],
+      request_stop: [:notion_sdk, :request, :stop],
+      request_exception: [:notion_sdk, :request, :exception],
+      stream_start: [:notion_sdk, :stream, :start],
+      stream_connected: [:notion_sdk, :stream, :connected],
+      stream_error: [:notion_sdk, :stream, :error]
+    }
+  end
+
+  defp foundation_value(nil, _key), do: nil
+  defp foundation_value(foundation, key), do: Map.get(foundation, key)
+
+  defp resource_group(request) do
+    path = request[:path_template] || request[:url] || ""
+
+    cond do
+      String.starts_with?(path, "/v1/oauth/") ->
+        "oauth_control"
+
+      String.ends_with?(path, "/send") and String.contains?(path, "/file_uploads/") ->
+        "file_upload_send"
+
+      String.starts_with?(path, "/v1/file_uploads") ->
+        "file_upload_control"
+
+      true ->
+        "core_api"
+    end
+  end
+
+  defp retry_group(_request, "oauth_control"), do: "notion.oauth_control"
+  defp retry_group(_request, "file_upload_send"), do: "notion.file_upload_send"
+
+  defp retry_group(request, _resource) do
+    case request[:method] do
+      method when method in [:get, :head] -> "notion.read"
+      :delete -> "notion.delete"
+      _other -> "notion.write"
+    end
+  end
+
+  defp circuit_breaker_name(%__MODULE__{base_url: base_url}, resource) do
+    host =
+      case URI.parse(base_url) do
+        %URI{host: nil} -> base_url
+        %URI{host: host} -> host
+      end
+
+    group =
+      case resource do
+        "file_upload_send" -> "file_upload_send"
+        "oauth_control" -> "oauth_control"
+        _other -> @default_breaker_group
+      end
+
+    "notion:#{host}:#{group}"
   end
 
   defp package_version do

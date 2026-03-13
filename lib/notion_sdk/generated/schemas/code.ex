@@ -29,7 +29,7 @@ defmodule NotionSDK.Code do
 
   def __fields__(:t) do
     [
-      code: {:union, [{NotionSDK.CodeCode, :t}, {NotionSDK.Code, :t_code}]},
+      code: {:union, [{NotionSDK.Code, :t_code}, {NotionSDK.CodeCode, :t}]},
       object: {:const, "block"},
       type: {:const, "code"}
     ]
@@ -157,7 +157,7 @@ defmodule NotionSDK.Code do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [{NotionSDK.CodeCode, :t}, {NotionSDK.Code, :t_code}]},
+        type: {:union, [{NotionSDK.Code, :t_code}, {NotionSDK.CodeCode, :t}]},
         write_only: false
       },
       %{

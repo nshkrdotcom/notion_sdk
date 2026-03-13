@@ -37,6 +37,57 @@ Both return a `%NotionSDK.Client{}` configured with:
 - `finch`: custom Finch name when using the default Finch transport
 - `typed_responses`: opt in to runtime request validation and generated response structs
 - `oauth2`: explicit bearer-OAuth opt-in for endpoints whose generated security metadata requires `bearerAuth`
+- `foundation`: curated Foundation-backed production runtime settings
+
+## Foundation-backed production runtime
+
+Use `foundation:` when you want shared rate-limit learning, circuit breaking,
+structured telemetry, or Dispatch-based admission control:
+
+```elixir
+client =
+  NotionSDK.Client.new(
+    auth: token,
+    foundation: [
+      integration_key: {:my_app, :notion, :prod},
+      rate_limit: [registry: MyApp.NotionRateLimits],
+      circuit_breaker: [registry: MyApp.NotionBreakers],
+      telemetry: [
+        events: %{request_stop: [:notion_sdk, :request, :stop]},
+        metadata: %{service: :notion}
+      ],
+      dispatch: [enabled: true, dispatch: MyApp.NotionDispatch]
+    ]
+  )
+```
+
+Supported `foundation:` keys:
+
+- `integration_key`: stable integration identity used for shared Notion controls
+- `rate_limit`: `false` or keyword options for `Pristine.Adapters.RateLimit.BackoffWindow`
+- `circuit_breaker`: `false` or keyword options for `Pristine.Adapters.CircuitBreaker.Foundation`
+- `telemetry`: `false` or keyword options for `Pristine.Adapters.Telemetry.Foundation`
+- `dispatch`: `false` or keyword options for `Pristine.Adapters.AdmissionControl.Dispatch`
+- `pool_base` and `pool_manager`: optional pool-routing inputs for the underlying `pristine` runtime
+
+Notion-specific defaults:
+
+- rate-limit scope is per integration, not per endpoint
+- endpoint metadata is derived automatically for `resource`, retry group, breaker name, rate-limit group, and pool routing
+- breaker groups default to `core_api`, `file_upload_send`, and `oauth_control`
+- default retry groups are `notion.read`, `notion.delete`, `notion.write`, `notion.file_upload_send`, and `notion.oauth_control`
+
+`integration_key` should usually be explicit. When shared rate limiting is
+enabled with a static bearer token, the client can derive a safe fallback key
+from a token hash, but it never emits the raw token in telemetry.
+
+`dispatch` is optional and expects a started `Foundation.Dispatch` process in
+`dispatch: [dispatch: pid]`. The SDK wires that process into the generic
+admission-control seam; lifecycle ownership stays in your application.
+
+Foundation registries and dispatch processes are node-local. If several nodes
+share one Notion integration, route that integration through one node or add a
+distributed coordination layer.
 
 ## Explicit OAuth-backed bearer auth
 
@@ -115,6 +166,13 @@ Disable retries entirely with:
 ```elixir
 client = NotionSDK.Client.new(auth: token, retry: false)
 ```
+
+The retry option still controls retry count and backoff. The actual decision to
+retry is Notion-specific and comes from the endpoint's retry group:
+
+- `429` retries for all request groups
+- `408`/`500`/`502`/`503`/`504` retry for `notion.read`, `notion.delete`, and `notion.file_upload_send`
+- `409` retries only for `file_uploads.send`
 
 ## Per-request auth overrides
 

@@ -68,8 +68,8 @@ defmodule NotionSDK.NumberedListItem do
          [
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.NumberedListItemNumberedListItem, :t},
-           {NotionSDK.NumberedListItem, :t_numbered_list_item}
+           {NotionSDK.NumberedListItem, :t_numbered_list_item},
+           {NotionSDK.NumberedListItemNumberedListItem, :t}
          ]},
       object: {:const, "block"},
       type: {:const, "numbered_list_item"}
@@ -163,8 +163,8 @@ defmodule NotionSDK.NumberedListItem do
            [
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.NumberedListItemNumberedListItem, :t},
-             {NotionSDK.NumberedListItem, :t_numbered_list_item}
+             {NotionSDK.NumberedListItem, :t_numbered_list_item},
+             {NotionSDK.NumberedListItemNumberedListItem, :t}
            ]},
         write_only: false
       },

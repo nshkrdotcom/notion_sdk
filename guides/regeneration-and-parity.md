@@ -19,6 +19,11 @@ elixir scripts/generate_notion_sdk.exs
 elixir scripts/refresh_notion_sdk.exs
 ```
 
+`mix notion.generate` uses the committed extracted fixtures in
+`priv/upstream/reference/` and `priv/upstream/reference_context/`. It does not
+require a sibling `notion_docs` checkout when those fixtures are already
+present.
+
 ## What `mix notion.refresh` does
 
 `NotionSDK.Refresh.run!/1` performs four major steps:
@@ -28,6 +33,9 @@ elixir scripts/refresh_notion_sdk.exs
 3. persists structured `reference_context` artifacts from the same markdown pages
 4. regenerates the SDK modules and bridge artifacts
 5. writes a grouped diff report for review
+
+`mix notion.refresh` still needs a local `notion_docs/reference/` checkout
+because it re-extracts the committed fixtures from upstream markdown.
 
 ## Important directories
 

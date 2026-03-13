@@ -56,6 +56,11 @@ export NOTION_TIMEOUT_MS="60000"
 `NOTION_BASE_URL` and `NOTION_VERSION` are only needed when you want to override
 the SDK defaults. If you set `NOTION_TIMEOUT_MS`, it must be a positive integer.
 
+Production-oriented Foundation settings such as shared rate limiting, circuit
+breaking, telemetry, or Dispatch admission control are configured through
+`NotionSDK.Client.new(foundation: ...)` in application code. The example
+harness does not map those runtime settings from environment variables.
+
 ### 2. Create one example database row page
 
 Create a database or data source with at least one row page, then share that database with the integration.

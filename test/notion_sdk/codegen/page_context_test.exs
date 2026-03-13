@@ -5,6 +5,11 @@ defmodule NotionSDK.Codegen.PageContextTest do
   alias NotionSDK.Codegen.Source.Extractor
 
   @fixture_page Path.expand("../../fixtures/reference/manage-widgets.md", __DIR__)
+  @committed_reference_spec Path.expand("../../../priv/upstream/reference/get-self.yaml", __DIR__)
+  @committed_reference_context Path.expand(
+                                 "../../../priv/upstream/reference_context/get-self.json",
+                                 __DIR__
+                               )
 
   test "extracts structured page context from a fixture page" do
     %{yaml: yaml, page_context: page_context} = Extractor.extract_file!(@fixture_page)
@@ -118,6 +123,37 @@ defmodule NotionSDK.Codegen.PageContextTest do
     end
 
     assert run_extract.() == run_extract.()
+  end
+
+  test "generate! reuses committed extracted fixtures when markdown sources are unavailable" do
+    project_root = make_tmp_dir!("generate_from_fixtures")
+    reference_root = Path.join(project_root, "missing_reference")
+    reference_dir = Path.join(project_root, "priv/upstream/reference")
+    reference_context_dir = Path.join(project_root, "priv/upstream/reference_context")
+
+    File.mkdir_p!(reference_dir)
+    File.mkdir_p!(reference_context_dir)
+    File.cp!(@committed_reference_spec, Path.join(reference_dir, "get-self.yaml"))
+    File.cp!(@committed_reference_context, Path.join(reference_context_dir, "get-self.json"))
+
+    opts = [
+      project_root: project_root,
+      reference_root: reference_root,
+      reference_pages: ["get-self.md"]
+    ]
+
+    state = Codegen.generate!(opts)
+
+    assert length(state.operations) == 1
+
+    generated_files =
+      project_root
+      |> Path.join("lib/notion_sdk/generated/**/*.ex")
+      |> Path.wildcard()
+
+    assert generated_files != []
+    assert File.exists?(Path.join(project_root, "priv/generated/manifest.json"))
+    assert File.exists?(Path.join(project_root, "priv/generated/docs_manifest.json"))
   end
 
   test "extracts markdown resources without treating inline code brackets as links" do

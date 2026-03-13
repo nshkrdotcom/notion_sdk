@@ -72,6 +72,35 @@ typed_client =
 
 The live examples use `NOTION_EXAMPLE_*` environment variables for fixture ids and URLs. The SDK itself does not read those values unless an example passes them into a request.
 
+## Production Runtime With Foundation
+
+`NotionSDK.Client` exposes a narrow `foundation:` option for production-only
+coordination. It compiles down into the generic `pristine` runtime without
+leaking `pristine` internals into your application code:
+
+```elixir
+client =
+  NotionSDK.Client.new(
+    auth: System.fetch_env!("NOTION_TOKEN"),
+    foundation: [
+      integration_key: {:my_app, :notion, :prod},
+      rate_limit: [registry: MyApp.NotionRateLimits],
+      circuit_breaker: [registry: MyApp.NotionBreakers],
+      telemetry: [metadata: %{service: :notion}],
+      dispatch: [enabled: true, dispatch: MyApp.NotionDispatch]
+    ]
+  )
+```
+
+Important runtime semantics:
+
+- shared rate limiting is keyed per integration, not per endpoint
+- `429` responses update the shared limiter and do not count as circuit-breaker failures
+- `408`/`500`/`502`/`503`/`504` and transport failures count against breaker health
+- breaker names and pool routing are grouped by Notion resources such as `core_api`, `file_upload_send`, and `oauth_control`
+- `dispatch` is optional and expects a started `Foundation.Dispatch` process that your application owns
+- Foundation registries and dispatch processes are ETS/process local, not cluster-wide coordination
+
 ## Programmatic OAuth Onboarding
 
 Most public integrations already have a registered HTTPS redirect URI in
@@ -183,6 +212,11 @@ elixir scripts/refresh_notion_sdk.exs
 4. regenerates the SDK surface and bridge artifacts
 5. writes `priv/generated/refresh_report.json` with grouped diffs for review
 
+`mix notion.generate` regenerates from the committed extracted fixtures under
+`priv/upstream/reference/` and `priv/upstream/reference_context/`. A sibling
+`notion_docs` checkout is only required for `mix notion.refresh` or other flows
+that need to re-extract those fixtures from upstream markdown.
+
 ## Key artifacts
 
 - `priv/upstream/reference/*.yaml`: extracted upstream OpenAPI fixtures
@@ -197,7 +231,7 @@ elixir scripts/refresh_notion_sdk.exs
 ## Oracle sources
 
 - `notion-sdk-js/`: vendored official JS SDK source and tests
-- sibling `notion_docs/reference/`: local Notion docs mirror used for OpenAPI extraction
+- sibling `notion_docs/reference/`: local Notion docs mirror used when refreshing upstream fixtures
 
 ## Tests
 

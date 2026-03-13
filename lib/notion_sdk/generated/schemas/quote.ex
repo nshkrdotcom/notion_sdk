@@ -69,8 +69,8 @@ defmodule NotionSDK.Quote do
          [
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.QuoteQuote, :t},
-           {NotionSDK.Quote, :t_quote}
+           {NotionSDK.Quote, :t_quote},
+           {NotionSDK.QuoteQuote, :t}
          ]},
       type: {:const, "quote"}
     ]
@@ -178,8 +178,8 @@ defmodule NotionSDK.Quote do
            [
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.QuoteQuote, :t},
-             {NotionSDK.Quote, :t_quote}
+             {NotionSDK.Quote, :t_quote},
+             {NotionSDK.QuoteQuote, :t}
            ]},
         write_only: false
       },
