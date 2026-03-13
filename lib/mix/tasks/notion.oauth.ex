@@ -42,11 +42,11 @@ defmodule Mix.Tasks.Notion.Oauth do
 
   use Mix.Task
 
+  alias NotionSDK.OAuthTokenFile
   alias Pristine.Adapters.TokenSource.File, as: FileTokenSource
   alias Pristine.OAuth2
   alias Pristine.OAuth2.Interactive
   alias Pristine.OAuth2.Token
-  alias NotionSDK.OAuthTokenFile
 
   @default_timeout_ms 120_000
   @interactive_switches [
