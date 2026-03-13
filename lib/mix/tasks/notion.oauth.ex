@@ -15,6 +15,10 @@ defmodule Mix.Tasks.Notion.Oauth do
   browser, then asks you to paste back the final redirected URL containing the
   temporary authorization code.
 
+  In OAuth terminology, `redirect URI` and `callback URL` mean the same thing.
+  In Notion's UI, this is the exact URL encoded in the `redirect_uri=...`
+  portion of the displayed `Authorization URL`.
+
   Optional loopback path if you have explicitly registered a literal loopback
   redirect URI such as `http://127.0.0.1:40071/callback` in Notion:
 

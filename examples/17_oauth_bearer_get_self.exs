@@ -12,6 +12,9 @@ Run `mix notion.oauth --save --manual --no-browser` first if your integration
 uses a registered HTTPS redirect URI, or `mix notion.oauth --save` if you have
 registered a loopback redirect URI like http://127.0.0.1:40071/callback.
 
+The redirect URI is the callback URL. If Notion shows only an Authorization
+URL, use the decoded `redirect_uri=...` value from that URL.
+
 This example reads the saved token from:
 #{path}
 

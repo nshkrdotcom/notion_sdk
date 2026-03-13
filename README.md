@@ -85,6 +85,10 @@ export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
 mix notion.oauth --save --manual --no-browser
 ```
 
+`NOTION_OAUTH_REDIRECT_URI` is the redirect URI, also called the callback URL.
+If Notion shows you an `Authorization URL`, use the exact decoded value from its
+`redirect_uri=...` parameter.
+
 What that does:
 
 - prints the Notion authorization URL
