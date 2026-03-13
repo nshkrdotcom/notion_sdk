@@ -61,6 +61,12 @@ client =
   )
 ```
 
+This is a provider-specific facade over the shared
+`Pristine.foundation_context/1` / `Pristine.Profiles.Foundation.context/1`
+runtime builder. NotionSDK adds Notion-specific classification, retry groups,
+breaker naming, and integration-key behavior on top of that generic Pristine
+profile.
+
 Supported `foundation:` keys:
 
 - `integration_key`: stable integration identity used for shared Notion controls
@@ -69,6 +75,9 @@ Supported `foundation:` keys:
 - `telemetry`: `false` or keyword options for `Pristine.Adapters.Telemetry.Foundation`
 - `dispatch`: `false` or keyword options for `Pristine.Adapters.AdmissionControl.Dispatch`
 - `pool_base` and `pool_manager`: optional pool-routing inputs for the underlying `pristine` runtime
+
+Telemetry defaults to the `[:notion_sdk, ...]` namespace unless you override it
+explicitly under `foundation: [telemetry: ...]`.
 
 Notion-specific defaults:
 
@@ -94,6 +103,22 @@ back to noop behavior.
 Foundation registries and dispatch processes are node-local. If several nodes
 share one Notion integration, route that integration through one node or add a
 distributed coordination layer.
+
+### Exporting telemetry
+
+The recommended exporter path is still normal `:telemetry` plus an attached
+reporter:
+
+```elixir
+{:ok, handler_id} =
+  Pristine.Profiles.Foundation.attach_reporter(
+    client.context,
+    reporter: MyApp.NotionTelemetryReporter
+  )
+```
+
+Create the reporter under supervision with
+`Pristine.Profiles.Foundation.reporter_child_spec/1`.
 
 ## Explicit OAuth-backed bearer auth
 

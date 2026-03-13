@@ -25,13 +25,13 @@ defmodule NotionSDK.Client do
     "notion.oauth_control"
   ]
 
-  @type retry_config ::
-          false
-          | %{
-              required(:initial_retry_delay_ms) => pos_integer(),
-              required(:max_retries) => non_neg_integer(),
-              required(:max_retry_delay_ms) => pos_integer()
-            }
+  @type retry_settings :: %{
+          required(:initial_retry_delay_ms) => pos_integer(),
+          required(:max_retries) => non_neg_integer(),
+          required(:max_retry_delay_ms) => pos_integer()
+        }
+
+  @type retry_config :: false | retry_settings()
 
   @type oauth2_config ::
           [
@@ -176,22 +176,13 @@ defmodule NotionSDK.Client do
   end
 
   defp build_context(%__MODULE__{} = client) do
-    retry_adapter =
-      if client.retry == false do
-        Pristine.Adapters.Retry.Noop
-      else
-        NotionSDK.Retry
-      end
-
     foundation = client.foundation
 
-    Pristine.context(
+    Pristine.foundation_context(
       auth: default_auth(client.auth, client.oauth2),
-      admission_control: admission_control_adapter(foundation),
-      admission_opts: admission_opts(foundation),
+      admission_control: admission_control_profile(foundation),
       base_url: client.base_url,
-      circuit_breaker: circuit_breaker_adapter(foundation),
-      circuit_breaker_opts: circuit_breaker_opts(foundation),
+      circuit_breaker: circuit_breaker_profile(foundation),
       default_timeout: client.timeout_ms,
       error_module: NotionSDK.Error,
       headers: %{
@@ -201,15 +192,11 @@ defmodule NotionSDK.Client do
       log_level: client.log_level,
       logger: client.logger,
       package_version: package_version(),
-      retry: retry_adapter,
-      retry_policies: retry_policies(client.retry),
+      retry: retry_profile(client.retry),
       result_classifier: NotionSDK.ResultClassifier,
-      rate_limiter: rate_limiter_adapter(foundation),
-      rate_limit_opts: rate_limit_opts(foundation),
+      rate_limit: rate_limit_profile(foundation),
       serializer: Pristine.Adapters.Serializer.JSON,
-      telemetry: telemetry_adapter(foundation),
-      telemetry_events: telemetry_events(foundation),
-      telemetry_metadata: telemetry_metadata(foundation),
+      telemetry: telemetry_profile(foundation),
       pool_base: foundation_value(foundation, :pool_base),
       pool_manager: foundation_value(foundation, :pool_manager),
       transport: client.transport,
@@ -371,6 +358,7 @@ defmodule NotionSDK.Client do
 
   defp normalize_request_auth(_auth), do: nil
 
+  @spec normalize_retry(term()) :: retry_config()
   defp normalize_retry(false), do: false
   defp normalize_retry(nil), do: @default_retry
   defp normalize_retry(retry) when retry == [] or retry == %{}, do: @default_retry
@@ -419,16 +407,19 @@ defmodule NotionSDK.Client do
   defp normalize_retry_key(:max_retry_delay_ms), do: :max_retry_delay_ms
   defp normalize_retry_key(key), do: key
 
-  defp retry_policies(false), do: %{}
-
-  defp retry_policies(retry) do
+  @spec retry_policies(retry_settings()) :: %{required(String.t()) => keyword()}
+  defp retry_policies(%{
+         initial_retry_delay_ms: initial_retry_delay_ms,
+         max_retries: max_retries,
+         max_retry_delay_ms: max_retry_delay_ms
+       }) do
     policy_opts = [
-      max_attempts: retry.max_retries,
+      max_attempts: max_retries,
       backoff_opts: [
-        base_delay_ms: retry.initial_retry_delay_ms,
+        base_delay_ms: initial_retry_delay_ms,
         jitter: 0.25,
         jitter_strategy: :factor,
-        max_delay_ms: retry.max_retry_delay_ms,
+        max_delay_ms: max_retry_delay_ms,
         strategy: :exponential
       ]
     ]
@@ -587,91 +578,63 @@ defmodule NotionSDK.Client do
     |> binary_part(0, 16)
   end
 
-  defp rate_limiter_adapter(nil), do: Pristine.Adapters.RateLimit.Noop
+  defp foundation_value(nil, _key), do: nil
+  defp foundation_value(foundation, key), do: Map.get(foundation, key)
 
-  defp rate_limiter_adapter(%{rate_limit: %{enabled: true}}),
-    do: Pristine.Adapters.RateLimit.BackoffWindow
+  @spec retry_profile(retry_config()) :: false | keyword()
+  defp retry_profile(false), do: false
 
-  defp rate_limiter_adapter(_foundation), do: Pristine.Adapters.RateLimit.Noop
+  defp retry_profile(%{} = retry) do
+    [
+      adapter: NotionSDK.Retry,
+      policies: retry_policies(retry)
+    ]
+  end
 
-  defp rate_limit_opts(nil), do: []
+  defp rate_limit_profile(nil), do: false
 
-  defp rate_limit_opts(%{integration_key: integration_key, rate_limit: rate_limit}) do
+  defp rate_limit_profile(%{
+         integration_key: integration_key,
+         rate_limit: %{enabled: true} = rate_limit
+       }) do
     rate_limit
     |> Map.delete(:enabled)
     |> Map.put(:key, integration_key)
     |> Enum.into([])
   end
 
-  defp admission_control_adapter(nil), do: Pristine.Adapters.AdmissionControl.Noop
+  defp rate_limit_profile(_foundation), do: false
 
-  defp admission_control_adapter(%{dispatch: %{enabled: true}}),
-    do: Pristine.Adapters.AdmissionControl.Dispatch
+  defp admission_control_profile(nil), do: false
 
-  defp admission_control_adapter(_foundation), do: Pristine.Adapters.AdmissionControl.Noop
-
-  defp admission_opts(nil), do: []
-
-  defp admission_opts(%{dispatch: %{enabled: true} = dispatch}) do
+  defp admission_control_profile(%{dispatch: %{enabled: true} = dispatch}) do
     dispatch
     |> Map.delete(:enabled)
     |> Enum.into([])
   end
 
-  defp admission_opts(_foundation), do: []
+  defp admission_control_profile(_foundation), do: false
 
-  defp circuit_breaker_adapter(nil), do: Pristine.Adapters.CircuitBreaker.Noop
+  defp circuit_breaker_profile(nil), do: false
 
-  defp circuit_breaker_adapter(%{circuit_breaker: %{enabled: true}}),
-    do: Pristine.Adapters.CircuitBreaker.Foundation
-
-  defp circuit_breaker_adapter(_foundation), do: Pristine.Adapters.CircuitBreaker.Noop
-
-  defp circuit_breaker_opts(nil), do: []
-
-  defp circuit_breaker_opts(%{circuit_breaker: circuit_breaker}) do
+  defp circuit_breaker_profile(%{circuit_breaker: %{enabled: true} = circuit_breaker}) do
     circuit_breaker
     |> Map.delete(:enabled)
     |> Enum.into([])
   end
 
-  defp telemetry_adapter(nil), do: Pristine.Adapters.Telemetry.Noop
+  defp circuit_breaker_profile(_foundation), do: false
 
-  defp telemetry_adapter(%{telemetry: %{enabled: true}}),
-    do: Pristine.Adapters.Telemetry.Foundation
+  defp telemetry_profile(nil), do: false
 
-  defp telemetry_adapter(_foundation), do: Pristine.Adapters.Telemetry.Noop
-
-  defp telemetry_events(nil), do: %{}
-
-  defp telemetry_events(%{telemetry: %{enabled: true} = telemetry}) do
-    default_events()
-    |> Map.merge(Map.get(telemetry, :events, %{}))
+  defp telemetry_profile(%{telemetry: %{enabled: true} = telemetry}) do
+    telemetry
+    |> Map.delete(:enabled)
+    |> Map.put_new(:namespace, [:notion_sdk])
+    |> Enum.into([])
   end
 
-  defp telemetry_events(_foundation), do: %{}
-
-  defp telemetry_metadata(nil), do: %{}
-
-  defp telemetry_metadata(%{telemetry: %{enabled: true} = telemetry}) do
-    Map.get(telemetry, :metadata, %{})
-  end
-
-  defp telemetry_metadata(_foundation), do: %{}
-
-  defp default_events do
-    %{
-      request_start: [:notion_sdk, :request, :start],
-      request_stop: [:notion_sdk, :request, :stop],
-      request_exception: [:notion_sdk, :request, :exception],
-      stream_start: [:notion_sdk, :stream, :start],
-      stream_connected: [:notion_sdk, :stream, :connected],
-      stream_error: [:notion_sdk, :stream, :error]
-    }
-  end
-
-  defp foundation_value(nil, _key), do: nil
-  defp foundation_value(foundation, key), do: Map.get(foundation, key)
+  defp telemetry_profile(_foundation), do: false
 
   defp resolve_circuit_breaker(%__MODULE__{} = client, nil, resource) do
     circuit_breaker_name(client, resource)

@@ -75,8 +75,9 @@ The live examples use `NOTION_EXAMPLE_*` environment variables for fixture ids a
 ## Production Runtime With Foundation
 
 `NotionSDK.Client` exposes a narrow `foundation:` option for production-only
-coordination. It compiles down into the generic `pristine` runtime without
-leaking `pristine` internals into your application code:
+coordination. It compiles down into the shared
+`Pristine.foundation_context/1` / `Pristine.Profiles.Foundation` runtime path
+without leaking raw `pristine` wiring into your application code:
 
 ```elixir
 client =
@@ -103,6 +104,38 @@ Important runtime semantics:
 - generated request maps carry stable runtime metadata for resource, retry group, breaker group, and rate-limit scope; low-level ad hoc requests fall back to client inference only when those fields are omitted
 - `dispatch` is optional and expects a started `Foundation.Dispatch` process that your application owns; registered names such as `MyApp.ApiDispatch` are supported
 - Foundation registries and dispatch processes are ETS/process local, not cluster-wide coordination
+
+The generic runtime wiring now lives in Pristine. `notion_sdk` keeps the
+provider-specific parts locally:
+
+- Notion result classification
+- Notion retry groups and breaker grouping
+- integration-key derivation rules
+- request metadata inference for low-level calls
+
+### Telemetry Export
+
+Use the client's underlying Pristine context when you want to attach a
+TelemetryReporter exporter:
+
+```elixir
+children = [
+  {Finch, name: NotionSDK.Finch},
+  Pristine.Profiles.Foundation.reporter_child_spec(
+    name: MyApp.NotionTelemetryReporter,
+    transport: MyApp.TelemetryTransport
+  )
+]
+
+{:ok, handler_id} =
+  Pristine.Profiles.Foundation.attach_reporter(
+    client.context,
+    reporter: MyApp.NotionTelemetryReporter
+  )
+```
+
+That keeps NotionSDK on normal `:telemetry` events while still exporting the
+same stream externally.
 
 ## Programmatic OAuth Onboarding
 

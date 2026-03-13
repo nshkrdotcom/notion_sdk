@@ -82,6 +82,29 @@ typed_client =
 
 Without `typed_responses: true`, success payloads remain JSON-shaped maps.
 
+## Production Runtime
+
+When you want shared rate-limit learning, circuit breaking, structured
+telemetry, or Dispatch-based admission control, use the curated
+`foundation:` facade:
+
+```elixir
+client =
+  NotionSDK.Client.new(
+    auth: System.fetch_env!("NOTION_TOKEN"),
+    foundation: [
+      integration_key: {:my_app, :notion, :prod},
+      rate_limit: [registry: MyApp.NotionRateLimits],
+      circuit_breaker: [registry: MyApp.NotionBreakers],
+      telemetry: [metadata: %{service: :notion}]
+    ]
+  )
+```
+
+That configuration is implemented on top of the shared
+`Pristine.foundation_context/1` runtime profile. NotionSDK keeps only the
+provider-specific classifier and grouping logic.
+
 ## Make a first request
 
 Fetch the bot user tied to the current token:

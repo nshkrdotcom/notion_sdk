@@ -59,7 +59,9 @@ the SDK defaults. If you set `NOTION_TIMEOUT_MS`, it must be a positive integer.
 Production-oriented Foundation settings such as shared rate limiting, circuit
 breaking, telemetry, or Dispatch admission control are configured through
 `NotionSDK.Client.new(foundation: ...)` in application code. The example
-harness does not map those runtime settings from environment variables.
+harness does not map those runtime settings from environment variables. That
+`foundation:` surface is implemented on top of Pristine's shared Foundation
+runtime profile rather than a separate example-only code path.
 
 ### 2. Create one example database row page
 

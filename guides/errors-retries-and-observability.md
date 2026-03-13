@@ -160,3 +160,17 @@ Notion backoff is forwarded into that shared `Foundation.Dispatch` process.
 
 Foundation registries are ETS-backed and node-local. Shared backoff and breaker
 state coordinate callers on one node unless you add your own cross-node layer.
+
+To export that same telemetry stream externally, attach a reporter to the
+client's Pristine context:
+
+```elixir
+{:ok, handler_id} =
+  Pristine.Profiles.Foundation.attach_reporter(
+    client.context,
+    reporter: MyApp.NotionTelemetryReporter
+  )
+```
+
+Supervise the reporter itself with
+`Pristine.Profiles.Foundation.reporter_child_spec/1`.

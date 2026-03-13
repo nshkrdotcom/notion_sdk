@@ -91,6 +91,14 @@ defmodule NotionSDK.ClientTest do
                max_retry_delay_ms: 5_000
              }
     end
+
+    test "keeps retry disablement explicit through the normalized client state" do
+      client = Client.new(auth: "secret_test_token", retry: false)
+
+      assert client.retry == false
+      assert client.context.retry == Pristine.Adapters.Retry.Noop
+      assert client.context.retry_policies == %{}
+    end
   end
 
   describe "request building parity" do
