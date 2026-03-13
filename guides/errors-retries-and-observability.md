@@ -58,6 +58,7 @@ Retries are configured on the client, not per endpoint module. By default the SD
 - `408`, `500`, `502`, `503`, and `504` for `notion.delete`
 - `408`, `500`, `502`, `503`, and `504` for `notion.file_upload_send`
 - `409` for `notion.file_upload_send`
+- transient transport failures such as Mint transport/HTTP errors and `:timeout`
 
 The default configuration is:
 
@@ -110,6 +111,10 @@ The SDK also creates `NotionSDK.Error` values for non-HTTP failures:
 - transport failures become `:api_connection`
 - request or response validation failures become `:validation`
 
+Only clearly transient transport failures are retried automatically. Local
+errors such as `:nxdomain` still map to `:api_connection`, but they do not
+blindly retry.
+
 You can reuse the same error handling path for both network and HTTP failures.
 
 Successful responses still default to maps. If you enable `typed_responses: true` on the client, the same validation path is used before generated structs are materialized.
@@ -130,6 +135,7 @@ Logger.error("notion request failed", request_id: request_id, error: Exception.m
 With `foundation:` enabled on the client:
 
 - `429` responses set shared limiter backoff and are ignored by the circuit breaker
+- caller-side `4xx` responses such as `400`, `401`, `403`, `404`, `409` (outside upload send), and `422` are ignored by the circuit breaker
 - `408`/`500`/`502`/`503`/`504` and transport failures count as breaker failures
 - telemetry defaults to `[:notion_sdk, :request, :start|:stop|:exception]`
 - telemetry metadata includes safe runtime fields such as `resource`, `retry_group`, `breaker_name`, and classified outcome metadata
@@ -149,7 +155,7 @@ client =
   )
 ```
 
-If you also provide `dispatch: [enabled: true, dispatch: pid]`, classified
+If you also provide `dispatch: [enabled: true, dispatch: server_handle]`, classified
 Notion backoff is forwarded into that shared `Foundation.Dispatch` process.
 
 Foundation registries are ETS-backed and node-local. Shared backoff and breaker

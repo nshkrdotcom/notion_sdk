@@ -87,7 +87,7 @@ client =
       rate_limit: [registry: MyApp.NotionRateLimits],
       circuit_breaker: [registry: MyApp.NotionBreakers],
       telemetry: [metadata: %{service: :notion}],
-      dispatch: [enabled: true, dispatch: MyApp.NotionDispatch]
+      dispatch: [enabled: true, dispatch: MyApp.ApiDispatch]
     ]
   )
 ```
@@ -96,9 +96,12 @@ Important runtime semantics:
 
 - shared rate limiting is keyed per integration, not per endpoint
 - `429` responses update the shared limiter and do not count as circuit-breaker failures
+- caller-side `4xx` responses such as `401`, `404`, and `422` are ignored by the circuit breaker instead of counting as success
 - `408`/`500`/`502`/`503`/`504` and transport failures count against breaker health
+- only clearly transient transport failures are retried automatically
 - breaker names and pool routing are grouped by Notion resources such as `core_api`, `file_upload_send`, and `oauth_control`
-- `dispatch` is optional and expects a started `Foundation.Dispatch` process that your application owns
+- generated request maps carry stable runtime metadata for resource, retry group, breaker group, and rate-limit scope; low-level ad hoc requests fall back to client inference only when those fields are omitted
+- `dispatch` is optional and expects a started `Foundation.Dispatch` process that your application owns; registered names such as `MyApp.ApiDispatch` are supported
 - Foundation registries and dispatch processes are ETS/process local, not cluster-wide coordination
 
 ## Programmatic OAuth Onboarding

@@ -190,7 +190,11 @@ defmodule NotionSDK.Comments do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "core_api",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -381,7 +385,11 @@ defmodule NotionSDK.Comments do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -555,7 +563,11 @@ defmodule NotionSDK.Comments do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration"
     })
   end
 

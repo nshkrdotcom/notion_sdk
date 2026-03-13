@@ -211,11 +211,7 @@
 
   </g>
 
-  <!-- === CORNER DETAIL: Elixir-inspired diamond sparkle === -->
-  <g transform="translate(155, 160)" opacity="0.6">
-    <path d="M 0,-6 L 3.5,0 L 0,6 L -3.5,0 Z" fill="none" stroke="#9B59B6" stroke-width="0.8"/>
-    <path d="M 0,-3.5 L 2,0 L 0,3.5 L -2,0 Z" fill="#9B59B6" opacity="0.4"/>
-  </g>
+  <!-- (diamond moved into page content) -->
 
   <!-- Subtle connecting dots pattern -->
   <g opacity="0.08" clip-path="url(#hexClip)">

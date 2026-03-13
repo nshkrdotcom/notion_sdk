@@ -225,7 +225,11 @@ defmodule NotionSDK.OAuth do
         {401, {NotionSDK.ErrorOauth401, :t}},
         {403, {NotionSDK.ErrorOauth403, :t}},
         {500, {NotionSDK.ErrorOauth500, :t}}
-      ]
+      ],
+      resource: "oauth_control",
+      retry: "notion.oauth_control",
+      circuit_breaker: "oauth_control",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -309,7 +313,11 @@ defmodule NotionSDK.OAuth do
         {401, {NotionSDK.ErrorOauth401, :t}},
         {403, {NotionSDK.ErrorOauth403, :t}},
         {500, {NotionSDK.ErrorOauth500, :t}}
-      ]
+      ],
+      resource: "oauth_control",
+      retry: "notion.oauth_control",
+      circuit_breaker: "oauth_control",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -437,7 +445,11 @@ defmodule NotionSDK.OAuth do
         {401, {NotionSDK.ErrorOauth401, :t}},
         {403, {NotionSDK.ErrorOauth403, :t}},
         {500, {NotionSDK.ErrorOauth500, :t}}
-      ]
+      ],
+      resource: "oauth_control",
+      retry: "notion.oauth_control",
+      circuit_breaker: "oauth_control",
+      rate_limit: "notion.integration"
     })
   end
 

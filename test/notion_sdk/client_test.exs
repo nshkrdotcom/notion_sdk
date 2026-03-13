@@ -63,6 +63,18 @@ defmodule NotionSDK.ClientTest do
       assert client.context.rate_limit_opts[:key] == {:notion, "16217f0c786e10bc"}
     end
 
+    test "requires a dispatch server handle when dispatch admission control is enabled" do
+      assert_raise ArgumentError, ~r/foundation dispatch requires/, fn ->
+        Client.new(
+          auth: "secret_test_token",
+          foundation: [
+            integration_key: {:integration, :demo},
+            dispatch: [enabled: true]
+          ]
+        )
+      end
+    end
+
     test "normalizes legacy retry option names" do
       client =
         Client.new(
@@ -720,6 +732,63 @@ defmodule NotionSDK.ClientTest do
       assert_receive {:transport_request, _request, _context}
       refute_receive {:transport_request, _request, _context}
     end
+
+    test "retries transient transport failures but not non-transient local errors" do
+      transient_client =
+        Client.new(
+          retry: [max_retries: 1, initial_retry_delay_ms: 1, max_retry_delay_ms: 1],
+          transport: TestTransport,
+          transport_opts: [
+            test_pid: self(),
+            response: fn _request, _context ->
+              attempt = Process.get(:transport_timeout_attempt, 0)
+              Process.put(:transport_timeout_attempt, attempt + 1)
+
+              case attempt do
+                0 -> {:error, :timeout}
+                _ -> ok_response(%{"ok" => true})
+              end
+            end
+          ]
+        )
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(transient_client, %{
+                 call: {__MODULE__, :get_self},
+                 method: :get,
+                 path_template: "/v1/users/me",
+                 url: "/v1/users/me",
+                 path_params: %{},
+                 query: %{},
+                 body: %{},
+                 form_data: %{}
+               })
+
+      assert_receive {:transport_request, _request, _context}
+      assert_receive {:transport_request, _request, _context}
+
+      non_transient_client =
+        Client.new(
+          retry: [max_retries: 1, initial_retry_delay_ms: 1, max_retry_delay_ms: 1],
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: {:error, :nxdomain}]
+        )
+
+      assert {:error, %NotionSDK.Error{code: :api_connection}} =
+               Client.request(non_transient_client, %{
+                 call: {__MODULE__, :get_self},
+                 method: :get,
+                 path_template: "/v1/users/me",
+                 url: "/v1/users/me",
+                 path_params: %{},
+                 query: %{},
+                 body: %{},
+                 form_data: %{}
+               })
+
+      assert_receive {:transport_request, _request, _context}
+      refute_receive {:transport_request, _request, _context}
+    end
   end
 
   describe "foundation runtime" do
@@ -878,6 +947,151 @@ defmodule NotionSDK.ClientTest do
       refute_receive {:transport_request, _request, _context}
     end
 
+    test "caller-side 4xx responses do not close a half-open breaker" do
+      for status <- [401, 404, 422] do
+        registry = Foundation.CircuitBreaker.Registry.new_registry()
+
+        client =
+          Client.new(
+            auth: "secret_test_token",
+            retry: false,
+            foundation: [
+              integration_key: {:integration, status},
+              rate_limit: [enabled: false],
+              circuit_breaker: [
+                registry: registry,
+                failure_threshold: 1,
+                reset_timeout_ms: 0,
+                half_open_max_calls: 1
+              ],
+              telemetry: [enabled: false]
+            ],
+            transport: TestTransport,
+            transport_opts: [
+              response: fn _request, _context ->
+                phase = Process.get({:half_open_status, status}, :open)
+
+                case phase do
+                  :open ->
+                    Process.put({:half_open_status, status}, :probe)
+                    error_response(503, %{"code" => "service_unavailable", "message" => "Later"})
+
+                  :probe ->
+                    Process.put({:half_open_status, status}, :success)
+                    error_response(status, %{"message" => "Caller issue"})
+
+                  :success ->
+                    ok_response(%{"ok" => true})
+                end
+              end
+            ]
+          )
+
+        assert {:error, %NotionSDK.Error{code: :service_unavailable}} =
+                 NotionSDK.Users.get_self(client)
+
+        Process.sleep(5)
+
+        assert {:error, %NotionSDK.Error{status: ^status}} = NotionSDK.Users.get_self(client)
+
+        assert Foundation.CircuitBreaker.Registry.state(
+                 registry,
+                 "notion:api.notion.com:core_api"
+               ) == :half_open
+
+        assert {:ok, %{"ok" => true}} = NotionSDK.Users.get_self(client)
+
+        assert Foundation.CircuitBreaker.Registry.state(
+                 registry,
+                 "notion:api.notion.com:core_api"
+               ) == :closed
+      end
+    end
+
+    test "non-upload 409 responses do not close a half-open breaker" do
+      registry = Foundation.CircuitBreaker.Registry.new_registry()
+
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          retry: false,
+          foundation: [
+            integration_key: {:integration, :conflict},
+            rate_limit: [enabled: false],
+            circuit_breaker: [
+              registry: registry,
+              failure_threshold: 1,
+              reset_timeout_ms: 0,
+              half_open_max_calls: 1
+            ],
+            telemetry: [enabled: false]
+          ],
+          transport: TestTransport,
+          transport_opts: [
+            response: fn _request, _context ->
+              phase = Process.get(:conflict_breaker_phase, :open)
+
+              case phase do
+                :open ->
+                  Process.put(:conflict_breaker_phase, :probe)
+                  error_response(503, %{"code" => "service_unavailable", "message" => "Later"})
+
+                :probe ->
+                  Process.put(:conflict_breaker_phase, :success)
+                  error_response(409, %{"message" => "Conflict"})
+
+                :success ->
+                  ok_response(%{"ok" => true})
+              end
+            end
+          ]
+        )
+
+      assert {:error, %NotionSDK.Error{code: :service_unavailable}} =
+               Client.request(client, %{
+                 call: {__MODULE__, :create_page},
+                 method: :post,
+                 path_template: "/v1/pages",
+                 url: "/v1/pages",
+                 path_params: %{},
+                 query: %{},
+                 body: %{"parent" => %{"type" => "workspace"}},
+                 form_data: %{}
+               })
+
+      Process.sleep(5)
+
+      assert {:error, %NotionSDK.Error{status: 409}} =
+               Client.request(client, %{
+                 call: {__MODULE__, :create_page},
+                 method: :post,
+                 path_template: "/v1/pages",
+                 url: "/v1/pages",
+                 path_params: %{},
+                 query: %{},
+                 body: %{"parent" => %{"type" => "workspace"}},
+                 form_data: %{}
+               })
+
+      assert Foundation.CircuitBreaker.Registry.state(registry, "notion:api.notion.com:core_api") ==
+               :half_open
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(client, %{
+                 call: {__MODULE__, :create_page},
+                 method: :post,
+                 path_template: "/v1/pages",
+                 url: "/v1/pages",
+                 path_params: %{},
+                 query: %{},
+                 body: %{"parent" => %{"type" => "workspace"}},
+                 form_data: %{}
+               })
+
+      assert Foundation.CircuitBreaker.Registry.state(registry, "notion:api.notion.com:core_api") ==
+               :closed
+    end
+
     test "emits structured notion telemetry events" do
       handler_id = attach_telemetry([:notion_sdk, :request, :stop])
 
@@ -907,15 +1121,17 @@ defmodule NotionSDK.ClientTest do
       refute Map.has_key?(metadata, :auth)
     end
 
-    test "supports optional dispatch-based admission control" do
+    test "supports optional dispatch-based admission control with a named dispatch server" do
       parent = self()
       limiter_registry = Foundation.RateLimit.BackoffWindow.new_registry()
+      dispatch_name = {:global, {__MODULE__, make_ref()}}
 
       limiter =
         Foundation.RateLimit.BackoffWindow.for_key(limiter_registry, {:integration, :dispatch})
 
-      {:ok, dispatch} =
+      {:ok, _dispatch} =
         Foundation.Dispatch.start_link(
+          name: dispatch_name,
           limiter: limiter,
           key: {:integration, :dispatch},
           sleep_fun: fn ms -> send(parent, {:dispatch_sleep, ms}) end,
@@ -933,7 +1149,7 @@ defmodule NotionSDK.ClientTest do
             rate_limit: [enabled: false],
             circuit_breaker: [enabled: false],
             telemetry: [enabled: false],
-            dispatch: [enabled: true, dispatch: dispatch]
+            dispatch: [enabled: true, dispatch: dispatch_name]
           ],
           transport: TestTransport,
           transport_opts: [
@@ -959,14 +1175,14 @@ defmodule NotionSDK.ClientTest do
 
       assert_receive {:transport_request, _request, first_context}
       assert first_context.admission_control == Pristine.Adapters.AdmissionControl.Dispatch
-      assert first_context.admission_opts[:dispatch] == dispatch
-      assert Foundation.Dispatch.snapshot(dispatch).backoff_active?
+      assert first_context.admission_opts[:dispatch] == dispatch_name
+      assert Foundation.Dispatch.snapshot(dispatch_name).backoff_active?
 
       assert {:ok, %{"ok" => true}} = NotionSDK.Users.get_self(client)
 
       assert_receive {:transport_request, _request, second_context}
       assert second_context.admission_control == Pristine.Adapters.AdmissionControl.Dispatch
-      assert second_context.admission_opts[:dispatch] == dispatch
+      assert second_context.admission_opts[:dispatch] == dispatch_name
     end
   end
 

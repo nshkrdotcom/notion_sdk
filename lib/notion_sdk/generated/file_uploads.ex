@@ -161,7 +161,11 @@ defmodule NotionSDK.FileUploads do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "file_upload_control",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -331,7 +335,11 @@ defmodule NotionSDK.FileUploads do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "file_upload_control",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -502,7 +510,11 @@ defmodule NotionSDK.FileUploads do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "file_upload_control",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -657,7 +669,11 @@ defmodule NotionSDK.FileUploads do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "file_upload_control",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration"
     })
   end
 
@@ -843,7 +859,11 @@ defmodule NotionSDK.FileUploads do
         {429, {NotionSDK.ErrorApi429, :t}},
         {500, {NotionSDK.ErrorApi500, :t}},
         {503, {NotionSDK.ErrorApi503, :t}}
-      ]
+      ],
+      resource: "file_upload_send",
+      retry: "notion.file_upload_send",
+      circuit_breaker: "file_upload_send",
+      rate_limit: "notion.integration"
     })
   end
 

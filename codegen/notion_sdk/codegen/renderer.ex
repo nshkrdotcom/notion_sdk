@@ -242,6 +242,7 @@ defmodule NotionSDK.Codegen.Renderer do
         render_request_info(state, request_body),
         render_response_info(state, responses)
       ]
+      |> Kernel.++(render_runtime_metadata(operation))
       |> Enum.reject(&is_nil/1)
 
     quote do
@@ -470,6 +471,49 @@ defmodule NotionSDK.Codegen.Renderer do
       {:response, unquote(items)}
     end
   end
+
+  defp render_runtime_metadata(%Operation{} = operation) do
+    resource = runtime_resource(operation.request_path)
+    retry_group = runtime_retry_group(operation.request_method, resource)
+    circuit_breaker = runtime_circuit_breaker(resource)
+
+    [
+      quote(do: {:resource, unquote(resource)}),
+      quote(do: {:retry, unquote(retry_group)}),
+      quote(do: {:circuit_breaker, unquote(circuit_breaker)}),
+      quote(do: {:rate_limit, "notion.integration"})
+    ]
+  end
+
+  defp runtime_resource(path) do
+    cond do
+      String.starts_with?(path, "/v1/oauth/") ->
+        "oauth_control"
+
+      String.ends_with?(path, "/send") and String.contains?(path, "/file_uploads/") ->
+        "file_upload_send"
+
+      String.starts_with?(path, "/v1/file_uploads") ->
+        "file_upload_control"
+
+      true ->
+        "core_api"
+    end
+  end
+
+  defp runtime_retry_group(_method, "oauth_control"), do: "notion.oauth_control"
+  defp runtime_retry_group(_method, "file_upload_send"), do: "notion.file_upload_send"
+
+  defp runtime_retry_group(method, _resource) when method in [:get, :head] do
+    "notion.read"
+  end
+
+  defp runtime_retry_group(:delete, _resource), do: "notion.delete"
+  defp runtime_retry_group(_method, _resource), do: "notion.write"
+
+  defp runtime_circuit_breaker("file_upload_send"), do: "file_upload_send"
+  defp runtime_circuit_breaker("oauth_control"), do: "oauth_control"
+  defp runtime_circuit_breaker(_resource), do: "core_api"
 
   defp render_return_type(_state, []), do: quote(do: :ok)
 

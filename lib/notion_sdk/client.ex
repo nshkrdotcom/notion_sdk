@@ -220,13 +220,14 @@ defmodule NotionSDK.Client do
   defp build_endpoint(%__MODULE__{} = client, request, typed_runtime?) do
     resource = request[:resource] || resource_group(request)
     retry_group = request[:retry] || retry_group(request, resource)
+    circuit_breaker = resolve_circuit_breaker(client, request[:circuit_breaker], resource)
 
     %Endpoint{
       id: request_id(request),
       method: request[:method],
       path: request[:path_template] || request[:url],
       body_type: nil,
-      circuit_breaker: request[:circuit_breaker] || circuit_breaker_name(client, resource),
+      circuit_breaker: circuit_breaker,
       content_type: nil,
       headers: %{},
       query: %{},
@@ -515,7 +516,12 @@ defmodule NotionSDK.Client do
       )
 
     telemetry = normalize_foundation_feature(Keyword.get(opts, :telemetry, []), enabled: true)
-    dispatch = normalize_foundation_feature(Keyword.get(opts, :dispatch), enabled: false)
+
+    dispatch =
+      opts
+      |> Keyword.get(:dispatch)
+      |> normalize_foundation_feature(enabled: false)
+      |> validate_dispatch_feature()
 
     %{
       integration_key:
@@ -549,6 +555,17 @@ defmodule NotionSDK.Client do
   defp normalize_foundation_feature(_opts, _defaults) do
     raise ArgumentError, "foundation feature options must be false or a keyword list"
   end
+
+  defp validate_dispatch_feature(%{enabled: true} = dispatch) do
+    if Map.has_key?(dispatch, :dispatch) do
+      dispatch
+    else
+      raise ArgumentError,
+            "foundation dispatch requires dispatch: [dispatch: server_handle] when enabled"
+    end
+  end
+
+  defp validate_dispatch_feature(dispatch), do: dispatch
 
   defp derived_integration_key(auth, _oauth2, %{enabled: true}) when is_binary(auth) do
     {:notion, hashed_secret(auth)}
@@ -655,6 +672,25 @@ defmodule NotionSDK.Client do
 
   defp foundation_value(nil, _key), do: nil
   defp foundation_value(foundation, key), do: Map.get(foundation, key)
+
+  defp resolve_circuit_breaker(%__MODULE__{} = client, nil, resource) do
+    circuit_breaker_name(client, resource)
+  end
+
+  defp resolve_circuit_breaker(%__MODULE__{} = client, breaker, _resource)
+       when is_binary(breaker) do
+    if explicit_circuit_breaker_name?(breaker) do
+      breaker
+    else
+      circuit_breaker_name(client, breaker)
+    end
+  end
+
+  defp resolve_circuit_breaker(%__MODULE__{} = client, _breaker, resource) do
+    circuit_breaker_name(client, resource)
+  end
+
+  defp explicit_circuit_breaker_name?(value), do: String.contains?(value, ":")
 
   defp resource_group(request) do
     path = request[:path_template] || request[:url] || ""

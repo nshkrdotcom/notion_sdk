@@ -56,7 +56,7 @@ client =
         events: %{request_stop: [:notion_sdk, :request, :stop]},
         metadata: %{service: :notion}
       ],
-      dispatch: [enabled: true, dispatch: MyApp.NotionDispatch]
+      dispatch: [enabled: true, dispatch: MyApp.ApiDispatch]
     ]
   )
 ```
@@ -73,7 +73,8 @@ Supported `foundation:` keys:
 Notion-specific defaults:
 
 - rate-limit scope is per integration, not per endpoint
-- endpoint metadata is derived automatically for `resource`, retry group, breaker name, rate-limit group, and pool routing
+- generated request maps carry stable `resource`, retry group, breaker group, and rate-limit metadata
+- low-level ad hoc requests still fall back to client inference when those runtime fields are omitted
 - breaker groups default to `core_api`, `file_upload_send`, and `oauth_control`
 - default retry groups are `notion.read`, `notion.delete`, `notion.write`, `notion.file_upload_send`, and `notion.oauth_control`
 
@@ -82,8 +83,13 @@ enabled with a static bearer token, the client can derive a safe fallback key
 from a token hash, but it never emits the raw token in telemetry.
 
 `dispatch` is optional and expects a started `Foundation.Dispatch` process in
-`dispatch: [dispatch: pid]`. The SDK wires that process into the generic
+`dispatch: [dispatch: server_handle]`. Pids and registered `GenServer.server()`
+handles both work. The SDK wires that process into the generic
 admission-control seam; lifecycle ownership stays in your application.
+
+If you enable `dispatch`, you must provide the `:dispatch` server handle. The
+client raises on missing explicit dispatch config instead of silently falling
+back to noop behavior.
 
 Foundation registries and dispatch processes are node-local. If several nodes
 share one Notion integration, route that integration through one node or add a

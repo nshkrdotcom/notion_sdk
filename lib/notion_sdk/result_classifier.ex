@@ -30,7 +30,7 @@ defmodule NotionSDK.ResultClassifier do
         telemetry: telemetry(endpoint, :retryable_conflict, true, :failure)
       })
     else
-      success(endpoint, :client_error)
+      ignore(endpoint, :client_error)
     end
   end
 
@@ -47,7 +47,12 @@ defmodule NotionSDK.ResultClassifier do
   end
 
   def classify({:ok, %Response{status: status}}, endpoint, _context, _opts)
-      when status >= 200 and status < 500 do
+      when status >= 400 and status < 500 do
+    ignore(endpoint, :client_error)
+  end
+
+  def classify({:ok, %Response{status: status}}, endpoint, _context, _opts)
+      when status >= 200 and status < 400 do
     success(endpoint, :success)
   end
 
@@ -59,15 +64,17 @@ defmodule NotionSDK.ResultClassifier do
     })
   end
 
-  def classify({:error, _reason}, endpoint, _context, _opts) do
+  def classify({:error, reason}, endpoint, _context, _opts) do
+    retryable = retryable_transport_error?(reason)
+
     ResultClassification.normalize(%{
-      retry?: true,
+      retry?: retryable,
       breaker_outcome: :failure,
-      telemetry: telemetry(endpoint, :transport_error, true, :failure)
+      telemetry: telemetry(endpoint, :transport_error, retryable, :failure)
     })
   end
 
-  def classify(_result, endpoint, _context, _opts), do: success(endpoint, :ignored)
+  def classify(_result, endpoint, _context, _opts), do: ignore(endpoint, :ignored)
 
   defp success(endpoint, classification) do
     ResultClassification.normalize(%{
@@ -77,9 +84,22 @@ defmodule NotionSDK.ResultClassifier do
     })
   end
 
+  defp ignore(endpoint, classification) do
+    ResultClassification.normalize(%{
+      retry?: false,
+      breaker_outcome: :ignore,
+      telemetry: telemetry(endpoint, classification, false, :ignore)
+    })
+  end
+
   defp retry_group(endpoint) do
     Map.get(endpoint, :retry) || Map.get(endpoint, "retry") || "notion.write"
   end
+
+  defp retryable_transport_error?(%Mint.TransportError{}), do: true
+  defp retryable_transport_error?(%Mint.HTTPError{}), do: true
+  defp retryable_transport_error?(:timeout), do: true
+  defp retryable_transport_error?(_reason), do: false
 
   defp telemetry(endpoint, classification, retryable, breaker_outcome) do
     %{

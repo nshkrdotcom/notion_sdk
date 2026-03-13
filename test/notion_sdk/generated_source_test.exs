@@ -4,6 +4,9 @@ defmodule NotionSDK.GeneratedSourceTest do
   @generated_dir Path.expand("../../lib/notion_sdk/generated", __DIR__)
   @oauth_source Path.join(@generated_dir, "o_auth.ex")
   @pages_source Path.join(@generated_dir, "pages.ex")
+  @users_source Path.join(@generated_dir, "users.ex")
+  @search_source Path.join(@generated_dir, "search.ex")
+  @file_uploads_source Path.join(@generated_dir, "file_uploads.ex")
   @page_schema_source Path.join(@generated_dir, "schemas/page_object_response.ex")
   @todo_schema_source Path.join(@generated_dir, "schemas/to_do_to_do.ex")
 
@@ -70,6 +73,29 @@ defmodule NotionSDK.GeneratedSourceTest do
     assert source =~ "extensions:"
     assert source =~ "read_only:"
     assert source =~ "write_only:"
+  end
+
+  test "generated request maps include stable runtime metadata" do
+    users_source = File.read!(@users_source)
+    search_source = File.read!(@search_source)
+    file_uploads_source = File.read!(@file_uploads_source)
+    oauth_source = File.read!(@oauth_source)
+
+    assert users_source =~ ~s(resource: "core_api")
+    assert users_source =~ ~s(retry: "notion.read")
+    assert users_source =~ ~s(circuit_breaker: "core_api")
+    assert users_source =~ ~s(rate_limit: "notion.integration")
+
+    assert search_source =~ ~s(resource: "core_api")
+    assert search_source =~ ~s(retry: "notion.write")
+
+    assert file_uploads_source =~ ~s(resource: "file_upload_send")
+    assert file_uploads_source =~ ~s(retry: "notion.file_upload_send")
+    assert file_uploads_source =~ ~s(circuit_breaker: "file_upload_send")
+
+    assert oauth_source =~ ~s(resource: "oauth_control")
+    assert oauth_source =~ ~s(retry: "notion.oauth_control")
+    assert oauth_source =~ ~s(circuit_breaker: "oauth_control")
   end
 
   test "generated source avoids credo-triggering blank lines and todo labels" do

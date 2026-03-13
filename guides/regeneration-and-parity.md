@@ -87,3 +87,4 @@ The richer docs are proved from generated artifacts, not hand edits:
 - `priv/generated/docs_manifest.json` should include source-context-backed operation docs
 - generated sources such as `lib/notion_sdk/generated/pages.ex` should show `## Source Context` and `## Code Samples`
 - generated schema helpers such as `__openapi_fields__/1` should include doc metadata keys beyond `name`, `type`, and `required`
+- generated request maps should carry stable runtime metadata such as `resource`, `retry`, `circuit_breaker`, and `rate_limit`
