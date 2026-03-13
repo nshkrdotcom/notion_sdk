@@ -27,6 +27,7 @@ defmodule NotionSDK.ExamplesReadinessTest do
     readme = File.read!(@readme_path)
 
     assert readme =~ "[`run_all.sh`](./run_all.sh)"
+    assert readme =~ "Read comments"
     refute readme =~ "/home/home/"
 
     for env_name <- [

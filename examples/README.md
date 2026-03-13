@@ -34,6 +34,11 @@ Use a disposable Notion workspace or a dedicated examples area. Some examples cr
 
 Create a Notion integration and copy its token.
 
+If you plan to run `06_list_page_comments.exs`, turn on the integration's
+`Read comments` capability first. Comment capabilities are off by default in
+Notion, and the comments endpoint returns `403 restricted_resource` until that
+capability is enabled.
+
 Export:
 
 ```bash
@@ -258,5 +263,6 @@ OAuth:
 - `15_upload_small_text_file.exs` creates a real file upload and sends real multipart form data.
 - `13_create_external_file_upload.exs` creates a real external URL import.
 - `06_list_page_comments.exs` succeeds even when the page has zero comments; zero comments is a real service response, not a skipped case.
+- `06_list_page_comments.exs` also requires the integration's `Read comments` capability; otherwise Notion returns `403 restricted_resource`.
 - `02_retrieve_page_property.exs` is most reliable when `NOTION_EXAMPLE_PAGE_ID` points at a row page inside a database-backed data source.
 - `18_oauth_refresh_and_get_self.exs` is the explicit Notion proof flow: refresh the saved token, persist it, then call a bearer-authenticated endpoint with that saved file.

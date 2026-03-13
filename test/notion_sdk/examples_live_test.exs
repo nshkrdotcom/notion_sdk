@@ -56,4 +56,39 @@ defmodule NotionSDK.Examples.LiveTest do
     assert Live.oauth_token_path() ==
              Path.join([tmp_dir, "notion_sdk", "oauth", "notion.json"])
   end
+
+  test "ok! raises with structured Pristine error details" do
+    error = %Pristine.Error{
+      type: :not_found,
+      status: 404,
+      message: "Resource not found",
+      body: %{
+        "code" => "object_not_found",
+        "message" => "Could not find page with ID: 32222fc0-502f-808e-b33f-cdd53e4d9a60.",
+        "request_id" => "req_123"
+      },
+      response: %Pristine.Core.Response{
+        status: 404,
+        headers: %{},
+        body: %{},
+        metadata: %{url: "https://api.notion.com/v1/pages/32222fc0-502f-808e-b33f-cdd53e4d9a60"}
+      }
+    }
+
+    exception =
+      assert_raise RuntimeError, fn ->
+        Live.ok!({:error, error}, "NotionSDK.Pages.retrieve/2")
+      end
+
+    message = Exception.message(exception)
+
+    assert message =~ "NotionSDK.Pages.retrieve/2 failed"
+    assert message =~ "status: 404"
+    assert message =~ "code: object_not_found"
+    assert message =~ "detail: Could not find page with ID: 32222fc0-502f-808e-b33f-cdd53e4d9a60."
+    assert message =~ "request_id: req_123"
+
+    assert message =~
+             "request_url: https://api.notion.com/v1/pages/32222fc0-502f-808e-b33f-cdd53e4d9a60"
+  end
 end

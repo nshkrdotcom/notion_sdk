@@ -521,6 +521,33 @@ defmodule NotionSDK.Examples.Live do
     end)
   end
 
+  defp format_error(%Pristine.Error{} = error) do
+    lines =
+      []
+      |> append_error_line("type", error.type)
+      |> append_error_line("status", error.status)
+      |> append_error_line("message", error.message)
+      |> append_error_line("code", pristine_error_code(error))
+      |> append_error_line("detail", pristine_error_detail(error))
+      |> append_error_line("request_id", pristine_error_request_id(error))
+      |> append_error_line("request_url", pristine_error_request_url(error))
+
+    Enum.join(lines, "\n")
+  end
+
+  defp format_error(%NotionSDK.Error{} = error) do
+    lines =
+      []
+      |> append_error_line("code", error.code)
+      |> append_error_line("status", error.status)
+      |> append_error_line("message", error.message)
+      |> append_error_line("request_id", error.request_id)
+      |> append_error_line("retry_after_ms", error.retry_after_ms)
+      |> append_error_line("additional_data", error.additional_data)
+
+    Enum.join(lines, "\n")
+  end
+
   defp format_error(error) do
     cond do
       is_struct(error) and function_exported?(error.__struct__, :message, 1) ->
@@ -530,4 +557,51 @@ defmodule NotionSDK.Examples.Live do
         inspect(error, pretty: true, limit: :infinity)
     end
   end
+
+  defp append_error_line(lines, _label, nil), do: lines
+  defp append_error_line(lines, _label, ""), do: lines
+
+  defp append_error_line(lines, label, value) when is_binary(value) do
+    lines ++ ["#{label}: #{value}"]
+  end
+
+  defp append_error_line(lines, label, value) do
+    lines ++ ["#{label}: #{inspect(value, pretty: true, limit: :infinity)}"]
+  end
+
+  defp pristine_error_code(%Pristine.Error{body: %{"code" => code}}) when is_binary(code),
+    do: code
+
+  defp pristine_error_code(_error), do: nil
+
+  defp pristine_error_detail(%Pristine.Error{message: message, body: %{"message" => detail}})
+       when is_binary(detail) and detail != "" and detail != message,
+       do: detail
+
+  defp pristine_error_detail(_error), do: nil
+
+  defp pristine_error_request_id(%Pristine.Error{body: %{"request_id" => request_id}})
+       when is_binary(request_id),
+       do: request_id
+
+  defp pristine_error_request_id(%Pristine.Error{
+         response: %Pristine.Core.Response{headers: headers}
+       })
+       when is_map(headers) do
+    headers["x-notion-request-id"] ||
+      headers["x-request-id"] ||
+      headers["X-Notion-Request-Id"] ||
+      headers["X-Request-Id"]
+  end
+
+  defp pristine_error_request_id(_error), do: nil
+
+  defp pristine_error_request_url(%Pristine.Error{
+         response: %Pristine.Core.Response{metadata: metadata}
+       })
+       when is_map(metadata) do
+    Map.get(metadata, :url) || Map.get(metadata, "url")
+  end
+
+  defp pristine_error_request_url(_error), do: nil
 end
