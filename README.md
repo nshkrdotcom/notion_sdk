@@ -10,7 +10,7 @@
 
 # NotionSDK
 
-Thin Elixir SDK for the Notion API, generated from the official Notion docs snippets through `oapi_generator` and executed through `pristine`.
+Elixir SDK for the Notion API, generated from the official Notion docs snippets through `oapi_generator` and executed through `pristine`.
 
 ## Runtime usage
 

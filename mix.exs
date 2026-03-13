@@ -93,8 +93,7 @@ defmodule NotionSDK.MixProject do
       source_ref: "main",
       extras: extras(),
       groups_for_extras: groups_for_extras(),
-      groups_for_modules: groups_for_modules(),
-      nest_modules_by_prefix: [NotionSDK]
+      groups_for_modules: groups_for_modules()
     ]
   end
 
