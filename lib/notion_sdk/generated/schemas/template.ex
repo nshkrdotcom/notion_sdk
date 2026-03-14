@@ -7,7 +7,7 @@ defmodule NotionSDK.Template do
     * Template
     * Template.t_template
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

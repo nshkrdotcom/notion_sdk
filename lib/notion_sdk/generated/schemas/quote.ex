@@ -7,7 +7,7 @@ defmodule NotionSDK.Quote do
     * Quote
     * Quote.t_quote
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

@@ -8,7 +8,7 @@ defmodule NotionSDK.NumberFormulaPropertyResponse do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{number: number | nil, type: String.t()}
 

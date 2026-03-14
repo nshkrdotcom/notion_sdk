@@ -10,7 +10,7 @@ defmodule NotionSDK.SelectPropertyItemObjectResponse do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),

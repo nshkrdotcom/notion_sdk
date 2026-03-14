@@ -12,7 +12,7 @@ defmodule NotionSDK.AnnotationRequest do
     * `underline`: Whether the text is formatted with an underline.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           bold: boolean | nil,

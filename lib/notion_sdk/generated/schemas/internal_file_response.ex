@@ -8,7 +8,7 @@ defmodule NotionSDK.InternalFileResponse do
     * `url`: The URL of the file.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{expiry_time: DateTime.t(), url: String.t()}
 

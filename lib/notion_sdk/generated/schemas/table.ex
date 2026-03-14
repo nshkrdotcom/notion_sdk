@@ -9,7 +9,7 @@ defmodule NotionSDK.Table do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

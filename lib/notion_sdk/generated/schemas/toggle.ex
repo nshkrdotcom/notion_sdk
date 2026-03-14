@@ -7,7 +7,7 @@ defmodule NotionSDK.Toggle do
     * Toggle
     * Toggle.t_toggle
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

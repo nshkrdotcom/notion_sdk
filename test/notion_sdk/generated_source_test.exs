@@ -10,7 +10,7 @@ defmodule NotionSDK.GeneratedSourceTest do
   @page_schema_source Path.join(@generated_dir, "schemas/page_object_response.ex")
   @todo_schema_source Path.join(@generated_dir, "schemas/to_do_to_do.ex")
 
-  test "generated modules alias the pristine runtime helper instead of calling it fully qualified" do
+  test "generated modules alias the NotionSDK runtime helper instead of calling it fully qualified" do
     sources =
       @generated_dir
       |> Path.join("**/*.ex")
@@ -19,11 +19,12 @@ defmodule NotionSDK.GeneratedSourceTest do
 
     assert Enum.any?(
              sources,
-             &String.contains?(&1, "alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime")
+             &String.contains?(&1, "alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime")
            )
 
     assert Enum.any?(sources, &String.contains?(&1, "OpenAPIRuntime.build_schema"))
     assert Enum.any?(sources, &String.contains?(&1, "OpenAPIRuntime.decode_module_type"))
+    refute Enum.any?(sources, &String.contains?(&1, "NotionSDK.GeneratedRuntime.build_schema"))
     refute Enum.any?(sources, &String.contains?(&1, "Pristine.OpenAPI.Runtime.build_schema"))
 
     refute Enum.any?(
@@ -32,20 +33,22 @@ defmodule NotionSDK.GeneratedSourceTest do
            )
   end
 
-  test "generated oauth helpers alias Pristine.OAuth2" do
+  test "generated oauth helpers preserve Pristine.OAuth2 types while routing behavior through GeneratedOAuth" do
     source = File.read!(@oauth_source)
 
     assert source =~ "alias Pristine.OAuth2, as: OAuth2"
-    assert source =~ "OAuth2.Provider.new("
+    assert source =~ "alias NotionSDK.GeneratedOAuth, as: OAuthRuntime"
+    assert source =~ "OAuthRuntime.provider_new("
     assert source =~ "with {:ok, authorization_opts} <- authorization_opts(opts) do"
-    assert source =~ "OAuth2.authorization_request(authorization_opts)"
-    assert source =~ "OAuth2.authorize_url(authorization_opts)"
-    assert source =~ "OAuth2.exchange_code(code, oauth_runtime_opts(opts))"
-    assert source =~ "OAuth2.refresh_token(refresh_token, oauth_runtime_opts(opts))"
+    assert source =~ "OAuthRuntime.authorization_request(authorization_opts)"
+    assert source =~ "OAuthRuntime.authorize_url(authorization_opts)"
+    assert source =~ "OAuthRuntime.exchange_code(code, oauth_runtime_opts(opts))"
+    assert source =~ "OAuthRuntime.refresh_token(refresh_token, oauth_runtime_opts(opts))"
     assert source =~ "Keyword.put_new(params, :owner, \"user\")"
-    assert source =~ "OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)"
-    refute source =~ "Pristine.OAuth2.Provider.new("
+    assert source =~ "OAuthRuntime.error_new(:missing_redirect_uri, provider: provider().name)"
+    refute source =~ "OAuth2.Provider.new("
     refute source =~ "Pristine.OAuth2.authorization_request("
+    refute source =~ "OAuth2.authorization_request(authorization_opts)"
   end
 
   test "generated operation docs include persisted source context and code samples" do

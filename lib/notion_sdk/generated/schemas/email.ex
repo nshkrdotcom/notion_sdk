@@ -9,7 +9,7 @@ defmodule NotionSDK.Email do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{email: map, property: String.t(), type: String.t() | nil}
 

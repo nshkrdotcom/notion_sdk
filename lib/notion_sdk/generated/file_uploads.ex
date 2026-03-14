@@ -10,8 +10,7 @@ defmodule NotionSDK.FileUploads do
     * Complete a multi-part file upload
     * Upload a file
   """
-  use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @doc """
   Complete a multi-part file upload
@@ -95,7 +94,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def complete(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -107,7 +106,11 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :complete},
       path_template: "/v1/file_uploads/{file_upload_id}/complete",
-      url: render_path("/v1/file_uploads/{file_upload_id}/complete", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/file_uploads/{file_upload_id}/complete",
+          partition.path_params
+        ),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -259,7 +262,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -280,7 +283,7 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :create},
       path_template: "/v1/file_uploads",
-      url: render_path("/v1/file_uploads", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/file_uploads", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -444,7 +447,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploads.list_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def list(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -456,7 +459,7 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :list},
       path_template: "/v1/file_uploads",
-      url: render_path("/v1/file_uploads", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/file_uploads", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -603,7 +606,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -615,7 +618,11 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :retrieve},
       path_template: "/v1/file_uploads/{file_upload_id}",
-      url: render_path("/v1/file_uploads/{file_upload_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/file_uploads/{file_upload_id}",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -792,7 +799,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def send(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{keys: [{"file", :file}, {"part_number", :part_number}], mode: :keys},
@@ -804,7 +811,11 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :send},
       path_template: "/v1/file_uploads/{file_upload_id}/send",
-      url: render_path("/v1/file_uploads/{file_upload_id}/send", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/file_uploads/{file_upload_id}/send",
+          partition.path_params
+        ),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,

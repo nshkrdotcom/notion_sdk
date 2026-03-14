@@ -43,7 +43,8 @@ defmodule NotionSDK.Refresh do
 
     snapshot_upstream!(paths)
 
-    NotionSDK.Codegen.extract_upstream!(
+    codegen_apply!(
+      :extract_upstream!,
       project_root: paths.project_root,
       reference_root: paths.reference_root,
       reference_pages: paths.reference_pages
@@ -85,7 +86,7 @@ defmodule NotionSDK.Refresh do
       Keyword.get(
         opts,
         :notion_docs_root,
-        NotionSDK.Codegen.reference_root(project_root: project_root(opts)) |> Path.dirname()
+        codegen_apply!(:reference_root, project_root: project_root(opts)) |> Path.dirname()
       )
 
     reference_root =
@@ -110,7 +111,8 @@ defmodule NotionSDK.Refresh do
       end
 
     codegen_paths =
-      NotionSDK.Codegen.paths(
+      codegen_apply!(
+        :paths,
         project_root: project_root(opts),
         reference_root: reference_root,
         inventory_path: inventory_path,
@@ -140,14 +142,35 @@ defmodule NotionSDK.Refresh do
     }
   end
 
-  defp project_root(opts), do: Keyword.get(opts, :project_root, NotionSDK.Codegen.project_root())
+  defp project_root(opts), do: Keyword.get(opts, :project_root, codegen_apply!(:project_root))
 
   defp default_generate(paths) do
-    NotionSDK.Codegen.generate!(
+    codegen_apply!(
+      :generate!,
       project_root: paths.project_root,
       reference_root: paths.reference_root,
       reference_pages: paths.reference_pages
     )
+  end
+
+  defp codegen_apply!(fun, opts \\ []) when is_atom(fun) and is_list(opts) do
+    module = codegen_module()
+    Code.ensure_loaded?(module)
+
+    cond do
+      opts == [] and function_exported?(module, fun, 0) ->
+        apply(module, fun, [])
+
+      function_exported?(module, fun, 1) ->
+        apply(module, fun, [opts])
+
+      function_exported?(module, fun, 0) ->
+        apply(module, fun, [])
+    end
+  end
+
+  defp codegen_module do
+    Module.concat(NotionSDK, Codegen)
   end
 
   defp snapshot_upstream!(paths) do

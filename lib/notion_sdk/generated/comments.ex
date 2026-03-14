@@ -8,8 +8,7 @@ defmodule NotionSDK.Comments do
     * Create a comment
     * Retrieve a comment
   """
-  use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @doc """
   Create a comment
@@ -114,7 +113,7 @@ defmodule NotionSDK.Comments do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -133,7 +132,7 @@ defmodule NotionSDK.Comments do
       args: params,
       call: {NotionSDK.Comments, :create},
       path_template: "/v1/comments",
-      url: render_path("/v1/comments", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/comments", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -315,7 +314,7 @@ defmodule NotionSDK.Comments do
           {:ok, NotionSDK.Comments.list_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def list(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -331,7 +330,7 @@ defmodule NotionSDK.Comments do
       args: params,
       call: {NotionSDK.Comments, :list},
       path_template: "/v1/comments",
-      url: render_path("/v1/comments", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/comments", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -495,7 +494,7 @@ defmodule NotionSDK.Comments do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -507,7 +506,11 @@ defmodule NotionSDK.Comments do
       args: params,
       call: {NotionSDK.Comments, :retrieve},
       path_template: "/v1/comments/{comment_id}",
-      url: render_path("/v1/comments/{comment_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/comments/{comment_id}",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,

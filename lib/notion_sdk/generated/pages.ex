@@ -12,8 +12,7 @@ defmodule NotionSDK.Pages do
     * Move a page
     * Retrieve a page property item
   """
-  use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @doc """
   Create a page
@@ -175,7 +174,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -200,7 +199,7 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :create},
       path_template: "/v1/pages",
-      url: render_path("/v1/pages", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/pages", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -454,7 +453,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def move(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{keys: [{"parent", :parent}], mode: :keys},
         form_data: %{mode: :none},
@@ -466,7 +465,11 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :move},
       path_template: "/v1/pages/{page_id}/move",
-      url: render_path("/v1/pages/{page_id}/move", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/pages/{page_id}/move",
+          partition.path_params
+        ),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -674,7 +677,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -686,7 +689,7 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :retrieve},
       path_template: "/v1/pages/{page_id}",
-      url: render_path("/v1/pages/{page_id}", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/pages/{page_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -885,7 +888,7 @@ defmodule NotionSDK.Pages do
           {:ok, NotionSDK.PageMarkdownResponse.t()} | {:error, NotionSDK.Error.t()}
   def retrieve_markdown(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -897,7 +900,11 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :retrieve_markdown},
       path_template: "/v1/pages/{page_id}/markdown",
-      url: render_path("/v1/pages/{page_id}/markdown", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/pages/{page_id}/markdown",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -1156,7 +1163,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def retrieve_property(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -1168,7 +1175,11 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :retrieve_property},
       path_template: "/v1/pages/{page_id}/properties/{property_id}",
-      url: render_path("/v1/pages/{page_id}/properties/{property_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/pages/{page_id}/properties/{property_id}",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -1417,7 +1428,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -1440,7 +1451,7 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :update},
       path_template: "/v1/pages/{page_id}",
-      url: render_path("/v1/pages/{page_id}", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/pages/{page_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
@@ -1644,7 +1655,7 @@ defmodule NotionSDK.Pages do
           {:ok, NotionSDK.PageMarkdownResponse.t()} | {:error, NotionSDK.Error.t()}
   def update_markdown(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -1663,7 +1674,11 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :update_markdown},
       path_template: "/v1/pages/{page_id}/markdown",
-      url: render_path("/v1/pages/{page_id}/markdown", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/pages/{page_id}/markdown",
+          partition.path_params
+        ),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

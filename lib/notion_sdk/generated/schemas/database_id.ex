@@ -8,7 +8,7 @@ defmodule NotionSDK.DatabaseId do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{database_id: String.t(), type: String.t() | nil}
 

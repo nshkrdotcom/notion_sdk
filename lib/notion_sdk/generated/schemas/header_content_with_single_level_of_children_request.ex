@@ -10,7 +10,7 @@ defmodule NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest do
     * `rich_text`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           children:

@@ -8,7 +8,7 @@ defmodule NotionSDK.EmojiPageIconResponse do
     * `type`: Type of icon. In this case, an emoji.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{emoji: String.t(), type: String.t()}
 

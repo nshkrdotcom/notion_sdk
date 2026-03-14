@@ -7,7 +7,7 @@ defmodule NotionSDK.RichTextItemRequest do
     * `annotations`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{annotations: NotionSDK.AnnotationRequest.t() | nil}
 

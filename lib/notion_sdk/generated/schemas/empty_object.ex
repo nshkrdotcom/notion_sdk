@@ -1,6 +1,6 @@
 defmodule NotionSDK.EmptyObject do
   @moduledoc "EmptyObject"
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{}
 

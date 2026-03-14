@@ -10,7 +10,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           created_by: NotionSDK.PartialUserObjectResponse.t() | NotionSDK.UserObjectResponse.t(),

@@ -7,7 +7,7 @@ defmodule NotionSDK.Callout do
     * Callout
     * Callout.t_callout
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           callout: NotionSDK.Callout.t_callout() | NotionSDK.CalloutCallout.t(),

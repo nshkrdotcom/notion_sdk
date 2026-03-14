@@ -20,7 +20,7 @@ defmodule NotionSDK.PageObjectResponse do
     * `url`: The URL of the Notion page.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           cover:

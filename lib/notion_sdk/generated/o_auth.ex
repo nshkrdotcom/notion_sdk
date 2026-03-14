@@ -8,9 +8,9 @@ defmodule NotionSDK.OAuth do
     * Revoke a token
     * Exchange an authorization code for an access and refresh token
   """
-  use Pristine.OpenAPI.Operation
+  alias NotionSDK.GeneratedOAuth, as: OAuthRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   alias Pristine.OAuth2, as: OAuth2
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   (
     @oauth_client_opts [
@@ -29,7 +29,7 @@ defmodule NotionSDK.OAuth do
     ]
     @spec provider() :: OAuth2.Provider.t()
     def provider do
-      OAuth2.Provider.new(
+      OAuthRuntime.provider_new(
         name: "notion",
         flow: :authorization_code,
         site: "https://api.notion.com",
@@ -47,28 +47,28 @@ defmodule NotionSDK.OAuth do
             {:ok, OAuth2.AuthorizationRequest.t()} | {:error, OAuth2.Error.t()}
     def authorization_request(opts \\ []) when is_list(opts) do
       with {:ok, authorization_opts} <- authorization_opts(opts) do
-        provider() |> OAuth2.authorization_request(authorization_opts)
+        provider() |> OAuthRuntime.authorization_request(authorization_opts)
       end
     end
 
     @spec authorize_url(keyword()) :: {:ok, String.t()} | {:error, OAuth2.Error.t()}
     def authorize_url(opts \\ []) when is_list(opts) do
       with {:ok, authorization_opts} <- authorization_opts(opts) do
-        provider() |> OAuth2.authorize_url(authorization_opts)
+        provider() |> OAuthRuntime.authorize_url(authorization_opts)
       end
     end
 
     @spec exchange_code(String.t(), keyword()) ::
             {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
     def exchange_code(code, opts \\ []) when is_binary(code) and is_list(opts) do
-      provider() |> OAuth2.exchange_code(code, oauth_runtime_opts(opts))
+      provider() |> OAuthRuntime.exchange_code(code, oauth_runtime_opts(opts))
     end
 
     @spec refresh_token(String.t(), keyword()) ::
             {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
     def refresh_token(refresh_token, opts \\ [])
         when is_binary(refresh_token) and is_list(opts) do
-      provider() |> OAuth2.refresh_token(refresh_token, oauth_runtime_opts(opts))
+      provider() |> OAuthRuntime.refresh_token(refresh_token, oauth_runtime_opts(opts))
     end
 
     defp authorization_opts(opts) do
@@ -83,7 +83,7 @@ defmodule NotionSDK.OAuth do
           {:ok, opts |> Keyword.put(:params, params) |> Keyword.put(:redirect_uri, redirect_uri)}
 
         _other ->
-          {:error, OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)}
+          {:error, OAuthRuntime.error_new(:missing_redirect_uri, provider: provider().name)}
       end
     end
 
@@ -198,7 +198,7 @@ defmodule NotionSDK.OAuth do
           {:ok, NotionSDK.OAuth.introspect_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def introspect(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(NotionSDK.Client.drop_oauth_credentials(params), %{
+      NotionSDK.GeneratedOperation.partition(NotionSDK.Client.drop_oauth_credentials(params), %{
         auth: {"auth", :auth},
         body: %{keys: [{"token", :token}], mode: :keys},
         form_data: %{mode: :none},
@@ -210,7 +210,8 @@ defmodule NotionSDK.OAuth do
       args: params,
       call: {NotionSDK.OAuth, :introspect},
       path_template: "/v1/oauth/introspect",
-      url: render_path("/v1/oauth/introspect", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path("/v1/oauth/introspect", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -286,7 +287,7 @@ defmodule NotionSDK.OAuth do
           {:ok, NotionSDK.OAuth.revoke_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def revoke(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(NotionSDK.Client.drop_oauth_credentials(params), %{
+      NotionSDK.GeneratedOperation.partition(NotionSDK.Client.drop_oauth_credentials(params), %{
         auth: {"auth", :auth},
         body: %{keys: [{"token", :token}], mode: :keys},
         form_data: %{mode: :none},
@@ -298,7 +299,7 @@ defmodule NotionSDK.OAuth do
       args: params,
       call: {NotionSDK.OAuth, :revoke},
       path_template: "/v1/oauth/revoke",
-      url: render_path("/v1/oauth/revoke", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/oauth/revoke", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -409,7 +410,7 @@ defmodule NotionSDK.OAuth do
           {:ok, NotionSDK.OAuth.token_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def token(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(NotionSDK.Client.drop_oauth_credentials(params), %{
+      NotionSDK.GeneratedOperation.partition(NotionSDK.Client.drop_oauth_credentials(params), %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -430,7 +431,7 @@ defmodule NotionSDK.OAuth do
       args: params,
       call: {NotionSDK.OAuth, :token},
       path_template: "/v1/oauth/token",
-      url: render_path("/v1/oauth/token", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/oauth/token", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,

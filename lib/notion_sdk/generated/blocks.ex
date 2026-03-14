@@ -10,8 +10,7 @@ defmodule NotionSDK.Blocks do
     * Retrieve block children
     * Append block children
   """
-  use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type append_children_200_json_resp :: %{
           block: NotionSDK.EmptyObject.t(),
@@ -205,7 +204,7 @@ defmodule NotionSDK.Blocks do
           {:ok, NotionSDK.Blocks.append_children_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def append_children(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{keys: [{"children", :children}, {"position", :position}], mode: :keys},
         form_data: %{mode: :none},
@@ -217,7 +216,11 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :append_children},
       path_template: "/v1/blocks/{block_id}/children",
-      url: render_path("/v1/blocks/{block_id}/children", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/blocks/{block_id}/children",
+          partition.path_params
+        ),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
@@ -449,7 +452,7 @@ defmodule NotionSDK.Blocks do
           | {:error, NotionSDK.Error.t()}
   def delete(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -461,7 +464,8 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :delete},
       path_template: "/v1/blocks/{block_id}",
-      url: render_path("/v1/blocks/{block_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :delete,
       path_params: partition.path_params,
       query: partition.query,
@@ -713,7 +717,7 @@ defmodule NotionSDK.Blocks do
           {:ok, NotionSDK.Blocks.list_children_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def list_children(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -725,7 +729,11 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :list_children},
       path_template: "/v1/blocks/{block_id}/children",
-      url: render_path("/v1/blocks/{block_id}/children", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/blocks/{block_id}/children",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -959,7 +967,7 @@ defmodule NotionSDK.Blocks do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -971,7 +979,8 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :retrieve},
       path_template: "/v1/blocks/{block_id}",
-      url: render_path("/v1/blocks/{block_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -1267,7 +1276,7 @@ defmodule NotionSDK.Blocks do
           | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -1313,7 +1322,8 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :update},
       path_template: "/v1/blocks/{block_id}",
-      url: render_path("/v1/blocks/{block_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

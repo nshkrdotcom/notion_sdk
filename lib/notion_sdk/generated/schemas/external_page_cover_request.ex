@@ -8,7 +8,7 @@ defmodule NotionSDK.ExternalPageCoverRequest do
     * `type`: Always `external`
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           external: NotionSDK.ExternalPageCoverRequestExternal.t(),

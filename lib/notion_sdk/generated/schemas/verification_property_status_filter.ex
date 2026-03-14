@@ -7,7 +7,7 @@ defmodule NotionSDK.VerificationPropertyStatusFilter do
     * `status`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{status: String.t()}
 

@@ -6,8 +6,7 @@ defmodule NotionSDK.Search do
 
     * Search by title
   """
-  use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type search_200_json_resp :: %{
           has_more: boolean,
@@ -133,7 +132,7 @@ defmodule NotionSDK.Search do
           {:ok, NotionSDK.Search.search_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def search(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -154,7 +153,7 @@ defmodule NotionSDK.Search do
       args: params,
       call: {NotionSDK.Search, :search},
       path_template: "/v1/search",
-      url: render_path("/v1/search", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/search", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,

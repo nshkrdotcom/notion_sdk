@@ -8,7 +8,7 @@ defmodule NotionSDK.ExternalPageCoverResponse do
     * `type`: Type of cover. In this case, an external URL.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           external: NotionSDK.ExternalPageCoverResponseExternal.t(),

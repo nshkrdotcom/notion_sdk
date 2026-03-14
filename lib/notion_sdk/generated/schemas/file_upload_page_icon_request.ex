@@ -8,7 +8,7 @@ defmodule NotionSDK.FileUploadPageIconRequest do
     * `type`: Always `file_upload`
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           file_upload: NotionSDK.FileUploadPageIconRequestFileUpload.t(),

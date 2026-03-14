@@ -8,7 +8,7 @@ defmodule NotionSDK.TranscriptionRecordingResponse do
     * `start_time`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{end_time: DateTime.t() | nil, start_time: DateTime.t() | nil}
 

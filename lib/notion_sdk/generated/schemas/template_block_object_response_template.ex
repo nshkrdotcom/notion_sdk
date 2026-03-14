@@ -7,7 +7,7 @@ defmodule NotionSDK.TemplateBlockObjectResponseTemplate do
     * `rich_text`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{rich_text: [NotionSDK.RichTextItemResponse.t()]}
 

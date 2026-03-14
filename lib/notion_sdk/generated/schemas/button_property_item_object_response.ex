@@ -10,7 +10,7 @@ defmodule NotionSDK.ButtonPropertyItemObjectResponse do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           button: NotionSDK.EmptyObject.t(),

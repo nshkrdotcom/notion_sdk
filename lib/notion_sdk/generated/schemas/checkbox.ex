@@ -9,7 +9,7 @@ defmodule NotionSDK.Checkbox do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{checkbox: map, property: String.t(), type: String.t() | nil}
 

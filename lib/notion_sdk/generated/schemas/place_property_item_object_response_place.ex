@@ -12,7 +12,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
     * `name`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           address: String.t() | nil,

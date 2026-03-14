@@ -10,7 +10,7 @@ defmodule NotionSDK.UserObjectResponse do
     * `object`: The user object type name.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           avatar_url: String.t() | nil,

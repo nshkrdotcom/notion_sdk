@@ -8,8 +8,7 @@ defmodule NotionSDK.Databases do
     * Retrieve a database
     * Update a database
   """
-  use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @doc """
   Create a database
@@ -125,7 +124,7 @@ defmodule NotionSDK.Databases do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -148,7 +147,7 @@ defmodule NotionSDK.Databases do
       args: params,
       call: {NotionSDK.Databases, :create},
       path_template: "/v1/databases",
-      url: render_path("/v1/databases", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/databases", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -353,7 +352,7 @@ defmodule NotionSDK.Databases do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -365,7 +364,11 @@ defmodule NotionSDK.Databases do
       args: params,
       call: {NotionSDK.Databases, :retrieve},
       path_template: "/v1/databases/{database_id}",
-      url: render_path("/v1/databases/{database_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/databases/{database_id}",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -560,7 +563,7 @@ defmodule NotionSDK.Databases do
           | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -584,7 +587,11 @@ defmodule NotionSDK.Databases do
       args: params,
       call: {NotionSDK.Databases, :update},
       path_template: "/v1/databases/{database_id}",
-      url: render_path("/v1/databases/{database_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/databases/{database_id}",
+          partition.path_params
+        ),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

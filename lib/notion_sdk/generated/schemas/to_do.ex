@@ -7,7 +7,7 @@ defmodule NotionSDK.ToDo do
     * To Do
     * To Do.t_to_do
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

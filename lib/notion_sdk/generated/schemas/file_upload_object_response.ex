@@ -21,7 +21,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
     * `upload_url`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           complete_url: String.t() | nil,

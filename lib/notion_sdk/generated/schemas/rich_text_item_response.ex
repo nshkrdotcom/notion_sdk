@@ -9,7 +9,7 @@ defmodule NotionSDK.RichTextItemResponse do
     * `plain_text`: The plain text content of the rich text object, without any styling.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           annotations: NotionSDK.AnnotationResponse.t() | nil,

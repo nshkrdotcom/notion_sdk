@@ -9,7 +9,7 @@ defmodule NotionSDK.CodeCode do
     * `rich_text`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           caption: [NotionSDK.RichTextItemRequest.t()] | nil,

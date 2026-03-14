@@ -7,7 +7,7 @@ defmodule NotionSDK.Heading3 do
     * Heading 3
     * Heading3.t_heading_3
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           heading_3:

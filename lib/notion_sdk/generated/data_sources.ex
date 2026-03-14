@@ -10,8 +10,7 @@ defmodule NotionSDK.DataSources do
     * Query a data source
     * List templates in a data source
   """
-  use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @doc """
   Create a data source
@@ -116,7 +115,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -136,7 +135,7 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :create},
       path_template: "/v1/data_sources",
-      url: render_path("/v1/data_sources", partition.path_params),
+      url: NotionSDK.GeneratedOperation.render_path("/v1/data_sources", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -306,7 +305,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def list_templates(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -318,7 +317,11 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :list_templates},
       path_template: "/v1/data_sources/{data_source_id}/templates",
-      url: render_path("/v1/data_sources/{data_source_id}/templates", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/data_sources/{data_source_id}/templates",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -649,7 +652,7 @@ defmodule NotionSDK.DataSources do
           {:ok, NotionSDK.DataSources.query_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def query(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -671,7 +674,11 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :query},
       path_template: "/v1/data_sources/{data_source_id}/query",
-      url: render_path("/v1/data_sources/{data_source_id}/query", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/data_sources/{data_source_id}/query",
+          partition.path_params
+        ),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -861,7 +868,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -873,7 +880,11 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :retrieve},
       path_template: "/v1/data_sources/{data_source_id}",
-      url: render_path("/v1/data_sources/{data_source_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/data_sources/{data_source_id}",
+          partition.path_params
+        ),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -1070,7 +1081,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      partition(params, %{
+      NotionSDK.GeneratedOperation.partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -1091,7 +1102,11 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :update},
       path_template: "/v1/data_sources/{data_source_id}",
-      url: render_path("/v1/data_sources/{data_source_id}", partition.path_params),
+      url:
+        NotionSDK.GeneratedOperation.render_path(
+          "/v1/data_sources/{data_source_id}",
+          partition.path_params
+        ),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

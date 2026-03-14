@@ -9,7 +9,7 @@ defmodule NotionSDK.Files do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{files: map, property: String.t(), type: String.t() | nil}
 

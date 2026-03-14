@@ -7,7 +7,7 @@ defmodule NotionSDK.NumberedListItem do
     * Numbered List Item
     * NumberedListItem.t_numbered_list_item
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           numbered_list_item:

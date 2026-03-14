@@ -10,7 +10,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
     * `table_width`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           children: [NotionSDK.TableRowRequest.t()],

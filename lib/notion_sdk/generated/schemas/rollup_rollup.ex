@@ -7,7 +7,7 @@ defmodule NotionSDK.RollupRollup do
     * `number`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{any: map, date: map, every: map, none: map, number: map}
 

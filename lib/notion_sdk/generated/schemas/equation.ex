@@ -9,7 +9,7 @@ defmodule NotionSDK.Equation do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           equation: NotionSDK.ContentWithExpressionRequest.t(),

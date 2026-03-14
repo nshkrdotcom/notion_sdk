@@ -9,7 +9,7 @@ defmodule NotionSDK.File do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           file: NotionSDK.External.t() | NotionSDK.FileUpload.t(),

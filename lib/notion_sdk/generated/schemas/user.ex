@@ -8,7 +8,7 @@ defmodule NotionSDK.User do
     * `user`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %{
           type: String.t(),

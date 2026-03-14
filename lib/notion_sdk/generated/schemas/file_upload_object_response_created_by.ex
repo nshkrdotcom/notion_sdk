@@ -8,7 +8,7 @@ defmodule NotionSDK.FileUploadObjectResponseCreatedBy do
     * `type`: One of: `person`, `bot`, `agent`
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t(), type: String.t()}
 
