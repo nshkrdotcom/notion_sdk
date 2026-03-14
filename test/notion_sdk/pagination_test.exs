@@ -31,6 +31,28 @@ defmodule NotionSDK.PaginationTest do
 
       assert {:ok, [1, 2, 3]} = Pagination.collect_paginated_api(list_fun, :client, %{})
     end
+
+    test "reduce_paginated_api/5 supports early halting without fetching later pages" do
+      list_fun = fn _client, params ->
+        send(self(), {:list_params, params})
+
+        case Map.get(params, "start_cursor") do
+          nil ->
+            {:ok, %{"results" => [1, 2], "has_more" => true, "next_cursor" => "cursor-1"}}
+
+          "cursor-1" ->
+            flunk("expected reduction to halt before requesting the next page")
+        end
+      end
+
+      assert {:ok, [1]} =
+               Pagination.reduce_paginated_api(list_fun, :client, %{}, [], fn item, acc ->
+                 {:halt, [item | acc]}
+               end)
+
+      assert_receive {:list_params, %{}}
+      refute_receive {:list_params, %{"start_cursor" => "cursor-1"}}
+    end
   end
 
   describe "iterate_data_source_templates/2 and collect_data_source_templates/2" do
@@ -132,6 +154,66 @@ defmodule NotionSDK.PaginationTest do
                Pagination.collect_data_source_templates(client, %{
                  "data_source_id" => "data-source-123"
                })
+    end
+
+    test "reduce_data_source_templates/4 reduces typed template responses across pages" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          transport: TestTransport,
+          transport_opts: [
+            test_pid: self(),
+            response: fn request, _context ->
+              body =
+                if String.contains?(
+                     request.url,
+                     "start_cursor=33333333-3333-3333-3333-333333333333"
+                   ) do
+                  %{
+                    "templates" => [
+                      %{
+                        "id" => "44444444-4444-4444-4444-444444444444",
+                        "name" => "Template 3",
+                        "is_default" => false
+                      }
+                    ],
+                    "has_more" => false,
+                    "next_cursor" => nil
+                  }
+                else
+                  %{
+                    "templates" => [
+                      %{
+                        "id" => "11111111-1111-1111-1111-111111111111",
+                        "name" => "Template 1",
+                        "is_default" => true
+                      },
+                      %{
+                        "id" => "22222222-2222-2222-2222-222222222222",
+                        "name" => "Template 2",
+                        "is_default" => false
+                      }
+                    ],
+                    "has_more" => true,
+                    "next_cursor" => "33333333-3333-3333-3333-333333333333"
+                  }
+                end
+
+              {:ok, %Response{status: 200, headers: %{}, body: Jason.encode!(body)}}
+            end
+          ]
+        )
+
+      assert {:ok, ["Template 1", "Template 2", "Template 3"]} =
+               Pagination.reduce_data_source_templates(
+                 client,
+                 %{"data_source_id" => "data-source-123"},
+                 [],
+                 fn template, acc ->
+                   {:cont, [template.name | acc]}
+                 end
+               )
+               |> then(fn {:ok, names} -> {:ok, Enum.reverse(names)} end)
     end
   end
 end

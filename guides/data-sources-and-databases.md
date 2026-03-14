@@ -88,6 +88,22 @@ Collect the full template set with the specialized pagination helper:
   })
 ```
 
+For larger template sets, use the reducer variant so you can stop early or keep
+only the fields you need:
+
+```elixir
+{:ok, template_names} =
+  NotionSDK.Pagination.reduce_data_source_templates(
+    client,
+    %{"data_source_id" => data_source_id},
+    [],
+    fn template, acc ->
+      {:cont, [template.name | acc]}
+    end
+  )
+  |> then(fn {:ok, names} -> {:ok, Enum.reverse(names)} end)
+```
+
 ## Database-specific behavior
 
 The database endpoints are thinner and focus on retrieve, create, and update:

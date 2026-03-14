@@ -1,9 +1,11 @@
 # Pagination, Helpers, and Guards
 
-Notion list endpoints are cursor-based. `NotionSDK.Pagination` gives you two styles of wrapper:
+Notion list endpoints are cursor-based. `NotionSDK.Pagination` gives you three
+styles of wrapper:
 
-- eager collection with `collect_*`
-- lazy streaming with `iterate_*`
+- eager collection with `collect_*` for smaller result sets
+- reducer-driven traversal with `reduce_*` for bounded-memory processing and early stopping
+- lazy streaming with `iterate_*` for parity-style iteration
 
 `NotionSDK.Helpers` and `NotionSDK.Guards` cover the most common ID-normalization and object-shape checks.
 
@@ -18,6 +20,23 @@ Use `collect_paginated_api/3` when you want the whole result list as a single `{
     client,
     %{"page_size" => 100}
   )
+```
+
+Use `reduce_paginated_api/5` when you want to keep your own accumulator shape or
+stop early:
+
+```elixir
+{:ok, user_ids} =
+  NotionSDK.Pagination.reduce_paginated_api(
+    &NotionSDK.Users.list/2,
+    client,
+    %{"page_size" => 100},
+    [],
+    fn user, acc ->
+      {:cont, [user["id"] | acc]}
+    end
+  )
+  |> then(fn {:ok, ids} -> {:ok, Enum.reverse(ids)} end)
 ```
 
 Use `iterate_paginated_api/3` when you want a stream:
@@ -38,7 +57,9 @@ The generic helpers expect the target function to return:
 - `{:ok, %{"results" => results, "has_more" => boolean, "next_cursor" => cursor}}`
 - or `{:error, reason}`
 
-`collect_paginated_api/3` returns the error tuple directly. `iterate_paginated_api/3` raises if a later page fails while the stream is being consumed.
+`collect_paginated_api/3` and `reduce_paginated_api/5` return the error tuple
+directly. `iterate_paginated_api/3` raises if a later page fails while the
+stream is being consumed.
 
 ## Paginate data source templates
 
@@ -56,6 +77,26 @@ NotionSDK.Pagination.iterate_data_source_templates(client, %{
   "data_source_id" => data_source_id
 })
 |> Enum.to_list()
+```
+
+For larger template inventories, prefer the reducer helper so you can own the
+accumulator:
+
+```elixir
+{:ok, default_templates} =
+  NotionSDK.Pagination.reduce_data_source_templates(
+    client,
+    %{"data_source_id" => data_source_id},
+    [],
+    fn template, acc ->
+      if template.is_default do
+        {:cont, [template | acc]}
+      else
+        {:cont, acc}
+      end
+    end
+  )
+  |> then(fn {:ok, templates} -> {:ok, Enum.reverse(templates)} end)
 ```
 
 ## Extract IDs from Notion URLs
