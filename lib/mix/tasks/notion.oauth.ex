@@ -43,7 +43,6 @@ defmodule Mix.Tasks.Notion.Oauth do
   use Mix.Task
 
   alias NotionSDK.OAuthTokenFile
-  alias Pristine.Adapters.TokenSource.File, as: FileTokenSource
 
   @default_timeout_ms 120_000
   @interactive_switches [
@@ -154,7 +153,7 @@ defmodule Mix.Tasks.Notion.Oauth do
   end
 
   defp load_saved_token!(path) do
-    case FileTokenSource.fetch(path: path) do
+    case token_source_fetch(path: path) do
       {:ok, token} ->
         token
 
@@ -177,7 +176,7 @@ defmodule Mix.Tasks.Notion.Oauth do
   end
 
   defp save_refreshed_token!(token, path) do
-    case FileTokenSource.put(token, path: path) do
+    case token_source_put(token, path: path) do
       :ok ->
         :ok
 
@@ -284,7 +283,7 @@ defmodule Mix.Tasks.Notion.Oauth do
     if save_enabled?(opts) do
       path = save_path(opts)
 
-      case FileTokenSource.put(token, path: path, create_dirs?: true) do
+      case token_source_put(token, path: path, create_dirs?: true) do
         :ok ->
           Mix.shell().info("Saved token file: #{path}")
 
@@ -319,6 +318,20 @@ defmodule Mix.Tasks.Notion.Oauth do
 
   defp token_to_map(%{__struct__: _module} = token), do: Map.from_struct(token)
   defp token_to_map(token) when is_map(token), do: token
+
+  defp token_source_fetch(opts) do
+    module = token_source_module()
+    module.fetch(opts)
+  end
+
+  defp token_source_put(token, opts) do
+    module = token_source_module()
+    module.put(token, opts)
+  end
+
+  defp token_source_module do
+    Module.concat([Pristine, Adapters, TokenSource, File])
+  end
 
   defp format_save_error({kind, %_{} = error}), do: "#{kind}: #{Exception.message(error)}"
   defp format_save_error({kind, reason}), do: "#{kind}: #{inspect(reason)}"

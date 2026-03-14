@@ -3,8 +3,6 @@ defmodule NotionSDK.Refresh do
   Repeatable upstream snapshot, regeneration, and diff workflow for `notion_sdk`.
   """
 
-  alias Jason.OrderedObject
-
   @doc_snapshot_pages [
     "versioning.md",
     "request-limits.md",
@@ -234,7 +232,7 @@ defmodule NotionSDK.Refresh do
     paths.js_sdk_root
     |> Path.join("package.json")
     |> File.read!()
-    |> Jason.decode!()
+    |> json_decode!()
     |> Map.get("version")
   end
 
@@ -386,7 +384,7 @@ defmodule NotionSDK.Refresh do
   defp ordered_json!(term) do
     term
     |> ordered_json_term()
-    |> Jason.encode!(pretty: true)
+    |> json_encode!(pretty: true)
   end
 
   defp ordered_json_term(%_{} = struct), do: struct |> Map.from_struct() |> ordered_json_term()
@@ -395,7 +393,7 @@ defmodule NotionSDK.Refresh do
     map
     |> Enum.map(fn {key, value} -> {to_string(key), ordered_json_term(value)} end)
     |> Enum.sort_by(fn {key, _value} -> key end)
-    |> OrderedObject.new()
+    |> ordered_object_new()
   end
 
   defp ordered_json_term(tuple) when is_tuple(tuple) do
@@ -406,4 +404,27 @@ defmodule NotionSDK.Refresh do
 
   defp ordered_json_term(list) when is_list(list), do: Enum.map(list, &ordered_json_term/1)
   defp ordered_json_term(value), do: value
+
+  defp json_decode!(value) do
+    module = json_module()
+    module.decode!(value)
+  end
+
+  defp json_encode!(value, opts) do
+    module = json_module()
+    module.encode!(value, opts)
+  end
+
+  defp ordered_object_new(entries) do
+    module = ordered_object_module()
+    module.new(entries)
+  end
+
+  defp json_module do
+    Module.concat([Jason])
+  end
+
+  defp ordered_object_module do
+    Module.concat([Jason, OrderedObject])
+  end
 end

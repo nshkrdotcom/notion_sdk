@@ -54,7 +54,7 @@ defmodule NotionSDK.MixProject do
 
   defp dialyzer do
     [
-      plt_add_apps: [:ex_unit, :mix, :oapi_generator],
+      plt_add_apps: [:ex_unit, :mix, :oapi_generator, :pristine],
       plt_core_path: "priv/plts/core",
       plt_local_path: Path.join("priv/plts/project", project_plt_fingerprint())
     ]
