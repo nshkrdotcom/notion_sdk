@@ -31,7 +31,7 @@ defmodule NotionSDK.Relation do
       id: :string,
       next_url: {:union, [:null, :string]},
       property: :string,
-      relation: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+      relation: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
       type: {:const, "relation"}
     ]
   end
@@ -102,7 +102,7 @@ defmodule NotionSDK.Relation do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+        type: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
         write_only: false
       },
       %{

@@ -31,8 +31,8 @@ defmodule NotionSDK.TableOfContents do
       table_of_contents:
         {:union,
          [
-           {NotionSDK.TableOfContents, :t_table_of_contents},
-           {NotionSDK.TableOfContentsTableOfContents, :t}
+           {NotionSDK.TableOfContentsTableOfContents, :t},
+           {NotionSDK.TableOfContents, :t_table_of_contents}
          ]},
       type: {:const, "table_of_contents"}
     ]
@@ -106,8 +106,8 @@ defmodule NotionSDK.TableOfContents do
         type:
           {:union,
            [
-             {NotionSDK.TableOfContents, :t_table_of_contents},
-             {NotionSDK.TableOfContentsTableOfContents, :t}
+             {NotionSDK.TableOfContentsTableOfContents, :t},
+             {NotionSDK.TableOfContents, :t_table_of_contents}
            ]},
         write_only: false
       },

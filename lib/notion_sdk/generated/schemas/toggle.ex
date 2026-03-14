@@ -69,8 +69,8 @@ defmodule NotionSDK.Toggle do
          [
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.Toggle, :t_toggle},
-           {NotionSDK.ToggleToggle, :t}
+           {NotionSDK.ToggleToggle, :t},
+           {NotionSDK.Toggle, :t_toggle}
          ]},
       type: {:const, "toggle"}
     ]
@@ -178,8 +178,8 @@ defmodule NotionSDK.Toggle do
            [
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.Toggle, :t_toggle},
-             {NotionSDK.ToggleToggle, :t}
+             {NotionSDK.ToggleToggle, :t},
+             {NotionSDK.Toggle, :t_toggle}
            ]},
         write_only: false
       },

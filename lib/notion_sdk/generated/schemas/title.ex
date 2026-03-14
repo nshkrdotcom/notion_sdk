@@ -31,7 +31,7 @@ defmodule NotionSDK.Title do
       id: :string,
       next_url: {:union, [:null, :string]},
       property: :string,
-      title: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+      title: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
       type: {:const, "title"}
     ]
   end
@@ -102,7 +102,7 @@ defmodule NotionSDK.Title do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+        type: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
         write_only: false
       },
       %{

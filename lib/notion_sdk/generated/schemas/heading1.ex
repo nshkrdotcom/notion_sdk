@@ -69,8 +69,8 @@ defmodule NotionSDK.Heading1 do
          [
            {NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest, :t},
            {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-           {NotionSDK.Heading1, :t_heading_1},
-           {NotionSDK.Heading1Heading1, :t}
+           {NotionSDK.Heading1Heading1, :t},
+           {NotionSDK.Heading1, :t_heading_1}
          ]},
       object: {:const, "block"},
       type: {:const, "heading_1"}
@@ -165,8 +165,8 @@ defmodule NotionSDK.Heading1 do
            [
              {NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest, :t},
              {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-             {NotionSDK.Heading1, :t_heading_1},
-             {NotionSDK.Heading1Heading1, :t}
+             {NotionSDK.Heading1Heading1, :t},
+             {NotionSDK.Heading1, :t_heading_1}
            ]},
         write_only: false
       },

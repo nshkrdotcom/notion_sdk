@@ -68,8 +68,8 @@ defmodule NotionSDK.BulletedListItem do
          [
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.BulletedListItem, :t_bulleted_list_item},
-           {NotionSDK.BulletedListItemBulletedListItem, :t}
+           {NotionSDK.BulletedListItemBulletedListItem, :t},
+           {NotionSDK.BulletedListItem, :t_bulleted_list_item}
          ]},
       object: {:const, "block"},
       type: {:const, "bulleted_list_item"}
@@ -163,8 +163,8 @@ defmodule NotionSDK.BulletedListItem do
            [
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.BulletedListItem, :t_bulleted_list_item},
-             {NotionSDK.BulletedListItemBulletedListItem, :t}
+             {NotionSDK.BulletedListItemBulletedListItem, :t},
+             {NotionSDK.BulletedListItem, :t_bulleted_list_item}
            ]},
         write_only: false
       },

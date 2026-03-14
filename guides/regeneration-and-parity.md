@@ -21,6 +21,9 @@ a sibling `notion_docs` checkout when those fixtures are already present.
 The generated runtime surface targets the hardened `Pristine.SDK.*` namespace
 plus `Pristine.execute_request/3`, not broad `pristine` internals.
 
+The retained build-time seam is `Pristine.OpenAPI.Bridge.run/3`, and
+`notion_sdk` keeps that dependency confined to its codegen workflow.
+
 ## What `mix notion.refresh` does
 
 `NotionSDK.Refresh.run!/1` performs four major steps:

@@ -31,7 +31,7 @@ defmodule NotionSDK.RichText do
       id: :string,
       next_url: {:union, [:null, :string]},
       property: :string,
-      rich_text: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+      rich_text: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
       type: {:const, "rich_text"}
     ]
   end
@@ -102,7 +102,7 @@ defmodule NotionSDK.RichText do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+        type: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
         write_only: false
       },
       %{

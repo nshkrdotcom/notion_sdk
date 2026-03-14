@@ -69,8 +69,8 @@ defmodule NotionSDK.Paragraph do
          [
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.Paragraph, :t_paragraph},
-           {NotionSDK.ParagraphParagraph, :t}
+           {NotionSDK.ParagraphParagraph, :t},
+           {NotionSDK.Paragraph, :t_paragraph}
          ]},
       type: {:const, "paragraph"}
     ]
@@ -178,8 +178,8 @@ defmodule NotionSDK.Paragraph do
            [
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.Paragraph, :t_paragraph},
-             {NotionSDK.ParagraphParagraph, :t}
+             {NotionSDK.ParagraphParagraph, :t},
+             {NotionSDK.Paragraph, :t_paragraph}
            ]},
         write_only: false
       },

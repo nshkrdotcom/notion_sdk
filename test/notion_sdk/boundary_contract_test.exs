@@ -11,10 +11,18 @@ defmodule NotionSDK.BoundaryContractTest do
     "Pristine.Profiles.Foundation"
   ]
 
+  @bridge_pattern "Pristine.OpenAPI.Bridge"
+
   @handwritten_globs [
     "README.md",
     "guides/**/*.md",
     "examples/**/*.exs",
+    "lib/**/*.ex",
+    "test/**/*.exs",
+    "codegen/**/*.ex"
+  ]
+
+  @code_globs [
     "lib/**/*.ex",
     "test/**/*.exs",
     "codegen/**/*.ex"
@@ -38,6 +46,19 @@ defmodule NotionSDK.BoundaryContractTest do
       end)
 
     assert violations == []
+  end
+
+  test "OpenAPI bridge dependency stays confined to build-time codegen" do
+    bridge_refs =
+      @code_globs
+      |> Enum.flat_map(&Path.wildcard/1)
+      |> Enum.reject(&generated_path?/1)
+      |> Enum.filter(fn path ->
+        File.read!(path) |> String.contains?(@bridge_pattern)
+      end)
+      |> Enum.sort()
+
+    assert bridge_refs == ["codegen/notion_sdk/codegen.ex"]
   end
 
   defp generated_path?(path) do
