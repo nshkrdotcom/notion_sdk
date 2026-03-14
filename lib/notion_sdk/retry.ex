@@ -70,7 +70,8 @@ defmodule NotionSDK.Retry do
   defp convert_request_date(value) when is_binary(value) do
     with {:module, :httpd_util} <- Code.ensure_loaded(:httpd_util),
          true <- function_exported?(:httpd_util, :convert_request_date, 1) do
-      :httpd_util.convert_request_date(String.to_charlist(value))
+      httpd_util = :httpd_util
+      httpd_util.convert_request_date(String.to_charlist(value))
     else
       _ -> nil
     end

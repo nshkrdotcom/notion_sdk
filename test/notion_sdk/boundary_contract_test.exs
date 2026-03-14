@@ -14,6 +14,7 @@ defmodule NotionSDK.BoundaryContractTest do
   ]
 
   @bridge_pattern "Pristine.OpenAPI.Bridge"
+  @mixfile_path "mix.exs"
   @oauth_task_path "lib/mix/tasks/notion.oauth.ex"
 
   @handwritten_globs [
@@ -69,8 +70,15 @@ defmodule NotionSDK.BoundaryContractTest do
 
     assert source =~ "Module.concat([Pristine, OAuth2, Interactive])"
     assert source =~ "Module.concat([Pristine, SDK, OAuth2])"
+    assert source =~ "Module.concat([Pristine, OAuth2, SavedToken])"
     assert source =~ "interactive_module().authorize(NotionSDK.OAuth.provider(),"
-    assert source =~ "oauth2_module().refresh_token(NotionSDK.OAuth.provider(), refresh_token,"
+    assert source =~ "saved_token_module().refresh(NotionSDK.OAuth.provider(),"
+  end
+
+  test "notion_sdk no longer carries a direct oauth2 dependency" do
+    mixfile = File.read!(@mixfile_path)
+
+    refute mixfile =~ "{:oauth2,"
   end
 
   defp generated_path?(path) do

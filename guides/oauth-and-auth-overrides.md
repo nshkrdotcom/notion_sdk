@@ -123,6 +123,9 @@ mix notion.oauth refresh
 That command loads the saved token JSON, sends a real
 `grant_type=refresh_token` request through `Pristine.SDK.OAuth2`, and writes any
 rotated refresh token back to disk before you reuse the file for bearer auth.
+The generic load/refresh/merge/save workflow now lives upstream in
+`Pristine.OAuth2.SavedToken`; `mix notion.oauth refresh` remains the Notion-
+specific CLI wrapper.
 
 Refresh flows use the same endpoint with a different grant type:
 
@@ -222,7 +225,9 @@ location.
 Because Notion does not publish expiry metadata in the OAuth token response, do
 not assume `Pristine.Adapters.TokenSource.Refreshable` can transparently
 pre-refresh these saved Notion tokens. Refresh them explicitly, then reuse the
-saved file.
+saved file. Browser launch and loopback callback capture remain optional
+interactive adapters on the Pristine side; manual paste-back still works
+without them.
 
 ## Disable inherited bearer auth
 

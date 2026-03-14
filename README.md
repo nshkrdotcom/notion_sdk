@@ -143,6 +143,10 @@ That flow prints the authorization URL, waits for approval in the browser, then
 exchanges the temporary code and saves the token JSON to
 `~/.config/notion_sdk/oauth/notion.json` by default.
 
+Saved token persistence and refresh merge behavior now come from the upstream
+`Pristine.OAuth2.SavedToken` workflow, while `mix notion.oauth` stays the thin
+Notion-specific wrapper around env vars, CLI wording, and default paths.
+
 For persisted bearer auth, point the client at the generic file token source:
 
 ```elixir

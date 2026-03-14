@@ -39,7 +39,6 @@ defmodule NotionSDK.MixProject do
   defp deps do
     [
       {:pristine, path: "../pristine"},
-      {:oauth2, "~> 2.1"},
       {:oapi_generator,
        github: "nshkrdotcom/open-api-generator",
        branch: "doc-generator-fix",

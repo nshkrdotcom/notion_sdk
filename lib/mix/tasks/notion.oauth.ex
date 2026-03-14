@@ -43,7 +43,7 @@ defmodule Mix.Tasks.Notion.Oauth do
   use Mix.Task
 
   alias NotionSDK.OAuthTokenFile
-  alias Pristine.SDK.OAuth2.{Error, Token}
+  alias Pristine.SDK.OAuth2.Error
 
   @default_timeout_ms 120_000
   @interactive_switches [
@@ -114,20 +114,36 @@ defmodule Mix.Tasks.Notion.Oauth do
     client_id = fetch_env!("NOTION_OAUTH_CLIENT_ID")
     client_secret = fetch_env!("NOTION_OAUTH_CLIENT_SECRET")
     path = save_path(opts)
-    saved_token = load_saved_token!(path)
-    refresh_token = fetch_saved_refresh_token!(saved_token, path)
     client = NotionSDK.Client.new()
 
-    case oauth2_module().refresh_token(NotionSDK.OAuth.provider(), refresh_token,
+    case saved_token_module().refresh(NotionSDK.OAuth.provider(),
+           oauth2_module: oauth2_module(),
            client_id: client_id,
            client_secret: client_secret,
-           context: client.context
+           context: client.context,
+           token_source: {token_source_module(), path: path}
          ) do
       {:ok, refreshed_token} ->
-        merged_token = merge_refreshed_token(saved_token, refreshed_token)
-        save_refreshed_token!(merged_token, path)
         Mix.shell().info("Updated token file: #{path}")
-        print_token(merged_token, save: true, path: path)
+        print_token(refreshed_token, save: true, path: path)
+
+      :error ->
+        Mix.raise("saved oauth token file not found at #{path}")
+
+      {:error, :missing_refresh_token} ->
+        Mix.raise("#{path} does not contain a refresh token")
+
+      {:error, {:token_refresh_persist_failed, reason}} ->
+        Mix.raise("failed to save oauth token to #{path}: #{format_save_error(reason)}")
+
+      {:error, {:token_file_read_failed, _} = reason} ->
+        Mix.raise("failed to load oauth token from #{path}: #{format_save_error(reason)}")
+
+      {:error, {:invalid_token_json, _} = reason} ->
+        Mix.raise("failed to load oauth token from #{path}: #{format_save_error(reason)}")
+
+      {:error, {:invalid_token_data, _} = reason} ->
+        Mix.raise("failed to load oauth token from #{path}: #{format_save_error(reason)}")
 
       {:error, error} ->
         raise_oauth_error("token refresh failed", error)
@@ -146,84 +162,14 @@ defmodule Mix.Tasks.Notion.Oauth do
     Application.get_env(:notion_sdk, :oauth2_module, Module.concat([Pristine, SDK, OAuth2]))
   end
 
+  defp saved_token_module do
+    Module.concat([Pristine, OAuth2, SavedToken])
+  end
+
   defp fetch_env!(name) do
     case System.get_env(name) do
       value when is_binary(value) and value != "" -> value
       _other -> Mix.raise("missing required environment variable #{name}")
-    end
-  end
-
-  defp load_saved_token!(path) do
-    case token_source_fetch(path: path) do
-      {:ok, token} ->
-        token
-
-      :error ->
-        Mix.raise("saved oauth token file not found at #{path}")
-
-      {:error, reason} ->
-        Mix.raise("failed to load oauth token from #{path}: #{format_save_error(reason)}")
-    end
-  end
-
-  defp fetch_saved_refresh_token!(token, path) do
-    refresh_token = Map.get(token, :refresh_token)
-
-    if is_binary(refresh_token) and refresh_token != "" do
-      refresh_token
-    else
-      Mix.raise("#{path} does not contain a refresh token")
-    end
-  end
-
-  defp save_refreshed_token!(token, path) do
-    case token_source_put(token, path: path) do
-      :ok ->
-        :ok
-
-      {:error, reason} ->
-        Mix.raise("failed to save oauth token to #{path}: #{format_save_error(reason)}")
-    end
-  end
-
-  defp merge_refreshed_token(saved_token, refreshed_token) do
-    saved_token_map = token_to_map(saved_token)
-    refreshed_token_map = token_to_map(refreshed_token)
-
-    access_token =
-      Map.get(refreshed_token_map, :access_token) ||
-        Mix.raise("refreshed token response did not include an access token")
-
-    token_from_map(%{
-      access_token: access_token,
-      refresh_token: merged_refresh_token(saved_token_map, refreshed_token_map),
-      expires_at: Map.get(refreshed_token_map, :expires_at),
-      token_type: merged_token_type(saved_token_map, refreshed_token_map),
-      other_params:
-        Map.merge(
-          Map.get(saved_token_map, :other_params, %{}),
-          Map.get(refreshed_token_map, :other_params, %{})
-        )
-    })
-  end
-
-  defp merged_refresh_token(saved_token, refreshed_token) do
-    refresh_token = Map.get(refreshed_token, :refresh_token)
-
-    if is_binary(refresh_token) and refresh_token != "" do
-      refresh_token
-    else
-      Map.get(saved_token, :refresh_token)
-    end
-  end
-
-  defp merged_token_type(saved_token, refreshed_token) do
-    token_type = Map.get(refreshed_token, :token_type)
-
-    if is_binary(token_type) and token_type != "" do
-      token_type
-    else
-      Map.get(saved_token, :token_type)
     end
   end
 
@@ -284,7 +230,10 @@ defmodule Mix.Tasks.Notion.Oauth do
     if save_enabled?(opts) do
       path = save_path(opts)
 
-      case token_source_put(token, path: path, create_dirs?: true) do
+      case saved_token_module().save(
+             token,
+             {token_source_module(), [path: path, create_dirs?: true]}
+           ) do
         :ok ->
           Mix.shell().info("Saved token file: #{path}")
 
@@ -311,23 +260,6 @@ defmodule Mix.Tasks.Notion.Oauth do
 
   defp oauth_error_module do
     Error.new(:oauth2_unavailable).__struct__
-  end
-
-  defp token_from_map(attrs) when is_map(attrs) do
-    Token.from_map(attrs)
-  end
-
-  defp token_to_map(%{__struct__: _module} = token), do: Map.from_struct(token)
-  defp token_to_map(token) when is_map(token), do: token
-
-  defp token_source_fetch(opts) do
-    module = token_source_module()
-    module.fetch(opts)
-  end
-
-  defp token_source_put(token, opts) do
-    module = token_source_module()
-    module.put(token, opts)
   end
 
   defp token_source_module do
