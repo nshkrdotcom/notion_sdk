@@ -191,6 +191,7 @@ defmodule NotionSDK.Refresh do
       notion_default_version: NotionSDK.Client.default_notion_version(),
       reference_pages: paths.reference_pages,
       parity_inventory: parity_inventory,
+      provenance: provenance_metadata(paths),
       doc_snapshot_pages: paths.doc_snapshot_pages,
       js_sdk_snapshot_files: paths.js_sdk_snapshot_files
     }
@@ -213,6 +214,65 @@ defmodule NotionSDK.Refresh do
     |> Jason.decode!()
     |> Map.get("version")
   end
+
+  defp provenance_metadata(paths) do
+    %{
+      captured_at: DateTime.utc_now() |> DateTime.truncate(:second) |> DateTime.to_iso8601(),
+      notion_docs: %{
+        git: git_provenance(paths.notion_docs_root),
+        tracked_files_sha256:
+          tracked_files_sha256(
+            paths.reference_root,
+            Enum.uniq(paths.reference_pages ++ paths.doc_snapshot_pages)
+          )
+      },
+      js_sdk: %{
+        package_version: package_version(paths),
+        git: git_provenance(paths.js_sdk_root),
+        tracked_files_sha256: tracked_files_sha256(paths.js_sdk_root, paths.js_sdk_snapshot_files)
+      }
+    }
+  end
+
+  defp tracked_files_sha256(root, relative_paths) do
+    relative_paths
+    |> Enum.sort()
+    |> Enum.map(fn relative_path ->
+      [relative_path, <<0>>, File.read!(Path.join(root, relative_path))]
+    end)
+    |> IO.iodata_to_binary()
+    |> then(&:crypto.hash(:sha256, &1))
+    |> Base.encode16(case: :lower)
+  end
+
+  defp git_provenance(root) do
+    with true <- is_binary(root) and File.dir?(root),
+         {:ok, commit} <- git_stdout(root, ["rev-parse", "HEAD"]) do
+      %{
+        available: true,
+        commit: commit,
+        origin_url: git_stdout(root, ["config", "--get", "remote.origin.url"]) |> value_or_nil()
+      }
+    else
+      _other ->
+        %{
+          available: false,
+          commit: nil,
+          origin_url: nil
+        }
+    end
+  end
+
+  defp git_stdout(root, args) do
+    case System.cmd("git", ["-C", root | args], stderr_to_stdout: true) do
+      {output, 0} -> {:ok, String.trim(output)}
+      {_output, _exit_code} -> :error
+    end
+  end
+
+  defp value_or_nil({:ok, ""}), do: nil
+  defp value_or_nil({:ok, value}), do: value
+  defp value_or_nil(:error), do: nil
 
   defp build_report(before, current, paths) do
     %{

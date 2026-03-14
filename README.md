@@ -197,6 +197,10 @@ mix notion.refresh
 mix notion.refresh --snapshots-only
 ```
 
+The maintainer tasks accept explicit path overrides such as
+`--reference-root`, `--notion-docs-root`, and `--js-sdk-root`, so sibling
+checkouts are optional rather than required.
+
 Use [Regeneration and Parity Workflow](guides/regeneration-and-parity.md) for
 the artifact map, refresh steps, and oracle details.
 

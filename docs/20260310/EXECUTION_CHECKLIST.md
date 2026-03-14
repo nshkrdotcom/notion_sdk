@@ -34,8 +34,10 @@ Repo-local mirror of the packet checklist, updated to match the implementation t
 - [x] `mix notion.generate` added
 - [x] `mix notion.refresh` added
 - [x] script wrappers kept for compatibility
+- [x] Mix tasks accept explicit path overrides instead of assuming one checkout topology
 - [x] upstream snapshot capture path defined under `priv/upstream/snapshots/`
 - [x] grouped diff report emitted to `priv/generated/refresh_report.json`
+- [x] snapshot metadata records explicit provenance fields
 
 ## Remaining Follow-Up
 

@@ -82,6 +82,9 @@ defmodule NotionSDK.RefreshTest do
       File.write!(path, contents)
     end)
 
+    init_git_repo!(notion_docs_root, "https://example.com/notion_docs.git")
+    init_git_repo!(js_sdk_root, "https://example.com/notion-sdk-js.git")
+
     report =
       NotionSDK.Refresh.run!(
         project_root: project_root,
@@ -140,6 +143,22 @@ defmodule NotionSDK.RefreshTest do
     assert metadata["reference_pages"] == ["get-self.md"]
     assert metadata["parity_inventory"]["js_sdk"]["package"] == "@notionhq/client"
     assert metadata["parity_inventory"]["operation_count"] == 1
+    assert metadata["provenance"]["notion_docs"]["git"]["available"] == true
+    assert metadata["provenance"]["notion_docs"]["git"]["commit"] =~ ~r/^[0-9a-f]{40}$/
+
+    assert metadata["provenance"]["notion_docs"]["git"]["origin_url"] ==
+             "https://example.com/notion_docs.git"
+
+    assert metadata["provenance"]["js_sdk"]["package_version"] == "5.12.0"
+    assert metadata["provenance"]["js_sdk"]["git"]["available"] == true
+    assert metadata["provenance"]["js_sdk"]["git"]["commit"] =~ ~r/^[0-9a-f]{40}$/
+
+    assert metadata["provenance"]["js_sdk"]["git"]["origin_url"] ==
+             "https://example.com/notion-sdk-js.git"
+
+    assert is_binary(metadata["provenance"]["notion_docs"]["tracked_files_sha256"])
+    assert is_binary(metadata["provenance"]["js_sdk"]["tracked_files_sha256"])
+    assert {:ok, _captured_at, 0} = DateTime.from_iso8601(metadata["provenance"]["captured_at"])
   end
 
   defp make_tmp_dir!(name) do
@@ -151,5 +170,29 @@ defmodule NotionSDK.RefreshTest do
     File.mkdir_p!(path)
     on_exit(fn -> File.rm_rf!(path) end)
     path
+  end
+
+  defp init_git_repo!(root, origin_url) do
+    run_cmd!(root, ["git", "init"])
+    run_cmd!(root, ["git", "remote", "add", "origin", origin_url])
+    run_cmd!(root, ["git", "add", "."])
+
+    run_cmd!(root, [
+      "git",
+      "-c",
+      "user.name=NotionSDK Test",
+      "-c",
+      "user.email=test@example.com",
+      "commit",
+      "-m",
+      "Initial snapshot"
+    ])
+  end
+
+  defp run_cmd!(cwd, argv) do
+    {output, 0} =
+      System.cmd(List.first(argv), Enum.drop(argv, 1), cd: cwd, stderr_to_stdout: true)
+
+    output
   end
 end

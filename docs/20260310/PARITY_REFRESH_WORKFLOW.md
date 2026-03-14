@@ -15,14 +15,16 @@ Compatibility wrappers:
 ```bash
 elixir scripts/generate_notion_sdk.exs
 elixir scripts/refresh_notion_sdk.exs
+elixir scripts/refresh_notion_sdk.exs --notion-docs-root /path/to/notion_docs --js-sdk-root /path/to/notion-sdk-js
 ```
 
 ## Refresh sequence
 
 1. Update the local upstream sources first.
    - `notion-sdk-js/`
-   - sibling `notion_docs/reference/`
+   - any Notion docs checkout or prepared snapshot root you plan to point `mix notion.refresh` at
 2. Run `mix notion.refresh`.
+   - use `--notion-docs-root`, `--reference-root`, and `--js-sdk-root` if your sources do not live in the default layout
 3. Review grouped changes in:
    - `priv/upstream/parity_inventory.json`
    - `priv/upstream/snapshots/`
@@ -38,6 +40,7 @@ elixir scripts/refresh_notion_sdk.exs
 
 - upstream snapshot diffs should explain why extracted specs changed
 - parity-inventory diffs should explain every added, removed, or renamed endpoint in the bounded surface
+- snapshot metadata diffs should show auditable provenance fields, not just file lists
 - reference-context diffs should explain any generated doc or docs-manifest changes
 - generated code diffs should trace back to either upstream snapshot changes or supplemental spec changes
 - bridge artifact diffs should remain deterministic and reviewable

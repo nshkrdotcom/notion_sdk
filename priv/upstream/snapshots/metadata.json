@@ -59,6 +59,26 @@
       "introspect-token.md"
     ]
   },
+  "provenance": {
+    "captured_at": "2026-03-14T05:11:20Z",
+    "notion_docs": {
+      "git": {
+        "available": false,
+        "commit": null,
+        "origin_url": null
+      },
+      "tracked_files_sha256": "852a2a51dabc1cc9e0e0e9332aa441a7c148f903b1ccde4872a7a7df8c5d50b1"
+    },
+    "js_sdk": {
+      "package_version": "5.12.0",
+      "git": {
+        "available": true,
+        "commit": "e8791458e0f69b9ff0b86ae0bb59489d8c1cbb4c",
+        "origin_url": "https://github.com/makenotion/notion-sdk-js.git"
+      },
+      "tracked_files_sha256": "0aad2504c862f4d85dcf6c5c9a6fb8605697b261019aa517604f953e89e4bc0d"
+    }
+  },
   "reference_pages": [
     "get-self.md",
     "get-user.md",

@@ -10,6 +10,7 @@ The supported entry points are the Mix tasks:
 mix notion.generate
 mix notion.refresh
 mix notion.refresh --snapshots-only
+mix notion.refresh --notion-docs-root /path/to/notion_docs --js-sdk-root /path/to/notion-sdk-js
 ```
 
 The script wrappers remain available as direct entry points:
@@ -17,7 +18,11 @@ The script wrappers remain available as direct entry points:
 ```bash
 elixir scripts/generate_notion_sdk.exs
 elixir scripts/refresh_notion_sdk.exs
+elixir scripts/refresh_notion_sdk.exs --notion-docs-root /path/to/notion_docs --js-sdk-root /path/to/notion-sdk-js
 ```
+
+The script wrappers forward argv unchanged, so they expose the same path
+override surface as the underlying Mix tasks.
 
 `mix notion.generate` uses the committed extracted fixtures in
 `priv/upstream/reference/`, `priv/upstream/reference_context/`, and the bounded
@@ -34,8 +39,10 @@ a sibling `notion_docs` checkout when those fixtures are already present.
 4. regenerates the SDK modules and bridge artifacts
 5. writes a grouped diff report for review
 
-`mix notion.refresh` still needs a local `notion_docs/reference/` checkout
-because it re-extracts the committed fixtures from upstream markdown.
+`mix notion.refresh` re-extracts the committed fixtures from upstream markdown,
+but it no longer assumes a sibling checkout layout. Point it at any prepared
+input roots with `--notion-docs-root`, `--reference-root`, and `--js-sdk-root`
+when the defaults are not appropriate.
 
 ## Important directories
 
@@ -61,6 +68,25 @@ Use this workflow when pulling a new upstream Notion release:
 6. Run `mix dialyzer`
 7. Run `mix credo --strict`
 8. Regenerate docs with `mix docs` if the public surface changed
+
+## Common override patterns
+
+`mix notion.generate` is the low-friction default. It rebuilds from committed
+fixtures and inventory artifacts already present in the repo.
+
+Use path overrides when you need to point at a different workspace layout:
+
+```bash
+mix notion.generate \
+  --reference-dir /tmp/notion/reference \
+  --reference-context-dir /tmp/notion/reference_context \
+  --generated-dir /tmp/notion/generated \
+  --generated-artifact-dir /tmp/notion/artifacts
+
+mix notion.refresh \
+  --notion-docs-root /worktrees/notion_docs \
+  --js-sdk-root /worktrees/notion-sdk-js
+```
 
 ## Parity target
 
@@ -90,3 +116,4 @@ The richer docs are proved from generated artifacts, not hand edits:
 - generated sources such as `lib/notion_sdk/generated/pages.ex` should show `## Source Context` and `## Code Samples`
 - generated schema helpers such as `__openapi_fields__/1` should include doc metadata keys beyond `name`, `type`, and `required`
 - generated request maps should carry stable runtime metadata such as `resource`, `retry`, `circuit_breaker`, and `rate_limit`
+- `priv/upstream/snapshots/metadata.json` should record provenance fields such as `captured_at`, git commit/origin when available, and stable tracked-file digests
