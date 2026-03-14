@@ -1,6 +1,6 @@
 defmodule NotionSDK.TableRowRequest do
   @moduledoc """
-  TableRowRequest
+  Table Row
 
   ## Fields
 
@@ -10,6 +10,7 @@ defmodule NotionSDK.TableRowRequest do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           object: String.t() | nil,
@@ -46,7 +47,7 @@ defmodule NotionSDK.TableRowRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -61,7 +62,7 @@ defmodule NotionSDK.TableRowRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "table_row",
         nullable: false,
@@ -76,7 +77,7 @@ defmodule NotionSDK.TableRowRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

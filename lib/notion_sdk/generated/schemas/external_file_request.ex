@@ -8,6 +8,7 @@ defmodule NotionSDK.ExternalFileRequest do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{url: String.t()}
 
@@ -36,7 +37,7 @@ defmodule NotionSDK.ExternalFileRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "url",
         nullable: false,

@@ -9,10 +9,9 @@ defmodule NotionSDK.Workspace do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{type: String.t() | nil, workspace: true}
-
-  defstruct [:type, :workspace]
+  @type t :: %{type: String.t() | nil, workspace: true}
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -37,7 +36,7 @@ defmodule NotionSDK.Workspace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -52,7 +51,7 @@ defmodule NotionSDK.Workspace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "workspace",
         nullable: false,

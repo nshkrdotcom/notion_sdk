@@ -10,8 +10,9 @@ defmodule NotionSDK.Pdf do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
+  @type t :: %{
           object: String.t() | nil,
           pdf: NotionSDK.External.t() | NotionSDK.FileUpload.t(),
           type: String.t() | nil
@@ -46,7 +47,7 @@ defmodule NotionSDK.Pdf do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -61,7 +62,7 @@ defmodule NotionSDK.Pdf do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "pdf",
         nullable: false,
@@ -76,7 +77,7 @@ defmodule NotionSDK.Pdf do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

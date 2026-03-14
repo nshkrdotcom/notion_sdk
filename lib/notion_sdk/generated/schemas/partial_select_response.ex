@@ -4,12 +4,13 @@ defmodule NotionSDK.PartialSelectResponse do
 
   ## Fields
 
-    * `color`: required
+    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`
     * `id`: required
     * `name`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{color: String.t(), id: String.t(), name: String.t()}
 
@@ -52,10 +53,11 @@ defmodule NotionSDK.PartialSelectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "color",
         nullable: false,
@@ -83,7 +85,7 @@ defmodule NotionSDK.PartialSelectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -98,7 +100,7 @@ defmodule NotionSDK.PartialSelectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "name",
         nullable: false,

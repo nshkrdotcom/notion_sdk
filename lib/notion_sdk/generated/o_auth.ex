@@ -4,12 +4,13 @@ defmodule NotionSDK.OAuth do
 
   ## Operations
 
-    * post `/v1/oauth/introspect`
-    * post `/v1/oauth/revoke`
-    * post `/v1/oauth/token`
+    * Introspect a token
+    * Revoke a token
+    * Exchange an authorization code for an access and refresh token
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   alias NotionSDK.GeneratedOAuth, as: OAuthRuntime
   alias Pristine.OAuth2, as: OAuth2
@@ -147,7 +148,7 @@ defmodule NotionSDK.OAuth do
         }
 
   @doc """
-  post `/v1/oauth/introspect`
+  Introspect a token
 
   ## Source Context
   Introspect a token
@@ -159,6 +160,14 @@ defmodule NotionSDK.OAuth do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `500` (application/json)
 
   ## Security
 
@@ -227,7 +236,7 @@ defmodule NotionSDK.OAuth do
   @type revoke_200_json_resp :: %{request_id: String.t() | nil}
 
   @doc """
-  post `/v1/oauth/revoke`
+  Revoke a token
 
   ## Source Context
   Revoke a token
@@ -239,6 +248,14 @@ defmodule NotionSDK.OAuth do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `500` (application/json)
 
   ## Security
 
@@ -318,7 +335,7 @@ defmodule NotionSDK.OAuth do
         }
 
   @doc """
-  post `/v1/oauth/token`
+  Exchange an authorization code for an access and refresh token
 
   ## Source Context
   Create a token
@@ -352,6 +369,14 @@ defmodule NotionSDK.OAuth do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `500` (application/json)
 
   ## Security
 
@@ -492,7 +517,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "active",
         nullable: false,
@@ -507,7 +532,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "iat",
         nullable: false,
@@ -522,7 +547,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "request_id",
         nullable: false,
@@ -537,7 +562,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "scope",
         nullable: false,
@@ -557,7 +582,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "token",
         nullable: false,
@@ -577,7 +602,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "request_id",
         nullable: false,
@@ -597,7 +622,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "token",
         nullable: false,
@@ -617,7 +642,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "access_token",
         nullable: false,
@@ -632,7 +657,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "bot_id",
         nullable: false,
@@ -647,7 +672,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "duplicated_template_id",
         nullable: false,
@@ -662,7 +687,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "owner",
         nullable: false,
@@ -677,7 +702,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "refresh_token",
         nullable: false,
@@ -692,7 +717,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "request_id",
         nullable: false,
@@ -707,7 +732,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "token_type",
         nullable: false,
@@ -722,7 +747,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "workspace_icon",
         nullable: false,
@@ -737,7 +762,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "workspace_id",
         nullable: false,
@@ -752,7 +777,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "workspace_name",
         nullable: false,
@@ -772,7 +797,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "code",
         nullable: false,
@@ -787,7 +812,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "external_account",
         nullable: false,
@@ -802,7 +827,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "grant_type",
         nullable: false,
@@ -817,7 +842,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "redirect_uri",
         nullable: false,
@@ -832,7 +857,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "refresh_token",
         nullable: false,
@@ -852,7 +877,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "key",
         nullable: false,
@@ -867,7 +892,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "name",
         nullable: false,

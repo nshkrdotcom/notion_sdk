@@ -1,16 +1,17 @@
 defmodule NotionSDK.PageId do
   @moduledoc """
-  PageId
+  Page Id
 
   ## Fields
 
     * `page_id`: required
-    * `type`: optional
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{page_id: String.t(), type: String.t() | nil}
+  @type t :: %{page_id: String.t(), type: String.t() | nil}
 
   defstruct [:page_id, :type]
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.PageId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "page_id",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.PageId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

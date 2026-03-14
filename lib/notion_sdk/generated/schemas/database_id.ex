@@ -1,16 +1,17 @@
 defmodule NotionSDK.DatabaseId do
   @moduledoc """
-  DatabaseId
+  Database Id
 
   ## Fields
 
     * `database_id`: required
-    * `type`: optional
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{database_id: String.t(), type: String.t() | nil}
+  @type t :: %{database_id: String.t(), type: String.t() | nil}
 
   defstruct [:database_id, :type]
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.DatabaseId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "database_id",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.DatabaseId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

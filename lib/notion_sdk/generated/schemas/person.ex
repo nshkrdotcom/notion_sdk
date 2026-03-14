@@ -1,29 +1,25 @@
 defmodule NotionSDK.Person do
   @moduledoc """
-  Person
+  Provides struct and types for Person
 
-  ## Fields
+  ## Types
 
-    * `avatar_url`: required
-    * `id`: required
-    * `name`: required
-    * `object`: required
-    * `person`: required
-    * `type`: required
-
+    * Person
+    * Person.t_person
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
+  @type t :: %{
           avatar_url: String.t() | nil,
           id: String.t(),
           name: String.t() | nil,
           object: String.t(),
-          person: NotionSDK.PersonPerson.t(),
+          person: NotionSDK.Person.t_person(),
           type: String.t()
         }
 
-  defstruct [:avatar_url, :id, :name, :object, :person, :type]
+  @type t_person :: %{email: String.t()}
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -35,9 +31,13 @@ defmodule NotionSDK.Person do
       id: :string,
       name: {:union, [:null, :string]},
       object: {:const, "user"},
-      person: {NotionSDK.PersonPerson, :t},
+      person: {NotionSDK.Person, :t_person},
       type: {:const, "person"}
     ]
+  end
+
+  def __fields__(:t_person) do
+    [email: :string]
   end
 
   (
@@ -55,7 +55,7 @@ defmodule NotionSDK.Person do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "avatar_url",
         nullable: false,
@@ -70,7 +70,7 @@ defmodule NotionSDK.Person do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -85,7 +85,7 @@ defmodule NotionSDK.Person do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "name",
         nullable: false,
@@ -100,7 +100,7 @@ defmodule NotionSDK.Person do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -115,13 +115,13 @@ defmodule NotionSDK.Person do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "person",
         nullable: false,
         read_only: false,
         required: true,
-        type: {NotionSDK.PersonPerson, :t},
+        type: {NotionSDK.Person, :t_person},
         write_only: false
       },
       %{
@@ -130,13 +130,33 @@ defmodule NotionSDK.Person do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
         required: true,
         type: {:const, "person"},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:t_person) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "email",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
         write_only: false
       }
     ]
@@ -151,6 +171,10 @@ defmodule NotionSDK.Person do
 
   def __schema__(:t) do
     OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  end
+
+  def __schema__(:t_person) do
+    OpenAPIRuntime.build_schema(__openapi_fields__(:t_person))
   end
 
   (

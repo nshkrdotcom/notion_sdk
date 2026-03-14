@@ -9,13 +9,12 @@ defmodule NotionSDK.User do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
+  @type t :: %{
           type: String.t(),
           user: NotionSDK.PartialUserObjectResponse.t() | NotionSDK.Person.t()
         }
-
-  defstruct [:type, :user]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -40,10 +39,10 @@ defmodule NotionSDK.User do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `user`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -58,7 +57,7 @@ defmodule NotionSDK.User do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "user",
         nullable: false,

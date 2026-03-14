@@ -1,24 +1,26 @@
-defmodule NotionSDK.PersonPerson do
+defmodule NotionSDK.FilePageCoverResponse do
   @moduledoc """
-  PersonPerson
+  File
 
   ## Fields
 
-    * `email`: required
+    * `file`: required
+    * `type`: Type of cover. In this case, a file.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{email: String.t()}
+  @type t :: %__MODULE__{file: NotionSDK.InternalFileResponse.t(), type: String.t()}
 
-  defstruct [:email]
+  defstruct [:file, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [email: :string]
+    [file: {NotionSDK.InternalFileResponse, :t}, type: {:const, "file"}]
   end
 
   (
@@ -36,13 +38,28 @@ defmodule NotionSDK.PersonPerson do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
-        name: "email",
+        name: "file",
         nullable: false,
         read_only: false,
         required: true,
-        type: :string,
+        type: {NotionSDK.InternalFileResponse, :t},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: "Type of cover. In this case, a file.",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "type",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {:const, "file"},
         write_only: false
       }
     ]

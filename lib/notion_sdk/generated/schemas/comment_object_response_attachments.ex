@@ -4,11 +4,12 @@ defmodule NotionSDK.CommentObjectResponseAttachments do
 
   ## Fields
 
-    * `category`: required
+    * `category`: One of: `audio`, `image`, `pdf`, `productivity`, `video`
     * `file`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{category: String.t(), file: NotionSDK.InternalFileResponse.t()}
 
@@ -37,10 +38,10 @@ defmodule NotionSDK.CommentObjectResponseAttachments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "One of: `audio`, `image`, `pdf`, `productivity`, `video`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "category",
         nullable: false,
@@ -55,7 +56,7 @@ defmodule NotionSDK.CommentObjectResponseAttachments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "file",
         nullable: false,

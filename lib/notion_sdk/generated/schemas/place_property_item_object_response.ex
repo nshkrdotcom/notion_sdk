@@ -1,6 +1,6 @@
 defmodule NotionSDK.PlacePropertyItemObjectResponse do
   @moduledoc """
-  PlacePropertyItemObjectResponse
+  Place
 
   ## Fields
 
@@ -11,6 +11,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
@@ -49,7 +50,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -64,7 +65,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -79,7 +80,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "place",
         nullable: false,
@@ -94,7 +95,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

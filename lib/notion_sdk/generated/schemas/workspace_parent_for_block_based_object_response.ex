@@ -4,11 +4,12 @@ defmodule NotionSDK.WorkspaceParentForBlockBasedObjectResponse do
 
   ## Fields
 
-    * `type`: required
-    * `workspace`: required
+    * `type`: The parent type.
+    * `workspace`: Always true for workspace parent.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{type: String.t(), workspace: true}
 
@@ -34,10 +35,10 @@ defmodule NotionSDK.WorkspaceParentForBlockBasedObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The parent type.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.WorkspaceParentForBlockBasedObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always true for workspace parent.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "workspace",
         nullable: false,

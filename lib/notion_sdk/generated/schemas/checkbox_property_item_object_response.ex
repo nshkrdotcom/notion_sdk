@@ -1,6 +1,6 @@
 defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
   @moduledoc """
-  CheckboxPropertyItemObjectResponse
+  Checkbox
 
   ## Fields
 
@@ -11,6 +11,7 @@ defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{checkbox: boolean, id: String.t(), object: String.t(), type: String.t()}
 
@@ -44,7 +45,7 @@ defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "checkbox",
         nullable: false,
@@ -59,7 +60,7 @@ defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -74,7 +75,7 @@ defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -89,7 +90,7 @@ defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

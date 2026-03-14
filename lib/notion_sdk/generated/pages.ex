@@ -4,19 +4,20 @@ defmodule NotionSDK.Pages do
 
   ## Operations
 
-    * post `/v1/pages`
-    * get `/v1/pages/{page_id}`
-    * patch `/v1/pages/{page_id}`
-    * get `/v1/pages/{page_id}/markdown`
-    * patch `/v1/pages/{page_id}/markdown`
-    * post `/v1/pages/{page_id}/move`
-    * get `/v1/pages/{page_id}/properties/{property_id}`
+    * Create a page
+    * Retrieve a page
+    * Update page
+    * Retrieve a page as markdown
+    * Update a page's content as markdown
+    * Move a page
+    * Retrieve a page property item
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
-  post `/v1/pages`
+  Create a page
 
   ## Source Context
   Create a page
@@ -92,6 +93,18 @@ defmodule NotionSDK.Pages do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -183,7 +196,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  post `/v1/pages/{page_id}/move`
+  Move a page
 
   ## Source Context
   Move a page
@@ -294,6 +307,18 @@ defmodule NotionSDK.Pages do
   ## Request Body
   **Content Types**: `application/json`
 
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
+
   ## Security
 
     * `bearerAuth`
@@ -367,7 +392,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  get `/v1/pages/{page_id}`
+  Retrieve a page
 
   ## Source Context
   Retrieve a page
@@ -434,6 +459,18 @@ defmodule NotionSDK.Pages do
   ## Options
 
     * `filter_properties`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -504,7 +541,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  get `/v1/pages/{page_id}/markdown`
+  Retrieve a page as markdown
 
   ## Source Context
   Retrieve a page as markdown
@@ -563,6 +600,18 @@ defmodule NotionSDK.Pages do
   ## Options
 
     * `include_transcript`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -632,7 +681,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  get `/v1/pages/{page_id}/properties/{property_id}`
+  Retrieve a page property item
 
   ## Source Context
   Retrieve a page property item
@@ -701,6 +750,18 @@ defmodule NotionSDK.Pages do
 
     * `start_cursor`
     * `page_size`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -806,33 +867,31 @@ defmodule NotionSDK.Pages do
         {200,
          {:union,
           [
-            {NotionSDK.PropertyItemPropertyItemListResponse, :t},
-            union: [
-              {NotionSDK.NumberPropertyItemObjectResponse, :t},
-              {NotionSDK.UrlPropertyItemObjectResponse, :t},
-              {NotionSDK.SelectPropertyItemObjectResponse, :t},
-              {NotionSDK.MultiSelectPropertyItemObjectResponse, :t},
-              {NotionSDK.StatusPropertyItemObjectResponse, :t},
-              {NotionSDK.DatePropertyItemObjectResponse, :t},
-              {NotionSDK.EmailPropertyItemObjectResponse, :t},
-              {NotionSDK.PhoneNumberPropertyItemObjectResponse, :t},
-              {NotionSDK.CheckboxPropertyItemObjectResponse, :t},
-              {NotionSDK.FilesPropertyItemObjectResponse, :t},
-              {NotionSDK.CreatedByPropertyItemObjectResponse, :t},
-              {NotionSDK.CreatedTimePropertyItemObjectResponse, :t},
-              {NotionSDK.LastEditedByPropertyItemObjectResponse, :t},
-              {NotionSDK.LastEditedTimePropertyItemObjectResponse, :t},
-              {NotionSDK.FormulaPropertyItemObjectResponse, :t},
-              {NotionSDK.ButtonPropertyItemObjectResponse, :t},
-              {NotionSDK.UniqueIdPropertyItemObjectResponse, :t},
-              {NotionSDK.VerificationPropertyItemObjectResponse, :t},
-              {NotionSDK.PlacePropertyItemObjectResponse, :t},
-              {NotionSDK.TitlePropertyItemObjectResponse, :t},
-              {NotionSDK.RichTextPropertyItemObjectResponse, :t},
-              {NotionSDK.PeoplePropertyItemObjectResponse, :t},
-              {NotionSDK.RelationPropertyItemObjectResponse, :t},
-              {NotionSDK.RollupPropertyItemObjectResponse, :t}
-            ]
+            {NotionSDK.NumberPropertyItemObjectResponse, :t},
+            {NotionSDK.UrlPropertyItemObjectResponse, :t},
+            {NotionSDK.SelectPropertyItemObjectResponse, :t},
+            {NotionSDK.MultiSelectPropertyItemObjectResponse, :t},
+            {NotionSDK.StatusPropertyItemObjectResponse, :t},
+            {NotionSDK.DatePropertyItemObjectResponse, :t},
+            {NotionSDK.EmailPropertyItemObjectResponse, :t},
+            {NotionSDK.PhoneNumberPropertyItemObjectResponse, :t},
+            {NotionSDK.CheckboxPropertyItemObjectResponse, :t},
+            {NotionSDK.FilesPropertyItemObjectResponse, :t},
+            {NotionSDK.CreatedByPropertyItemObjectResponse, :t},
+            {NotionSDK.CreatedTimePropertyItemObjectResponse, :t},
+            {NotionSDK.LastEditedByPropertyItemObjectResponse, :t},
+            {NotionSDK.LastEditedTimePropertyItemObjectResponse, :t},
+            {NotionSDK.FormulaPropertyItemObjectResponse, :t},
+            {NotionSDK.ButtonPropertyItemObjectResponse, :t},
+            {NotionSDK.UniqueIdPropertyItemObjectResponse, :t},
+            {NotionSDK.VerificationPropertyItemObjectResponse, :t},
+            {NotionSDK.PlacePropertyItemObjectResponse, :t},
+            {NotionSDK.TitlePropertyItemObjectResponse, :t},
+            {NotionSDK.RichTextPropertyItemObjectResponse, :t},
+            {NotionSDK.PeoplePropertyItemObjectResponse, :t},
+            {NotionSDK.RelationPropertyItemObjectResponse, :t},
+            {NotionSDK.RollupPropertyItemObjectResponse, :t},
+            {NotionSDK.PropertyItemPropertyItemListResponse, :t}
           ]}},
         {400, {NotionSDK.ErrorApi400, :t}},
         {401, {NotionSDK.ErrorApi401, :t}},
@@ -851,7 +910,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  patch `/v1/pages/{page_id}`
+  Update page
 
   ## Source Context
   Update page
@@ -928,6 +987,18 @@ defmodule NotionSDK.Pages do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -1015,7 +1086,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  patch `/v1/pages/{page_id}/markdown`
+  Update a page's content as markdown
 
   ## Source Context
   Update a page's content as markdown
@@ -1075,6 +1146,18 @@ defmodule NotionSDK.Pages do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -1226,7 +1309,13 @@ defmodule NotionSDK.Pages do
           {NotionSDK.SyncedBlock, :t}
         ]
       ],
-      cover: {:union, [:null, :map]},
+      cover:
+        {:union,
+         [
+           :null,
+           {NotionSDK.FileUploadPageCoverRequest, :t},
+           {NotionSDK.ExternalPageCoverRequest, :t}
+         ]},
       icon:
         {:union,
          [
@@ -1276,9 +1365,23 @@ defmodule NotionSDK.Pages do
 
   def __fields__(:update_json_req) do
     [
-      cover: {:union, [:null, :map]},
+      cover:
+        {:union,
+         [
+           :null,
+           {NotionSDK.FileUploadPageCoverRequest, :t},
+           {NotionSDK.ExternalPageCoverRequest, :t}
+         ]},
       erase_content: :boolean,
-      icon: {:union, [:null, :map]},
+      icon:
+        {:union,
+         [
+           :null,
+           {NotionSDK.FileUploadPageIconRequest, :t},
+           {NotionSDK.EmojiPageIconRequest, :t},
+           {NotionSDK.ExternalPageIconRequest, :t},
+           {NotionSDK.CustomEmojiPageIconRequest, :t}
+         ]},
       in_trash: :boolean,
       is_locked: :boolean,
       properties: :map,
@@ -1321,7 +1424,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "children",
         nullable: false,
@@ -1368,7 +1471,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "content",
         nullable: false,
@@ -1415,13 +1518,19 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "cover",
         nullable: false,
         read_only: false,
         required: false,
-        type: {:union, [:null, :map]},
+        type:
+          {:union,
+           [
+             :null,
+             {NotionSDK.FileUploadPageCoverRequest, :t},
+             {NotionSDK.ExternalPageCoverRequest, :t}
+           ]},
         write_only: false
       },
       %{
@@ -1430,7 +1539,331 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "icon",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type:
+          {:union,
+           [
+             :null,
+             {NotionSDK.FileUploadPageIconRequest, :t},
+             {NotionSDK.EmojiPageIconRequest, :t},
+             {NotionSDK.ExternalPageIconRequest, :t},
+             {NotionSDK.CustomEmojiPageIconRequest, :t}
+           ]},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description:
+          "Page content as Notion-flavored Markdown. Mutually exclusive with content/children.",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "markdown",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "parent",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type:
+          {:union,
+           [
+             {NotionSDK.PageId, :t},
+             {NotionSDK.DatabaseId, :t},
+             {NotionSDK.DataSourceId, :t},
+             {NotionSDK.Workspace, :t}
+           ]},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "position",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: {NotionSDK.Pages, :create_json_req_position},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "properties",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: :map,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "template",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: {NotionSDK.Pages, :create_json_req_template},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:create_json_req_position) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "after_block",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {NotionSDK.Pages, :create_json_req_position_after_block},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "type",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {:enum, ["after_block", "page_end", "page_start"]},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:create_json_req_position_after_block) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "id",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:create_json_req_template) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "template_id",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description:
+          "IANA timezone to use when resolving template variables like @now and @today (e.g. 'America/New_York'). Defaults to the authorizing user's timezone for public integrations, or UTC for internal integrations.",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "timezone",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "type",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {:enum, ["default", "none", "template_id"]},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:move_json_req) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: "The new parent of the page.",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "parent",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {NotionSDK.Pages, :move_json_req_parent},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:move_json_req_parent) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "data_source_id",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "page_id",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: "Always `page_id`",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "type",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: {:enum, ["data_source_id", "page_id"]},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:update_json_req) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "cover",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type:
+          {:union,
+           [
+             :null,
+             {NotionSDK.FileUploadPageCoverRequest, :t},
+             {NotionSDK.ExternalPageCoverRequest, :t}
+           ]},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description:
+          "Whether to erase all existing content from the page. When used with a template, the template content replaces the existing content. When used without a template, simply clears the page content.",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "erase_content",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: :boolean,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
         external_docs: nil,
         name: "icon",
         nullable: false,
@@ -1453,314 +1886,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "markdown",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "parent",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:union,
-           [
-             {NotionSDK.PageId, :t},
-             {NotionSDK.DatabaseId, :t},
-             {NotionSDK.DataSourceId, :t},
-             {NotionSDK.Workspace, :t}
-           ]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "position",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: {NotionSDK.Pages, :create_json_req_position},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "properties",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :map,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "template",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: {NotionSDK.Pages, :create_json_req_template},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:create_json_req_position) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "after_block",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Pages, :create_json_req_position_after_block},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "type",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {:enum, ["after_block", "page_end", "page_start"]},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:create_json_req_position_after_block) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "id",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:create_json_req_template) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "template_id",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "timezone",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "type",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {:enum, ["default", "none", "template_id"]},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:move_json_req) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "parent",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Pages, :move_json_req_parent},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:move_json_req_parent) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "data_source_id",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "page_id",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "type",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: {:enum, ["data_source_id", "page_id"]},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "cover",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: {:union, [:null, :map]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "erase_content",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :boolean,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "icon",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: {:union, [:null, :map]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -1772,10 +1898,11 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Whether the page should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "is_locked",
         nullable: false,
@@ -1790,7 +1917,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "properties",
         nullable: false,
@@ -1805,7 +1932,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "template",
         nullable: false,
@@ -1825,7 +1952,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "template_id",
         nullable: false,
@@ -1837,10 +1964,11 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "IANA timezone to use when resolving template variables like @now and @today (e.g. 'America/New_York'). Defaults to the authorizing user's timezone for public integrations, or UTC for internal integrations.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "timezone",
         nullable: false,
@@ -1855,7 +1983,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -1872,10 +2000,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Insert new content into the page.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "insert_content",
         nullable: false,
@@ -1887,10 +2015,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Replace a range of content in the page.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "replace_content_range",
         nullable: false,
@@ -1902,10 +2030,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `replace_content_range`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -1922,10 +2050,11 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Selection of existing content to insert after, using the ellipsis format (\"start text...end text\"). Omit to append at the end of the page.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "after",
         nullable: false,
@@ -1937,10 +2066,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The enhanced markdown content to insert into the page.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "content",
         nullable: false,
@@ -1957,10 +2086,11 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Set to true to allow the operation to delete child pages or databases. Defaults to false.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "allow_deleting_content",
         nullable: false,
@@ -1972,10 +2102,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The new enhanced markdown content to replace the matched range.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "content",
         nullable: false,
@@ -1987,10 +2117,11 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Selection of existing content to replace, using the ellipsis format (\"start text...end text\").",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "content_range",
         nullable: false,

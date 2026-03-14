@@ -10,6 +10,7 @@ defmodule NotionSDK.Incomplete do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           function: String.t(),
@@ -73,7 +74,7 @@ defmodule NotionSDK.Incomplete do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "function",
         nullable: false,
@@ -115,7 +116,7 @@ defmodule NotionSDK.Incomplete do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "incomplete",
         nullable: false,
@@ -130,7 +131,7 @@ defmodule NotionSDK.Incomplete do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

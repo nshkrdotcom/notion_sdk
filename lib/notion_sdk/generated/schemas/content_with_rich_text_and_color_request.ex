@@ -4,11 +4,12 @@ defmodule NotionSDK.ContentWithRichTextAndColorRequest do
 
   ## Fields
 
-    * `color`: optional
+    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`
     * `rich_text`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{color: String.t() | nil, rich_text: [NotionSDK.RichTextItemRequest.t()]}
 
@@ -60,10 +61,11 @@ defmodule NotionSDK.ContentWithRichTextAndColorRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "color",
         nullable: false,
@@ -101,7 +103,7 @@ defmodule NotionSDK.ContentWithRichTextAndColorRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "rich_text",
         nullable: false,

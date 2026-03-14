@@ -1,14 +1,15 @@
 defmodule NotionSDK.EmojiPageIconRequest do
   @moduledoc """
-  EmojiPageIconRequest
+  Emoji
 
   ## Fields
 
     * `emoji`: required
-    * `type`: optional
+    * `type`: Always `emoji`
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{emoji: String.t(), type: String.t() | nil}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.EmojiPageIconRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "emoji",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.EmojiPageIconRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `emoji`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

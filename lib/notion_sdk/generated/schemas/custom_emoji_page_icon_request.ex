@@ -1,14 +1,15 @@
 defmodule NotionSDK.CustomEmojiPageIconRequest do
   @moduledoc """
-  CustomEmojiPageIconRequest
+  Custom Emoji
 
   ## Fields
 
     * `custom_emoji`: required
-    * `type`: optional
+    * `type`: Always `custom_emoji`
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           custom_emoji: NotionSDK.CustomEmojiPageIconRequestCustomEmoji.t(),
@@ -43,7 +44,7 @@ defmodule NotionSDK.CustomEmojiPageIconRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "custom_emoji",
         nullable: false,
@@ -55,10 +56,10 @@ defmodule NotionSDK.CustomEmojiPageIconRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `custom_emoji`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

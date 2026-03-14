@@ -2,13 +2,16 @@ defmodule NotionSDK.CommentObjectResponseDisplayName do
   @moduledoc """
   CommentObjectResponseDisplayName
 
+  The display name of the comment.
+
   ## Fields
 
     * `resolved_name`: required
-    * `type`: required
+    * `type`: One of: `custom`, `user`, `integration`
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{resolved_name: String.t() | nil, type: String.t()}
 
@@ -37,7 +40,7 @@ defmodule NotionSDK.CommentObjectResponseDisplayName do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "resolved_name",
         nullable: false,
@@ -49,10 +52,10 @@ defmodule NotionSDK.CommentObjectResponseDisplayName do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "One of: `custom`, `user`, `integration`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

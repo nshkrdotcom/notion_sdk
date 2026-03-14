@@ -9,6 +9,7 @@ defmodule NotionSDK.UniqueIdPropertyItemObjectResponseUniqueId do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{number: number | nil, prefix: String.t() | nil}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.UniqueIdPropertyItemObjectResponseUniqueId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "number",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.UniqueIdPropertyItemObjectResponseUniqueId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "prefix",
         nullable: false,

@@ -9,6 +9,7 @@ defmodule NotionSDK.MediaContentWithUrlAndCaptionRequest do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{caption: [NotionSDK.RichTextItemRequest.t()] | nil, url: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.MediaContentWithUrlAndCaptionRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "caption",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.MediaContentWithUrlAndCaptionRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "url",
         nullable: false,

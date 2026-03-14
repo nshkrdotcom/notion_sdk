@@ -13,6 +13,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           address: String.t() | nil,
@@ -55,7 +56,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "address",
         nullable: false,
@@ -70,7 +71,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "aws_place_id",
         nullable: false,
@@ -85,7 +86,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "google_place_id",
         nullable: false,
@@ -100,7 +101,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "lat",
         nullable: false,
@@ -115,7 +116,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "lon",
         nullable: false,
@@ -130,7 +131,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "name",
         nullable: false,

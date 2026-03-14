@@ -11,6 +11,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           children: [NotionSDK.TableRowRequest.t()],
@@ -49,7 +50,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "children",
         nullable: false,
@@ -64,7 +65,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "has_column_header",
         nullable: false,
@@ -79,7 +80,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "has_row_header",
         nullable: false,
@@ -94,7 +95,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "table_width",
         nullable: false,

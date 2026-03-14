@@ -11,15 +11,17 @@ defmodule NotionSDK.Title do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
           next_url: String.t() | nil,
-          title: NotionSDK.EmptyObject.t(),
-          type: String.t()
+          property: String.t(),
+          title: map | NotionSDK.EmptyObject.t(),
+          type: String.t() | nil
         }
 
-  defstruct [:id, :next_url, :title, :type]
+  defstruct [:id, :next_url, :property, :title, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -29,7 +31,8 @@ defmodule NotionSDK.Title do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      title: {NotionSDK.EmptyObject, :t},
+      property: :string,
+      title: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
       type: {:const, "title"}
     ]
   end
@@ -49,7 +52,7 @@ defmodule NotionSDK.Title do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -64,7 +67,7 @@ defmodule NotionSDK.Title do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "next_url",
         nullable: false,
@@ -79,13 +82,13 @@ defmodule NotionSDK.Title do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
-        name: "title",
+        name: "property",
         nullable: false,
         read_only: false,
         required: true,
-        type: {NotionSDK.EmptyObject, :t},
+        type: :string,
         write_only: false
       },
       %{
@@ -94,12 +97,27 @@ defmodule NotionSDK.Title do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "title",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: true,
+        required: false,
         type: {:const, "title"},
         write_only: false
       }

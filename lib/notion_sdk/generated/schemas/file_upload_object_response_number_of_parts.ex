@@ -9,6 +9,7 @@ defmodule NotionSDK.FileUploadObjectResponseNumberOfParts do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{sent: integer, total: integer}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.FileUploadObjectResponseNumberOfParts do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "sent",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.FileUploadObjectResponseNumberOfParts do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "total",
         nullable: false,

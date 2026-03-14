@@ -5,10 +5,11 @@ defmodule NotionSDK.DataSourceReferenceResponse do
   ## Fields
 
     * `id`: required
-    * `name`: required
+    * `name`: The name of the data source.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t(), name: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.DataSourceReferenceResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.DataSourceReferenceResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The name of the data source.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "name",
         nullable: false,

@@ -11,6 +11,7 @@ defmodule NotionSDK.External do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           caption: [NotionSDK.RichTextItemRequest.t()] | nil,
@@ -49,7 +50,7 @@ defmodule NotionSDK.External do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "caption",
         nullable: false,
@@ -64,7 +65,7 @@ defmodule NotionSDK.External do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "external",
         nullable: false,
@@ -79,7 +80,7 @@ defmodule NotionSDK.External do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "name",
         nullable: false,
@@ -94,7 +95,7 @@ defmodule NotionSDK.External do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

@@ -5,10 +5,11 @@ defmodule NotionSDK.PartialUserObjectResponse do
   ## Fields
 
     * `id`: required
-    * `object`: required
+    * `object`: Always `user`
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t(), object: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.PartialUserObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.PartialUserObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `user`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,

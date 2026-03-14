@@ -1,20 +1,61 @@
 defmodule NotionSDK.Callout do
   @moduledoc """
-  Callout
+  Provides struct and types for Callout
 
-  ## Fields
+  ## Types
 
-    * `callout`: required
-    * `object`: optional
-    * `type`: optional
-
+    * Callout
+    * Callout.t_callout
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          callout: NotionSDK.CalloutCallout.t(),
+  @type t :: %{
+          callout: NotionSDK.Callout.t_callout() | NotionSDK.CalloutCallout.t(),
           object: String.t() | nil,
           type: String.t() | nil
+        }
+
+  @type t_callout :: %{
+          children:
+            [
+              NotionSDK.Audio.t()
+              | NotionSDK.Bookmark.t()
+              | NotionSDK.Breadcrumb.t()
+              | NotionSDK.BulletedListItem.t()
+              | NotionSDK.Callout.t()
+              | NotionSDK.Code.t()
+              | NotionSDK.Divider.t()
+              | NotionSDK.Embed.t()
+              | NotionSDK.Equation.t()
+              | NotionSDK.File.t()
+              | NotionSDK.Heading1.t()
+              | NotionSDK.Heading2.t()
+              | NotionSDK.Heading3.t()
+              | NotionSDK.Image.t()
+              | NotionSDK.LinkToPage.t()
+              | NotionSDK.NumberedListItem.t()
+              | NotionSDK.Paragraph.t()
+              | NotionSDK.Pdf.t()
+              | NotionSDK.Quote.t()
+              | NotionSDK.SyncedBlock.t()
+              | NotionSDK.Table.t()
+              | NotionSDK.TableOfContents.t()
+              | NotionSDK.TableRow.t()
+              | NotionSDK.Template.t()
+              | NotionSDK.ToDo.t()
+              | NotionSDK.Toggle.t()
+              | NotionSDK.Video.t()
+            ]
+            | nil,
+          color: String.t() | nil,
+          icon:
+            NotionSDK.CustomEmojiPageIconRequest.t()
+            | NotionSDK.EmojiPageIconRequest.t()
+            | NotionSDK.ExternalPageIconRequest.t()
+            | NotionSDK.FileUploadPageIconRequest.t()
+            | nil,
+          rich_text: [NotionSDK.RichTextItemRequest.t()]
         }
 
   defstruct [:callout, :object, :type]
@@ -25,9 +66,78 @@ defmodule NotionSDK.Callout do
 
   def __fields__(:t) do
     [
-      callout: {NotionSDK.CalloutCallout, :t},
+      callout: {:union, [{NotionSDK.CalloutCallout, :t}, {NotionSDK.Callout, :t_callout}]},
       object: {:const, "block"},
       type: {:const, "callout"}
+    ]
+  end
+
+  def __fields__(:t_callout) do
+    [
+      children: [
+        union: [
+          {NotionSDK.Embed, :t},
+          {NotionSDK.Bookmark, :t},
+          {NotionSDK.Image, :t},
+          {NotionSDK.Video, :t},
+          {NotionSDK.Pdf, :t},
+          {NotionSDK.File, :t},
+          {NotionSDK.Audio, :t},
+          {NotionSDK.Code, :t},
+          {NotionSDK.Equation, :t},
+          {NotionSDK.Divider, :t},
+          {NotionSDK.Breadcrumb, :t},
+          {NotionSDK.TableOfContents, :t},
+          {NotionSDK.LinkToPage, :t},
+          {NotionSDK.TableRow, :t},
+          {NotionSDK.Heading1, :t},
+          {NotionSDK.Heading2, :t},
+          {NotionSDK.Heading3, :t},
+          {NotionSDK.Paragraph, :t},
+          {NotionSDK.BulletedListItem, :t},
+          {NotionSDK.NumberedListItem, :t},
+          {NotionSDK.Quote, :t},
+          {NotionSDK.Table, :t},
+          {NotionSDK.ToDo, :t},
+          {NotionSDK.Toggle, :t},
+          {NotionSDK.Template, :t},
+          {NotionSDK.Callout, :t},
+          {NotionSDK.SyncedBlock, :t}
+        ]
+      ],
+      color:
+        {:enum,
+         [
+           "default",
+           "gray",
+           "brown",
+           "orange",
+           "yellow",
+           "green",
+           "blue",
+           "purple",
+           "pink",
+           "red",
+           "default_background",
+           "gray_background",
+           "brown_background",
+           "orange_background",
+           "yellow_background",
+           "green_background",
+           "blue_background",
+           "purple_background",
+           "pink_background",
+           "red_background"
+         ]},
+      icon:
+        {:union,
+         [
+           {NotionSDK.FileUploadPageIconRequest, :t},
+           {NotionSDK.EmojiPageIconRequest, :t},
+           {NotionSDK.ExternalPageIconRequest, :t},
+           {NotionSDK.CustomEmojiPageIconRequest, :t}
+         ]},
+      rich_text: [{NotionSDK.RichTextItemRequest, :t}]
     ]
   end
 
@@ -46,13 +156,13 @@ defmodule NotionSDK.Callout do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "callout",
         nullable: false,
         read_only: false,
         required: true,
-        type: {NotionSDK.CalloutCallout, :t},
+        type: {:union, [{NotionSDK.CalloutCallout, :t}, {NotionSDK.Callout, :t_callout}]},
         write_only: false
       },
       %{
@@ -61,7 +171,7 @@ defmodule NotionSDK.Callout do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -76,13 +186,139 @@ defmodule NotionSDK.Callout do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
         required: false,
         type: {:const, "callout"},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:t_callout) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "children",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type: [
+          union: [
+            {NotionSDK.Embed, :t},
+            {NotionSDK.Bookmark, :t},
+            {NotionSDK.Image, :t},
+            {NotionSDK.Video, :t},
+            {NotionSDK.Pdf, :t},
+            {NotionSDK.File, :t},
+            {NotionSDK.Audio, :t},
+            {NotionSDK.Code, :t},
+            {NotionSDK.Equation, :t},
+            {NotionSDK.Divider, :t},
+            {NotionSDK.Breadcrumb, :t},
+            {NotionSDK.TableOfContents, :t},
+            {NotionSDK.LinkToPage, :t},
+            {NotionSDK.TableRow, :t},
+            {NotionSDK.Heading1, :t},
+            {NotionSDK.Heading2, :t},
+            {NotionSDK.Heading3, :t},
+            {NotionSDK.Paragraph, :t},
+            {NotionSDK.BulletedListItem, :t},
+            {NotionSDK.NumberedListItem, :t},
+            {NotionSDK.Quote, :t},
+            {NotionSDK.Table, :t},
+            {NotionSDK.ToDo, :t},
+            {NotionSDK.Toggle, :t},
+            {NotionSDK.Template, :t},
+            {NotionSDK.Callout, :t},
+            {NotionSDK.SyncedBlock, :t}
+          ]
+        ],
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description:
+          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "color",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type:
+          {:enum,
+           [
+             "default",
+             "gray",
+             "brown",
+             "orange",
+             "yellow",
+             "green",
+             "blue",
+             "purple",
+             "pink",
+             "red",
+             "default_background",
+             "gray_background",
+             "brown_background",
+             "orange_background",
+             "yellow_background",
+             "green_background",
+             "blue_background",
+             "purple_background",
+             "pink_background",
+             "red_background"
+           ]},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "icon",
+        nullable: false,
+        read_only: false,
+        required: false,
+        type:
+          {:union,
+           [
+             {NotionSDK.FileUploadPageIconRequest, :t},
+             {NotionSDK.EmojiPageIconRequest, :t},
+             {NotionSDK.ExternalPageIconRequest, :t},
+             {NotionSDK.CustomEmojiPageIconRequest, :t}
+           ]},
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "rich_text",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: [{NotionSDK.RichTextItemRequest, :t}],
         write_only: false
       }
     ]
@@ -97,6 +333,10 @@ defmodule NotionSDK.Callout do
 
   def __schema__(:t) do
     OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  end
+
+  def __schema__(:t_callout) do
+    OpenAPIRuntime.build_schema(__openapi_fields__(:t_callout))
   end
 
   (

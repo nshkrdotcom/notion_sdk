@@ -5,10 +5,11 @@ defmodule NotionSDK.DatabaseParentResponse do
   ## Fields
 
     * `database_id`: required
-    * `type`: required
+    * `type`: The parent type.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{database_id: String.t(), type: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.DatabaseParentResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "database_id",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.DatabaseParentResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The parent type.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

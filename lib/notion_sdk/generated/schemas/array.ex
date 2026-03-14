@@ -10,6 +10,7 @@ defmodule NotionSDK.Array do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           array: [NotionSDK.EmptyObject.t()],
@@ -73,7 +74,7 @@ defmodule NotionSDK.Array do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "array",
         nullable: false,
@@ -88,7 +89,7 @@ defmodule NotionSDK.Array do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "function",
         nullable: false,
@@ -130,7 +131,7 @@ defmodule NotionSDK.Array do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

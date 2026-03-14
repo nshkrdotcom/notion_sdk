@@ -1,6 +1,6 @@
 defmodule NotionSDK.RollupPropertyItemObjectResponse do
   @moduledoc """
-  RollupPropertyItemObjectResponse
+  Rollup
 
   ## Fields
 
@@ -11,6 +11,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
@@ -62,7 +63,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -77,7 +78,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -92,7 +93,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "rollup",
         nullable: false,
@@ -115,7 +116,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

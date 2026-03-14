@@ -4,15 +4,16 @@ defmodule NotionSDK.Databases do
 
   ## Operations
 
-    * post `/v1/databases`
-    * get `/v1/databases/{database_id}`
-    * patch `/v1/databases/{database_id}`
+    * Create a database
+    * Retrieve a database
+    * Update a database
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
-  post `/v1/databases`
+  Create a database
 
   ## Source Context
   Create a database
@@ -43,6 +44,18 @@ defmodule NotionSDK.Databases do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -132,7 +145,7 @@ defmodule NotionSDK.Databases do
   end
 
   @doc """
-  get `/v1/databases/{database_id}`
+  Retrieve a database
 
   ## Source Context
   Retrieve a database
@@ -193,6 +206,18 @@ defmodule NotionSDK.Databases do
     * [database relations](https://www.notion.so/help/relations-and-rollups#what-is-a-database-relation)
     * [linked database](https://www.notion.so/help/guides/using-linked-databases)
     * [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database)
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -266,7 +291,7 @@ defmodule NotionSDK.Databases do
   end
 
   @doc """
-  patch `/v1/databases/{database_id}`
+  Update a database
 
   ## Source Context
   Update a database
@@ -317,6 +342,18 @@ defmodule NotionSDK.Databases do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -473,7 +510,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "cover",
         nullable: false,
@@ -487,10 +524,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The description of the database.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "description",
         nullable: false,
@@ -505,7 +542,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "icon",
         nullable: false,
@@ -527,7 +564,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "initial_data_source",
         nullable: false,
@@ -539,10 +576,11 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Whether the database should be displayed inline in the parent page. Defaults to false.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "is_inline",
         nullable: false,
@@ -554,10 +592,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The parent page or workspace where the database will be created.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -569,10 +607,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The title of the database.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -589,10 +627,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The type of parent.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -612,7 +650,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "cover",
         nullable: false,
@@ -626,10 +664,11 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "The updated description of the database, if any. If not provided, the description will not be updated.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "description",
         nullable: false,
@@ -644,7 +683,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "icon",
         nullable: false,
@@ -663,10 +702,11 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Whether the database should be moved to or from the trash. If not provided, the trash status will not be updated.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -678,10 +718,11 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Whether the database should be displayed inline in the parent page. If not provided, the inline status will not be updated.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "is_inline",
         nullable: false,
@@ -693,10 +734,11 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Whether the database should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "is_locked",
         nullable: false,
@@ -708,10 +750,11 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "The parent page or workspace to move the database to. If not provided, the database will not be moved.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -723,10 +766,11 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "The updated title of the database, if any. If not provided, the title will not be updated.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -743,10 +787,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The type of parent.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

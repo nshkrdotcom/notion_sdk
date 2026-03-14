@@ -4,15 +4,16 @@ defmodule NotionSDK.Comments do
 
   ## Operations
 
-    * get `/v1/comments`
-    * post `/v1/comments`
-    * get `/v1/comments/{comment_id}`
+    * List comments
+    * Create a comment
+    * Retrieve a comment
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
-  post `/v1/comments`
+  Create a comment
 
   ## Source Context
   Create comment
@@ -37,6 +38,18 @@ defmodule NotionSDK.Comments do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -126,7 +139,7 @@ defmodule NotionSDK.Comments do
         }
 
   @doc """
-  get `/v1/comments`
+  List comments
 
   ## Source Context
   List comments
@@ -157,6 +170,18 @@ defmodule NotionSDK.Comments do
     * `block_id`
     * `start_cursor`
     * `page_size`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -230,7 +255,7 @@ defmodule NotionSDK.Comments do
   end
 
   @doc """
-  get `/v1/comments/{comment_id}`
+  Retrieve a comment
 
   ## Source Context
   Retrieve a comment
@@ -255,6 +280,18 @@ defmodule NotionSDK.Comments do
     * [capabilities guide](https://developers.notion.com/reference/capabilities)
     * [integration dashboard](https://www.notion.so/profile/integrations)
     * [Retrieve a comment](https://developers.notion.com/reference/retrieve-comment)
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -365,10 +402,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "An array of files to attach to the comment. Maximum of 3 allowed.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "attachments",
         nullable: false,
@@ -380,10 +417,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Display name for the comment.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "display_name",
         nullable: false,
@@ -396,10 +433,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "An array of rich text objects that represent the content of the comment.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "rich_text",
         nullable: false,
@@ -416,10 +453,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "ID of a FileUpload object that has the status `uploaded`.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "file_upload_id",
         nullable: false,
@@ -431,10 +468,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `file_upload`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -454,7 +491,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "comment",
         nullable: false,
@@ -469,7 +506,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -484,7 +521,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -496,10 +533,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `list`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -514,7 +551,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "results",
         nullable: false,
@@ -526,10 +563,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `comment`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

@@ -4,12 +4,13 @@ defmodule NotionSDK.DateResponse do
 
   ## Fields
 
-    * `end`: required
-    * `start`: required
-    * `time_zone`: required
+    * `end`: The end date of the date object, if any.
+    * `start`: The start date of the date object.
+    * `time_zone`: The time zone of the date object.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{end: Date.t() | nil, start: Date.t(), time_zone: String.t() | nil}
 
@@ -39,10 +40,10 @@ defmodule NotionSDK.DateResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The end date of the date object, if any.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "end",
         nullable: false,
@@ -54,10 +55,10 @@ defmodule NotionSDK.DateResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The start date of the date object.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "start",
         nullable: false,
@@ -69,10 +70,10 @@ defmodule NotionSDK.DateResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The time zone of the date object.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "time_zone",
         nullable: false,

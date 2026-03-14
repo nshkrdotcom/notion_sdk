@@ -5,11 +5,12 @@ defmodule NotionSDK.RichTextItemResponse do
   ## Fields
 
     * `annotations`: optional
-    * `href`: optional
-    * `plain_text`: optional
+    * `href`: A URL that the rich text object links to or mentions.
+    * `plain_text`: The plain text content of the rich text object, without any styling.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           annotations: NotionSDK.AnnotationResponse.t() | nil,
@@ -46,7 +47,7 @@ defmodule NotionSDK.RichTextItemResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "annotations",
         nullable: false,
@@ -58,10 +59,10 @@ defmodule NotionSDK.RichTextItemResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "A URL that the rich text object links to or mentions.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "href",
         nullable: false,
@@ -73,10 +74,10 @@ defmodule NotionSDK.RichTextItemResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The plain text content of the rich text object, without any styling.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "plain_text",
         nullable: false,

@@ -5,13 +5,14 @@ defmodule NotionSDK.PageMarkdownResponse do
   ## Fields
 
     * `id`: required
-    * `markdown`: required
-    * `object`: required
-    * `truncated`: required
-    * `unknown_block_ids`: required
+    * `markdown`: The page content rendered as enhanced Markdown.
+    * `object`: The type of object, always 'page_markdown'.
+    * `truncated`: Whether the content was truncated due to exceeding the record count limit.
+    * `unknown_block_ids`: Block IDs that could not be loaded (appeared as <unknown> tags in the markdown). Pass these IDs back to this endpoint to fetch their content separately.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
@@ -52,7 +53,7 @@ defmodule NotionSDK.PageMarkdownResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -64,10 +65,10 @@ defmodule NotionSDK.PageMarkdownResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The page content rendered as enhanced Markdown.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "markdown",
         nullable: false,
@@ -79,10 +80,10 @@ defmodule NotionSDK.PageMarkdownResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The type of object, always 'page_markdown'.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -94,10 +95,10 @@ defmodule NotionSDK.PageMarkdownResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the content was truncated due to exceeding the record count limit.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "truncated",
         nullable: false,
@@ -109,10 +110,11 @@ defmodule NotionSDK.PageMarkdownResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Block IDs that could not be loaded (appeared as <unknown> tags in the markdown). Pass these IDs back to this endpoint to fetch their content separately.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "unknown_block_ids",
         nullable: false,

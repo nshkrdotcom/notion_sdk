@@ -1,6 +1,6 @@
 defmodule NotionSDK.NumberFormulaPropertyResponse do
   @moduledoc """
-  NumberFormulaPropertyResponse
+  Number
 
   ## Fields
 
@@ -9,6 +9,7 @@ defmodule NotionSDK.NumberFormulaPropertyResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{number: number | nil, type: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.NumberFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "number",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.NumberFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

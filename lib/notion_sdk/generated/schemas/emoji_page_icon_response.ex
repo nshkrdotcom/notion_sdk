@@ -1,24 +1,26 @@
-defmodule NotionSDK.CustomCustom do
+defmodule NotionSDK.EmojiPageIconResponse do
   @moduledoc """
-  CustomCustom
+  Emoji
 
   ## Fields
 
-    * `name`: required
+    * `emoji`: required
+    * `type`: Type of icon. In this case, an emoji.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{name: String.t()}
+  @type t :: %__MODULE__{emoji: String.t(), type: String.t()}
 
-  defstruct [:name]
+  defstruct [:emoji, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [name: :string]
+    [emoji: :string, type: {:const, "emoji"}]
   end
 
   (
@@ -36,13 +38,28 @@ defmodule NotionSDK.CustomCustom do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
-        name: "name",
+        name: "emoji",
         nullable: false,
         read_only: false,
         required: true,
         type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: "Type of icon. In this case, an emoji.",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "type",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {:const, "emoji"},
         write_only: false
       }
     ]

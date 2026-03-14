@@ -1,6 +1,6 @@
 defmodule NotionSDK.ColumnBlockWithChildrenRequest do
   @moduledoc """
-  ColumnBlockWithChildrenRequest
+  Column
 
   ## Fields
 
@@ -10,6 +10,7 @@ defmodule NotionSDK.ColumnBlockWithChildrenRequest do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           column: NotionSDK.ColumnWithChildrenRequest.t(),
@@ -46,7 +47,7 @@ defmodule NotionSDK.ColumnBlockWithChildrenRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "column",
         nullable: false,
@@ -61,7 +62,7 @@ defmodule NotionSDK.ColumnBlockWithChildrenRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -76,7 +77,7 @@ defmodule NotionSDK.ColumnBlockWithChildrenRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

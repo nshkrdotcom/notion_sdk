@@ -4,15 +4,16 @@ defmodule NotionSDK.Users do
 
   ## Operations
 
-    * get `/v1/users`
-    * get `/v1/users/me`
-    * get `/v1/users/{user_id}`
+    * List all users
+    * Retrieve your token's bot user
+    * Retrieve a user
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
-  get `/v1/users/me`
+  Retrieve your token's bot user
 
   ## Source Context
   Retrieve your token's bot user
@@ -35,6 +36,18 @@ defmodule NotionSDK.Users do
     * [user object](https://developers.notion.com/reference/user)
     * [capabilities guide](https://developers.notion.com/reference/capabilities)
     * [Retrieve your token's bot user](https://developers.notion.com/reference/get-self)
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -109,7 +122,7 @@ defmodule NotionSDK.Users do
         }
 
   @doc """
-  get `/v1/users`
+  List all users
 
   ## Source Context
   List all users
@@ -138,6 +151,18 @@ defmodule NotionSDK.Users do
 
     * `start_cursor`
     * `page_size`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -206,7 +231,7 @@ defmodule NotionSDK.Users do
   end
 
   @doc """
-  get `/v1/users/{user_id}`
+  Retrieve a user
 
   ## Source Context
   Retrieve a user
@@ -228,6 +253,18 @@ defmodule NotionSDK.Users do
     * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
     * [capabilities guide](https://developers.notion.com/reference/capabilities)
     * [Retrieve a user](https://developers.notion.com/reference/get-user)
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -324,7 +361,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -339,7 +376,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -354,7 +391,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -369,7 +406,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "results",
         nullable: false,
@@ -384,7 +421,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -399,7 +436,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "user",
         nullable: false,

@@ -1,16 +1,17 @@
 defmodule NotionSDK.CommentId do
   @moduledoc """
-  CommentId
+  Comment Id
 
   ## Fields
 
     * `comment_id`: required
-    * `type`: optional
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{comment_id: String.t(), type: String.t() | nil}
+  @type t :: %{comment_id: String.t(), type: String.t() | nil}
 
   defstruct [:comment_id, :type]
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.CommentId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "comment_id",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.CommentId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

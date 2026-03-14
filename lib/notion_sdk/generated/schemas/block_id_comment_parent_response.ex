@@ -1,14 +1,15 @@
 defmodule NotionSDK.BlockIdCommentParentResponse do
   @moduledoc """
-  BlockIdCommentParentResponse
+  Block Id
 
   ## Fields
 
     * `block_id`: required
-    * `type`: required
+    * `type`: Always `block_id`
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{block_id: String.t(), type: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.BlockIdCommentParentResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "block_id",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.BlockIdCommentParentResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `block_id`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

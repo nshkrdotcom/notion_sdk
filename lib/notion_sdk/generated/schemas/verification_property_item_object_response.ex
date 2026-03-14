@@ -1,6 +1,6 @@
 defmodule NotionSDK.VerificationPropertyItemObjectResponse do
   @moduledoc """
-  VerificationPropertyItemObjectResponse
+  Verification
 
   ## Fields
 
@@ -11,12 +11,16 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
           object: String.t(),
           type: String.t(),
-          verification: map | nil
+          verification:
+            NotionSDK.VerificationPropertyResponse.t()
+            | NotionSDK.VerificationPropertyUnverifiedResponse.t()
+            | nil
         }
 
   defstruct [:id, :object, :type, :verification]
@@ -30,7 +34,13 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
       id: :string,
       object: {:const, "property_item"},
       type: {:const, "verification"},
-      verification: {:union, [:null, :map]}
+      verification:
+        {:union,
+         [
+           :null,
+           {NotionSDK.VerificationPropertyUnverifiedResponse, :t},
+           {NotionSDK.VerificationPropertyResponse, :t}
+         ]}
     ]
   end
 
@@ -49,7 +59,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -64,7 +74,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -79,7 +89,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -94,13 +104,19 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "verification",
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:null, :map]},
+        type:
+          {:union,
+           [
+             :null,
+             {NotionSDK.VerificationPropertyUnverifiedResponse, :t},
+             {NotionSDK.VerificationPropertyResponse, :t}
+           ]},
         write_only: false
       }
     ]

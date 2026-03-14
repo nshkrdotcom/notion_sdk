@@ -8,6 +8,7 @@ defmodule NotionSDK.ColumnListRequest do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{children: [NotionSDK.ColumnBlockWithChildrenRequest.t()]}
 
@@ -36,7 +37,7 @@ defmodule NotionSDK.ColumnListRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "children",
         nullable: false,

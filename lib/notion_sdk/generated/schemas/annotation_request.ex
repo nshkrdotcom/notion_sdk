@@ -4,15 +4,16 @@ defmodule NotionSDK.AnnotationRequest do
 
   ## Fields
 
-    * `bold`: optional
-    * `code`: optional
-    * `color`: optional
-    * `italic`: optional
-    * `strikethrough`: optional
-    * `underline`: optional
+    * `bold`: Whether the text is formatted as bold.
+    * `code`: Whether the text is formatted as code.
+    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`
+    * `italic`: Whether the text is formatted as italic.
+    * `strikethrough`: Whether the text is formatted with a strikethrough.
+    * `underline`: Whether the text is formatted with an underline.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           bold: boolean | nil,
@@ -75,10 +76,10 @@ defmodule NotionSDK.AnnotationRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the text is formatted as bold.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "bold",
         nullable: false,
@@ -90,10 +91,10 @@ defmodule NotionSDK.AnnotationRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the text is formatted as code.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "code",
         nullable: false,
@@ -105,10 +106,11 @@ defmodule NotionSDK.AnnotationRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "color",
         nullable: false,
@@ -143,10 +145,10 @@ defmodule NotionSDK.AnnotationRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the text is formatted as italic.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "italic",
         nullable: false,
@@ -158,10 +160,10 @@ defmodule NotionSDK.AnnotationRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the text is formatted with a strikethrough.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "strikethrough",
         nullable: false,
@@ -173,10 +175,10 @@ defmodule NotionSDK.AnnotationRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the text is formatted with an underline.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "underline",
         nullable: false,

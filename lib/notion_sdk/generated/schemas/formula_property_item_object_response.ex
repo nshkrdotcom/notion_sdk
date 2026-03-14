@@ -1,6 +1,6 @@
 defmodule NotionSDK.FormulaPropertyItemObjectResponse do
   @moduledoc """
-  FormulaPropertyItemObjectResponse
+  Formula
 
   ## Fields
 
@@ -11,6 +11,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           formula:
@@ -60,7 +61,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "formula",
         nullable: false,
@@ -82,7 +83,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -97,7 +98,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -112,7 +113,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

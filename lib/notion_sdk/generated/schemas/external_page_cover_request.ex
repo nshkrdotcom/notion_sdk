@@ -1,14 +1,15 @@
 defmodule NotionSDK.ExternalPageCoverRequest do
   @moduledoc """
-  ExternalPageCoverRequest
+  External
 
   ## Fields
 
-    * `external`: required
-    * `type`: optional
+    * `external`: External URL for the cover.
+    * `type`: Always `external`
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           external: NotionSDK.ExternalPageCoverRequestExternal.t(),
@@ -37,10 +38,10 @@ defmodule NotionSDK.ExternalPageCoverRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "External URL for the cover.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "external",
         nullable: false,
@@ -52,10 +53,10 @@ defmodule NotionSDK.ExternalPageCoverRequest do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `external`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

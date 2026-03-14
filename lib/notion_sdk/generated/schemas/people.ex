@@ -11,15 +11,17 @@ defmodule NotionSDK.People do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
           next_url: String.t() | nil,
-          people: NotionSDK.EmptyObject.t(),
-          type: String.t()
+          people: map | NotionSDK.EmptyObject.t(),
+          property: String.t(),
+          type: String.t() | nil
         }
 
-  defstruct [:id, :next_url, :people, :type]
+  defstruct [:id, :next_url, :people, :property, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -29,7 +31,8 @@ defmodule NotionSDK.People do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      people: {NotionSDK.EmptyObject, :t},
+      people: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+      property: :string,
       type: {:const, "people"}
     ]
   end
@@ -49,7 +52,7 @@ defmodule NotionSDK.People do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -64,7 +67,7 @@ defmodule NotionSDK.People do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "next_url",
         nullable: false,
@@ -79,13 +82,13 @@ defmodule NotionSDK.People do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "people",
         nullable: false,
         read_only: false,
         required: true,
-        type: {NotionSDK.EmptyObject, :t},
+        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
         write_only: false
       },
       %{
@@ -94,12 +97,27 @@ defmodule NotionSDK.People do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "property",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: true,
+        required: false,
         type: {:const, "people"},
         write_only: false
       }

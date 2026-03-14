@@ -4,23 +4,36 @@ defmodule NotionSDK.FileUploads do
 
   ## Operations
 
-    * get `/v1/file_uploads`
-    * post `/v1/file_uploads`
-    * get `/v1/file_uploads/{file_upload_id}`
-    * post `/v1/file_uploads/{file_upload_id}/complete`
-    * post `/v1/file_uploads/{file_upload_id}/send`
+    * List file uploads
+    * Create a file upload
+    * Retrieve a file upload
+    * Complete a multi-part file upload
+    * Upload a file
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
-  post `/v1/file_uploads/{file_upload_id}/complete`
+  Complete a multi-part file upload
 
   ## Source Context
   Complete a file upload
   ### Resources
 
     * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -88,7 +101,7 @@ defmodule NotionSDK.FileUploads do
   end
 
   @doc """
-  post `/v1/file_uploads`
+  Create a file upload
 
   ## Source Context
   Create a file upload
@@ -101,6 +114,18 @@ defmodule NotionSDK.FileUploads do
 
   ## Request Body
   **Content Types**: `application/json`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -189,7 +214,7 @@ defmodule NotionSDK.FileUploads do
         }
 
   @doc """
-  get `/v1/file_uploads`
+  List file uploads
 
   ## Source Context
   List file uploads
@@ -205,6 +230,18 @@ defmodule NotionSDK.FileUploads do
     * `status`
     * `start_cursor`
     * `page_size`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -273,7 +310,7 @@ defmodule NotionSDK.FileUploads do
   end
 
   @doc """
-  get `/v1/file_uploads/{file_upload_id}`
+  Retrieve a file upload
 
   ## Source Context
   Retrieve a file upload
@@ -283,6 +320,18 @@ defmodule NotionSDK.FileUploads do
 
     * [File Upload](https://developers.notion.com/reference/file-upload)
     * [Retrieve a file upload](https://developers.notion.com/reference/retrieve-a-file-upload)
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -350,7 +399,7 @@ defmodule NotionSDK.FileUploads do
   end
 
   @doc """
-  post `/v1/file_uploads/{file_upload_id}/send`
+  Upload a file
 
   ## Source Context
   Send a file upload
@@ -379,6 +428,18 @@ defmodule NotionSDK.FileUploads do
 
   ## Request Body
   **Content Types**: `multipart/form-data`
+
+  ## Responses
+
+    * `200` (application/json)
+    * `400` (application/json)
+    * `401` (application/json)
+    * `403` (application/json)
+    * `404` (application/json)
+    * `409` (application/json)
+    * `429` (application/json)
+    * `500` (application/json)
+    * `503` (application/json)
 
   ## Security
 
@@ -498,10 +559,11 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "MIME type of the file to be created. Recommended when sending the file in multiple parts. Must match the content type of the file that's sent, and the extension of the `filename` parameter if any.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "content_type",
         nullable: false,
@@ -513,10 +575,11 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "When `mode` is `external_url`, provide the HTTPS URL of a publicly accessible file to import into your workspace.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "external_url",
         nullable: false,
@@ -528,10 +591,11 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "Name of the file to be created. Required when `mode` is `multi_part`. Otherwise optional, and used to override the filename. Must include an extension, or have one inferred from the `content_type` parameter.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "filename",
         nullable: false,
@@ -543,10 +607,11 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "How the file is being sent. Use `multi_part` for files larger than 20MB. Use `external_url` for files that are temporarily hosted publicly elsewhere. Default is `single_part`.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "mode",
         nullable: false,
@@ -558,10 +623,11 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "When `mode` is `multi_part`, the number of parts you are uploading. This must match the number of parts as well as the final `part_number` you send.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "number_of_parts",
         nullable: false,
@@ -581,7 +647,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "file_upload",
         nullable: false,
@@ -596,7 +662,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -611,7 +677,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -623,10 +689,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `list`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -641,7 +707,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "results",
         nullable: false,
@@ -653,10 +719,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `file_upload`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -673,10 +739,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The raw binary file contents to upload.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "file",
         nullable: false,
@@ -688,10 +754,11 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "When uploading files greater than 20MB in parts, this is the current part number. Must be an integer between 1 and 1,000.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "part_number",
         nullable: false,

@@ -12,6 +12,7 @@ defmodule NotionSDK.ErrorOauth400 do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           additional_data: map | nil,
@@ -60,7 +61,7 @@ defmodule NotionSDK.ErrorOauth400 do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "additional_data",
         nullable: false,
@@ -75,7 +76,7 @@ defmodule NotionSDK.ErrorOauth400 do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "code",
         nullable: false,
@@ -98,7 +99,7 @@ defmodule NotionSDK.ErrorOauth400 do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "message",
         nullable: false,
@@ -113,7 +114,7 @@ defmodule NotionSDK.ErrorOauth400 do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -128,7 +129,7 @@ defmodule NotionSDK.ErrorOauth400 do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "status",
         nullable: false,

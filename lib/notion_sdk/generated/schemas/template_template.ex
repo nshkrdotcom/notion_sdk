@@ -9,6 +9,7 @@ defmodule NotionSDK.TemplateTemplate do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           children:
@@ -165,7 +166,7 @@ defmodule NotionSDK.TemplateTemplate do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "children",
         nullable: false,
@@ -244,7 +245,7 @@ defmodule NotionSDK.TemplateTemplate do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "rich_text",
         nullable: false,

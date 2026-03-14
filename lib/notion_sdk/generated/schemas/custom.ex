@@ -1,25 +1,29 @@
 defmodule NotionSDK.Custom do
   @moduledoc """
-  Custom
+  Provides struct and types for Custom
 
-  ## Fields
+  ## Types
 
-    * `custom`: required
-    * `type`: required
-
+    * Custom
+    * Custom.t_custom
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{custom: NotionSDK.CustomCustom.t(), type: String.t()}
+  @type t :: %{custom: NotionSDK.Custom.t_custom(), type: String.t()}
 
-  defstruct [:custom, :type]
+  @type t_custom :: %{name: String.t()}
 
   @doc false
   @spec __fields__(atom) :: keyword
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [custom: {NotionSDK.CustomCustom, :t}, type: {:const, "custom"}]
+    [custom: {NotionSDK.Custom, :t_custom}, type: {:const, "custom"}]
+  end
+
+  def __fields__(:t_custom) do
+    [name: :string]
   end
 
   (
@@ -37,28 +41,48 @@ defmodule NotionSDK.Custom do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "custom",
         nullable: false,
         read_only: false,
         required: true,
-        type: {NotionSDK.CustomCustom, :t},
+        type: {NotionSDK.Custom, :t_custom},
         write_only: false
       },
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `custom`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
         required: true,
         type: {:const, "custom"},
+        write_only: false
+      }
+    ]
+  end
+
+  def __openapi_fields__(:t_custom) do
+    [
+      %{
+        default: nil,
+        deprecated: false,
+        description: "The custom display name to use",
+        example: nil,
+        examples: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "name",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
         write_only: false
       }
     ]
@@ -73,6 +97,10 @@ defmodule NotionSDK.Custom do
 
   def __schema__(:t) do
     OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  end
+
+  def __schema__(:t_custom) do
+    OpenAPIRuntime.build_schema(__openapi_fields__(:t_custom))
   end
 
   (

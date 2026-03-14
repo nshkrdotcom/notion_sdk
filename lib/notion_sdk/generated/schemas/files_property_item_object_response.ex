@@ -1,6 +1,6 @@
 defmodule NotionSDK.FilesPropertyItemObjectResponse do
   @moduledoc """
-  FilesPropertyItemObjectResponse
+  Files
 
   ## Fields
 
@@ -11,6 +11,7 @@ defmodule NotionSDK.FilesPropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           files: [NotionSDK.InternalOrExternalFileWithNameResponse.t()],
@@ -49,7 +50,7 @@ defmodule NotionSDK.FilesPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "files",
         nullable: false,
@@ -64,7 +65,7 @@ defmodule NotionSDK.FilesPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -79,7 +80,7 @@ defmodule NotionSDK.FilesPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -94,7 +95,7 @@ defmodule NotionSDK.FilesPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

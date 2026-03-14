@@ -1,6 +1,6 @@
 defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
   @moduledoc """
-  CreatedByPropertyItemObjectResponse
+  Created By
 
   ## Fields
 
@@ -11,6 +11,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           created_by: NotionSDK.PartialUserObjectResponse.t() | NotionSDK.UserObjectResponse.t(),
@@ -50,7 +51,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "created_by",
         nullable: false,
@@ -67,7 +68,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -82,7 +83,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -97,7 +98,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

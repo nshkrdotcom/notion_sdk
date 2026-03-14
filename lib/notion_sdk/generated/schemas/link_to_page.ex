@@ -1,6 +1,6 @@
 defmodule NotionSDK.LinkToPage do
   @moduledoc """
-  LinkToPage
+  Link To Page
 
   ## Fields
 
@@ -10,8 +10,9 @@ defmodule NotionSDK.LinkToPage do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
+  @type t :: %{
           link_to_page: NotionSDK.CommentId.t() | NotionSDK.DatabaseId.t() | NotionSDK.PageId.t(),
           object: String.t() | nil,
           type: String.t() | nil
@@ -47,7 +48,7 @@ defmodule NotionSDK.LinkToPage do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "link_to_page",
         nullable: false,
@@ -64,7 +65,7 @@ defmodule NotionSDK.LinkToPage do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -79,7 +80,7 @@ defmodule NotionSDK.LinkToPage do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

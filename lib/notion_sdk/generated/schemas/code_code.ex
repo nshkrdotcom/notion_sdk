@@ -10,6 +10,7 @@ defmodule NotionSDK.CodeCode do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           caption: [NotionSDK.RichTextItemRequest.t()] | nil,
@@ -139,7 +140,7 @@ defmodule NotionSDK.CodeCode do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "caption",
         nullable: false,
@@ -154,7 +155,7 @@ defmodule NotionSDK.CodeCode do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "language",
         nullable: false,
@@ -262,7 +263,7 @@ defmodule NotionSDK.CodeCode do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "rich_text",
         nullable: false,

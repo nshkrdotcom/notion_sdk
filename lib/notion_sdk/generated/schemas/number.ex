@@ -4,16 +4,22 @@ defmodule NotionSDK.Number do
 
   ## Fields
 
-    * `function`: required
     * `number`: required
-    * `type`: required
+    * `property`: required
+    * `type`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{function: String.t(), number: number | nil, type: String.t()}
+  @type t :: %__MODULE__{
+          function: String.t(),
+          number: map | number | nil,
+          property: String.t(),
+          type: String.t() | nil
+        }
 
-  defstruct [:function, :number, :type]
+  defstruct [:function, :number, :property, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -49,7 +55,8 @@ defmodule NotionSDK.Number do
            "percent_per_group",
            "show_original"
          ]},
-      number: {:union, [:null, :number]},
+      number: {:union, [:null, :number, :map]},
+      property: :string,
       type: {:const, "number"}
     ]
   end
@@ -69,7 +76,7 @@ defmodule NotionSDK.Number do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "function",
         nullable: false,
@@ -111,13 +118,13 @@ defmodule NotionSDK.Number do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "number",
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:null, :number]},
+        type: {:union, [:null, :number, :map]},
         write_only: false
       },
       %{
@@ -126,12 +133,27 @@ defmodule NotionSDK.Number do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
+        external_docs: nil,
+        name: "property",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: :string,
+        write_only: false
+      },
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: true,
+        required: false,
         type: {:const, "number"},
         write_only: false
       }

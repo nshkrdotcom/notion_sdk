@@ -4,29 +4,31 @@ defmodule NotionSDK.DataSourceObjectResponse do
 
   ## Fields
 
-    * `cover`: required
+    * `cover`: The cover of the data source.
     * `created_by`: required
-    * `created_time`: required
+    * `created_time`: The time when the data source was created.
     * `database_parent`: required
-    * `description`: required
-    * `icon`: required
+    * `description`: The description of the data source.
+    * `icon`: The icon of the data source.
     * `id`: required
-    * `in_trash`: required
-    * `is_inline`: required
+    * `in_trash`: Whether the data source is in the trash.
+    * `is_inline`: Whether the data source is inline.
     * `last_edited_by`: required
-    * `last_edited_time`: required
-    * `object`: required
-    * `parent`: required
-    * `properties`: required
-    * `public_url`: required
-    * `title`: required
-    * `url`: required
+    * `last_edited_time`: The time when the data source was last edited.
+    * `object`: The data source object type name.
+    * `parent`: The parent of the data source. This is typically a database (`database_id`), but for externally synced data sources, can be another data source (`data_source_id`).
+    * `properties`: The properties schema of the data source.
+    * `public_url`: The public URL of the data source if it is publicly accessible.
+    * `title`: The title of the data source.
+    * `url`: The URL of the data source.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
-          cover: map | nil,
+          cover:
+            NotionSDK.ExternalPageCoverResponse.t() | NotionSDK.FilePageCoverResponse.t() | nil,
           created_by: NotionSDK.PartialUserObjectResponse.t(),
           created_time: DateTime.t(),
           database_parent:
@@ -35,7 +37,12 @@ defmodule NotionSDK.DataSourceObjectResponse do
             | NotionSDK.PageIdParentForBlockBasedObjectResponse.t()
             | NotionSDK.WorkspaceParentForBlockBasedObjectResponse.t(),
           description: [NotionSDK.RichTextItemResponse.t()],
-          icon: map | nil,
+          icon:
+            NotionSDK.CustomEmojiPageIconResponse.t()
+            | NotionSDK.EmojiPageIconResponse.t()
+            | NotionSDK.ExternalPageIconResponse.t()
+            | NotionSDK.FilePageIconResponse.t()
+            | nil,
           id: String.t(),
           in_trash: boolean,
           is_inline: boolean,
@@ -75,7 +82,9 @@ defmodule NotionSDK.DataSourceObjectResponse do
 
   def __fields__(:t) do
     [
-      cover: {:union, [:null, :map]},
+      cover:
+        {:union,
+         [:null, {NotionSDK.FilePageCoverResponse, :t}, {NotionSDK.ExternalPageCoverResponse, :t}]},
       created_by: {NotionSDK.PartialUserObjectResponse, :t},
       created_time: {:string, "date-time"},
       database_parent:
@@ -87,7 +96,15 @@ defmodule NotionSDK.DataSourceObjectResponse do
            {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t}
          ]},
       description: [{NotionSDK.RichTextItemResponse, :t}],
-      icon: {:union, [:null, :map]},
+      icon:
+        {:union,
+         [
+           :null,
+           {NotionSDK.EmojiPageIconResponse, :t},
+           {NotionSDK.FilePageIconResponse, :t},
+           {NotionSDK.ExternalPageIconResponse, :t},
+           {NotionSDK.CustomEmojiPageIconResponse, :t}
+         ]},
       id: {:string, "uuid"},
       in_trash: :boolean,
       is_inline: :boolean,
@@ -116,16 +133,22 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The cover of the data source.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "cover",
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:null, :map]},
+        type:
+          {:union,
+           [
+             :null,
+             {NotionSDK.FilePageCoverResponse, :t},
+             {NotionSDK.ExternalPageCoverResponse, :t}
+           ]},
         write_only: false
       },
       %{
@@ -134,7 +157,7 @@ defmodule NotionSDK.DataSourceObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "created_by",
         nullable: false,
@@ -146,10 +169,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The time when the data source was created.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "created_time",
         nullable: false,
@@ -164,7 +187,7 @@ defmodule NotionSDK.DataSourceObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "database_parent",
         nullable: false,
@@ -183,10 +206,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The description of the data source.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "description",
         nullable: false,
@@ -198,16 +221,24 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The icon of the data source.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "icon",
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:null, :map]},
+        type:
+          {:union,
+           [
+             :null,
+             {NotionSDK.EmojiPageIconResponse, :t},
+             {NotionSDK.FilePageIconResponse, :t},
+             {NotionSDK.ExternalPageIconResponse, :t},
+             {NotionSDK.CustomEmojiPageIconResponse, :t}
+           ]},
         write_only: false
       },
       %{
@@ -216,7 +247,7 @@ defmodule NotionSDK.DataSourceObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -228,10 +259,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the data source is in the trash.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -243,10 +274,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Whether the data source is inline.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "is_inline",
         nullable: false,
@@ -261,7 +292,7 @@ defmodule NotionSDK.DataSourceObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "last_edited_by",
         nullable: false,
@@ -273,10 +304,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The time when the data source was last edited.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "last_edited_time",
         nullable: false,
@@ -288,10 +319,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The data source object type name.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -303,10 +334,11 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description:
+          "The parent of the data source. This is typically a database (`database_id`), but for externally synced data sources, can be another data source (`data_source_id`).",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -320,10 +352,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The properties schema of the data source.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "properties",
         nullable: false,
@@ -335,10 +367,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The public URL of the data source if it is publicly accessible.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "public_url",
         nullable: false,
@@ -350,10 +382,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The title of the data source.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -365,10 +397,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The URL of the data source.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "url",
         nullable: false,

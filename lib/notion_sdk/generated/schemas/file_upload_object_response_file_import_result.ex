@@ -4,10 +4,11 @@ defmodule NotionSDK.FileUploadObjectResponseFileImportResult do
 
   ## Fields
 
-    * `imported_time`: optional
+    * `imported_time`: The time the file was imported into Notion. ISO 8601 format.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{imported_time: DateTime.t() | nil}
 
@@ -33,10 +34,10 @@ defmodule NotionSDK.FileUploadObjectResponseFileImportResult do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The time the file was imported into Notion. ISO 8601 format.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "imported_time",
         nullable: false,

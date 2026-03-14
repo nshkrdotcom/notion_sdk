@@ -1,6 +1,6 @@
 defmodule NotionSDK.BooleanFormulaPropertyResponse do
   @moduledoc """
-  BooleanFormulaPropertyResponse
+  Boolean
 
   ## Fields
 
@@ -9,6 +9,7 @@ defmodule NotionSDK.BooleanFormulaPropertyResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{boolean: boolean | nil, type: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.BooleanFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "boolean",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.BooleanFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

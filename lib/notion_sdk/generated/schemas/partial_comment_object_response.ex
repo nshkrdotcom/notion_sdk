@@ -5,10 +5,11 @@ defmodule NotionSDK.PartialCommentObjectResponse do
   ## Fields
 
     * `id`: required
-    * `object`: required
+    * `object`: The comment object type name.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t(), object: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.PartialCommentObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.PartialCommentObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The comment object type name.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,

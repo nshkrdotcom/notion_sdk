@@ -5,10 +5,11 @@ defmodule NotionSDK.FileUploadObjectResponseCreatedBy do
   ## Fields
 
     * `id`: required
-    * `type`: required
+    * `type`: One of: `person`, `bot`, `agent`
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t(), type: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.FileUploadObjectResponseCreatedBy do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -49,10 +50,10 @@ defmodule NotionSDK.FileUploadObjectResponseCreatedBy do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "One of: `person`, `bot`, `agent`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

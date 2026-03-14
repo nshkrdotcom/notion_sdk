@@ -16,12 +16,13 @@ defmodule NotionSDK.FileUploadObjectResponse do
     * `in_trash`: required
     * `last_edited_time`: required
     * `number_of_parts`: optional
-    * `object`: required
-    * `status`: required
+    * `object`: Always `file_upload`
+    * `status`: One of: `pending`, `uploaded`, `expired`, `failed`
     * `upload_url`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           complete_url: String.t() | nil,
@@ -98,7 +99,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "complete_url",
         nullable: false,
@@ -113,7 +114,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "content_length",
         nullable: false,
@@ -128,7 +129,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "content_type",
         nullable: false,
@@ -143,7 +144,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "created_by",
         nullable: false,
@@ -158,7 +159,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "created_time",
         nullable: false,
@@ -173,7 +174,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "expiry_time",
         nullable: false,
@@ -188,7 +189,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "file_import_result",
         nullable: false,
@@ -203,7 +204,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "filename",
         nullable: false,
@@ -218,7 +219,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -233,7 +234,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -248,7 +249,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "last_edited_time",
         nullable: false,
@@ -263,7 +264,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "number_of_parts",
         nullable: false,
@@ -275,10 +276,10 @@ defmodule NotionSDK.FileUploadObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "Always `file_upload`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -290,10 +291,10 @@ defmodule NotionSDK.FileUploadObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "One of: `pending`, `uploaded`, `expired`, `failed`",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "status",
         nullable: false,
@@ -308,7 +309,7 @@ defmodule NotionSDK.FileUploadObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "upload_url",
         nullable: false,

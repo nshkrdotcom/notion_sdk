@@ -1,6 +1,6 @@
 defmodule NotionSDK.DateFormulaPropertyResponse do
   @moduledoc """
-  DateFormulaPropertyResponse
+  Date
 
   ## Fields
 
@@ -9,6 +9,7 @@ defmodule NotionSDK.DateFormulaPropertyResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{date: NotionSDK.DateResponse.t() | nil, type: String.t()}
 
@@ -37,7 +38,7 @@ defmodule NotionSDK.DateFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "date",
         nullable: false,
@@ -52,7 +53,7 @@ defmodule NotionSDK.DateFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "type",
         nullable: false,

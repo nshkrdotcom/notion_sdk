@@ -4,13 +4,14 @@ defmodule NotionSDK.UserObjectResponse do
 
   ## Fields
 
-    * `avatar_url`: optional
+    * `avatar_url`: The avatar URL of the user.
     * `id`: optional
-    * `name`: optional
-    * `object`: optional
+    * `name`: The name of the user.
+    * `object`: The user object type name.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           avatar_url: String.t() | nil,
@@ -46,10 +47,10 @@ defmodule NotionSDK.UserObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The avatar URL of the user.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "avatar_url",
         nullable: false,
@@ -64,7 +65,7 @@ defmodule NotionSDK.UserObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -76,10 +77,10 @@ defmodule NotionSDK.UserObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The name of the user.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "name",
         nullable: false,
@@ -91,10 +92,10 @@ defmodule NotionSDK.UserObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The user object type name.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "object",
         nullable: false,

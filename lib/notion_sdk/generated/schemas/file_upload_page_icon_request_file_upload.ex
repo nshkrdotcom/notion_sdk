@@ -4,10 +4,11 @@ defmodule NotionSDK.FileUploadPageIconRequestFileUpload do
 
   ## Fields
 
-    * `id`: required
+    * `id`: ID of a FileUpload object that has the status `uploaded`.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t()}
 
@@ -33,10 +34,10 @@ defmodule NotionSDK.FileUploadPageIconRequestFileUpload do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "ID of a FileUpload object that has the status `uploaded`.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "id",
         nullable: false,

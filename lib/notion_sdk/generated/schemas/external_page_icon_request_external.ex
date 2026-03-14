@@ -4,10 +4,11 @@ defmodule NotionSDK.ExternalPageIconRequestExternal do
 
   ## Fields
 
-    * `url`: required
+    * `url`: The URL of the external file.
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{url: String.t()}
 
@@ -33,10 +34,10 @@ defmodule NotionSDK.ExternalPageIconRequestExternal do
       %{
         default: nil,
         deprecated: false,
-        description: nil,
+        description: "The URL of the external file.",
         example: nil,
         examples: nil,
-        extensions: nil,
+        extensions: %{},
         external_docs: nil,
         name: "url",
         nullable: false,
