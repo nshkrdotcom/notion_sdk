@@ -89,10 +89,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
       database_parent:
         {:union,
          [
-           {NotionSDK.DatabaseParentResponse, :t},
            {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
-           {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
-           {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
+           {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t},
+           {NotionSDK.DatabaseParentResponse, :t},
+           {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t}
          ]},
       description: [{NotionSDK.RichTextItemResponse, :t}],
       icon:
@@ -195,10 +195,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
         type:
           {:union,
            [
-             {NotionSDK.DatabaseParentResponse, :t},
              {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
-             {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
-             {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
+             {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t},
+             {NotionSDK.DatabaseParentResponse, :t},
+             {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t}
            ]},
         write_only: false
       },

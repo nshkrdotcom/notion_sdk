@@ -30,7 +30,7 @@ defmodule NotionSDK.People do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      people: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
+      people: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
       property: :string,
       type: {:const, "people"}
     ]
@@ -87,7 +87,7 @@ defmodule NotionSDK.People do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
+        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
         write_only: false
       },
       %{
