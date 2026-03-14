@@ -5,13 +5,16 @@ defmodule NotionSDK.BoundaryContractTest do
     "Pristine.Core.Context",
     "Pristine.Core.Response",
     "Pristine.Core.ResultClassification",
+    "Pristine.Manifest",
     "Pristine.OpenAPI.Client",
     "Pristine.OpenAPI.Operation",
     "Pristine.OpenAPI.Runtime",
-    "Pristine.Profiles.Foundation"
+    "Pristine.Profiles.Foundation",
+    "Pristine.Runtime"
   ]
 
   @bridge_pattern "Pristine.OpenAPI.Bridge"
+  @oauth_task_path "lib/mix/tasks/notion.oauth.ex"
 
   @handwritten_globs [
     "README.md",
@@ -59,6 +62,15 @@ defmodule NotionSDK.BoundaryContractTest do
       |> Enum.sort()
 
     assert bridge_refs == ["codegen/notion_sdk/codegen.ex"]
+  end
+
+  test "mix notion.oauth defaults route through the retained pristine oauth helpers" do
+    source = File.read!(@oauth_task_path)
+
+    assert source =~ "Module.concat([Pristine, OAuth2, Interactive])"
+    assert source =~ "Module.concat([Pristine, SDK, OAuth2])"
+    assert source =~ "interactive_module().authorize(NotionSDK.OAuth.provider(),"
+    assert source =~ "oauth2_module().refresh_token(NotionSDK.OAuth.provider(), refresh_token,"
   end
 
   defp generated_path?(path) do

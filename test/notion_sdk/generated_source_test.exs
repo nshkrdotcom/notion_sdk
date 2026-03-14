@@ -41,6 +41,8 @@ defmodule NotionSDK.GeneratedSourceTest do
 
     assert source =~ "alias Pristine.SDK.OAuth2, as: OAuth2"
     assert source =~ "OAuth2.Provider.new("
+    refute source =~ "from_manifest("
+    refute source =~ "from_manifest!("
     assert source =~ "with {:ok, authorization_opts} <- authorization_opts(opts) do"
     assert source =~ "OAuth2.authorization_request(provider(), authorization_opts)"
     assert source =~ "OAuth2.authorize_url(provider(), authorization_opts)"
@@ -50,6 +52,9 @@ defmodule NotionSDK.GeneratedSourceTest do
 
     assert source =~ "Keyword.put_new(params, :owner, \"user\")"
     assert source =~ "OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)"
+    assert source =~ "NotionSDK.Client.drop_oauth_credentials(params)"
+    assert source =~ "NotionSDK.Client.oauth_request_auth(params)"
+    assert source =~ ~s(security: [%{"basicAuth" => []}])
     refute source =~ "GeneratedOAuth"
     refute source =~ "OAuth2.authorization_request(authorization_opts)"
   end

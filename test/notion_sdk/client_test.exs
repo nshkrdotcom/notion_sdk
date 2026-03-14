@@ -333,6 +333,62 @@ defmodule NotionSDK.ClientTest do
       assert request.headers["Authorization"] == "Bearer override-token"
     end
 
+    test "request-level auth overrides still win on oauth-backed raw requests" do
+      client =
+        Client.new(
+          oauth2: [
+            token_source:
+              {Pristine.Adapters.TokenSource.Static,
+               token: OAuth2Token.from_map(%{access_token: "oauth-access-token"})}
+          ],
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(client, %{
+                 method: :get,
+                 path: "/v1/users/me",
+                 path_params: %{},
+                 query: %{},
+                 body: nil,
+                 form_data: nil,
+                 headers: %{},
+                 auth: "override-token"
+               })
+
+      assert_receive {:transport_request, request, _context}
+      assert request.headers["Authorization"] == "Bearer override-token"
+    end
+
+    test "raw oauth control requests do not inherit bearer auth from oauth-backed clients" do
+      client =
+        Client.new(
+          retry: false,
+          oauth2: [
+            token_source:
+              {Pristine.Adapters.TokenSource.Static,
+               token: OAuth2Token.from_map(%{access_token: "oauth-access-token"})}
+          ],
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: ok_response(%{"ok" => true})]
+        )
+
+      assert {:ok, %{"ok" => true}} =
+               Client.request(client, %{
+                 method: :post,
+                 path: "/v1/oauth/introspect",
+                 path_params: %{},
+                 query: %{},
+                 body: %{"token" => "secret_123"},
+                 form_data: nil,
+                 headers: %{}
+               })
+
+      assert_receive {:transport_request, request, _context}
+      refute Map.has_key?(request.headers, "Authorization")
+    end
+
     test "oauth-backed bearer auth can read persisted tokens from a file", %{tmp_dir: tmp_dir} do
       path = Path.join(tmp_dir, "notion-oauth.json")
 
