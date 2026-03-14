@@ -10,7 +10,7 @@ defmodule NotionSDK.Blocks do
     * Retrieve block children
     * Append block children
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
 
   @type append_children_200_json_resp :: %{

@@ -7,7 +7,7 @@ defmodule NotionSDK.TitleObjectResponse do
     * `title`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{title: String.t()}
 

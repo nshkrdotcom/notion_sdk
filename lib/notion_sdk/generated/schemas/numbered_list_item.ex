@@ -7,7 +7,7 @@ defmodule NotionSDK.NumberedListItem do
     * Numbered List Item
     * NumberedListItem.t_numbered_list_item
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           numbered_list_item:
@@ -66,10 +66,10 @@ defmodule NotionSDK.NumberedListItem do
       numbered_list_item:
         {:union,
          [
-           {NotionSDK.NumberedListItemNumberedListItem, :t},
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.NumberedListItem, :t_numbered_list_item}
+           {NotionSDK.NumberedListItem, :t_numbered_list_item},
+           {NotionSDK.NumberedListItemNumberedListItem, :t}
          ]},
       object: {:const, "block"},
       type: {:const, "numbered_list_item"}
@@ -161,10 +161,10 @@ defmodule NotionSDK.NumberedListItem do
         type:
           {:union,
            [
-             {NotionSDK.NumberedListItemNumberedListItem, :t},
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.NumberedListItem, :t_numbered_list_item}
+             {NotionSDK.NumberedListItem, :t_numbered_list_item},
+             {NotionSDK.NumberedListItemNumberedListItem, :t}
            ]},
         write_only: false
       },

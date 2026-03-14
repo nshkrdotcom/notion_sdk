@@ -17,7 +17,7 @@ defmodule NotionSDK.MeetingNotesBlockObjectResponse do
     * `type`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           created_by: NotionSDK.PartialUserObjectResponse.t(),

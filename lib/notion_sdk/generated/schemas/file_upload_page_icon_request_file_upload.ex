@@ -7,7 +7,7 @@ defmodule NotionSDK.FileUploadPageIconRequestFileUpload do
     * `id`: ID of a FileUpload object that has the status `uploaded`.
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t()}
 

@@ -12,7 +12,7 @@ defmodule NotionSDK.Pages do
     * Move a page
     * Retrieve a page property item
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
 
   @doc """

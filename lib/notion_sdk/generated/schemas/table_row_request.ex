@@ -9,7 +9,7 @@ defmodule NotionSDK.TableRowRequest do
     * `type`: optional
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           object: String.t() | nil,

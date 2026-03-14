@@ -7,7 +7,7 @@ defmodule NotionSDK.SyncedBlock do
     * Synced Block
     * SyncedBlock.t_synced_block
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

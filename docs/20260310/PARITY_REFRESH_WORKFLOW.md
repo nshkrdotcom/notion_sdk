@@ -10,14 +10,6 @@ mix notion.refresh
 mix notion.refresh --snapshots-only
 ```
 
-Compatibility wrappers:
-
-```bash
-elixir scripts/generate_notion_sdk.exs
-elixir scripts/refresh_notion_sdk.exs
-elixir scripts/refresh_notion_sdk.exs --notion-docs-root /path/to/notion_docs --js-sdk-root /path/to/notion-sdk-js
-```
-
 ## Refresh sequence
 
 1. Update the local upstream sources first.

@@ -8,7 +8,7 @@ defmodule NotionSDK.CommentId do
     * `type`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{comment_id: String.t(), type: String.t() | nil}
 

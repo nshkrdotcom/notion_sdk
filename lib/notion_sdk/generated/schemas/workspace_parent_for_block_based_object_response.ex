@@ -8,7 +8,7 @@ defmodule NotionSDK.WorkspaceParentForBlockBasedObjectResponse do
     * `workspace`: Always true for workspace parent.
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{type: String.t(), workspace: true}
 

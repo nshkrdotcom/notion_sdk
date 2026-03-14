@@ -7,7 +7,7 @@ defmodule NotionSDK.Person do
     * Person
     * Person.t_person
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           avatar_url: String.t() | nil,

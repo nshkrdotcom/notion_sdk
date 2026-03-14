@@ -7,7 +7,7 @@ defmodule NotionSDK.TableOfContents do
     * Table Of Contents
     * TableOfContents.t_table_of_contents
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

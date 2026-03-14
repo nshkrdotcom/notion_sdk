@@ -7,7 +7,7 @@ Repo-local mirror of the packet checklist, updated to match the implementation t
 - [x] official target pinned to JS SDK `5.12.0`
 - [x] default Notion API version pinned to `2025-09-03`
 - [x] 35 documented endpoint defs tracked in the committed parity inventory and tests
-- [x] refresh workflow moved onto committed wrapper tasks instead of one-off codegen glue
+- [x] refresh workflow moved onto committed Mix tasks instead of one-off codegen glue
 
 ## Thin Rebuild Reality
 
@@ -33,7 +33,6 @@ Repo-local mirror of the packet checklist, updated to match the implementation t
 
 - [x] `mix notion.generate` added
 - [x] `mix notion.refresh` added
-- [x] script wrappers kept for compatibility
 - [x] Mix tasks accept explicit path overrides instead of assuming one checkout topology
 - [x] upstream snapshot capture path defined under `priv/upstream/snapshots/`
 - [x] grouped diff report emitted to `priv/generated/refresh_report.json`

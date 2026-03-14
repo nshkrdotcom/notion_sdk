@@ -6,7 +6,7 @@ defmodule NotionSDK.Search do
 
     * Search by title
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
 
   @type search_200_json_resp :: %{

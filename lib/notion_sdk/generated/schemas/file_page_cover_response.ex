@@ -8,7 +8,7 @@ defmodule NotionSDK.FilePageCoverResponse do
     * `type`: Type of cover. In this case, a file.
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{file: NotionSDK.InternalFileResponse.t(), type: String.t()}
 

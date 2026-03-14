@@ -8,7 +8,7 @@ defmodule NotionSDK.DateFormulaPropertyResponse do
     * `type`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{date: NotionSDK.DateResponse.t() | nil, type: String.t()}
 

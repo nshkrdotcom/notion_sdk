@@ -10,7 +10,7 @@ defmodule NotionSDK.DataSources do
     * Query a data source
     * List templates in a data source
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
 
   @doc """

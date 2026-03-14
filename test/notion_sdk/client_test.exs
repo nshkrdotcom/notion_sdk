@@ -1401,18 +1401,19 @@ defmodule NotionSDK.ClientTest do
 
   defp attach_telemetry(event) do
     handler_id = {__MODULE__, make_ref()}
-    parent = self()
 
     :ok =
       :telemetry.attach(
         handler_id,
         event,
-        fn event_name, measurements, metadata, _config ->
-          send(parent, {:telemetry, event_name, measurements, metadata})
-        end,
-        nil
+        &__MODULE__.handle_telemetry_event/4,
+        self()
       )
 
     handler_id
+  end
+
+  def handle_telemetry_event(event_name, measurements, metadata, parent) do
+    send(parent, {:telemetry, event_name, measurements, metadata})
   end
 end

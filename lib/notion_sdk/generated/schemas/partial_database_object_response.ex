@@ -8,7 +8,7 @@ defmodule NotionSDK.PartialDatabaseObjectResponse do
     * `object`: The database object type name.
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t(), object: String.t()}
 

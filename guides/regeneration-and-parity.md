@@ -13,17 +13,6 @@ mix notion.refresh --snapshots-only
 mix notion.refresh --notion-docs-root /path/to/notion_docs --js-sdk-root /path/to/notion-sdk-js
 ```
 
-The script wrappers remain available as direct entry points:
-
-```bash
-elixir scripts/generate_notion_sdk.exs
-elixir scripts/refresh_notion_sdk.exs
-elixir scripts/refresh_notion_sdk.exs --notion-docs-root /path/to/notion_docs --js-sdk-root /path/to/notion-sdk-js
-```
-
-The script wrappers forward argv unchanged, so they expose the same path
-override surface as the underlying Mix tasks.
-
 `mix notion.generate` uses the committed extracted fixtures in
 `priv/upstream/reference/`, `priv/upstream/reference_context/`, and the bounded
 parity inventory in `priv/upstream/parity_inventory.json`. It does not require

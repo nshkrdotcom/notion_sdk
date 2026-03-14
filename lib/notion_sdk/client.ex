@@ -426,11 +426,11 @@ defmodule NotionSDK.Client do
        }) do
     policy_opts = [
       max_attempts: max_retries,
-      backoff_opts: [
-        base_delay_ms: initial_retry_delay_ms,
+      backoff: [
+        base_ms: initial_retry_delay_ms,
         jitter: 0.25,
         jitter_strategy: :factor,
-        max_delay_ms: max_retry_delay_ms,
+        max_ms: max_retry_delay_ms,
         strategy: :exponential
       ]
     ]

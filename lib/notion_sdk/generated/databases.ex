@@ -8,7 +8,7 @@ defmodule NotionSDK.Databases do
     * Retrieve a database
     * Update a database
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
 
   @doc """

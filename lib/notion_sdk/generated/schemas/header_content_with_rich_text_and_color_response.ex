@@ -9,7 +9,7 @@ defmodule NotionSDK.HeaderContentWithRichTextAndColorResponse do
     * `rich_text`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           color: String.t(),

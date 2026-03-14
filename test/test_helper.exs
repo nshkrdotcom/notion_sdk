@@ -11,4 +11,10 @@ Application.put_env(
   max_retry_delay_ms: 60_000
 )
 
-ExUnit.start()
+if function_exported?(Logger, :put_module_level, 2) and Code.ensure_loaded?(Bandit.Clock) do
+  Logger.put_module_level(Bandit.Clock, :error)
+end
+
+Logger.configure(level: :warning)
+
+ExUnit.start(capture_log: true)

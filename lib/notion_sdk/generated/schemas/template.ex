@@ -7,7 +7,7 @@ defmodule NotionSDK.Template do
     * Template
     * Template.t_template
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,
@@ -65,8 +65,8 @@ defmodule NotionSDK.Template do
       template:
         {:union,
          [
-           {NotionSDK.TemplateTemplate, :t},
            {NotionSDK.ContentWithRichTextRequest, :t},
+           {NotionSDK.TemplateTemplate, :t},
            {NotionSDK.Template, :t_template}
          ]},
       type: {:const, "template"}
@@ -149,8 +149,8 @@ defmodule NotionSDK.Template do
         type:
           {:union,
            [
-             {NotionSDK.TemplateTemplate, :t},
              {NotionSDK.ContentWithRichTextRequest, :t},
+             {NotionSDK.TemplateTemplate, :t},
              {NotionSDK.Template, :t_template}
            ]},
         write_only: false

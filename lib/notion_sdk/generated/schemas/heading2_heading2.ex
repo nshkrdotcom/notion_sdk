@@ -10,7 +10,7 @@ defmodule NotionSDK.Heading2Heading2 do
     * `rich_text`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           children:

@@ -9,7 +9,7 @@ defmodule NotionSDK.Pdf do
     * `type`: optional
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

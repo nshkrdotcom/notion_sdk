@@ -9,7 +9,7 @@ defmodule NotionSDK.UniqueId do
     * `unique_id`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{property: String.t(), type: String.t() | nil, unique_id: map}
 

@@ -8,7 +8,7 @@ defmodule NotionSDK.BlockIdCommentParentResponse do
     * `type`: Always `block_id`
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{block_id: String.t(), type: String.t()}
 

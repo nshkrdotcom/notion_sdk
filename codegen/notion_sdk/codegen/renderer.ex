@@ -38,7 +38,7 @@ defmodule NotionSDK.Codegen.Renderer do
       if file.schemas == [] do
         nil
       else
-        quote(do: alias(NotionSDK.GeneratedRuntime, as: OpenAPIRuntime))
+        quote(do: alias(Pristine.OpenAPI.Runtime, as: OpenAPIRuntime))
       end
 
     Util.clean_list([
@@ -342,7 +342,7 @@ defmodule NotionSDK.Codegen.Renderer do
 
         @spec provider() :: OAuth2.Provider.t()
         def provider do
-          OAuthRuntime.provider_new(
+          OAuth2.Provider.new(
             name: "notion",
             flow: :authorization_code,
             site: "https://api.notion.com",
@@ -361,28 +361,28 @@ defmodule NotionSDK.Codegen.Renderer do
                 | {:error, OAuth2.Error.t()}
         def authorization_request(opts \\ []) when is_list(opts) do
           with {:ok, authorization_opts} <- authorization_opts(opts) do
-            OAuthRuntime.authorization_request(provider(), authorization_opts)
+            OAuth2.authorization_request(provider(), authorization_opts)
           end
         end
 
         @spec authorize_url(keyword()) :: {:ok, String.t()} | {:error, OAuth2.Error.t()}
         def authorize_url(opts \\ []) when is_list(opts) do
           with {:ok, authorization_opts} <- authorization_opts(opts) do
-            OAuthRuntime.authorize_url(provider(), authorization_opts)
+            OAuth2.authorize_url(provider(), authorization_opts)
           end
         end
 
         @spec exchange_code(String.t(), keyword()) ::
                 {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
         def exchange_code(code, opts \\ []) when is_binary(code) and is_list(opts) do
-          OAuthRuntime.exchange_code(provider(), code, oauth_runtime_opts(opts))
+          OAuth2.exchange_code(provider(), code, oauth_runtime_opts(opts))
         end
 
         @spec refresh_token(String.t(), keyword()) ::
                 {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
         def refresh_token(refresh_token, opts \\ [])
             when is_binary(refresh_token) and is_list(opts) do
-          OAuthRuntime.refresh_token(provider(), refresh_token, oauth_runtime_opts(opts))
+          OAuth2.refresh_token(provider(), refresh_token, oauth_runtime_opts(opts))
         end
 
         defp authorization_opts(opts) do
@@ -400,7 +400,7 @@ defmodule NotionSDK.Codegen.Renderer do
                |> Keyword.put(:redirect_uri, redirect_uri)}
 
             _other ->
-              {:error, OAuthRuntime.error_new(:missing_redirect_uri, provider: provider().name)}
+              {:error, OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)}
           end
         end
 
@@ -442,7 +442,6 @@ defmodule NotionSDK.Codegen.Renderer do
       end
 
     Util.clean_list([
-      quote(do: alias(NotionSDK.GeneratedOAuth, as: OAuthRuntime)),
       quote(do: alias(Pristine.OAuth2, as: OAuth2)),
       helper_definitions
     ])

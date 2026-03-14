@@ -11,7 +11,7 @@ defmodule NotionSDK.ErrorApi500 do
     * `status`: optional
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           additional_data: map | nil,

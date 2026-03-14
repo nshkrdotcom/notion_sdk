@@ -8,7 +8,7 @@ defmodule NotionSDK.CustomEmojiPageIconRequest do
     * `type`: Always `custom_emoji`
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           custom_emoji: NotionSDK.CustomEmojiPageIconRequestCustomEmoji.t(),

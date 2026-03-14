@@ -7,7 +7,7 @@ defmodule NotionSDK.Paragraph do
     * Paragraph
     * Paragraph.t_paragraph
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,
@@ -67,10 +67,10 @@ defmodule NotionSDK.Paragraph do
       paragraph:
         {:union,
          [
-           {NotionSDK.ParagraphParagraph, :t},
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.Paragraph, :t_paragraph}
+           {NotionSDK.Paragraph, :t_paragraph},
+           {NotionSDK.ParagraphParagraph, :t}
          ]},
       type: {:const, "paragraph"}
     ]
@@ -176,10 +176,10 @@ defmodule NotionSDK.Paragraph do
         type:
           {:union,
            [
-             {NotionSDK.ParagraphParagraph, :t},
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.Paragraph, :t_paragraph}
+             {NotionSDK.Paragraph, :t_paragraph},
+             {NotionSDK.ParagraphParagraph, :t}
            ]},
         write_only: false
       },

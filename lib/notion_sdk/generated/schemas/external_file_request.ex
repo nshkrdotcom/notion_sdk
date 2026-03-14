@@ -7,7 +7,7 @@ defmodule NotionSDK.ExternalFileRequest do
     * `url`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{url: String.t()}
 

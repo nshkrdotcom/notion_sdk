@@ -7,7 +7,7 @@ defmodule NotionSDK.ContentWithRichTextRequest do
     * `rich_text`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{rich_text: [NotionSDK.RichTextItemRequest.t()]}
 

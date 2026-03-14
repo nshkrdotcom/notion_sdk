@@ -8,7 +8,7 @@ defmodule NotionSDK.FileUploadPageCoverRequest do
     * `type`: Always `file_upload`
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           file_upload: NotionSDK.FileUploadPageCoverRequestFileUpload.t(),

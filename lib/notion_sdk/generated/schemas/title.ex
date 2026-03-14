@@ -10,7 +10,7 @@ defmodule NotionSDK.Title do
     * `type`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
@@ -31,7 +31,7 @@ defmodule NotionSDK.Title do
       id: :string,
       next_url: {:union, [:null, :string]},
       property: :string,
-      title: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
+      title: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
       type: {:const, "title"}
     ]
   end
@@ -102,7 +102,7 @@ defmodule NotionSDK.Title do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
+        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
         write_only: false
       },
       %{

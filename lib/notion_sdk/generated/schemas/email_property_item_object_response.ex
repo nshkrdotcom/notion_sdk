@@ -10,7 +10,7 @@ defmodule NotionSDK.EmailPropertyItemObjectResponse do
     * `type`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           email: String.t() | nil,

@@ -10,7 +10,7 @@ defmodule NotionSDK.FileUploads do
     * Complete a multi-part file upload
     * Upload a file
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
 
   @doc """

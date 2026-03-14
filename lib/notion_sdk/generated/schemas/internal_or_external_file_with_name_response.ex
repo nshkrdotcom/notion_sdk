@@ -7,7 +7,7 @@ defmodule NotionSDK.InternalOrExternalFileWithNameResponse do
     * `name`: The name of the file.
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{name: String.t() | nil}
 

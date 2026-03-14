@@ -8,7 +8,7 @@ defmodule NotionSDK.ExternalPageIconResponse do
     * `type`: Type of icon. In this case, an external URL.
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           external: NotionSDK.ExternalPageIconResponseExternal.t(),

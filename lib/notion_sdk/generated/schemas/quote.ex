@@ -7,7 +7,7 @@ defmodule NotionSDK.Quote do
     * Quote
     * Quote.t_quote
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,
@@ -67,10 +67,10 @@ defmodule NotionSDK.Quote do
       quote:
         {:union,
          [
-           {NotionSDK.QuoteQuote, :t},
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.Quote, :t_quote}
+           {NotionSDK.Quote, :t_quote},
+           {NotionSDK.QuoteQuote, :t}
          ]},
       type: {:const, "quote"}
     ]
@@ -176,10 +176,10 @@ defmodule NotionSDK.Quote do
         type:
           {:union,
            [
-             {NotionSDK.QuoteQuote, :t},
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.Quote, :t_quote}
+             {NotionSDK.Quote, :t_quote},
+             {NotionSDK.QuoteQuote, :t}
            ]},
         write_only: false
       },

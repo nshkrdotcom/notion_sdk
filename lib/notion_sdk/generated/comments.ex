@@ -8,7 +8,7 @@ defmodule NotionSDK.Comments do
     * Create a comment
     * Retrieve a comment
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
 
   @doc """

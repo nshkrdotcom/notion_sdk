@@ -9,7 +9,7 @@ defmodule NotionSDK.VerificationPropertyUnverifiedResponse do
     * `verified_by`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{date: nil, state: String.t(), verified_by: nil}
 

@@ -8,7 +8,7 @@ defmodule NotionSDK.CommentObjectResponseAttachments do
     * `file`: required
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{category: String.t(), file: NotionSDK.InternalFileResponse.t()}
 

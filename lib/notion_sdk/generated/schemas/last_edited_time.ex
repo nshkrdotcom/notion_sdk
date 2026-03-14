@@ -9,7 +9,7 @@ defmodule NotionSDK.LastEditedTime do
     * `type`: optional
 
   """
-  alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{last_edited_time: map, property: String.t(), type: String.t() | nil}
 
