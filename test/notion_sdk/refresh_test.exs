@@ -38,8 +38,23 @@ defmodule NotionSDK.RefreshTest do
     {"test/Client.test.ts", "describe('Client', () => {})\n"},
     {"test/helpers.test.ts", "describe('helpers', () => {})\n"}
   ]
+  @parity_inventory %{
+    "js_sdk" => %{
+      "package" => "@notionhq/client",
+      "version" => "5.12.0"
+    },
+    "operations" => [
+      %{
+        "function" => "get_self",
+        "method" => "get",
+        "module" => "Users",
+        "path" => "/v1/users/me",
+        "reference_page" => "get-self.md"
+      }
+    ]
+  }
 
-  test "captures upstream snapshots, runs generation, and writes a grouped diff report" do
+  test "captures upstream snapshots from the committed parity inventory, runs generation, and writes a grouped diff report" do
     project_root = make_tmp_dir!("project")
     notion_docs_root = Path.join(project_root, "notion_docs")
     js_sdk_root = Path.join(project_root, "notion-sdk-js")
@@ -49,6 +64,11 @@ defmodule NotionSDK.RefreshTest do
 
     File.mkdir_p!(Path.join(upstream_dir, "supplemental"))
     File.write!(Path.join(upstream_dir, "supplemental/notion_sdk.root.yaml"), "openapi: 3.1.0\n")
+
+    File.write!(
+      Path.join(upstream_dir, "parity_inventory.json"),
+      Jason.encode!(@parity_inventory)
+    )
 
     Enum.each(@doc_source_files, fn {relative_path, contents} ->
       path = Path.join(notion_docs_root, relative_path)
@@ -67,7 +87,6 @@ defmodule NotionSDK.RefreshTest do
         project_root: project_root,
         notion_docs_root: notion_docs_root,
         js_sdk_root: js_sdk_root,
-        reference_pages: ["get-self.md"],
         generate_fun: fn paths ->
           File.mkdir_p!(paths.generated_dir)
 
@@ -100,6 +119,12 @@ defmodule NotionSDK.RefreshTest do
     assert File.exists?(Path.join(generated_dir, "users.ex"))
     assert File.exists?(Path.join(generated_artifact_dir, "refresh_report.json"))
 
+    metadata =
+      upstream_dir
+      |> Path.join("snapshots/metadata.json")
+      |> File.read!()
+      |> Jason.decode!()
+
     assert report.upstream_snapshots.added != []
     assert report.extracted_specs.added == ["get-self.yaml"]
     assert report.reference_context.added == ["get-self.json"]
@@ -111,6 +136,10 @@ defmodule NotionSDK.RefreshTest do
              "manifest.json",
              "refresh_report.json"
            ]
+
+    assert metadata["reference_pages"] == ["get-self.md"]
+    assert metadata["parity_inventory"]["js_sdk"]["package"] == "@notionhq/client"
+    assert metadata["parity_inventory"]["operation_count"] == 1
   end
 
   defp make_tmp_dir!(name) do

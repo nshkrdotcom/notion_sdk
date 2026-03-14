@@ -20,9 +20,9 @@ elixir scripts/refresh_notion_sdk.exs
 ```
 
 `mix notion.generate` uses the committed extracted fixtures in
-`priv/upstream/reference/` and `priv/upstream/reference_context/`. It does not
-require a sibling `notion_docs` checkout when those fixtures are already
-present.
+`priv/upstream/reference/`, `priv/upstream/reference_context/`, and the bounded
+parity inventory in `priv/upstream/parity_inventory.json`. It does not require
+a sibling `notion_docs` checkout when those fixtures are already present.
 
 ## What `mix notion.refresh` does
 
@@ -41,6 +41,7 @@ because it re-extracts the committed fixtures from upstream markdown.
 
 - `priv/upstream/reference/`: extracted upstream OpenAPI fixtures
 - `priv/upstream/reference_context/`: persisted page-context artifacts used to enrich docs
+- `priv/upstream/parity_inventory.json`: committed bounded-surface inventory for the vendored JS SDK oracle
 - `priv/upstream/supplemental/`: committed supplemental specs
 - `priv/upstream/snapshots/`: raw upstream snapshot inputs
 - `priv/generated/manifest.json`: generated endpoint manifest
@@ -69,7 +70,8 @@ The committed test suite currently pins:
 - Default Notion API version: `2025-09-03`
 - Documented endpoint surface: 35 operations
 
-`test/notion_sdk/parity_endpoint_test.exs` enforces that operation matrix.
+`test/notion_sdk/parity_endpoint_test.exs` compares the generated manifest
+against `priv/upstream/parity_inventory.json`.
 
 ## When to use `generate` vs `refresh`
 

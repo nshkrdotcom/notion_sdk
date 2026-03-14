@@ -1,0 +1,253 @@
+{
+  "js_sdk": {
+    "package": "@notionhq/client",
+    "version": "5.12.0"
+  },
+  "operations": [
+    {
+      "function": "get_self",
+      "method": "get",
+      "module": "Users",
+      "path": "/v1/users/me",
+      "reference_page": "get-self.md"
+    },
+    {
+      "function": "retrieve",
+      "method": "get",
+      "module": "Users",
+      "path": "/v1/users/{user_id}",
+      "reference_page": "get-user.md"
+    },
+    {
+      "function": "list",
+      "method": "get",
+      "module": "Users",
+      "path": "/v1/users",
+      "reference_page": "get-users.md"
+    },
+    {
+      "function": "create",
+      "method": "post",
+      "module": "Pages",
+      "path": "/v1/pages",
+      "reference_page": "post-page.md"
+    },
+    {
+      "function": "retrieve",
+      "method": "get",
+      "module": "Pages",
+      "path": "/v1/pages/{page_id}",
+      "reference_page": "retrieve-a-page.md"
+    },
+    {
+      "function": "update",
+      "method": "patch",
+      "module": "Pages",
+      "path": "/v1/pages/{page_id}",
+      "reference_page": "patch-page.md"
+    },
+    {
+      "function": "move",
+      "method": "post",
+      "module": "Pages",
+      "path": "/v1/pages/{page_id}/move",
+      "reference_page": "move-page.md"
+    },
+    {
+      "function": "retrieve_property",
+      "method": "get",
+      "module": "Pages",
+      "path": "/v1/pages/{page_id}/properties/{property_id}",
+      "reference_page": "retrieve-a-page-property.md"
+    },
+    {
+      "function": "retrieve_markdown",
+      "method": "get",
+      "module": "Pages",
+      "path": "/v1/pages/{page_id}/markdown",
+      "reference_page": "retrieve-page-markdown.md"
+    },
+    {
+      "function": "update_markdown",
+      "method": "patch",
+      "module": "Pages",
+      "path": "/v1/pages/{page_id}/markdown",
+      "reference_page": "update-page-markdown.md"
+    },
+    {
+      "function": "retrieve",
+      "method": "get",
+      "module": "Blocks",
+      "path": "/v1/blocks/{block_id}",
+      "reference_page": "retrieve-a-block.md"
+    },
+    {
+      "function": "update",
+      "method": "patch",
+      "module": "Blocks",
+      "path": "/v1/blocks/{block_id}",
+      "reference_page": "update-a-block.md"
+    },
+    {
+      "function": "delete",
+      "method": "delete",
+      "module": "Blocks",
+      "path": "/v1/blocks/{block_id}",
+      "reference_page": "delete-a-block.md"
+    },
+    {
+      "function": "list_children",
+      "method": "get",
+      "module": "Blocks",
+      "path": "/v1/blocks/{block_id}/children",
+      "reference_page": "get-block-children.md"
+    },
+    {
+      "function": "append_children",
+      "method": "patch",
+      "module": "Blocks",
+      "path": "/v1/blocks/{block_id}/children",
+      "reference_page": "patch-block-children.md"
+    },
+    {
+      "function": "retrieve",
+      "method": "get",
+      "module": "DataSources",
+      "path": "/v1/data_sources/{data_source_id}",
+      "reference_page": "retrieve-a-data-source.md"
+    },
+    {
+      "function": "update",
+      "method": "patch",
+      "module": "DataSources",
+      "path": "/v1/data_sources/{data_source_id}",
+      "reference_page": "update-a-data-source.md"
+    },
+    {
+      "function": "query",
+      "method": "post",
+      "module": "DataSources",
+      "path": "/v1/data_sources/{data_source_id}/query",
+      "reference_page": "query-a-data-source.md"
+    },
+    {
+      "function": "create",
+      "method": "post",
+      "module": "DataSources",
+      "path": "/v1/data_sources",
+      "reference_page": "create-a-data-source.md"
+    },
+    {
+      "function": "list_templates",
+      "method": "get",
+      "module": "DataSources",
+      "path": "/v1/data_sources/{data_source_id}/templates",
+      "reference_page": "list-data-source-templates.md"
+    },
+    {
+      "function": "retrieve",
+      "method": "get",
+      "module": "Databases",
+      "path": "/v1/databases/{database_id}",
+      "reference_page": "retrieve-a-database.md"
+    },
+    {
+      "function": "update",
+      "method": "patch",
+      "module": "Databases",
+      "path": "/v1/databases/{database_id}",
+      "reference_page": "update-a-database.md"
+    },
+    {
+      "function": "create",
+      "method": "post",
+      "module": "Databases",
+      "path": "/v1/databases",
+      "reference_page": "create-a-database.md"
+    },
+    {
+      "function": "search",
+      "method": "post",
+      "module": "Search",
+      "path": "/v1/search",
+      "reference_page": "post-search.md"
+    },
+    {
+      "function": "create",
+      "method": "post",
+      "module": "Comments",
+      "path": "/v1/comments",
+      "reference_page": "create-a-comment.md"
+    },
+    {
+      "function": "list",
+      "method": "get",
+      "module": "Comments",
+      "path": "/v1/comments",
+      "reference_page": "list-comments.md"
+    },
+    {
+      "function": "retrieve",
+      "method": "get",
+      "module": "Comments",
+      "path": "/v1/comments/{comment_id}",
+      "reference_page": "retrieve-comment.md"
+    },
+    {
+      "function": "create",
+      "method": "post",
+      "module": "FileUploads",
+      "path": "/v1/file_uploads",
+      "reference_page": "create-a-file-upload.md"
+    },
+    {
+      "function": "list",
+      "method": "get",
+      "module": "FileUploads",
+      "path": "/v1/file_uploads",
+      "reference_page": "list-file-uploads.md"
+    },
+    {
+      "function": "send",
+      "method": "post",
+      "module": "FileUploads",
+      "path": "/v1/file_uploads/{file_upload_id}/send",
+      "reference_page": "send-a-file-upload.md"
+    },
+    {
+      "function": "complete",
+      "method": "post",
+      "module": "FileUploads",
+      "path": "/v1/file_uploads/{file_upload_id}/complete",
+      "reference_page": "complete-a-file-upload.md"
+    },
+    {
+      "function": "retrieve",
+      "method": "get",
+      "module": "FileUploads",
+      "path": "/v1/file_uploads/{file_upload_id}",
+      "reference_page": "retrieve-a-file-upload.md"
+    },
+    {
+      "function": "token",
+      "method": "post",
+      "module": "OAuth",
+      "path": "/v1/oauth/token",
+      "reference_page": "create-a-token.md"
+    },
+    {
+      "function": "revoke",
+      "method": "post",
+      "module": "OAuth",
+      "path": "/v1/oauth/revoke",
+      "reference_page": "revoke-token.md"
+    },
+    {
+      "function": "introspect",
+      "method": "post",
+      "module": "OAuth",
+      "path": "/v1/oauth/introspect",
+      "reference_page": "introspect-token.md"
+    }
+  ]
+}

@@ -6,7 +6,7 @@ Repo-local mirror of the packet checklist, updated to match the implementation t
 
 - [x] official target pinned to JS SDK `5.12.0`
 - [x] default Notion API version pinned to `2025-09-03`
-- [x] 35 documented endpoint defs tracked in committed tests
+- [x] 35 documented endpoint defs tracked in the committed parity inventory and tests
 - [x] refresh workflow moved onto committed wrapper tasks instead of one-off codegen glue
 
 ## Thin Rebuild Reality
@@ -16,6 +16,7 @@ Repo-local mirror of the packet checklist, updated to match the implementation t
 - [x] thin `NotionSDK.Error` implemented
 - [x] thin helper modules implemented (`Helpers`, `Guards`, `Pagination`)
 - [x] upstream extracted specs committed under `priv/upstream/reference/`
+- [x] bounded parity inventory committed under `priv/upstream/parity_inventory.json`
 - [x] supplemental specs committed under `priv/upstream/supplemental/`
 
 ## Parity Validation

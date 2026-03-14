@@ -154,6 +154,7 @@ The public default remains:
 
 - Notion API version header: `2025-09-03`
 - JS SDK oracle: `@notionhq/client` `5.12.0`
+- Bounded parity inventory: `priv/upstream/parity_inventory.json`
 
 You can override the version header per client:
 
@@ -184,7 +185,7 @@ the detailed support contract and migration guidance.
 
 Surface proved in this package today:
 
-- 35 documented endpoint definitions in the committed parity matrix
+- 35 documented endpoint definitions in the committed bounded parity inventory
 - request building for OAuth, markdown, multipart uploads, and custom headers
 - helper behavior, retry behavior, and error mapping
 

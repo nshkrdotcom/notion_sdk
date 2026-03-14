@@ -1,6 +1,6 @@
 # Parity Acceptance and Refresh Workflow
 
-This repo now treats the official JS SDK and local Notion docs mirror as the parity oracle and upgrade input set.
+This repo now treats the official JS SDK and local Notion docs mirror as the parity oracle and upgrade input set, with `priv/upstream/parity_inventory.json` defining the committed bounded surface.
 
 ## Commands
 
@@ -24,6 +24,7 @@ elixir scripts/refresh_notion_sdk.exs
    - sibling `notion_docs/reference/`
 2. Run `mix notion.refresh`.
 3. Review grouped changes in:
+   - `priv/upstream/parity_inventory.json`
    - `priv/upstream/snapshots/`
    - `priv/upstream/reference/`
    - `priv/upstream/reference_context/`
@@ -36,6 +37,7 @@ elixir scripts/refresh_notion_sdk.exs
 ## Review expectations
 
 - upstream snapshot diffs should explain why extracted specs changed
+- parity-inventory diffs should explain every added, removed, or renamed endpoint in the bounded surface
 - reference-context diffs should explain any generated doc or docs-manifest changes
 - generated code diffs should trace back to either upstream snapshot changes or supplemental spec changes
 - bridge artifact diffs should remain deterministic and reviewable

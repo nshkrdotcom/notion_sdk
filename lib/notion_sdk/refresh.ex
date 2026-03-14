@@ -91,11 +91,30 @@ defmodule NotionSDK.Refresh do
     reference_root =
       Keyword.get(opts, :reference_root, Path.join(notion_docs_root, "reference"))
 
+    inventory_path =
+      NotionSDK.ParityInventory.path(
+        project_root: project_root(opts),
+        inventory_path: Keyword.get(opts, :inventory_path)
+      )
+
+    reference_pages =
+      case Keyword.fetch(opts, :reference_pages) do
+        {:ok, pages} ->
+          pages
+
+        :error ->
+          NotionSDK.ParityInventory.reference_pages(
+            project_root: project_root(opts),
+            inventory_path: inventory_path
+          )
+      end
+
     codegen_paths =
       NotionSDK.Codegen.paths(
         project_root: project_root(opts),
         reference_root: reference_root,
-        reference_pages: Keyword.get(opts, :reference_pages, NotionSDK.Codegen.reference_pages())
+        inventory_path: inventory_path,
+        reference_pages: reference_pages
       )
 
     %{
@@ -106,6 +125,7 @@ defmodule NotionSDK.Refresh do
       supplemental_dir: Map.fetch!(codegen_paths, :supplemental_dir),
       generated_dir: Map.fetch!(codegen_paths, :generated_dir),
       generated_artifact_dir: Map.fetch!(codegen_paths, :generated_artifact_dir),
+      inventory_path: inventory_path,
       reference_root: Map.fetch!(codegen_paths, :reference_root),
       notion_docs_root: notion_docs_root,
       js_sdk_root:
@@ -160,10 +180,17 @@ defmodule NotionSDK.Refresh do
       )
     end)
 
+    parity_inventory =
+      NotionSDK.ParityInventory.summary(
+        project_root: paths.project_root,
+        inventory_path: paths.inventory_path
+      )
+
     metadata = %{
       js_sdk_version: package_version(paths),
       notion_default_version: NotionSDK.Client.default_notion_version(),
       reference_pages: paths.reference_pages,
+      parity_inventory: parity_inventory,
       doc_snapshot_pages: paths.doc_snapshot_pages,
       js_sdk_snapshot_files: paths.js_sdk_snapshot_files
     }

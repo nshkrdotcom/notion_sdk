@@ -6,47 +6,10 @@ defmodule NotionSDK.Codegen do
   alias Jason.OrderedObject
   alias NotionSDK.Codegen.Source.Extractor
   alias NotionSDK.Codegen.Source.PageContext
+  alias NotionSDK.ParityInventory
   alias Pristine.OpenAPI.Bridge
 
   @profile :notion_sdk
-
-  @reference_pages [
-    "get-self.md",
-    "get-user.md",
-    "get-users.md",
-    "post-page.md",
-    "retrieve-a-page.md",
-    "patch-page.md",
-    "move-page.md",
-    "retrieve-a-page-property.md",
-    "retrieve-page-markdown.md",
-    "update-page-markdown.md",
-    "retrieve-a-block.md",
-    "update-a-block.md",
-    "delete-a-block.md",
-    "get-block-children.md",
-    "patch-block-children.md",
-    "retrieve-a-data-source.md",
-    "update-a-data-source.md",
-    "query-a-data-source.md",
-    "create-a-data-source.md",
-    "list-data-source-templates.md",
-    "retrieve-a-database.md",
-    "update-a-database.md",
-    "create-a-database.md",
-    "post-search.md",
-    "create-a-comment.md",
-    "list-comments.md",
-    "retrieve-comment.md",
-    "create-a-file-upload.md",
-    "list-file-uploads.md",
-    "send-a-file-upload.md",
-    "complete-a-file-upload.md",
-    "retrieve-a-file-upload.md",
-    "create-a-token.md",
-    "revoke-token.md",
-    "introspect-token.md"
-  ]
 
   @type path_options :: keyword()
   @type state :: map()
@@ -55,7 +18,7 @@ defmodule NotionSDK.Codegen do
   def profile, do: @profile
 
   @spec reference_pages() :: [String.t()]
-  def reference_pages, do: @reference_pages
+  def reference_pages, do: ParityInventory.reference_pages()
 
   @spec project_root() :: String.t()
   def project_root do
@@ -66,6 +29,14 @@ defmodule NotionSDK.Codegen do
   def paths(opts \\ []) when is_list(opts) do
     project_root = Keyword.get(opts, :project_root, project_root())
     upstream_dir = Keyword.get(opts, :upstream_dir, Path.join(project_root, "priv/upstream"))
+
+    inventory_path =
+      ParityInventory.path(
+        project_root: project_root,
+        inventory_path: Keyword.get(opts, :inventory_path)
+      )
+
+    reference_pages = reference_pages_opt(opts, project_root, inventory_path)
 
     generated_dir =
       Keyword.get(opts, :generated_dir, Path.join(project_root, "lib/notion_sdk/generated"))
@@ -81,6 +52,7 @@ defmodule NotionSDK.Codegen do
       generated_dir: generated_dir,
       generated_artifact_dir:
         Keyword.get(opts, :generated_artifact_dir, Path.join(project_root, "priv/generated")),
+      inventory_path: inventory_path,
       reference_root:
         Keyword.get(
           opts,
@@ -88,7 +60,7 @@ defmodule NotionSDK.Codegen do
           System.get_env("NOTION_DOCS_ROOT") ||
             Path.expand("../notion_docs/reference", project_root)
         ),
-      reference_pages: Keyword.get(opts, :reference_pages, reference_pages())
+      reference_pages: reference_pages
     }
   end
 
@@ -220,6 +192,19 @@ defmodule NotionSDK.Codegen do
     File.mkdir_p!(paths.generated_dir)
     File.rm_rf!(paths.generated_artifact_dir)
     File.mkdir_p!(paths.generated_artifact_dir)
+  end
+
+  defp reference_pages_opt(opts, project_root, inventory_path) do
+    case Keyword.fetch(opts, :reference_pages) do
+      {:ok, reference_pages} ->
+        reference_pages
+
+      :error ->
+        ParityInventory.reference_pages(
+          project_root: project_root,
+          inventory_path: inventory_path
+        )
+    end
   end
 
   defp extract_upstream?(paths) do
