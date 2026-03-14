@@ -252,7 +252,6 @@ defmodule NotionSDK.Codegen.Renderer do
         quote(do: {:args, params}),
         quote(do: {:call, {unquote(module_name), unquote(function_name)}}),
         quote(do: {:path_template, unquote(request_path)}),
-        quote(do: {:url, render_path(unquote(request_path), partition.path_params)}),
         quote(do: {:method, unquote(request_method)}),
         quote(do: {:path_params, partition.path_params}),
         quote(do: {:query, partition.query}),
@@ -270,7 +269,7 @@ defmodule NotionSDK.Codegen.Renderer do
       def unquote(function_name)(client, params \\ %{}) when is_map(params) do
         partition = partition(unquote(partition_params), unquote(Macro.escape(partition_spec)))
 
-        NotionSDK.Client.request(client, %{
+        NotionSDK.Client.execute_generated_request(client, %{
           unquote_splicing(request)
         })
       end

@@ -10,7 +10,6 @@ defmodule NotionSDK.Databases do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
   Create a database
@@ -111,11 +110,10 @@ defmodule NotionSDK.Databases do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Databases, :create},
       path_template: "/v1/databases",
-      url: render_path("/v1/databases", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -258,11 +256,10 @@ defmodule NotionSDK.Databases do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Databases, :retrieve},
       path_template: "/v1/databases/{database_id}",
-      url: render_path("/v1/databases/{database_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -407,11 +404,10 @@ defmodule NotionSDK.Databases do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Databases, :update},
       path_template: "/v1/databases/{database_id}",
-      url: render_path("/v1/databases/{database_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

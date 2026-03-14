@@ -14,7 +14,6 @@ defmodule NotionSDK.Pages do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
   Create a page
@@ -163,11 +162,10 @@ defmodule NotionSDK.Pages do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Pages, :create},
       path_template: "/v1/pages",
-      url: render_path("/v1/pages", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -359,11 +357,10 @@ defmodule NotionSDK.Pages do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Pages, :move},
       path_template: "/v1/pages/{page_id}/move",
-      url: render_path("/v1/pages/{page_id}/move", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -509,11 +506,10 @@ defmodule NotionSDK.Pages do
         query: [{"filter_properties", :filter_properties}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Pages, :retrieve},
       path_template: "/v1/pages/{page_id}",
-      url: render_path("/v1/pages/{page_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -650,11 +646,10 @@ defmodule NotionSDK.Pages do
         query: [{"include_transcript", :include_transcript}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Pages, :retrieve_markdown},
       path_template: "/v1/pages/{page_id}/markdown",
-      url: render_path("/v1/pages/{page_id}/markdown", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -851,11 +846,10 @@ defmodule NotionSDK.Pages do
         query: [{"start_cursor", :start_cursor}, {"page_size", :page_size}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Pages, :retrieve_property},
       path_template: "/v1/pages/{page_id}/properties/{property_id}",
-      url: render_path("/v1/pages/{page_id}/properties/{property_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -1053,11 +1047,10 @@ defmodule NotionSDK.Pages do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Pages, :update},
       path_template: "/v1/pages/{page_id}",
-      url: render_path("/v1/pages/{page_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
@@ -1206,11 +1199,10 @@ defmodule NotionSDK.Pages do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Pages, :update_markdown},
       path_template: "/v1/pages/{page_id}/markdown",
-      url: render_path("/v1/pages/{page_id}/markdown", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

@@ -10,7 +10,6 @@ defmodule NotionSDK.Status do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{property: String.t(), status: map, type: String.t() | nil}
 

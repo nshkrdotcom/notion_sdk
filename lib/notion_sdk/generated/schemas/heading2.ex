@@ -8,7 +8,6 @@ defmodule NotionSDK.Heading2 do
     * Heading2.t_heading_2
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           heading_2:
@@ -68,10 +67,10 @@ defmodule NotionSDK.Heading2 do
       heading_2:
         {:union,
          [
+           {NotionSDK.Heading2Heading2, :t},
            {NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest, :t},
            {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-           {NotionSDK.Heading2, :t_heading_2},
-           {NotionSDK.Heading2Heading2, :t}
+           {NotionSDK.Heading2, :t_heading_2}
          ]},
       object: {:const, "block"},
       type: {:const, "heading_2"}
@@ -164,10 +163,10 @@ defmodule NotionSDK.Heading2 do
         type:
           {:union,
            [
+             {NotionSDK.Heading2Heading2, :t},
              {NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest, :t},
              {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-             {NotionSDK.Heading2, :t_heading_2},
-             {NotionSDK.Heading2Heading2, :t}
+             {NotionSDK.Heading2, :t_heading_2}
            ]},
         write_only: false
       },

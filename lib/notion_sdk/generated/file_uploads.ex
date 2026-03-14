@@ -12,7 +12,6 @@ defmodule NotionSDK.FileUploads do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
   Complete a multi-part file upload
@@ -70,11 +69,10 @@ defmodule NotionSDK.FileUploads do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.FileUploads, :complete},
       path_template: "/v1/file_uploads/{file_upload_id}/complete",
-      url: render_path("/v1/file_uploads/{file_upload_id}/complete", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -173,11 +171,10 @@ defmodule NotionSDK.FileUploads do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.FileUploads, :create},
       path_template: "/v1/file_uploads",
-      url: render_path("/v1/file_uploads", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -279,11 +276,10 @@ defmodule NotionSDK.FileUploads do
         query: [{"status", :status}, {"start_cursor", :start_cursor}, {"page_size", :page_size}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.FileUploads, :list},
       path_template: "/v1/file_uploads",
-      url: render_path("/v1/file_uploads", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -368,11 +364,10 @@ defmodule NotionSDK.FileUploads do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.FileUploads, :retrieve},
       path_template: "/v1/file_uploads/{file_upload_id}",
-      url: render_path("/v1/file_uploads/{file_upload_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -487,11 +482,10 @@ defmodule NotionSDK.FileUploads do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.FileUploads, :send},
       path_template: "/v1/file_uploads/{file_upload_id}/send",
-      url: render_path("/v1/file_uploads/{file_upload_id}/send", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,

@@ -8,7 +8,6 @@ defmodule NotionSDK.Search do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type search_200_json_resp :: %{
           has_more: boolean,
@@ -117,11 +116,10 @@ defmodule NotionSDK.Search do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Search, :search},
       path_template: "/v1/search",
-      url: render_path("/v1/search", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,

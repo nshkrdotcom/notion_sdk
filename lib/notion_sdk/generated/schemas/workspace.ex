@@ -9,7 +9,6 @@ defmodule NotionSDK.Workspace do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{type: String.t() | nil, workspace: true}
 

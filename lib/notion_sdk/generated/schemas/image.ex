@@ -10,7 +10,6 @@ defmodule NotionSDK.Image do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           image: NotionSDK.External.t() | NotionSDK.FileUpload.t(),

@@ -10,7 +10,6 @@ defmodule NotionSDK.Comments do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
   Create a comment
@@ -96,11 +95,10 @@ defmodule NotionSDK.Comments do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Comments, :create},
       path_template: "/v1/comments",
-      url: render_path("/v1/comments", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -224,11 +222,10 @@ defmodule NotionSDK.Comments do
         ]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Comments, :list},
       path_template: "/v1/comments",
-      url: render_path("/v1/comments", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -330,11 +327,10 @@ defmodule NotionSDK.Comments do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Comments, :retrieve},
       path_template: "/v1/comments/{comment_id}",
-      url: render_path("/v1/comments/{comment_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,

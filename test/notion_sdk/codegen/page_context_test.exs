@@ -144,7 +144,7 @@ defmodule NotionSDK.Codegen.PageContextTest do
 
     state = Codegen.generate!(opts)
 
-    assert length(state.operations) == 1
+    assert length(state.ir.operations) == 1
 
     generated_files =
       project_root

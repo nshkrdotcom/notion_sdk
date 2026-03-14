@@ -17,7 +17,6 @@ defmodule NotionSDK.CommentObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           attachments: [NotionSDK.CommentObjectResponseAttachments.t()] | nil,

@@ -4,7 +4,6 @@ defmodule NotionSDK.Codegen do
   """
 
   alias Jason.OrderedObject
-  alias NotionSDK.CompatibilityContract
   alias NotionSDK.Codegen.Source.Extractor
   alias NotionSDK.Codegen.Source.PageContext
   alias NotionSDK.ParityInventory
@@ -269,28 +268,23 @@ defmodule NotionSDK.Codegen do
   defp normalize_context_key(_artifact), do: nil
 
   defp persist_artifacts!(state, paths) do
-    compatibility = CompatibilityContract.load!(project_root: paths.project_root)
+    operations = state.ir.operations
+    schemas = state.ir.schemas
+    generated_files = Map.get(state.docs_manifest, "generated_files", [])
+    snapshot = canonical_snapshot(state)
 
     summary = %{
-      compatibility: compatibility,
       profile: Atom.to_string(profile()),
-      operation_count: length(state.operations),
-      schema_count: map_size(state.schemas),
-      operation_modules:
-        state.operations |> Enum.map(&module_name/1) |> Enum.uniq() |> Enum.sort(),
-      operations: Enum.map(state.operations, &operation_summary/1),
-      generated_files:
-        state.files
-        |> Enum.map(& &1.location)
-        |> Enum.reject(&is_nil/1)
-        |> Enum.sort()
+      operation_count: length(operations),
+      schema_count: length(schemas),
+      operation_modules: operations |> Enum.map(&module_name/1) |> Enum.uniq() |> Enum.sort(),
+      operations: Enum.map(operations, &operation_summary/1),
+      generated_files: generated_files
     }
 
     summary
     |> ordered_json!()
     |> then(&File.write!(Path.join(paths.generated_artifact_dir, "manifest.json"), &1))
-
-    snapshot = canonical_snapshot(state)
 
     File.write!(
       Path.join(paths.generated_artifact_dir, "open_api_state.snapshot.term"),
@@ -299,33 +293,36 @@ defmodule NotionSDK.Codegen do
 
     File.write!(
       Path.join(paths.generated_artifact_dir, "docs_manifest.json"),
-      ordered_json!(Map.put(state.docs_manifest, :compatibility, compatibility))
+      ordered_json!(state.docs_manifest)
     )
   end
 
   defp operation_summary(operation) do
     %{
       function: Atom.to_string(operation.function_name),
-      method: Atom.to_string(operation.request_method),
+      method: Atom.to_string(operation.method),
       module: module_name(operation),
-      path: operation.request_path
+      path: operation.path
     }
   end
 
   defp canonical_snapshot(state) do
+    schemas_by_ref = Map.new(state.ir.schemas, &{Map.get(&1, :ref), &1})
+
     ref_labels =
-      Enum.into(state.schemas, %{}, fn {ref, schema} ->
-        {ref, schema_ref_label(schema, state.schemas)}
+      Enum.into(schemas_by_ref, %{}, fn {ref, schema} ->
+        {ref, schema_ref_label(schema, schemas_by_ref)}
       end)
 
     [
       operations:
-        state.operations
+        state.ir.operations
         |> Enum.map(&canonical_term(&1, ref_labels))
         |> Enum.sort(),
       schemas:
-        state.schemas
-        |> Enum.map(fn {ref, schema} ->
+        state.ir.schemas
+        |> Enum.map(fn schema ->
+          ref = Map.get(schema, :ref)
           {Map.fetch!(ref_labels, ref), canonical_term(schema, ref_labels)}
         end)
         |> Enum.sort()

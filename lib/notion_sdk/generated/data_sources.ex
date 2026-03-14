@@ -12,7 +12,6 @@ defmodule NotionSDK.DataSources do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
   Create a data source
@@ -99,11 +98,10 @@ defmodule NotionSDK.DataSources do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.DataSources, :create},
       path_template: "/v1/data_sources",
-      url: render_path("/v1/data_sources", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -211,11 +209,10 @@ defmodule NotionSDK.DataSources do
         query: [{"name", :name}, {"start_cursor", :start_cursor}, {"page_size", :page_size}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.DataSources, :list_templates},
       path_template: "/v1/data_sources/{data_source_id}/templates",
-      url: render_path("/v1/data_sources/{data_source_id}/templates", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -494,11 +491,10 @@ defmodule NotionSDK.DataSources do
         query: [{"filter_properties", :filter_properties}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.DataSources, :query},
       path_template: "/v1/data_sources/{data_source_id}/query",
-      url: render_path("/v1/data_sources/{data_source_id}/query", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -626,11 +622,10 @@ defmodule NotionSDK.DataSources do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.DataSources, :retrieve},
       path_template: "/v1/data_sources/{data_source_id}",
-      url: render_path("/v1/data_sources/{data_source_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -774,11 +769,10 @@ defmodule NotionSDK.DataSources do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.DataSources, :update},
       path_template: "/v1/data_sources/{data_source_id}",
-      url: render_path("/v1/data_sources/{data_source_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

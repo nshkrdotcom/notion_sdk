@@ -10,7 +10,6 @@ defmodule NotionSDK.CreatedTime do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{created_time: map, property: String.t(), type: String.t() | nil}
 

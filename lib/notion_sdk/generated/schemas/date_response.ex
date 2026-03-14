@@ -10,7 +10,6 @@ defmodule NotionSDK.DateResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{end: Date.t() | nil, start: Date.t(), time_zone: String.t() | nil}
 

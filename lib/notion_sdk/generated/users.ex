@@ -10,7 +10,6 @@ defmodule NotionSDK.Users do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @doc """
   Retrieve your token's bot user
@@ -82,11 +81,10 @@ defmodule NotionSDK.Users do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Users, :get_self},
       path_template: "/v1/users/me",
-      url: render_path("/v1/users/me", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -200,11 +198,10 @@ defmodule NotionSDK.Users do
         query: [{"start_cursor", :start_cursor}, {"page_size", :page_size}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Users, :list},
       path_template: "/v1/users",
-      url: render_path("/v1/users", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -301,11 +298,10 @@ defmodule NotionSDK.Users do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Users, :retrieve},
       path_template: "/v1/users/{user_id}",
-      url: render_path("/v1/users/{user_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,

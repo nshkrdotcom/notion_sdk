@@ -8,6 +8,10 @@ defmodule NotionSDK.ClientTest do
   @moduletag :tmp_dir
 
   describe "new/1" do
+    test "keeps the default Notion API version pinned to 2025-09-03" do
+      assert Client.default_notion_version() == "2025-09-03"
+    end
+
     test "applies Notion defaults" do
       client = Client.new(auth: "secret_test_token")
 
@@ -75,8 +79,8 @@ defmodule NotionSDK.ClientTest do
       end
     end
 
-    test "normalizes legacy retry option names" do
-      client =
+    test "rejects legacy retry option names" do
+      assert_raise ArgumentError, ~r/unknown retry option/, fn ->
         Client.new(
           retry: [
             max_attempts: 4,
@@ -84,12 +88,7 @@ defmodule NotionSDK.ClientTest do
             max_delay_ms: 5_000
           ]
         )
-
-      assert client.retry == %{
-               max_retries: 4,
-               initial_retry_delay_ms: 250,
-               max_retry_delay_ms: 5_000
-             }
+      end
     end
 
     test "keeps retry disablement explicit through the normalized client state" do
@@ -135,6 +134,22 @@ defmodule NotionSDK.ClientTest do
       assert request.headers["Authorization"] == "Bearer override-token"
     end
 
+    test "rejects generated request maps on the public raw request api" do
+      client = Client.new(auth: "secret_test_token")
+
+      assert_raise ArgumentError, ~r/raw request spec/, fn ->
+        Client.request(client, %{
+          call: {__MODULE__, :request},
+          method: :get,
+          path_template: "/v1/comments",
+          path_params: %{},
+          query: %{},
+          body: %{},
+          form_data: %{}
+        })
+      end
+    end
+
     test "supports request-level basic auth overrides" do
       client =
         Client.new(
@@ -144,11 +159,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:error, %NotionSDK.Error{code: :api_connection}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :request},
                  method: :get,
                  path_template: "/v1/comments",
-                 url: "/v1/comments",
                  path_params: %{},
                  query: %{},
                  body: %{},
@@ -174,12 +188,11 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:error, %NotionSDK.Error{code: :api_connection}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  args: %{"comment_id" => "a b"},
                  call: {__MODULE__, :request},
                  method: :get,
                  path_template: "/v1/comments/{comment_id}",
-                 url: "/v1/comments/a b",
                  path_params: %{"comment_id" => "a b"},
                  query: %{},
                  body: %{},
@@ -199,11 +212,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :request},
                  method: :get,
                  path_template: "/v1/comments",
-                 url: "/v1/comments",
                  path_params: %{},
                  query: %{},
                  body: %{},
@@ -224,11 +236,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :request},
                  method: :get,
                  path_template: "/v1/comments",
-                 url: "/v1/comments",
                  path_params: %{},
                  query: %{},
                  body: %{},
@@ -502,11 +513,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :request},
                  method: :get,
                  path_template: "/v1/comments",
-                 url: "/v1/comments",
                  path_params: %{},
                  query: %{},
                  body: %{},
@@ -786,11 +796,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :search},
                  method: :post,
                  path_template: "/v1/search",
-                 url: "/v1/search",
                  path_params: %{},
                  query: %{},
                  body: %{"query" => "docs"},
@@ -824,11 +833,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :get_self},
                  method: :get,
                  path_template: "/v1/users/me",
-                 url: "/v1/users/me",
                  path_params: %{},
                  query: %{},
                  body: %{},
@@ -855,11 +863,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:error, %NotionSDK.Error{code: :internal_server_error}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :create_page},
                  method: :post,
                  path_template: "/v1/pages",
-                 url: "/v1/pages",
                  path_params: %{},
                  query: %{},
                  body: %{"parent" => %{"type" => "workspace"}},
@@ -890,11 +897,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(transient_client, %{
+               Client.execute_generated_request(transient_client, %{
                  call: {__MODULE__, :get_self},
                  method: :get,
                  path_template: "/v1/users/me",
-                 url: "/v1/users/me",
                  path_params: %{},
                  query: %{},
                  body: %{},
@@ -912,11 +918,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:error, %NotionSDK.Error{code: :api_connection}} =
-               Client.request(non_transient_client, %{
+               Client.execute_generated_request(non_transient_client, %{
                  call: {__MODULE__, :get_self},
                  method: :get,
                  path_template: "/v1/users/me",
-                 url: "/v1/users/me",
                  path_params: %{},
                  query: %{},
                  body: %{},
@@ -951,11 +956,10 @@ defmodule NotionSDK.ClientTest do
       assert core_request.metadata.pool_type == "core_api"
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :send_upload},
                  method: :post,
                  path_template: "/v1/file_uploads/{file_upload_id}/send",
-                 url: "/v1/file_uploads/{file_upload_id}/send",
                  path_params: %{"file_upload_id" => "upload-123"},
                  query: %{},
                  body: %{},
@@ -1224,11 +1228,10 @@ defmodule NotionSDK.ClientTest do
         )
 
       assert {:error, %NotionSDK.Error{code: :service_unavailable}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :create_page},
                  method: :post,
                  path_template: "/v1/pages",
-                 url: "/v1/pages",
                  path_params: %{},
                  query: %{},
                  body: %{"parent" => %{"type" => "workspace"}},
@@ -1238,11 +1241,10 @@ defmodule NotionSDK.ClientTest do
       Process.sleep(5)
 
       assert {:error, %NotionSDK.Error{status: 409}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :create_page},
                  method: :post,
                  path_template: "/v1/pages",
-                 url: "/v1/pages",
                  path_params: %{},
                  query: %{},
                  body: %{"parent" => %{"type" => "workspace"}},
@@ -1253,11 +1255,10 @@ defmodule NotionSDK.ClientTest do
                :half_open
 
       assert {:ok, %{"ok" => true}} =
-               Client.request(client, %{
+               Client.execute_generated_request(client, %{
                  call: {__MODULE__, :create_page},
                  method: :post,
                  path_template: "/v1/pages",
-                 url: "/v1/pages",
                  path_params: %{},
                  query: %{},
                  body: %{"parent" => %{"type" => "workspace"}},

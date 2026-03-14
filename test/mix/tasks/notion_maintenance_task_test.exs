@@ -7,7 +7,7 @@ defmodule Mix.Tasks.Notion.MaintenanceTaskTest do
   defmodule FakeCodegen do
     def generate!(opts) do
       send(Process.get(:notion_maintenance_task_test_pid), {:generate_opts, opts})
-      %{operations: [%{}], schemas: %{demo: %{}}}
+      %{ir: %{operations: [%{}], schemas: [%{}]}}
     end
   end
 

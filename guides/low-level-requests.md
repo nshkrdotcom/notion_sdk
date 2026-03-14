@@ -1,13 +1,7 @@
 # Low-Level Requests
 
-`NotionSDK.Client.request/2` is the custom-request escape hatch.
-
-It accepts two shapes:
-
-- the richer generated/internal request maps emitted by the generated endpoint modules
-- a simpler user-facing raw request spec for ad hoc calls
-
-If you are writing application code by hand, use the raw request spec.
+`NotionSDK.Client.request/2` is the custom-request escape hatch for
+application code. It accepts the public raw request spec only.
 
 ## The raw request shape
 
@@ -33,8 +27,13 @@ means they inherit:
 
 - path and path-parameter traversal validation
 - the client's default `Notion-Version` and `User-Agent` headers
-- the client's configured auth, retry, telemetry, and transport adapters
+- the client's configured retry, telemetry, and transport adapters
 - Notion-specific resource, retry-group, and circuit-breaker inference when you omit those fields
+
+On non-OAuth paths, raw requests also use the client's configured bearer auth
+unless you override or disable it. OAuth control paths do not inherit bearer
+auth automatically; provide Basic credentials explicitly or use the
+`NotionSDK.OAuth.*` helpers.
 
 ## JSON body example
 
@@ -172,14 +171,11 @@ You can also validate request payloads before the transport runs:
   })
 ```
 
-## Internal generated request maps
+## Internal generated requests
 
-The generated endpoint modules still call `NotionSDK.Client.request/2` with a
-richer internal request map that includes fields such as `call`,
-`path_template`, `resource`, and precomputed schema refs.
-
-That shape remains supported for generated code compatibility. It is no longer
-the recommended manual API for end users.
+Generated endpoint modules use an internal generated-request helper. That
+helper is part of the generated/runtime boundary, not the manual request API
+for application code.
 
 ## Related guides
 

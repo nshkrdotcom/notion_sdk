@@ -11,7 +11,6 @@ defmodule NotionSDK.Rollup do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
@@ -41,12 +40,12 @@ defmodule NotionSDK.Rollup do
       rollup:
         {:union,
          [
-           {NotionSDK.RollupRollup, :t},
            {NotionSDK.Number, :t},
            {NotionSDK.Date, :t},
            {NotionSDK.Array, :t},
            {NotionSDK.Unsupported, :t},
-           {NotionSDK.Incomplete, :t}
+           {NotionSDK.Incomplete, :t},
+           {NotionSDK.RollupRollup, :t}
          ]},
       type: {:const, "rollup"}
     ]
@@ -121,12 +120,12 @@ defmodule NotionSDK.Rollup do
         type:
           {:union,
            [
-             {NotionSDK.RollupRollup, :t},
              {NotionSDK.Number, :t},
              {NotionSDK.Date, :t},
              {NotionSDK.Array, :t},
              {NotionSDK.Unsupported, :t},
-             {NotionSDK.Incomplete, :t}
+             {NotionSDK.Incomplete, :t},
+             {NotionSDK.RollupRollup, :t}
            ]},
         write_only: false
       },

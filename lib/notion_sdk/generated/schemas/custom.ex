@@ -8,7 +8,6 @@ defmodule NotionSDK.Custom do
     * Custom.t_custom
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{custom: NotionSDK.Custom.t_custom(), type: String.t()}
 

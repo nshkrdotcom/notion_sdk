@@ -10,7 +10,6 @@ defmodule NotionSDK.TranscriptionChildrenResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           notes_block_id: String.t() | nil,

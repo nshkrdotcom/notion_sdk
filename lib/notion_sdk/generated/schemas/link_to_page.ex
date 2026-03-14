@@ -10,7 +10,6 @@ defmodule NotionSDK.LinkToPage do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           link_to_page: NotionSDK.CommentId.t() | NotionSDK.DatabaseId.t() | NotionSDK.PageId.t(),

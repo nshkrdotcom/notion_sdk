@@ -8,7 +8,6 @@ defmodule NotionSDK.FormulaFormula do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{checkbox: map, date: map, number: map, string: map}
 

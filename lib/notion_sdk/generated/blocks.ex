@@ -12,7 +12,6 @@ defmodule NotionSDK.Blocks do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type append_children_200_json_resp :: %{
           block: NotionSDK.EmptyObject.t(),
@@ -180,11 +179,10 @@ defmodule NotionSDK.Blocks do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Blocks, :append_children},
       path_template: "/v1/blocks/{block_id}/children",
-      url: render_path("/v1/blocks/{block_id}/children", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
@@ -354,11 +352,10 @@ defmodule NotionSDK.Blocks do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Blocks, :delete},
       path_template: "/v1/blocks/{block_id}",
-      url: render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :delete,
       path_params: partition.path_params,
       query: partition.query,
@@ -548,11 +545,10 @@ defmodule NotionSDK.Blocks do
         query: [{"start_cursor", :start_cursor}, {"page_size", :page_size}]
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Blocks, :list_children},
       path_template: "/v1/blocks/{block_id}/children",
-      url: render_path("/v1/blocks/{block_id}/children", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -724,11 +720,10 @@ defmodule NotionSDK.Blocks do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Blocks, :retrieve},
       path_template: "/v1/blocks/{block_id}",
-      url: render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
@@ -996,11 +991,10 @@ defmodule NotionSDK.Blocks do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.Blocks, :update},
       path_template: "/v1/blocks/{block_id}",
-      url: render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,

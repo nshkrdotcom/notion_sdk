@@ -11,7 +11,6 @@ defmodule NotionSDK.UserObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           avatar_url: String.t() | nil,

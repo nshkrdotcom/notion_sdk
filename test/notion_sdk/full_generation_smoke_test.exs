@@ -2,7 +2,6 @@ defmodule NotionSDK.FullGenerationSmokeTest do
   use ExUnit.Case, async: false
 
   alias NotionSDK.Codegen
-  alias NotionSDK.CompatibilityContract
   alias NotionSDK.ParityInventory
 
   @moduletag timeout: 120_000
@@ -10,7 +9,6 @@ defmodule NotionSDK.FullGenerationSmokeTest do
   test "generate! completes from committed fixtures without mutating the repo" do
     project_root = Codegen.project_root()
     inventory = ParityInventory.summary(project_root: project_root)
-    compatibility = CompatibilityContract.load!(project_root: project_root)
     tmp_dir = make_tmp_dir!("full_generation")
 
     state =
@@ -28,12 +26,13 @@ defmodule NotionSDK.FullGenerationSmokeTest do
     manifest = Jason.decode!(File.read!(manifest_path))
     docs_manifest = Jason.decode!(File.read!(docs_manifest_path))
 
-    assert length(state.operations) == inventory["operation_count"]
-    assert map_size(state.schemas) > 0
+    assert length(state.ir.operations) == inventory["operation_count"]
+    assert state.ir.schemas != []
     assert manifest["operation_count"] == inventory["operation_count"]
     assert manifest["schema_count"] > 0
     assert manifest["operation_modules"] != []
-    assert docs_manifest["compatibility"] == compatibility
+    refute Map.has_key?(manifest, "compatibility")
+    refute Map.has_key?(docs_manifest, "compatibility")
     assert length(docs_manifest["operations"]) == inventory["operation_count"]
     assert File.exists?(snapshot_path)
 
@@ -43,6 +42,13 @@ defmodule NotionSDK.FullGenerationSmokeTest do
       |> Path.wildcard()
 
     assert generated_files != []
+
+    assert Path.join(
+             tmp_dir,
+             "lib/notion_sdk/generated/schemas/meeting_notes_block_object_response.ex"
+           ) in generated_files
+
+    assert Path.join(tmp_dir, "lib/notion_sdk/generated/schemas/transcription_block_response.ex") in generated_files
   end
 
   defp make_tmp_dir!(name) do

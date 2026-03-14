@@ -227,14 +227,12 @@ For one-off low-level requests, pass `auth: false` or `auth: []` to remove the c
 
 ```elixir
 NotionSDK.Client.request(client, %{
-  call: {MyApp.Notion, :probe},
   method: :get,
-  path_template: "/v1/users",
-  url: "/v1/users",
+  path: "/v1/users",
   path_params: %{},
   query: %{},
-  body: %{},
-  form_data: %{},
+  body: nil,
+  form_data: nil,
   auth: false
 })
 ```

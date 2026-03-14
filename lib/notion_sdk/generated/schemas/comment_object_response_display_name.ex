@@ -11,7 +11,6 @@ defmodule NotionSDK.CommentObjectResponseDisplayName do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{resolved_name: String.t() | nil, type: String.t()}
 

@@ -9,7 +9,6 @@ defmodule NotionSDK.StringFormulaPropertyResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{string: String.t() | nil, type: String.t()}
 

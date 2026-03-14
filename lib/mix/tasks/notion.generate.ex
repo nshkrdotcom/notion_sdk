@@ -49,7 +49,7 @@ defmodule Mix.Tasks.Notion.Generate do
     state = codegen_module().generate!(opts)
 
     Mix.shell().info(
-      "Generated NotionSDK: #{length(state.operations)} operations, #{map_size(state.schemas)} schemas"
+      "Generated NotionSDK: #{length(state.ir.operations)} operations, #{length(state.ir.schemas)} schemas"
     )
   end
 

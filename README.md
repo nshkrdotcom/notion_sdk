@@ -20,7 +20,7 @@ reference fixtures and executed through the shared `pristine` runtime.
 - generated endpoint modules stay close to upstream JSON payloads
 - `NotionSDK.Client` owns Notion-specific runtime defaults and auth behavior
 - generic transport, retry, telemetry, and path-safety behavior comes from `pristine`
-- hand-written guides explain the runtime contract, compatibility story, and common workflows around the generated API reference
+- hand-written guides explain the supported runtime contract and common workflows around the generated API reference
 
 The client owns runtime concerns such as auth, retries, transport, and headers.
 Workspace resource ids stay on each request:
@@ -87,7 +87,7 @@ typed_client =
 
 - [Getting Started](guides/getting-started.md): install, defaults, client creation, and first calls
 - [Client Configuration](guides/client-configuration.md): client options, Foundation runtime integration, retry tuning, typed responses, and transport overrides
-- [Versioning and Compatibility](guides/versioning-and-compatibility.md): default Notion version, override rules, deprecated database messaging, and newer generated concepts
+- [Versioning](guides/versioning-and-compatibility.md): default Notion version, override rules, and how the committed generated surface is versioned
 - [Capabilities, Permissions, and Sharing](guides/capabilities-permissions-and-sharing.md): what must be enabled or shared before content, comment, and user calls succeed
 - [Pages, Blocks, and Search](guides/pages-blocks-and-search.md): read-oriented page, block, markdown, and search flows
 - [Content Creation and Mutation](guides/content-creation-and-mutation.md): create, move, update, and append content
@@ -148,7 +148,7 @@ client =
 
 Use the full walkthrough in [OAuth and Auth Overrides](guides/oauth-and-auth-overrides.md) for loopback redirects, programmatic authorization URLs, refresh flows, and explicit Basic auth overrides on OAuth control endpoints.
 
-## Compatibility, API versions, and newer concepts
+## API versioning
 
 The public default remains:
 
@@ -166,24 +166,22 @@ client =
   )
 ```
 
-The vendored JS SDK README documents both `2025-09-03` and `2026-03-11`.
-`notion_sdk` does not claim a blanket `2026-03-11` default today. Its public
-contract is narrower: `2025-09-03` by default, plus additive newer schema
-concepts that are already present in the committed generated surface.
+The vendored JS SDK README documents newer upstream versions as well.
+`notion_sdk` does not automatically move its default header forward; the
+supported default in this repo stays `2025-09-03` until the committed fixtures,
+generated code, and tests are updated together.
 
-That compatibility stance is also encoded machine-readably in
-`priv/upstream/version_contract.json`, which is copied into the generated
-manifest artifacts.
-
-That generated surface currently includes newer concepts such as:
+The committed generated surface currently includes fields and request shapes such as:
 
 - block append `position` with `after_block`, `start`, and `end`
 - page create `position` with `after_block`, `page_start`, and `page_end`
 - `in_trash` fields on modern page, block, database, data source, and upload responses
-- `meeting_notes` block response support in the committed compatibility surface
+- `meeting_notes` block response support in the generated block unions
 
-Use [Versioning and Compatibility](guides/versioning-and-compatibility.md) for
-the detailed support contract and migration guidance.
+If you override `notion_version`, keep that override explicit in code and test
+the affected flows in your workspace. Use
+[Versioning](guides/versioning-and-compatibility.md) for the current support
+contract.
 
 ## Parity and regeneration
 

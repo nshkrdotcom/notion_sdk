@@ -29,8 +29,9 @@ The client already ships with sensible defaults:
 - Timeout: `60_000` ms
 - Retry policy: two retries with exponential backoff
 
-The compatibility contract for newer concepts such as `position` and
-`meeting_notes` lives in `guides/versioning-and-compatibility.md`.
+The committed generated surface already includes current Notion concepts such
+as `position`, `in_trash`, and `meeting_notes`. Use the versioning guide when
+you need to override the default `Notion-Version` header.
 
 Only configure values you want to override:
 
@@ -162,7 +163,7 @@ The supporting utilities live in:
 
 - Read `guides/client-configuration.md` for all client options and production runtime wiring
 - Read `guides/low-level-requests.md` when you need a custom path before a generated wrapper exists
-- Read `guides/versioning-and-compatibility.md` before changing the `Notion-Version` header or relying on newer concepts
+- Read `guides/versioning-and-compatibility.md` before changing the `Notion-Version` header
 - Read `guides/capabilities-permissions-and-sharing.md` before debugging `403 restricted_resource` failures
 - Use the workflow guides for pages, blocks, data sources, uploads, comments, and users
 - Use `examples/README.md` when you want live proofs against a real Notion workspace

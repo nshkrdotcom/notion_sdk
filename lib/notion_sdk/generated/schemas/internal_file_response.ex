@@ -9,7 +9,6 @@ defmodule NotionSDK.InternalFileResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{expiry_time: DateTime.t(), url: String.t()}
 

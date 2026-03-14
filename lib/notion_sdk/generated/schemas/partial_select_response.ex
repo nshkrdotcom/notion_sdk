@@ -10,7 +10,6 @@ defmodule NotionSDK.PartialSelectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{color: String.t(), id: String.t(), name: String.t()}
 

@@ -49,10 +49,9 @@ when the defaults are not appropriate.
 - `priv/upstream/reference/`: extracted upstream OpenAPI fixtures
 - `priv/upstream/reference_context/`: persisted page-context artifacts used to enrich docs
 - `priv/upstream/parity_inventory.json`: committed bounded-surface inventory for the vendored JS SDK oracle
-- `priv/upstream/version_contract.json`: committed machine-readable compatibility contract for the default baseline and reviewed opt-in seams
 - `priv/upstream/supplemental/`: committed supplemental specs
 - `priv/upstream/snapshots/`: raw upstream snapshot inputs
-- `priv/generated/manifest.json`: generated endpoint manifest
+- `priv/generated/manifest.json`: generated surface summary emitted from the `pristine` bridge result
 - `priv/generated/docs_manifest.json`: shared docs-manifest artifact emitted from the `pristine` seam
 - `priv/generated/open_api_state.snapshot.term`: bridge snapshot
 - `priv/generated/refresh_report.json`: grouped change report

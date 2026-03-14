@@ -10,7 +10,6 @@ defmodule NotionSDK.CodeCode do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           caption: [NotionSDK.RichTextItemRequest.t()] | nil,

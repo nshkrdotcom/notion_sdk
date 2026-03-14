@@ -8,7 +8,6 @@ defmodule NotionSDK.BulletedListItem do
     * BulletedListItem.t_bulleted_list_item
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           bulleted_list_item:
@@ -67,10 +66,10 @@ defmodule NotionSDK.BulletedListItem do
       bulleted_list_item:
         {:union,
          [
+           {NotionSDK.BulletedListItemBulletedListItem, :t},
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.BulletedListItem, :t_bulleted_list_item},
-           {NotionSDK.BulletedListItemBulletedListItem, :t}
+           {NotionSDK.BulletedListItem, :t_bulleted_list_item}
          ]},
       object: {:const, "block"},
       type: {:const, "bulleted_list_item"}
@@ -162,10 +161,10 @@ defmodule NotionSDK.BulletedListItem do
         type:
           {:union,
            [
+             {NotionSDK.BulletedListItemBulletedListItem, :t},
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.BulletedListItem, :t_bulleted_list_item},
-             {NotionSDK.BulletedListItemBulletedListItem, :t}
+             {NotionSDK.BulletedListItem, :t_bulleted_list_item}
            ]},
         write_only: false
       },

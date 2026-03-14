@@ -18,7 +18,6 @@ defmodule NotionSDK.ChildPageBlockObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           child_page: NotionSDK.TitleObjectResponse.t(),

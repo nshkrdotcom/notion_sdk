@@ -43,7 +43,7 @@ Both return a `%NotionSDK.Client{}` configured with:
 
 The generic transport, retry, telemetry, and path-validation behavior behind
 these options comes from `pristine`. `notion_sdk` keeps the Notion-specific
-classifier, retry groups, breaker grouping, and compatibility defaults locally.
+classifier, retry groups, breaker grouping, and default headers locally.
 
 ## Foundation-backed production runtime
 
@@ -184,19 +184,9 @@ client =
   )
 ```
 
-Legacy names are normalized, so this also works:
-
-```elixir
-client =
-  NotionSDK.Client.new(
-    auth: token,
-    retry: [
-      max_attempts: 4,
-      base_delay_ms: 250,
-      max_delay_ms: 5_000
-    ]
-  )
-```
+Use the current keys only: `:max_retries`, `:initial_retry_delay_ms`, and
+`:max_retry_delay_ms`. Legacy aliases are rejected so retry configuration stays
+unambiguous across the public and generated layers.
 
 Disable retries entirely with:
 
@@ -241,14 +231,12 @@ Remove the client's default auth from one request with `false` or `[]`:
 
 ```elixir
 NotionSDK.Client.request(client, %{
-  call: {MyApp.Notion, :unauthenticated_ping},
   method: :get,
-  path_template: "/v1/users",
-  url: "/v1/users",
+  path: "/v1/users",
   path_params: %{},
   query: %{},
-  body: %{},
-  form_data: %{},
+  body: nil,
+  form_data: nil,
   auth: false
 })
 ```

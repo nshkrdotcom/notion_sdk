@@ -9,7 +9,6 @@ defmodule NotionSDK.DataSourceId do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{data_source_id: String.t(), type: String.t() | nil}
 

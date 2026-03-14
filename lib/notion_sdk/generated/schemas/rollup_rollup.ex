@@ -8,7 +8,6 @@ defmodule NotionSDK.RollupRollup do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{any: map, date: map, every: map, none: map, number: map}
 

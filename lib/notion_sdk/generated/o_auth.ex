@@ -10,7 +10,6 @@ defmodule NotionSDK.OAuth do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
   use Pristine.OpenAPI.Operation
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   alias NotionSDK.GeneratedOAuth, as: OAuthRuntime
   alias Pristine.OAuth2, as: OAuth2
@@ -206,11 +205,10 @@ defmodule NotionSDK.OAuth do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.OAuth, :introspect},
       path_template: "/v1/oauth/introspect",
-      url: render_path("/v1/oauth/introspect", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -294,11 +292,10 @@ defmodule NotionSDK.OAuth do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.OAuth, :revoke},
       path_template: "/v1/oauth/revoke",
-      url: render_path("/v1/oauth/revoke", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -426,11 +423,10 @@ defmodule NotionSDK.OAuth do
         query: []
       })
 
-    NotionSDK.Client.request(client, %{
+    NotionSDK.Client.execute_generated_request(client, %{
       args: params,
       call: {NotionSDK.OAuth, :token},
       path_template: "/v1/oauth/token",
-      url: render_path("/v1/oauth/token", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,

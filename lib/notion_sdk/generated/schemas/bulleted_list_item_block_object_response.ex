@@ -18,7 +18,6 @@ defmodule NotionSDK.BulletedListItemBlockObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           bulleted_list_item: NotionSDK.ContentWithRichTextAndColorResponse.t(),

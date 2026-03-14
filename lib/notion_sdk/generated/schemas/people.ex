@@ -11,7 +11,6 @@ defmodule NotionSDK.People do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           id: String.t(),
@@ -31,7 +30,7 @@ defmodule NotionSDK.People do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      people: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+      people: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
       property: :string,
       type: {:const, "people"}
     ]
@@ -88,7 +87,7 @@ defmodule NotionSDK.People do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+        type: {:union, [{NotionSDK.EmptyObject, :t}, :map]},
         write_only: false
       },
       %{

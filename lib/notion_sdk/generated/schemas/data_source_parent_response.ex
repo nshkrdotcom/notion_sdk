@@ -10,7 +10,6 @@ defmodule NotionSDK.DataSourceParentResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{data_source_id: String.t(), database_id: String.t(), type: String.t()}
 

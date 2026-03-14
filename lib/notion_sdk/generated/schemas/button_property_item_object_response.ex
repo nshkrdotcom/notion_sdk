@@ -11,7 +11,6 @@ defmodule NotionSDK.ButtonPropertyItemObjectResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           button: NotionSDK.EmptyObject.t(),

@@ -7,7 +7,16 @@ defmodule NotionSDK.GeneratedSourceTest do
   @users_source Path.join(@generated_dir, "users.ex")
   @search_source Path.join(@generated_dir, "search.ex")
   @file_uploads_source Path.join(@generated_dir, "file_uploads.ex")
+  @blocks_source Path.join(@generated_dir, "blocks.ex")
   @page_schema_source Path.join(@generated_dir, "schemas/page_object_response.ex")
+  @meeting_notes_schema_source Path.join(
+                                 @generated_dir,
+                                 "schemas/meeting_notes_block_object_response.ex"
+                               )
+  @transcription_schema_source Path.join(
+                                 @generated_dir,
+                                 "schemas/transcription_block_response.ex"
+                               )
   @todo_schema_source Path.join(@generated_dir, "schemas/to_do_to_do.ex")
 
   test "generated modules alias the NotionSDK runtime helper instead of calling it fully qualified" do
@@ -109,9 +118,48 @@ defmodule NotionSDK.GeneratedSourceTest do
     pages_source = File.read!(@pages_source)
 
     assert users_source =~ "use Pristine.OpenAPI.Operation"
+    assert users_source =~ "NotionSDK.Client.execute_generated_request(client, %{"
     assert pages_source =~ "path_template: \"/v1/pages/{page_id}\""
+    refute users_source =~ "NotionSDK.Client.request(client, %{"
+    refute pages_source =~ "url: "
     refute users_source =~ "NotionSDK.GeneratedOperation"
     refute pages_source =~ "NotionSDK.GeneratedOperation"
+  end
+
+  test "current generated surface includes position variants and meeting notes" do
+    assert Keyword.fetch!(NotionSDK.Blocks.__fields__(:append_children_json_req_position), :type) ==
+             {:enum, ["after_block", "end", "start"]}
+
+    assert Keyword.fetch!(
+             NotionSDK.Blocks.__fields__(:append_children_json_req_position),
+             :after_block
+           ) ==
+             {NotionSDK.Blocks, :append_children_json_req_position_after_block}
+
+    assert Keyword.fetch!(NotionSDK.Pages.__fields__(:create_json_req_position), :type) ==
+             {:enum, ["after_block", "page_end", "page_start"]}
+
+    assert Keyword.fetch!(NotionSDK.Pages.__fields__(:create_json_req_position), :after_block) ==
+             {NotionSDK.Pages, :create_json_req_position_after_block}
+
+    assert Keyword.fetch!(NotionSDK.PageObjectResponse.__fields__(:t), :in_trash) == :boolean
+
+    assert Keyword.fetch!(
+             NotionSDK.MeetingNotesBlockObjectResponse.__fields__(:t),
+             :meeting_notes
+           ) ==
+             {NotionSDK.TranscriptionBlockResponse, :t}
+  end
+
+  test "generated schema files include the real meeting notes and transcription modules" do
+    meeting_notes_source = File.read!(@meeting_notes_schema_source)
+    transcription_source = File.read!(@transcription_schema_source)
+    blocks_source = File.read!(@blocks_source)
+
+    assert meeting_notes_source =~ "defmodule NotionSDK.MeetingNotesBlockObjectResponse do"
+    assert transcription_source =~ "defmodule NotionSDK.TranscriptionBlockResponse do"
+    assert blocks_source =~ "NotionSDK.MeetingNotesBlockObjectResponse.t()"
+    refute blocks_source =~ "url: "
   end
 
   test "generated security docs and metadata deduplicate bearer auth requirements" do

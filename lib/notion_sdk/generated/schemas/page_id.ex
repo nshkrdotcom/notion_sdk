@@ -9,7 +9,6 @@ defmodule NotionSDK.PageId do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{page_id: String.t(), type: String.t() | nil}
 

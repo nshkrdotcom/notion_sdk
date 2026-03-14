@@ -9,7 +9,6 @@ defmodule NotionSDK.FileUploadObjectResponseNumberOfParts do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{sent: integer, total: integer}
 

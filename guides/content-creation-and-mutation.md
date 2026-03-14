@@ -26,7 +26,7 @@ Create a page under a page or data source:
 
 - `children` when you want to seed the page with block content immediately
 - `template` when you want Notion to apply a data-source template
-- `position` when the target version/workflow supports ordering hints such as `page_start`, `page_end`, or `after_block`
+- `position` when you want explicit ordering such as `page_start`, `page_end`, or `after_block`
 
 ## Move or update a page
 
@@ -115,8 +115,8 @@ Comment capability must be enabled explicitly in Notion.
 
 For container-level schema changes:
 
-- use `NotionSDK.DataSources.create/2` and `NotionSDK.DataSources.update/2` for modern structured-content workflows
-- use `NotionSDK.Databases.create/2` and `NotionSDK.Databases.update/2` only when you need the older compatibility surface that still exists in upstream docs
+- use `NotionSDK.DataSources.create/2` and `NotionSDK.DataSources.update/2` for data-source workflows
+- use `NotionSDK.Databases.create/2` and `NotionSDK.Databases.update/2` for database endpoints that are still part of the current generated surface
 
 See `data-sources-and-databases.md` for query and template workflows around
 those containers.
@@ -126,11 +126,11 @@ those containers.
 - confirm the integration has insert or update content capability, depending on the call
 - confirm the destination parent is shared with the integration
 - use a disposable workspace or dedicated test area for mutation-heavy examples
-- keep the `Notion-Version` choice explicit when you rely on newer ordering concepts
+- keep the `Notion-Version` choice explicit when you override the default header
 
 ## Related guides
 
 - `pages-blocks-and-search.md` for read-oriented page and block traversal
 - `data-sources-and-databases.md` for container metadata and queries
 - `file-uploads-and-page-attachments.md` for file-backed content mutation
-- `versioning-and-compatibility.md` for `position` and newer concept messaging
+- `versioning-and-compatibility.md` for header overrides and generated-surface versioning

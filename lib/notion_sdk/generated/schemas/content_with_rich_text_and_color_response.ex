@@ -9,7 +9,6 @@ defmodule NotionSDK.ContentWithRichTextAndColorResponse do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{color: String.t(), rich_text: [NotionSDK.RichTextItemResponse.t()]}
 

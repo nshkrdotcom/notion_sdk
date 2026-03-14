@@ -12,7 +12,6 @@ defmodule NotionSDK.ErrorOauth401 do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           additional_data: map | nil,

@@ -8,7 +8,6 @@ defmodule NotionSDK.Toggle do
     * Toggle.t_toggle
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,
@@ -68,10 +67,10 @@ defmodule NotionSDK.Toggle do
       toggle:
         {:union,
          [
+           {NotionSDK.ToggleToggle, :t},
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
            {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.Toggle, :t_toggle},
-           {NotionSDK.ToggleToggle, :t}
+           {NotionSDK.Toggle, :t_toggle}
          ]},
       type: {:const, "toggle"}
     ]
@@ -177,10 +176,10 @@ defmodule NotionSDK.Toggle do
         type:
           {:union,
            [
+             {NotionSDK.ToggleToggle, :t},
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
              {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.Toggle, :t_toggle},
-             {NotionSDK.ToggleToggle, :t}
+             {NotionSDK.Toggle, :t_toggle}
            ]},
         write_only: false
       },

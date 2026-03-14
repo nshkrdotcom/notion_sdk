@@ -10,7 +10,6 @@ defmodule NotionSDK.Audio do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           audio: NotionSDK.External.t() | NotionSDK.FileUpload.t(),

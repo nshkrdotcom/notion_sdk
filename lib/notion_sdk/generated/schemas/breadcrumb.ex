@@ -10,7 +10,6 @@ defmodule NotionSDK.Breadcrumb do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           breadcrumb: NotionSDK.EmptyObject.t(),

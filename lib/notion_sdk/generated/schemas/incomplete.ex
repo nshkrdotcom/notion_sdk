@@ -10,7 +10,6 @@ defmodule NotionSDK.Incomplete do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           function: String.t(),

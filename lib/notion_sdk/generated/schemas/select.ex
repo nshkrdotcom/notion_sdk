@@ -10,7 +10,6 @@ defmodule NotionSDK.Select do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{property: String.t(), select: map, type: String.t() | nil}
 

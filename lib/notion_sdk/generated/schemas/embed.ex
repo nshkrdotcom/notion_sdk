@@ -10,7 +10,6 @@ defmodule NotionSDK.Embed do
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           embed: NotionSDK.MediaContentWithUrlAndCaptionRequest.t(),

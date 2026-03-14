@@ -44,21 +44,21 @@ defmodule NotionSDK.Client do
           required(:call) => {module(), atom()},
           required(:method) => atom(),
           required(:path_template) => String.t(),
-          required(:url) => String.t(),
           required(:path_params) => map(),
           required(:query) => map(),
           required(:body) => term(),
           required(:form_data) => term(),
           optional(:auth) => term(),
           optional(:circuit_breaker) => String.t(),
-          optional(:security) => [map()] | nil,
           optional(:headers) => map(),
+          optional(:opts) => keyword(),
           optional(:rate_limit) => String.t(),
           optional(:resource) => String.t(),
           optional(:request) => [{String.t(), term()}],
           optional(:response) => [{integer() | :default, term()}],
           optional(:retry) => String.t(),
           optional(:retry_opts) => keyword(),
+          optional(:security) => [map()] | nil,
           optional(:telemetry) => String.t(),
           optional(:timeout) => pos_integer()
         }
@@ -86,7 +86,7 @@ defmodule NotionSDK.Client do
           optional(:timeout) => pos_integer()
         }
 
-  @type request_t :: generated_request_t() | raw_request_t()
+  @type request_t :: raw_request_t()
 
   @type t :: %__MODULE__{
           auth: String.t() | nil,
@@ -177,16 +177,10 @@ defmodule NotionSDK.Client do
 
   @spec request(t(), request_t()) :: {:ok, term()} | {:error, NotionSDK.Error.t()}
   def request(%__MODULE__{} = client, request) when is_map(request) do
-    cond do
-      generated_request?(request) ->
-        execute_generated_request(client, request)
-
-      raw_request?(request) ->
-        execute_raw_request(client, request)
-
-      true ->
-        raise ArgumentError,
-              "expected generated request shape or raw request spec, got: #{inspect(request)}"
+    if raw_request?(request) do
+      execute_raw_request(client, request)
+    else
+      raise ArgumentError, "expected raw request spec, got: #{inspect(request)}"
     end
   end
 
@@ -194,20 +188,28 @@ defmodule NotionSDK.Client do
     raise ArgumentError, "expected NotionSDK.Client, got: #{inspect(other)}"
   end
 
-  defp execute_generated_request(%__MODULE__{} = client, request) do
-    typed_runtime? = typed_runtime_enabled?(client, request)
+  @doc false
+  @spec execute_generated_request(t(), generated_request_t()) ::
+          {:ok, term()} | {:error, NotionSDK.Error.t()}
+  def execute_generated_request(%__MODULE__{} = client, request) when is_map(request) do
+    if generated_request?(request) do
+      typed_runtime? = typed_runtime_enabled?(client, request)
 
-    request_spec =
-      request
-      |> OpenAPIClient.to_request_spec()
-      |> prepare_request_spec(client, typed_runtime?)
+      request_spec =
+        request
+        |> normalize_generated_request()
+        |> OpenAPIClient.to_request_spec()
+        |> prepare_request_spec(client, typed_runtime?)
 
-    execute_opts =
-      []
-      |> maybe_put(:retry_opts, request[:retry_opts])
-      |> maybe_put(:typed_responses, typed_runtime?)
+      execute_opts =
+        []
+        |> maybe_put(:retry_opts, request[:retry_opts])
+        |> maybe_put(:typed_responses, typed_runtime?)
 
-    Pristine.execute_request(request_spec, client.context, execute_opts)
+      Pristine.execute_request(request_spec, client.context, execute_opts)
+    else
+      raise ArgumentError, "expected generated request spec, got: #{inspect(request)}"
+    end
   end
 
   defp execute_raw_request(%__MODULE__{} = client, request) do
@@ -216,6 +218,7 @@ defmodule NotionSDK.Client do
     request_spec =
       request
       |> Map.put(:form_data, normalize_form_data(request[:form_data]))
+      |> put_default_raw_security()
       |> prepare_request_spec(client, typed_runtime?)
 
     execute_opts =
@@ -308,6 +311,32 @@ defmodule NotionSDK.Client do
     |> Map.put(:response_schema, nil)
   end
 
+  defp normalize_generated_request(request) when is_map(request) do
+    request
+    |> Map.put_new(:opts, [])
+    |> Map.put_new(:headers, %{})
+    |> Map.put_new(:request, [])
+    |> Map.put_new(:response, [])
+    |> Map.put_new(:security, nil)
+  end
+
+  defp put_default_raw_security(%{path: path} = request) when is_binary(path) do
+    case Map.get(request, :security) do
+      nil -> Map.put(request, :security, default_raw_security(path))
+      _security -> request
+    end
+  end
+
+  defp put_default_raw_security(request), do: request
+
+  defp default_raw_security(path) when is_binary(path) do
+    if String.starts_with?(path, "/v1/oauth/") do
+      nil
+    else
+      [%{"bearerAuth" => []}]
+    end
+  end
+
   @doc false
   @spec oauth_request_auth(map()) :: map() | nil
   def oauth_request_auth(params) when is_map(params) do
@@ -354,14 +383,14 @@ defmodule NotionSDK.Client do
 
   defp normalize_retry(retry) when is_list(retry) do
     retry
-    |> Enum.into(%{}, fn {key, value} -> {normalize_retry_key(key), value} end)
+    |> Enum.into(%{}, fn {key, value} -> {normalize_retry_key!(key), value} end)
     |> normalize_retry()
   end
 
   defp normalize_retry(retry) when is_map(retry) do
     normalized =
       Map.new(retry, fn {key, value} ->
-        {normalize_retry_key(key), value}
+        {normalize_retry_key!(key), value}
       end)
 
     %{
@@ -373,28 +402,21 @@ defmodule NotionSDK.Client do
     }
   end
 
-  defp normalize_retry(_retry), do: @default_retry
-
-  defp normalize_retry_key("base_delay_ms"), do: :initial_retry_delay_ms
-  defp normalize_retry_key("initial_retry_delay_ms"), do: :initial_retry_delay_ms
-  defp normalize_retry_key("max_attempts"), do: :max_retries
-  defp normalize_retry_key("max_delay_ms"), do: :max_retry_delay_ms
-  defp normalize_retry_key("max_retries"), do: :max_retries
-  defp normalize_retry_key("max_retry_delay_ms"), do: :max_retry_delay_ms
-
-  defp normalize_retry_key(key) when is_binary(key) do
-    String.to_existing_atom(key)
-  rescue
-    ArgumentError -> key
+  defp normalize_retry(_retry) do
+    raise ArgumentError, "retry must be false, a map, or a keyword list"
   end
 
-  defp normalize_retry_key(:base_delay_ms), do: :initial_retry_delay_ms
-  defp normalize_retry_key(:initial_retry_delay_ms), do: :initial_retry_delay_ms
-  defp normalize_retry_key(:max_attempts), do: :max_retries
-  defp normalize_retry_key(:max_delay_ms), do: :max_retry_delay_ms
-  defp normalize_retry_key(:max_retries), do: :max_retries
-  defp normalize_retry_key(:max_retry_delay_ms), do: :max_retry_delay_ms
-  defp normalize_retry_key(key), do: key
+  defp normalize_retry_key!("initial_retry_delay_ms"), do: :initial_retry_delay_ms
+  defp normalize_retry_key!("max_retries"), do: :max_retries
+  defp normalize_retry_key!("max_retry_delay_ms"), do: :max_retry_delay_ms
+  defp normalize_retry_key!(:initial_retry_delay_ms), do: :initial_retry_delay_ms
+  defp normalize_retry_key!(:max_retries), do: :max_retries
+  defp normalize_retry_key!(:max_retry_delay_ms), do: :max_retry_delay_ms
+
+  defp normalize_retry_key!(key) do
+    raise ArgumentError,
+          "unknown retry option #{inspect(key)}; supported keys are :initial_retry_delay_ms, :max_retries, :max_retry_delay_ms"
+  end
 
   @spec retry_policies(retry_settings()) :: %{required(String.t()) => keyword()}
   defp retry_policies(%{
@@ -472,8 +494,7 @@ defmodule NotionSDK.Client do
   defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 
   defp generated_request?(request) when is_map(request) do
-    Map.has_key?(request, :call) and
-      (Map.has_key?(request, :path_template) or Map.has_key?(request, :url))
+    Map.has_key?(request, :call) and Map.has_key?(request, :path_template)
   end
 
   defp raw_request?(request) when is_map(request) do
@@ -647,7 +668,7 @@ defmodule NotionSDK.Client do
   defp explicit_circuit_breaker_name?(value), do: String.contains?(value, ":")
 
   defp resource_group(request) do
-    path = request[:path] || request[:path_template] || request[:url] || ""
+    path = request[:path] || request[:path_template] || ""
 
     cond do
       String.starts_with?(path, "/v1/oauth/") ->
