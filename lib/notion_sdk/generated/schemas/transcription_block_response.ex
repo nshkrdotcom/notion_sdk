@@ -11,7 +11,7 @@ defmodule NotionSDK.TranscriptionBlockResponse do
     * `title`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           calendar_event: NotionSDK.TranscriptionCalendarEventResponse.t() | nil,

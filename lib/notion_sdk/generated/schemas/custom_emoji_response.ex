@@ -9,7 +9,7 @@ defmodule NotionSDK.CustomEmojiResponse do
     * `url`: The URL of the custom emoji.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{id: String.t(), name: String.t(), url: String.t()}
 

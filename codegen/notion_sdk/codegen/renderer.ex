@@ -38,7 +38,7 @@ defmodule NotionSDK.Codegen.Renderer do
       if file.schemas == [] do
         nil
       else
-        quote(do: alias(Pristine.OpenAPI.Runtime, as: OpenAPIRuntime))
+        quote(do: alias(Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime))
       end
 
     Util.clean_list([
@@ -442,7 +442,7 @@ defmodule NotionSDK.Codegen.Renderer do
       end
 
     Util.clean_list([
-      quote(do: alias(Pristine.OAuth2, as: OAuth2)),
+      quote(do: alias(Pristine.SDK.OAuth2, as: OAuth2)),
       helper_definitions
     ])
   end

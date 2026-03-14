@@ -8,7 +8,7 @@ defmodule NotionSDK.UniqueIdPropertyItemObjectResponseUniqueId do
     * `prefix`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{number: number | nil, prefix: String.t() | nil}
 

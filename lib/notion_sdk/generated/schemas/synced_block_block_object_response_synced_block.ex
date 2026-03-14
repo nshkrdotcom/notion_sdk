@@ -7,7 +7,7 @@ defmodule NotionSDK.SyncedBlockBlockObjectResponseSyncedBlock do
     * `synced_from`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{synced_from: NotionSDK.BlockId.t() | nil}
 

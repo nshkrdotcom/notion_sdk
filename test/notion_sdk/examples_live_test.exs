@@ -6,6 +6,7 @@ defmodule NotionSDK.Examples.LiveTest do
   @moduletag :tmp_dir
 
   alias NotionSDK.Examples.Live
+  alias Pristine.SDK.{Error, Response}
 
   @example_envs [
     "NOTION_EXAMPLE_BLOCK_ID",
@@ -78,22 +79,26 @@ defmodule NotionSDK.Examples.LiveTest do
   end
 
   test "ok! raises with structured Pristine error details" do
-    error = %Pristine.Error{
-      type: :not_found,
-      status: 404,
-      message: "Resource not found",
-      body: %{
-        "code" => "object_not_found",
-        "message" => "Could not find page with ID: 32222fc0-502f-808e-b33f-cdd53e4d9a60.",
-        "request_id" => "req_123"
-      },
-      response: %Pristine.Core.Response{
+    response =
+      Response.new(
         status: 404,
         headers: %{},
         body: %{},
         metadata: %{url: "https://api.notion.com/v1/pages/32222fc0-502f-808e-b33f-cdd53e4d9a60"}
-      }
-    }
+      )
+
+    error =
+      response
+      |> Error.from_response()
+      |> Map.merge(%{
+        type: :not_found,
+        message: "Resource not found",
+        body: %{
+          "code" => "object_not_found",
+          "message" => "Could not find page with ID: 32222fc0-502f-808e-b33f-cdd53e4d9a60.",
+          "request_id" => "req_123"
+        }
+      })
 
     exception =
       assert_raise RuntimeError, fn ->

@@ -43,6 +43,7 @@ defmodule Mix.Tasks.Notion.Oauth do
   use Mix.Task
 
   alias NotionSDK.OAuthTokenFile
+  alias Pristine.SDK.OAuth2.{Error, Token}
 
   @default_timeout_ms 120_000
   @interactive_switches [
@@ -142,7 +143,7 @@ defmodule Mix.Tasks.Notion.Oauth do
   end
 
   defp oauth2_module do
-    Application.get_env(:notion_sdk, :oauth2_module, Module.concat([Pristine, OAuth2]))
+    Application.get_env(:notion_sdk, :oauth2_module, Module.concat([Pristine, SDK, OAuth2]))
   end
 
   defp fetch_env!(name) do
@@ -193,7 +194,7 @@ defmodule Mix.Tasks.Notion.Oauth do
       Map.get(refreshed_token_map, :access_token) ||
         Mix.raise("refreshed token response did not include an access token")
 
-    struct!(token_module(), %{
+    token_from_map(%{
       access_token: access_token,
       refresh_token: merged_refresh_token(saved_token_map, refreshed_token_map),
       expires_at: Map.get(refreshed_token_map, :expires_at),
@@ -309,11 +310,11 @@ defmodule Mix.Tasks.Notion.Oauth do
   defp oauth_error?(_error), do: false
 
   defp oauth_error_module do
-    Module.concat([Pristine, OAuth2, Error])
+    Error.new(:oauth2_unavailable).__struct__
   end
 
-  defp token_module do
-    Module.concat([Pristine, OAuth2, Token])
+  defp token_from_map(attrs) when is_map(attrs) do
+    Token.from_map(attrs)
   end
 
   defp token_to_map(%{__struct__: _module} = token), do: Map.from_struct(token)

@@ -17,7 +17,7 @@ defmodule NotionSDK.VideoBlockObjectResponse do
     * `video`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           created_by: NotionSDK.PartialUserObjectResponse.t(),

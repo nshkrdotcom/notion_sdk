@@ -7,7 +7,7 @@ defmodule NotionSDK.BulletedListItem do
     * Bulleted List Item
     * BulletedListItem.t_bulleted_list_item
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           bulleted_list_item:

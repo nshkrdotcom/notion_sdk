@@ -12,8 +12,8 @@ defmodule NotionSDK.Pages do
     * Move a page
     * Retrieve a page property item
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
-  use Pristine.OpenAPI.Operation
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+  use Pristine.SDK.OpenAPI.Operation
 
   @doc """
   Create a page

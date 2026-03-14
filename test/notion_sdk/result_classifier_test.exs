@@ -2,13 +2,13 @@ defmodule NotionSDK.ResultClassifierTest do
   use ExUnit.Case, async: true
 
   alias NotionSDK.ResultClassifier
-  alias Pristine.Core.Response
+  alias Pristine.SDK.Response
 
   test "treats caller-side 4xx responses as breaker ignore" do
     for status <- [401, 404, 422] do
       classification =
         ResultClassifier.classify(
-          {:ok, %Response{status: status}},
+          {:ok, Response.new(status: status)},
           %{resource: "core_api", retry: "notion.read"},
           nil,
           []
@@ -23,7 +23,7 @@ defmodule NotionSDK.ResultClassifierTest do
   test "treats non-upload 409 responses as breaker ignore" do
     classification =
       ResultClassifier.classify(
-        {:ok, %Response{status: 409}},
+        {:ok, Response.new(status: 409)},
         %{resource: "core_api", retry: "notion.write"},
         nil,
         []
@@ -37,7 +37,7 @@ defmodule NotionSDK.ResultClassifierTest do
   test "keeps file upload send conflicts retryable" do
     classification =
       ResultClassifier.classify(
-        {:ok, %Response{status: 409}},
+        {:ok, Response.new(status: 409)},
         %{resource: "file_upload_send", retry: "notion.file_upload_send"},
         nil,
         []

@@ -8,8 +8,8 @@ defmodule NotionSDK.Comments do
     * Create a comment
     * Retrieve a comment
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
-  use Pristine.OpenAPI.Operation
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+  use Pristine.SDK.OpenAPI.Operation
 
   @doc """
   Create a comment

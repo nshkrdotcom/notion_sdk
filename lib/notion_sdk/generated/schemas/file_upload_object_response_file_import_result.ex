@@ -7,7 +7,7 @@ defmodule NotionSDK.FileUploadObjectResponseFileImportResult do
     * `imported_time`: The time the file was imported into Notion. ISO 8601 format.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{imported_time: DateTime.t() | nil}
 

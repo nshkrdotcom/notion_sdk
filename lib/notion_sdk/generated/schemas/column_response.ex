@@ -7,7 +7,7 @@ defmodule NotionSDK.ColumnResponse do
     * `width_ratio`: Ratio between 0 and 1 of the width of this column relative to all columns in the list. If not provided, uses an equal width.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{width_ratio: number | nil}
 

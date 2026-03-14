@@ -7,7 +7,7 @@ defmodule NotionSDK.UnsupportedBlockObjectResponseUnsupported do
     * `block_type`: The underlying block type that is not currently supported by the Public API. Example values include: tab, form, button, drive.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{block_type: String.t()}
 

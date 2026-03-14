@@ -9,7 +9,7 @@ defmodule NotionSDK.PartialSelectResponse do
     * `name`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{color: String.t(), id: String.t(), name: String.t()}
 

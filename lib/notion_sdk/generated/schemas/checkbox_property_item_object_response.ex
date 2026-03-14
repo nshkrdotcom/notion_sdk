@@ -10,7 +10,7 @@ defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{checkbox: boolean, id: String.t(), object: String.t(), type: String.t()}
 

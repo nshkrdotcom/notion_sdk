@@ -21,7 +21,7 @@ defmodule NotionSDK.DatabaseObjectResponse do
     * `url`: The URL of the database.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           cover:

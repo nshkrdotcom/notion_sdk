@@ -9,7 +9,7 @@ defmodule NotionSDK.Bookmark do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           bookmark: NotionSDK.MediaContentWithUrlAndCaptionRequest.t(),

@@ -9,7 +9,7 @@ defmodule NotionSDK.Divider do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           divider: NotionSDK.EmptyObject.t(),

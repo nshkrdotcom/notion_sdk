@@ -3,8 +3,8 @@ Code.require_file("support/live_example.exs", __DIR__)
 alias NotionSDK.Examples.Live
 alias NotionSDK.Users
 alias Pristine.Adapters.TokenSource.File, as: FileTokenSource
-alias Pristine.OAuth2
-alias Pristine.OAuth2.Token
+alias Pristine.SDK.OAuth2
+alias Pristine.SDK.OAuth2.Token
 
 Live.banner!("18_oauth_refresh_and_get_self.exs")
 
@@ -12,7 +12,7 @@ path = Live.oauth_token_path()
 
 saved_token =
   case FileTokenSource.fetch(path: path) do
-    {:ok, %Token{} = token} ->
+    {:ok, %{access_token: _access_token} = token} ->
       token
 
     :error ->
@@ -48,23 +48,24 @@ refreshed_token =
     client_secret: credentials["client_secret"],
     context: oauth_client.context
   )
-  |> Live.ok!("Pristine.OAuth2.refresh_token/3")
+  |> Live.ok!("Pristine.SDK.OAuth2.refresh_token/3")
 
-persisted_token = %Token{
-  access_token: refreshed_token.access_token || raise("refresh did not return an access token"),
-  refresh_token:
-    case refreshed_token.refresh_token do
-      value when is_binary(value) and value != "" -> value
-      _other -> saved_token.refresh_token
-    end,
-  expires_at: refreshed_token.expires_at,
-  token_type:
-    case refreshed_token.token_type do
-      value when is_binary(value) and value != "" -> value
-      _other -> saved_token.token_type
-    end,
-  other_params: Map.merge(saved_token.other_params || %{}, refreshed_token.other_params || %{})
-}
+persisted_token =
+  Token.from_map(%{
+    access_token: refreshed_token.access_token || raise("refresh did not return an access token"),
+    refresh_token:
+      case refreshed_token.refresh_token do
+        value when is_binary(value) and value != "" -> value
+        _other -> saved_token.refresh_token
+      end,
+    expires_at: refreshed_token.expires_at,
+    token_type:
+      case refreshed_token.token_type do
+        value when is_binary(value) and value != "" -> value
+        _other -> saved_token.token_type
+      end,
+    other_params: Map.merge(saved_token.other_params || %{}, refreshed_token.other_params || %{})
+  })
 
 :ok =
   case FileTokenSource.put(persisted_token, path: path) do

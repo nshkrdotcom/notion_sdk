@@ -3,8 +3,6 @@ defmodule NotionSDK.Error do
   Notion-specific error type returned by the thin generated SDK.
   """
 
-  alias Pristine.Core.Response
-
   @api_code_map %{
     "bad_gateway" => :bad_gateway,
     "conflict_error" => :conflict_error,
@@ -103,26 +101,32 @@ defmodule NotionSDK.Error do
     }
   end
 
-  @spec from_response(Response.t(), term(), non_neg_integer() | nil) :: t()
-  def from_response(%Response{} = response, body, retry_after_ms) do
+  @spec from_response(Pristine.SDK.Response.t() | map(), term(), non_neg_integer() | nil) :: t()
+  def from_response(%{status: _status} = response, body, retry_after_ms) do
     from_response(response, body, retry_after_ms, [])
   end
 
-  @spec from_response(Response.t(), term(), non_neg_integer() | nil, keyword()) :: t()
-  def from_response(%Response{} = response, body, retry_after_ms, _opts) do
+  @spec from_response(
+          Pristine.SDK.Response.t() | map(),
+          term(),
+          non_neg_integer() | nil,
+          keyword()
+        ) :: t()
+  def from_response(%{status: status} = response, body, retry_after_ms, _opts) do
     body = normalize_body(body)
-    code = code_from_body(body) || code_from_status(response.status)
-    message = message_from_body(body) || "HTTP #{response.status}"
+    headers = Map.get(response, :headers, %{})
+    code = code_from_body(body) || code_from_status(status)
+    message = message_from_body(body) || "HTTP #{status}"
 
     %__MODULE__{
       additional_data: additional_data(body),
       body: body,
       code: code,
-      headers: normalize_headers(response.headers),
+      headers: normalize_headers(headers),
       message: message,
-      request_id: request_id(body, response.headers),
+      request_id: request_id(body, headers),
       retry_after_ms: retry_after_ms,
-      status: response.status
+      status: status
     }
   end
 

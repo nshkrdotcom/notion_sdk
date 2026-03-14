@@ -28,7 +28,7 @@ defmodule NotionSDK.GeneratedSourceTest do
 
     assert Enum.any?(
              sources,
-             &String.contains?(&1, "alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime")
+             &String.contains?(&1, "alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime")
            )
 
     assert Enum.any?(sources, &String.contains?(&1, "OpenAPIRuntime.build_schema"))
@@ -36,10 +36,10 @@ defmodule NotionSDK.GeneratedSourceTest do
     refute Enum.any?(sources, &String.contains?(&1, "NotionSDK.GeneratedRuntime"))
   end
 
-  test "generated oauth helpers call Pristine.OAuth2 directly" do
+  test "generated oauth helpers call the hardened Pristine SDK oauth boundary" do
     source = File.read!(@oauth_source)
 
-    assert source =~ "alias Pristine.OAuth2, as: OAuth2"
+    assert source =~ "alias Pristine.SDK.OAuth2, as: OAuth2"
     assert source =~ "OAuth2.Provider.new("
     assert source =~ "with {:ok, authorization_opts} <- authorization_opts(opts) do"
     assert source =~ "OAuth2.authorization_request(provider(), authorization_opts)"
@@ -108,7 +108,7 @@ defmodule NotionSDK.GeneratedSourceTest do
     users_source = File.read!(@users_source)
     pages_source = File.read!(@pages_source)
 
-    assert users_source =~ "use Pristine.OpenAPI.Operation"
+    assert users_source =~ "use Pristine.SDK.OpenAPI.Operation"
     assert users_source =~ "NotionSDK.Client.execute_generated_request(client, %{"
     assert pages_source =~ "path_template: \"/v1/pages/{page_id}\""
     refute users_source =~ "NotionSDK.Client.request(client, %{"

@@ -4,13 +4,13 @@ defmodule NotionSDK.ResultClassifier do
   @behaviour Pristine.Ports.ResultClassifier
 
   alias NotionSDK.Retry
-  alias Pristine.Core.{Response, ResultClassification}
+  alias Pristine.SDK.ResultClassification
 
   @upstream_failure_statuses [408, 500, 502, 503, 504]
   @retryable_groups ["notion.read", "notion.delete", "notion.file_upload_send"]
 
   @impl true
-  def classify({:ok, %Response{status: 429, headers: headers}}, endpoint, _context, _opts) do
+  def classify({:ok, %{status: 429, headers: headers}}, endpoint, _context, _opts) do
     retry_after_ms = Retry.parse_retry_after(headers)
 
     ResultClassification.normalize(%{
@@ -22,7 +22,7 @@ defmodule NotionSDK.ResultClassifier do
     })
   end
 
-  def classify({:ok, %Response{status: 409}}, endpoint, _context, _opts) do
+  def classify({:ok, %{status: 409}}, endpoint, _context, _opts) do
     if retry_group(endpoint) == "notion.file_upload_send" do
       ResultClassification.normalize(%{
         retry?: true,
@@ -34,7 +34,7 @@ defmodule NotionSDK.ResultClassifier do
     end
   end
 
-  def classify({:ok, %Response{status: status, headers: headers}}, endpoint, _context, _opts)
+  def classify({:ok, %{status: status, headers: headers}}, endpoint, _context, _opts)
       when status in @upstream_failure_statuses do
     retryable = retry_group(endpoint) in @retryable_groups
 
@@ -46,12 +46,12 @@ defmodule NotionSDK.ResultClassifier do
     })
   end
 
-  def classify({:ok, %Response{status: status}}, endpoint, _context, _opts)
+  def classify({:ok, %{status: status}}, endpoint, _context, _opts)
       when status >= 400 and status < 500 do
     ignore(endpoint, :client_error)
   end
 
-  def classify({:ok, %Response{status: status}}, endpoint, _context, _opts)
+  def classify({:ok, %{status: status}}, endpoint, _context, _opts)
       when status >= 200 and status < 400 do
     success(endpoint, :success)
   end

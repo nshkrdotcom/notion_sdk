@@ -16,7 +16,7 @@ defmodule NotionSDK.CommentObjectResponse do
     * `rich_text`: The rich text content of the comment.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           attachments: [NotionSDK.CommentObjectResponseAttachments.t()] | nil,

@@ -9,7 +9,7 @@ defmodule NotionSDK.ContentWithTableResponse do
     * `table_width`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           has_column_header: boolean,

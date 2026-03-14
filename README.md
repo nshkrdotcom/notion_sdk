@@ -13,6 +13,16 @@
 Elixir SDK for the Notion API, generated from committed upstream Notion
 reference fixtures and executed through the shared `pristine` runtime.
 
+That `pristine` dependency is intentional. `notion_sdk` targets the bounded
+public runtime surface:
+
+- `Pristine.execute_request/3`
+- `Pristine.foundation_context/1`
+- `Pristine.SDK.*`
+
+It does not treat broad `Pristine.Core.*` or `Pristine.OpenAPI.*` internals as
+its SDK contract.
+
 ## What this SDK is
 
 `NotionSDK` is intentionally thin:

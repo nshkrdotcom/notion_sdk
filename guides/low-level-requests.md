@@ -30,6 +30,9 @@ means they inherit:
 - the client's configured retry, telemetry, and transport adapters
 - Notion-specific resource, retry-group, and circuit-breaker inference when you omit those fields
 
+This user-facing escape hatch is still implemented on top of
+`Pristine.execute_request/3` and the `Pristine.SDK.*` boundary.
+
 On non-OAuth paths, raw requests also use the client's configured bearer auth
 unless you override or disable it. OAuth control paths do not inherit bearer
 auth automatically; provide Basic credentials explicitly or use the

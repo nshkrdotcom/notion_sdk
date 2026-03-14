@@ -8,7 +8,7 @@ defmodule NotionSDK.ExternalPageIconRequest do
     * `type`: Always `external`
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           external: NotionSDK.ExternalPageIconRequestExternal.t(),

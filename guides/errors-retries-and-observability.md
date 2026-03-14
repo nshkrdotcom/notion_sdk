@@ -166,11 +166,11 @@ client's Pristine context:
 
 ```elixir
 {:ok, handler_id} =
-  Pristine.Profiles.Foundation.attach_reporter(
+  Pristine.SDK.Profiles.Foundation.attach_reporter(
     client.context,
     reporter: MyApp.NotionTelemetryReporter
   )
 ```
 
 Supervise the reporter itself with
-`Pristine.Profiles.Foundation.reporter_child_spec/1`.
+`Pristine.SDK.Profiles.Foundation.reporter_child_spec/1`.

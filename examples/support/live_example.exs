@@ -584,7 +584,7 @@ defmodule NotionSDK.Examples.Live do
 
   def save_oauth_exchange_token!(response) when is_map(response) do
     path = oauth_exchange_token_path()
-    token = Pristine.OAuth2.Token.from_backend_token(response)
+    token = Pristine.SDK.OAuth2.Token.from_backend_token(response)
 
     case FileTokenSource.put(token, path: path, create_dirs?: true) do
       :ok ->
@@ -680,11 +680,10 @@ defmodule NotionSDK.Examples.Live do
     path = oauth_token_path()
 
     case FileTokenSource.fetch(path: path) do
-      {:ok, %Pristine.OAuth2.Token{access_token: access_token}}
-      when is_binary(access_token) and access_token != "" ->
+      {:ok, %{access_token: access_token}} when is_binary(access_token) and access_token != "" ->
         access_token
 
-      {:ok, %Pristine.OAuth2.Token{}} ->
+      {:ok, %{}} ->
         raise """
         #{path} does not contain an access token
         regenerate it with `mix notion.oauth --save`
@@ -708,11 +707,10 @@ defmodule NotionSDK.Examples.Live do
     path = oauth_exchange_token_path()
 
     case FileTokenSource.fetch(path: path) do
-      {:ok, %Pristine.OAuth2.Token{access_token: access_token}}
-      when is_binary(access_token) and access_token != "" ->
+      {:ok, %{access_token: access_token}} when is_binary(access_token) and access_token != "" ->
         access_token
 
-      {:ok, %Pristine.OAuth2.Token{}} ->
+      {:ok, %{}} ->
         raise """
         #{path} does not contain an access token
         run examples/34_oauth_token_exchange.exs first or set NOTION_OAUTH_REVOKE_TOKEN
@@ -788,7 +786,7 @@ defmodule NotionSDK.Examples.Live do
     end)
   end
 
-  defp format_error(%Pristine.Error{} = error) do
+  defp format_error(%{type: _type, body: _body, response: _response} = error) do
     lines =
       []
       |> append_error_line("type", error.type)
@@ -836,24 +834,22 @@ defmodule NotionSDK.Examples.Live do
     lines ++ ["#{label}: #{inspect(value, pretty: true, limit: :infinity)}"]
   end
 
-  defp pristine_error_code(%Pristine.Error{body: %{"code" => code}}) when is_binary(code),
+  defp pristine_error_code(%{body: %{"code" => code}}) when is_binary(code),
     do: code
 
   defp pristine_error_code(_error), do: nil
 
-  defp pristine_error_detail(%Pristine.Error{message: message, body: %{"message" => detail}})
+  defp pristine_error_detail(%{message: message, body: %{"message" => detail}})
        when is_binary(detail) and detail != "" and detail != message,
        do: detail
 
   defp pristine_error_detail(_error), do: nil
 
-  defp pristine_error_request_id(%Pristine.Error{body: %{"request_id" => request_id}})
+  defp pristine_error_request_id(%{body: %{"request_id" => request_id}})
        when is_binary(request_id),
        do: request_id
 
-  defp pristine_error_request_id(%Pristine.Error{
-         response: %Pristine.Core.Response{headers: headers}
-       })
+  defp pristine_error_request_id(%{response: %{headers: headers}})
        when is_map(headers) do
     headers["x-notion-request-id"] ||
       headers["x-request-id"] ||
@@ -863,9 +859,7 @@ defmodule NotionSDK.Examples.Live do
 
   defp pristine_error_request_id(_error), do: nil
 
-  defp pristine_error_request_url(%Pristine.Error{
-         response: %Pristine.Core.Response{metadata: metadata}
-       })
+  defp pristine_error_request_url(%{response: %{metadata: metadata}})
        when is_map(metadata) do
     Map.get(metadata, :url) || Map.get(metadata, "url")
   end

@@ -8,7 +8,7 @@ defmodule NotionSDK.FilePageIconResponse do
     * `type`: Type of icon. In this case, a file.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{file: NotionSDK.InternalFileResponse.t(), type: String.t()}
 

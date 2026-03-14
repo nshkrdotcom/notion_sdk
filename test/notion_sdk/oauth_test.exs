@@ -2,8 +2,8 @@ defmodule NotionSDK.OAuthTest do
   use ExUnit.Case, async: true
 
   alias NotionSDK.TestTransport
-  alias Pristine.Core.Response
-  alias Pristine.OAuth2.Token
+  alias Pristine.SDK.OAuth2.Token
+  alias Pristine.SDK.Response
 
   test "builds Notion authorization requests programmatically with owner=user by default" do
     assert {:ok, request} =
@@ -21,17 +21,17 @@ defmodule NotionSDK.OAuthTest do
   end
 
   test "fails clearly when redirect_uri is missing from authorization requests" do
-    assert {:error, %Pristine.OAuth2.Error{reason: :missing_redirect_uri}} =
+    assert {:error, %{reason: :missing_redirect_uri}} =
              NotionSDK.OAuth.authorization_request(client_id: "client-id")
 
-    assert {:error, %Pristine.OAuth2.Error{reason: :missing_redirect_uri}} =
+    assert {:error, %{reason: :missing_redirect_uri}} =
              NotionSDK.OAuth.authorize_url(client_id: "client-id", state: "state-123")
   end
 
   test "exchanges and refreshes Notion OAuth tokens programmatically" do
     response =
       {:ok,
-       %Response{
+       Response.new(
          status: 200,
          headers: %{"content-type" => "application/json"},
          body:
@@ -40,9 +40,9 @@ defmodule NotionSDK.OAuthTest do
              "refresh_token" => "refresh_access",
              "token_type" => "bearer"
            })
-       }}
+       )}
 
-    assert {:ok, %Token{access_token: "secret_access"}} =
+    assert {:ok, exchange_token} =
              NotionSDK.OAuth.exchange_code("auth-code",
                client_id: "client-id",
                client_secret: "client-secret",
@@ -50,6 +50,9 @@ defmodule NotionSDK.OAuthTest do
                transport: TestTransport,
                transport_opts: [test_pid: self(), response: response]
              )
+
+    assert exchange_token.__struct__ == Token.from_map(%{}).__struct__
+    assert exchange_token.access_token == "secret_access"
 
     assert_receive {:transport_request, exchange_request, _context}
 
@@ -59,13 +62,16 @@ defmodule NotionSDK.OAuthTest do
     refute exchange_request.body =~ "client_id"
     refute exchange_request.body =~ "client_secret"
 
-    assert {:ok, %Token{access_token: "secret_access"}} =
+    assert {:ok, refresh_token} =
              NotionSDK.OAuth.refresh_token("refresh_access",
                client_id: "client-id",
                client_secret: "client-secret",
                transport: TestTransport,
                transport_opts: [test_pid: self(), response: response]
              )
+
+    assert refresh_token.__struct__ == Token.from_map(%{}).__struct__
+    assert refresh_token.access_token == "secret_access"
 
     assert_receive {:transport_request, refresh_request, _context}
     assert refresh_request.body =~ "refresh_token"

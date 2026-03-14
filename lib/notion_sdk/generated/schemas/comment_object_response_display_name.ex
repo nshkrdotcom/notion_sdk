@@ -10,7 +10,7 @@ defmodule NotionSDK.CommentObjectResponseDisplayName do
     * `type`: One of: `custom`, `user`, `integration`
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{resolved_name: String.t() | nil, type: String.t()}
 

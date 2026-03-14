@@ -7,7 +7,7 @@ defmodule NotionSDK.ExternalPageIconRequestExternal do
     * `url`: The URL of the external file.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{url: String.t()}
 

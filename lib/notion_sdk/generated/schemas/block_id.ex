@@ -8,7 +8,7 @@ defmodule NotionSDK.BlockId do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{block_id: String.t(), type: String.t() | nil}
 

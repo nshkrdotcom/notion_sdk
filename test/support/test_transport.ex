@@ -3,10 +3,11 @@ defmodule NotionSDK.TestTransport do
 
   @behaviour Pristine.Ports.Transport
 
-  alias Pristine.Core.{Context, Request, Response}
+  alias Pristine.SDK.Response
 
   @impl true
-  def send(%Request{} = request, %Context{transport_opts: transport_opts} = context) do
+  def send(request, %{transport_opts: transport_opts} = context)
+      when is_map(request) and is_map(context) do
     if test_pid = Keyword.get(transport_opts, :test_pid) do
       Kernel.send(test_pid, {:transport_request, request, context})
     end
@@ -18,6 +19,6 @@ defmodule NotionSDK.TestTransport do
   end
 
   defp default_response do
-    {:ok, %Response{status: 200, headers: %{}, body: "{}"}}
+    {:ok, Response.new(status: 200, headers: %{}, body: "{}")}
   end
 end

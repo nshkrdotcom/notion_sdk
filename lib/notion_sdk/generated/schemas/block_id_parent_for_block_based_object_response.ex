@@ -8,7 +8,7 @@ defmodule NotionSDK.BlockIdParentForBlockBasedObjectResponse do
     * `type`: The parent type.
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{block_id: String.t(), type: String.t()}
 

@@ -2,7 +2,7 @@ defmodule NotionSDK.ErrorTest do
   use ExUnit.Case, async: true
 
   alias NotionSDK.Error
-  alias Pristine.Core.Response
+  alias Pristine.SDK.Response
 
   describe "from_response/3" do
     test "maps Notion API codes from the body" do
@@ -143,6 +143,6 @@ defmodule NotionSDK.ErrorTest do
   end
 
   defp response(status, headers \\ %{}) do
-    %Response{status: status, headers: headers, body: nil}
+    Response.new(status: status, headers: headers, body: nil)
   end
 end

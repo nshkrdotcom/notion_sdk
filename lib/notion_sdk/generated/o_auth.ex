@@ -8,10 +8,10 @@ defmodule NotionSDK.OAuth do
     * Revoke a token
     * Exchange an authorization code for an access and refresh token
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
-  use Pristine.OpenAPI.Operation
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+  use Pristine.SDK.OpenAPI.Operation
 
-  alias Pristine.OAuth2, as: OAuth2
+  alias Pristine.SDK.OAuth2, as: OAuth2
 
   @oauth_client_opts [
     :base_url,

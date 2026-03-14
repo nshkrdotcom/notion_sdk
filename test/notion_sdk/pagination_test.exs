@@ -4,7 +4,7 @@ defmodule NotionSDK.PaginationTest do
   alias NotionSDK.Client
   alias NotionSDK.Pagination
   alias NotionSDK.TestTransport
-  alias Pristine.Core.Response
+  alias Pristine.SDK.Response
 
   describe "iterate_paginated_api/3 and collect_paginated_api/3" do
     test "advance start_cursor across pages" do
@@ -99,7 +99,7 @@ defmodule NotionSDK.PaginationTest do
                   }
                 end
 
-              {:ok, %Response{status: 200, headers: %{}, body: Jason.encode!(body)}}
+              {:ok, Response.new(status: 200, headers: %{}, body: Jason.encode!(body))}
             end
           ]
         )
@@ -199,7 +199,7 @@ defmodule NotionSDK.PaginationTest do
                   }
                 end
 
-              {:ok, %Response{status: 200, headers: %{}, body: Jason.encode!(body)}}
+              {:ok, Response.new(status: 200, headers: %{}, body: Jason.encode!(body))}
             end
           ]
         )

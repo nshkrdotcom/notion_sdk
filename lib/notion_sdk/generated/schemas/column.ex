@@ -9,7 +9,7 @@ defmodule NotionSDK.Column do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           column: NotionSDK.ColumnWithChildrenRequest.t(),

@@ -7,7 +7,7 @@ defmodule NotionSDK.Paragraph do
     * Paragraph
     * Paragraph.t_paragraph
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           object: String.t() | nil,

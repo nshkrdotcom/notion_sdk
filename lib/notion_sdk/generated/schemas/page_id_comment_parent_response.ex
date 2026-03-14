@@ -8,7 +8,7 @@ defmodule NotionSDK.PageIdCommentParentResponse do
     * `type`: Always `page_id`
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{page_id: String.t(), type: String.t()}
 

@@ -3,7 +3,8 @@ defmodule NotionSDK.ClientTest do
 
   alias NotionSDK.Client
   alias NotionSDK.TestTransport
-  alias Pristine.Core.Response
+  alias Pristine.SDK.OAuth2.Token, as: OAuth2Token
+  alias Pristine.SDK.Response
 
   @moduletag :tmp_dir
 
@@ -289,7 +290,7 @@ defmodule NotionSDK.ClientTest do
           oauth2: [
             token_source:
               {Pristine.Adapters.TokenSource.Static,
-               token: %Pristine.OAuth2.Token{access_token: "oauth-access-token"}}
+               token: OAuth2Token.from_map(%{access_token: "oauth-access-token"})}
           ],
           transport: TestTransport,
           transport_opts: [test_pid: self(), response: {:error, :boom}]
@@ -319,7 +320,7 @@ defmodule NotionSDK.ClientTest do
           oauth2: [
             token_source:
               {Pristine.Adapters.TokenSource.Static,
-               token: %Pristine.OAuth2.Token{access_token: "oauth-access-token"}}
+               token: OAuth2Token.from_map(%{access_token: "oauth-access-token"})}
           ],
           transport: TestTransport,
           transport_opts: [test_pid: self(), response: {:error, :boom}]
@@ -337,7 +338,7 @@ defmodule NotionSDK.ClientTest do
 
       assert :ok =
                Pristine.Adapters.TokenSource.File.put(
-                 %Pristine.OAuth2.Token{access_token: "oauth-file-token"},
+                 OAuth2Token.from_map(%{access_token: "oauth-file-token"}),
                  path: path
                )
 
@@ -364,10 +365,10 @@ defmodule NotionSDK.ClientTest do
 
       assert :ok =
                Pristine.Adapters.TokenSource.File.put(
-                 %Pristine.OAuth2.Token{
+                 OAuth2Token.from_map(%{
                    access_token: "oauth-file-token-old",
                    refresh_token: "refresh-old"
-                 },
+                 }),
                  path: path
                )
 
@@ -388,10 +389,10 @@ defmodule NotionSDK.ClientTest do
 
       assert :ok =
                Pristine.Adapters.TokenSource.File.put(
-                 %Pristine.OAuth2.Token{
+                 OAuth2Token.from_map(%{
                    access_token: "oauth-file-token-new",
                    refresh_token: "refresh-rotated"
-                 },
+                 }),
                  path: path
                )
 
@@ -1364,11 +1365,11 @@ defmodule NotionSDK.ClientTest do
   end
 
   defp ok_response(body, headers \\ %{}) do
-    {:ok, %Response{status: 200, headers: headers, body: Jason.encode!(body)}}
+    {:ok, Response.new(status: 200, headers: headers, body: Jason.encode!(body))}
   end
 
   defp error_response(status, body, headers \\ %{}) do
-    {:ok, %Response{status: status, headers: headers, body: Jason.encode!(body)}}
+    {:ok, Response.new(status: status, headers: headers, body: Jason.encode!(body))}
   end
 
   defp page_response_body do

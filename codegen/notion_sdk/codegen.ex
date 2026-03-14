@@ -105,7 +105,7 @@ defmodule NotionSDK.Codegen do
         base_module: NotionSDK,
         output_dir: paths.generated_dir,
         default_client: NotionSDK.Client,
-        operation_use: Pristine.OpenAPI.Operation,
+        operation_use: Pristine.SDK.OpenAPI.Operation,
         error_type: NotionSDK.Error,
         processor: NotionSDK.Codegen.Processor,
         renderer: NotionSDK.Codegen.Renderer,

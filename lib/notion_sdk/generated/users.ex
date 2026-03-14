@@ -8,8 +8,8 @@ defmodule NotionSDK.Users do
     * Retrieve your token's bot user
     * Retrieve a user
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
-  use Pristine.OpenAPI.Operation
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+  use Pristine.SDK.OpenAPI.Operation
 
   @doc """
   Retrieve your token's bot user

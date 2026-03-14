@@ -9,7 +9,7 @@ defmodule NotionSDK.TimestampCreatedTimeFilter do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{created_time: map, timestamp: String.t(), type: String.t() | nil}
 

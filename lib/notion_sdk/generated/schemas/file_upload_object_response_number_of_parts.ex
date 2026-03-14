@@ -8,7 +8,7 @@ defmodule NotionSDK.FileUploadObjectResponseNumberOfParts do
     * `total`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{sent: integer, total: integer}
 

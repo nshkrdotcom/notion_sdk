@@ -17,7 +17,7 @@ defmodule NotionSDK.ChildDatabaseBlockObjectResponse do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           child_database: NotionSDK.TitleObjectResponse.t(),

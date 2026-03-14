@@ -9,7 +9,7 @@ defmodule NotionSDK.TranscriptionCalendarEventResponse do
     * `start_time`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           attendees: [String.t()] | nil,

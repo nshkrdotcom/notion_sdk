@@ -9,7 +9,7 @@ defmodule NotionSDK.PhoneNumber do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{phone_number: map, property: String.t(), type: String.t() | nil}
 

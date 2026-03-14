@@ -18,6 +18,9 @@ mix notion.refresh --notion-docs-root /path/to/notion_docs --js-sdk-root /path/t
 parity inventory in `priv/upstream/parity_inventory.json`. It does not require
 a sibling `notion_docs` checkout when those fixtures are already present.
 
+The generated runtime surface targets the hardened `Pristine.SDK.*` namespace
+plus `Pristine.execute_request/3`, not broad `pristine` internals.
+
 ## What `mix notion.refresh` does
 
 `NotionSDK.Refresh.run!/1` performs four major steps:

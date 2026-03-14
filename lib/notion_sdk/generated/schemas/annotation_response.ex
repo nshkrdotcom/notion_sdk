@@ -12,7 +12,7 @@ defmodule NotionSDK.AnnotationResponse do
     * `underline`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           bold: boolean,

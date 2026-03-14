@@ -3,9 +3,8 @@ defmodule NotionSDK.Client do
   Thin Notion client configuration layered on top of Pristine runtime execution.
   """
 
-  alias Pristine.Adapters.Auth.{Bearer, OAuth2}
-  alias Pristine.Core.Context
-  alias Pristine.OpenAPI.Client, as: OpenAPIClient
+  alias Pristine.SDK.Context
+  alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient
 
   @default_base_url "https://api.notion.com"
   @default_log_level :warn
@@ -273,13 +272,13 @@ defmodule NotionSDK.Client do
     )
   end
 
-  defp default_auth(auth, nil) when is_binary(auth), do: [Bearer.new(auth)]
+  defp default_auth(auth, nil) when is_binary(auth), do: [bearer_auth(auth)]
   defp default_auth(nil, nil), do: []
 
   defp default_auth(auth, oauth2) when is_list(oauth2) do
     %{
       "basicAuth" => [],
-      "bearerAuth" => [OAuth2.new(oauth2)],
+      "bearerAuth" => [oauth2_auth(oauth2)],
       "default" => default_auth(auth, nil)
     }
   end
@@ -369,6 +368,9 @@ defmodule NotionSDK.Client do
   end
 
   defp oauth_client_credentials(_params), do: nil
+
+  defp bearer_auth(token), do: {Pristine.Adapters.Auth.Bearer, token: token}
+  defp oauth2_auth(opts) when is_list(opts), do: {Pristine.Adapters.Auth.OAuth2, opts}
 
   defp normalize_request_auth(%{} = auth) do
     Map.new(auth, fn {key, value} -> {to_string(key), value} end)

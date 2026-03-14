@@ -2,6 +2,8 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
   use ExUnit.Case, async: false
 
   alias Mix.Tasks.Notion.Oauth, as: OAuthTask
+  alias Pristine.SDK.Context, as: SDKContext
+  alias Pristine.SDK.OAuth2.Token, as: SDKToken
 
   @moduletag :tmp_dir
 
@@ -12,7 +14,7 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
       Process.get(
         :notion_oauth_task_result,
         {:ok,
-         %Pristine.OAuth2.Token{
+         SDKToken.from_map(%{
            access_token: "secret_access",
            refresh_token: "refresh_access",
            other_params: %{
@@ -20,7 +22,7 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
              "workspace_id" => "workspace-123",
              "workspace_name" => "Example Workspace"
            }
-         }}
+         })}
       )
     end
   end
@@ -35,10 +37,10 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
       Process.get(
         :notion_oauth_refresh_result,
         {:ok,
-         %Pristine.OAuth2.Token{
+         SDKToken.from_map(%{
            access_token: "refreshed_access",
            refresh_token: "refresh_rotated"
-         }}
+         })}
       )
     end
   end
@@ -166,22 +168,22 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
 
     assert :ok =
              Pristine.Adapters.TokenSource.File.put(
-               %Pristine.OAuth2.Token{
+               SDKToken.from_map(%{
                  access_token: "secret_access",
                  refresh_token: "refresh_access",
                  other_params: %{"workspace_name" => "Example Workspace"}
-               },
+               }),
                path: path
              )
 
     Process.put(
       :notion_oauth_refresh_result,
       {:ok,
-       %Pristine.OAuth2.Token{
+       SDKToken.from_map(%{
          access_token: "refreshed_access",
          refresh_token: "refresh_rotated",
          other_params: %{"workspace_id" => "workspace-123"}
-       }}
+       })}
     )
 
     OAuthTask.run(["refresh", "--path=#{path}"])
@@ -190,7 +192,7 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
     assert provider.name == "notion"
     assert opts[:client_id] == "client-id"
     assert opts[:client_secret] == "client-secret"
-    assert match?(%Pristine.Core.Context{}, opts[:context])
+    assert opts[:context].__struct__ == SDKContext.new().__struct__
 
     assert_receive {:mix_shell, :info, ["Updated token file: " <> ^path]}
     assert_receive {:mix_shell, :info, ["Access token:"]}
@@ -203,9 +205,10 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
     assert_receive {:mix_shell, :info, ["export NOTION_OAUTH_REFRESH_TOKEN=\"refresh_rotated\""]}
     assert_receive {:mix_shell, :info, ["export NOTION_OAUTH_TOKEN_PATH=\"" <> ^path <> "\""]}
 
-    assert {:ok, %Pristine.OAuth2.Token{} = token} =
+    assert {:ok, token} =
              Pristine.Adapters.TokenSource.File.fetch(path: path)
 
+    assert token.__struct__ == SDKToken.from_map(%{}).__struct__
     assert token.access_token == "refreshed_access"
     assert token.refresh_token == "refresh_rotated"
 
@@ -222,7 +225,7 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
 
     assert :ok =
              Pristine.Adapters.TokenSource.File.put(
-               %Pristine.OAuth2.Token{access_token: "secret_access"},
+               SDKToken.from_map(%{access_token: "secret_access"}),
                path: path
              )
 

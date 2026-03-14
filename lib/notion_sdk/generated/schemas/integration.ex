@@ -7,7 +7,7 @@ defmodule NotionSDK.Integration do
     * `type`: Always `integration`
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{type: String.t()}
 

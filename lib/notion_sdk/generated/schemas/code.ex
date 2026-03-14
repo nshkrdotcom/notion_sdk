@@ -7,7 +7,7 @@ defmodule NotionSDK.Code do
     * Code
     * Code.t_code
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           code: NotionSDK.Code.t_code() | NotionSDK.CodeCode.t(),

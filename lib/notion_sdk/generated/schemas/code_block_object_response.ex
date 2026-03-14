@@ -17,7 +17,7 @@ defmodule NotionSDK.CodeBlockObjectResponse do
     * `type`: required
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
           code: NotionSDK.CodeBlockObjectResponseCode.t(),

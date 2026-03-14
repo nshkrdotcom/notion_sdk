@@ -9,7 +9,7 @@ defmodule NotionSDK.ColumnList do
     * `type`: optional
 
   """
-  alias Pristine.OpenAPI.Runtime, as: OpenAPIRuntime
+  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
   @type t :: %{
           column_list: NotionSDK.ColumnListRequest.t(),
