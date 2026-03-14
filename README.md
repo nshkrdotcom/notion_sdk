@@ -171,6 +171,10 @@ The vendored JS SDK README documents both `2025-09-03` and `2026-03-11`.
 contract is narrower: `2025-09-03` by default, plus additive newer schema
 concepts that are already present in the committed generated surface.
 
+That compatibility stance is also encoded machine-readably in
+`priv/upstream/version_contract.json`, which is copied into the generated
+manifest artifacts.
+
 That generated surface currently includes newer concepts such as:
 
 - block append `position` with `after_block`, `start`, and `end`

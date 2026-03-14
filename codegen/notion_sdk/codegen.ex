@@ -4,6 +4,7 @@ defmodule NotionSDK.Codegen do
   """
 
   alias Jason.OrderedObject
+  alias NotionSDK.CompatibilityContract
   alias NotionSDK.Codegen.Source.Extractor
   alias NotionSDK.Codegen.Source.PageContext
   alias NotionSDK.ParityInventory
@@ -268,7 +269,10 @@ defmodule NotionSDK.Codegen do
   defp normalize_context_key(_artifact), do: nil
 
   defp persist_artifacts!(state, paths) do
+    compatibility = CompatibilityContract.load!(project_root: paths.project_root)
+
     summary = %{
+      compatibility: compatibility,
       profile: Atom.to_string(profile()),
       operation_count: length(state.operations),
       schema_count: map_size(state.schemas),
@@ -295,7 +299,7 @@ defmodule NotionSDK.Codegen do
 
     File.write!(
       Path.join(paths.generated_artifact_dir, "docs_manifest.json"),
-      ordered_json!(state.docs_manifest)
+      ordered_json!(Map.put(state.docs_manifest, :compatibility, compatibility))
     )
   end
 

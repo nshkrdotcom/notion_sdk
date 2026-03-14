@@ -277,6 +277,65 @@
     "/home/home/p/g/n/notion_sdk/lib/notion_sdk/generated/search.ex",
     "/home/home/p/g/n/notion_sdk/lib/notion_sdk/generated/users.ex"
   ],
+  "compatibility": {
+    "default_notion_version": "2025-09-03",
+    "known_seams": [
+      {
+        "compatibility_notes": "Ordering hints under position are newer-version concepts. Keep notion_version explicit when using append ordering beyond the baseline header.",
+        "field": "position",
+        "id": "blocks_append_children_position",
+        "introduced_in": "2026-03-11",
+        "kind": "request_field",
+        "minimum_api_version": "2026-03-11",
+        "path": "/v1/blocks/{block_id}/children",
+        "surface": "NotionSDK.Blocks.append_children/2"
+      },
+      {
+        "compatibility_notes": "Page creation ordering hints are opt-in newer semantics and should be paired with an explicit newer Notion-Version header.",
+        "field": "position",
+        "id": "pages_create_position",
+        "introduced_in": "2026-03-11",
+        "kind": "request_field",
+        "minimum_api_version": "2026-03-11",
+        "path": "/v1/pages",
+        "surface": "NotionSDK.Pages.create/2"
+      },
+      {
+        "compatibility_notes": "Modern trash-state fields are available in the committed surface, but callers should treat them as newer additive response data.",
+        "field": "in_trash",
+        "id": "modern_response_in_trash",
+        "introduced_in": "2026-03-11",
+        "kind": "response_field",
+        "minimum_api_version": "2026-03-11",
+        "surface": "Modern page, block, database, data source, and file upload responses"
+      },
+      {
+        "compatibility_notes": "Meeting notes is the newer name for the transcription block response family and should be treated as an opt-in newer concept.",
+        "field": "meeting_notes",
+        "id": "meeting_notes_block",
+        "introduced_in": "2026-03-11",
+        "kind": "response_field",
+        "minimum_api_version": "2026-03-11",
+        "renamed_from": "transcription",
+        "surface": "NotionSDK.MeetingNotesBlockObjectResponse"
+      },
+      {
+        "compatibility_notes": "The databases namespace remains in the SDK as compatibility surface, but new work should prefer the data source APIs under the 2025-09-03 baseline.",
+        "deprecated_in": "2025-09-03",
+        "id": "databases_data_sources_split",
+        "kind": "namespace_policy",
+        "minimum_api_version": "2025-09-03",
+        "surface": "NotionSDK.Databases and NotionSDK.DataSources"
+      }
+    ],
+    "opt_in_versions": [
+      "2026-03-11"
+    ],
+    "policy": {
+      "mode": "baseline_plus_additive_opt_in",
+      "summary": "Keep 2025-09-03 as the default request header and require explicit opt-in for newer additive version seams."
+    }
+  },
   "operation_count": 35,
   "operation_modules": [
     "Blocks",

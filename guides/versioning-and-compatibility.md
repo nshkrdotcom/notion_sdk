@@ -6,6 +6,10 @@
 That is the repo's public default today. It is narrower than saying "this SDK
 defaults to every newest upstream version automatically".
 
+The committed machine-readable contract for that stance lives in
+`priv/upstream/version_contract.json` and is copied into
+`priv/generated/manifest.json` and `priv/generated/docs_manifest.json`.
+
 ## Current contract
 
 The compatibility contract in this repo has three layers:
@@ -55,7 +59,22 @@ The safer statement is:
 
 - `2025-09-03` is the default header and the main compatibility baseline
 - newer additive concepts already present in committed generated code are available when you choose to use them
-- if you rely on those newer concepts, set the version header intentionally and test the affected flows in your workspace
+- if you rely on those newer concepts, use the explicit opt-in path: set `notion_version: "2026-03-11"` (or a later reviewed value), then test the affected flows in your workspace
+
+## Machine-readable version seams
+
+`priv/upstream/version_contract.json` records the known compatibility seams that
+cross the default baseline today.
+
+That artifact currently calls out:
+
+- `position` on block append and page create as newer request-field seams
+- `in_trash` and `meeting_notes` as newer additive response seams
+- the databases/data-sources split as a compatibility namespace policy under `2025-09-03`
+
+Treat that file as the generated-artifact companion to this guide. If you
+change the public version stance, update the contract artifact and the guide in
+the same commit.
 
 ## Databases vs data sources
 
@@ -75,6 +94,7 @@ and generated docs.
 - stay on the default version unless you have a concrete reason to change it
 - keep version overrides close to the call sites or client construction that needs them
 - when using newer concepts such as `position`, test both the request shape and the resulting behavior in a disposable workspace
+- treat `priv/upstream/version_contract.json` as the machine-readable source of truth for known version seams
 - treat generated module docs as the source of truth for exact request keys and response unions
 
 ## Related guides
