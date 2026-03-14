@@ -228,7 +228,9 @@ NotionSDK.OAuth.introspect(client, %{
 })
 ```
 
-These overrides are passed through to the underlying `Pristine.execute/5` call instead of mutating the client context, so bearer overrides, Basic overrides, and `auth: false` / `auth: []` all stay request-scoped.
+These overrides are passed through to the underlying `Pristine.execute_request/3`
+call instead of mutating the client context, so bearer overrides, Basic
+overrides, and `auth: false` / `auth: []` all stay request-scoped.
 
 Remove the client's default auth from one request with `false` or `[]`:
 
