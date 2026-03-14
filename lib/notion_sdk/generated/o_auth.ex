@@ -4,141 +4,140 @@ defmodule NotionSDK.OAuth do
 
   ## Operations
 
-    * Introspect a token
-    * Revoke a token
-    * Exchange an authorization code for an access and refresh token
+    * post `/v1/oauth/introspect`
+    * post `/v1/oauth/revoke`
+    * post `/v1/oauth/token`
   """
-  alias NotionSDK.GeneratedOAuth, as: OAuthRuntime
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
+
+  alias NotionSDK.GeneratedOAuth, as: OAuthRuntime
   alias Pristine.OAuth2, as: OAuth2
 
-  (
-    @oauth_client_opts [
-      :base_url,
-      :finch,
-      :foundation,
-      :log_level,
-      :logger,
-      :notion_version,
-      :retry,
-      :timeout_ms,
-      :transport,
-      :transport_opts,
-      :typed_responses,
-      :user_agent
-    ]
-    @spec provider() :: OAuth2.Provider.t()
-    def provider do
-      OAuthRuntime.provider_new(
-        name: "notion",
-        flow: :authorization_code,
-        site: "https://api.notion.com",
-        authorize_url: "/v1/oauth/authorize",
-        token_url: "/v1/oauth/token",
-        revocation_url: "/v1/oauth/revoke",
-        introspection_url: "/v1/oauth/introspect",
-        client_auth_method: :basic,
-        token_method: :post,
-        token_content_type: "application/json"
-      )
+  @oauth_client_opts [
+    :base_url,
+    :finch,
+    :foundation,
+    :log_level,
+    :logger,
+    :notion_version,
+    :retry,
+    :timeout_ms,
+    :transport,
+    :transport_opts,
+    :typed_responses,
+    :user_agent
+  ]
+  @spec provider() :: OAuth2.Provider.t()
+  def provider do
+    OAuthRuntime.provider_new(
+      name: "notion",
+      flow: :authorization_code,
+      site: "https://api.notion.com",
+      authorize_url: "/v1/oauth/authorize",
+      token_url: "/v1/oauth/token",
+      revocation_url: "/v1/oauth/revoke",
+      introspection_url: "/v1/oauth/introspect",
+      client_auth_method: :basic,
+      token_method: :post,
+      token_content_type: "application/json"
+    )
+  end
+
+  @spec authorization_request(keyword()) ::
+          {:ok, OAuth2.AuthorizationRequest.t()} | {:error, OAuth2.Error.t()}
+  def authorization_request(opts \\ []) when is_list(opts) do
+    with {:ok, authorization_opts} <- authorization_opts(opts) do
+      OAuthRuntime.authorization_request(provider(), authorization_opts)
     end
+  end
 
-    @spec authorization_request(keyword()) ::
-            {:ok, OAuth2.AuthorizationRequest.t()} | {:error, OAuth2.Error.t()}
-    def authorization_request(opts \\ []) when is_list(opts) do
-      with {:ok, authorization_opts} <- authorization_opts(opts) do
-        provider() |> OAuthRuntime.authorization_request(authorization_opts)
-      end
+  @spec authorize_url(keyword()) :: {:ok, String.t()} | {:error, OAuth2.Error.t()}
+  def authorize_url(opts \\ []) when is_list(opts) do
+    with {:ok, authorization_opts} <- authorization_opts(opts) do
+      OAuthRuntime.authorize_url(provider(), authorization_opts)
     end
+  end
 
-    @spec authorize_url(keyword()) :: {:ok, String.t()} | {:error, OAuth2.Error.t()}
-    def authorize_url(opts \\ []) when is_list(opts) do
-      with {:ok, authorization_opts} <- authorization_opts(opts) do
-        provider() |> OAuthRuntime.authorize_url(authorization_opts)
-      end
-    end
+  @spec exchange_code(String.t(), keyword()) ::
+          {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
+  def exchange_code(code, opts \\ []) when is_binary(code) and is_list(opts) do
+    OAuthRuntime.exchange_code(provider(), code, oauth_runtime_opts(opts))
+  end
 
-    @spec exchange_code(String.t(), keyword()) ::
-            {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
-    def exchange_code(code, opts \\ []) when is_binary(code) and is_list(opts) do
-      provider() |> OAuthRuntime.exchange_code(code, oauth_runtime_opts(opts))
-    end
+  @spec refresh_token(String.t(), keyword()) ::
+          {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
+  def refresh_token(refresh_token, opts \\ []) when is_binary(refresh_token) and is_list(opts) do
+    OAuthRuntime.refresh_token(provider(), refresh_token, oauth_runtime_opts(opts))
+  end
 
-    @spec refresh_token(String.t(), keyword()) ::
-            {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
-    def refresh_token(refresh_token, opts \\ [])
-        when is_binary(refresh_token) and is_list(opts) do
-      provider() |> OAuthRuntime.refresh_token(refresh_token, oauth_runtime_opts(opts))
-    end
-
-    defp authorization_opts(opts) do
-      params =
-        opts
-        |> Keyword.get(:params, [])
-        |> normalize_keyword()
-        |> maybe_put_owner(Keyword.get(opts, :owner))
-
-      case Keyword.get(opts, :redirect_uri) do
-        redirect_uri when is_binary(redirect_uri) and redirect_uri != "" ->
-          {:ok, opts |> Keyword.put(:params, params) |> Keyword.put(:redirect_uri, redirect_uri)}
-
-        _other ->
-          {:error, OAuthRuntime.error_new(:missing_redirect_uri, provider: provider().name)}
-      end
-    end
-
-    defp oauth_runtime_opts(opts) do
-      client = Keyword.get(opts, :client) || NotionSDK.Client.new(client_opts(opts))
-
-      token_params =
-        []
-        |> maybe_put(:external_account, Keyword.get(opts, :external_account))
-        |> Keyword.merge(opts |> Keyword.get(:token_params, []) |> normalize_keyword())
-
-      []
-      |> Keyword.put(:context, client.context)
-      |> maybe_put(:client_id, Keyword.get(opts, :client_id))
-      |> maybe_put(:client_secret, Keyword.get(opts, :client_secret))
-      |> maybe_put(:redirect_uri, Keyword.get(opts, :redirect_uri))
-      |> maybe_put(:token_params, token_params)
-    end
-
-    defp client_opts(opts) do
-      Keyword.take(opts, @oauth_client_opts)
-    end
-
-    defp maybe_put_owner(params, value) when is_binary(value) and value != "" do
-      Keyword.put(params, :owner, value)
-    end
-
-    defp maybe_put_owner(params, _value) do
-      Keyword.put_new(params, :owner, "user")
-    end
-
-    defp maybe_put(opts, _key, nil) do
+  defp authorization_opts(opts) do
+    params =
       opts
-    end
+      |> Keyword.get(:params, [])
+      |> normalize_keyword()
+      |> maybe_put_owner(Keyword.get(opts, :owner))
 
-    defp maybe_put(opts, _key, []) do
-      opts
-    end
+    case Keyword.get(opts, :redirect_uri) do
+      redirect_uri when is_binary(redirect_uri) and redirect_uri != "" ->
+        {:ok, opts |> Keyword.put(:params, params) |> Keyword.put(:redirect_uri, redirect_uri)}
 
-    defp maybe_put(opts, key, value) do
-      Keyword.put(opts, key, value)
+      _other ->
+        {:error, OAuthRuntime.error_new(:missing_redirect_uri, provider: provider().name)}
     end
+  end
 
-    defp normalize_keyword(value) when is_list(value) do
-      value
-    end
+  defp oauth_runtime_opts(opts) do
+    client = Keyword.get(opts, :client) || NotionSDK.Client.new(client_opts(opts))
 
-    defp normalize_keyword(value) when is_map(value) do
-      Enum.into(value, [])
-    end
-
-    defp normalize_keyword(_value) do
+    token_params =
       []
-    end
-  )
+      |> maybe_put(:external_account, Keyword.get(opts, :external_account))
+      |> Keyword.merge(opts |> Keyword.get(:token_params, []) |> normalize_keyword())
+
+    []
+    |> Keyword.put(:context, client.context)
+    |> maybe_put(:client_id, Keyword.get(opts, :client_id))
+    |> maybe_put(:client_secret, Keyword.get(opts, :client_secret))
+    |> maybe_put(:redirect_uri, Keyword.get(opts, :redirect_uri))
+    |> maybe_put(:token_params, token_params)
+  end
+
+  defp client_opts(opts) do
+    Keyword.take(opts, @oauth_client_opts)
+  end
+
+  defp maybe_put_owner(params, value) when is_binary(value) and value != "" do
+    Keyword.put(params, :owner, value)
+  end
+
+  defp maybe_put_owner(params, _value) do
+    Keyword.put_new(params, :owner, "user")
+  end
+
+  defp maybe_put(opts, _key, nil) do
+    opts
+  end
+
+  defp maybe_put(opts, _key, []) do
+    opts
+  end
+
+  defp maybe_put(opts, key, value) do
+    Keyword.put(opts, key, value)
+  end
+
+  defp normalize_keyword(value) when is_list(value) do
+    value
+  end
+
+  defp normalize_keyword(value) when is_map(value) do
+    Enum.into(value, [])
+  end
+
+  defp normalize_keyword(_value) do
+    []
+  end
 
   @type introspect_200_json_resp :: %{
           active: boolean,
@@ -148,7 +147,7 @@ defmodule NotionSDK.OAuth do
         }
 
   @doc """
-  Introspect a token
+  post `/v1/oauth/introspect`
 
   ## Source Context
   Introspect a token
@@ -160,14 +159,6 @@ defmodule NotionSDK.OAuth do
 
   ## Request Body
   **Content Types**: `application/json`
-
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `500` (application/json)
 
   ## Security
 
@@ -198,7 +189,7 @@ defmodule NotionSDK.OAuth do
           {:ok, NotionSDK.OAuth.introspect_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def introspect(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(NotionSDK.Client.drop_oauth_credentials(params), %{
+      partition(NotionSDK.Client.drop_oauth_credentials(params), %{
         auth: {"auth", :auth},
         body: %{keys: [{"token", :token}], mode: :keys},
         form_data: %{mode: :none},
@@ -210,8 +201,7 @@ defmodule NotionSDK.OAuth do
       args: params,
       call: {NotionSDK.OAuth, :introspect},
       path_template: "/v1/oauth/introspect",
-      url:
-        NotionSDK.GeneratedOperation.render_path("/v1/oauth/introspect", partition.path_params),
+      url: render_path("/v1/oauth/introspect", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -237,7 +227,7 @@ defmodule NotionSDK.OAuth do
   @type revoke_200_json_resp :: %{request_id: String.t() | nil}
 
   @doc """
-  Revoke a token
+  post `/v1/oauth/revoke`
 
   ## Source Context
   Revoke a token
@@ -249,14 +239,6 @@ defmodule NotionSDK.OAuth do
 
   ## Request Body
   **Content Types**: `application/json`
-
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `500` (application/json)
 
   ## Security
 
@@ -287,7 +269,7 @@ defmodule NotionSDK.OAuth do
           {:ok, NotionSDK.OAuth.revoke_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def revoke(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(NotionSDK.Client.drop_oauth_credentials(params), %{
+      partition(NotionSDK.Client.drop_oauth_credentials(params), %{
         auth: {"auth", :auth},
         body: %{keys: [{"token", :token}], mode: :keys},
         form_data: %{mode: :none},
@@ -299,7 +281,7 @@ defmodule NotionSDK.OAuth do
       args: params,
       call: {NotionSDK.OAuth, :revoke},
       path_template: "/v1/oauth/revoke",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/oauth/revoke", partition.path_params),
+      url: render_path("/v1/oauth/revoke", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -336,7 +318,7 @@ defmodule NotionSDK.OAuth do
         }
 
   @doc """
-  Exchange an authorization code for an access and refresh token
+  post `/v1/oauth/token`
 
   ## Source Context
   Create a token
@@ -371,14 +353,6 @@ defmodule NotionSDK.OAuth do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `500` (application/json)
-
   ## Security
 
     * `basicAuth`
@@ -410,7 +384,7 @@ defmodule NotionSDK.OAuth do
           {:ok, NotionSDK.OAuth.token_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def token(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(NotionSDK.Client.drop_oauth_credentials(params), %{
+      partition(NotionSDK.Client.drop_oauth_credentials(params), %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -431,7 +405,7 @@ defmodule NotionSDK.OAuth do
       args: params,
       call: {NotionSDK.OAuth, :token},
       path_template: "/v1/oauth/token",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/oauth/token", partition.path_params),
+      url: render_path("/v1/oauth/token", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
@@ -518,7 +492,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "active",
         nullable: false,
@@ -533,7 +507,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "iat",
         nullable: false,
@@ -548,7 +522,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "request_id",
         nullable: false,
@@ -563,7 +537,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "scope",
         nullable: false,
@@ -583,7 +557,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "token",
         nullable: false,
@@ -603,7 +577,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "request_id",
         nullable: false,
@@ -623,7 +597,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "token",
         nullable: false,
@@ -643,7 +617,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "access_token",
         nullable: false,
@@ -658,7 +632,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "bot_id",
         nullable: false,
@@ -673,7 +647,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "duplicated_template_id",
         nullable: false,
@@ -688,7 +662,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "owner",
         nullable: false,
@@ -703,7 +677,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "refresh_token",
         nullable: false,
@@ -718,7 +692,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "request_id",
         nullable: false,
@@ -733,7 +707,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "token_type",
         nullable: false,
@@ -748,7 +722,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "workspace_icon",
         nullable: false,
@@ -763,7 +737,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "workspace_id",
         nullable: false,
@@ -778,7 +752,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "workspace_name",
         nullable: false,
@@ -798,7 +772,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "code",
         nullable: false,
@@ -813,7 +787,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "external_account",
         nullable: false,
@@ -828,7 +802,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "grant_type",
         nullable: false,
@@ -843,7 +817,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "redirect_uri",
         nullable: false,
@@ -858,7 +832,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "refresh_token",
         nullable: false,
@@ -878,7 +852,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "key",
         nullable: false,
@@ -893,7 +867,7 @@ defmodule NotionSDK.OAuth do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "name",
         nullable: false,

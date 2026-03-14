@@ -1,6 +1,6 @@
 defmodule NotionSDK.PeoplePropertyItemObjectResponse do
   @moduledoc """
-  People
+  PeoplePropertyItemObjectResponse
 
   ## Fields
 
@@ -50,7 +50,7 @@ defmodule NotionSDK.PeoplePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -65,7 +65,7 @@ defmodule NotionSDK.PeoplePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -80,7 +80,7 @@ defmodule NotionSDK.PeoplePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "people",
         nullable: false,
@@ -97,7 +97,7 @@ defmodule NotionSDK.PeoplePropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

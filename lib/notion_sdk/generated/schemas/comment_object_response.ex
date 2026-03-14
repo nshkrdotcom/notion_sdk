@@ -4,16 +4,16 @@ defmodule NotionSDK.CommentObjectResponse do
 
   ## Fields
 
-    * `attachments`: Any file attachments associated with the comment.
+    * `attachments`: optional
     * `created_by`: required
-    * `created_time`: The time when the comment was created.
+    * `created_time`: required
     * `discussion_id`: required
-    * `display_name`: The display name of the comment.
+    * `display_name`: required
     * `id`: required
-    * `last_edited_time`: The time when the comment was last edited.
-    * `object`: The comment object type name.
+    * `last_edited_time`: required
+    * `object`: required
     * `parent`: required
-    * `rich_text`: The rich text content of the comment.
+    * `rich_text`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -81,10 +81,10 @@ defmodule NotionSDK.CommentObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Any file attachments associated with the comment.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "attachments",
         nullable: false,
@@ -99,7 +99,7 @@ defmodule NotionSDK.CommentObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "created_by",
         nullable: false,
@@ -111,10 +111,10 @@ defmodule NotionSDK.CommentObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The time when the comment was created.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "created_time",
         nullable: false,
@@ -129,7 +129,7 @@ defmodule NotionSDK.CommentObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "discussion_id",
         nullable: false,
@@ -141,10 +141,10 @@ defmodule NotionSDK.CommentObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The display name of the comment.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "display_name",
         nullable: false,
@@ -159,7 +159,7 @@ defmodule NotionSDK.CommentObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -171,10 +171,10 @@ defmodule NotionSDK.CommentObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The time when the comment was last edited.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "last_edited_time",
         nullable: false,
@@ -186,10 +186,10 @@ defmodule NotionSDK.CommentObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The comment object type name.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -204,7 +204,7 @@ defmodule NotionSDK.CommentObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -221,10 +221,10 @@ defmodule NotionSDK.CommentObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The rich text content of the comment.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "rich_text",
         nullable: false,

@@ -4,7 +4,7 @@ defmodule NotionSDK.TableOfContentsTableOfContents do
 
   ## Fields
 
-    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`
+    * `color`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -58,11 +58,10 @@ defmodule NotionSDK.TableOfContentsTableOfContents do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "color",
         nullable: false,

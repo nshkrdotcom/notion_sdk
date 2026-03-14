@@ -1,6 +1,6 @@
 defmodule NotionSDK.TableRowRequest do
   @moduledoc """
-  Table Row
+  TableRowRequest
 
   ## Fields
 
@@ -46,7 +46,7 @@ defmodule NotionSDK.TableRowRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -61,7 +61,7 @@ defmodule NotionSDK.TableRowRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "table_row",
         nullable: false,
@@ -76,7 +76,7 @@ defmodule NotionSDK.TableRowRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

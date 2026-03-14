@@ -2,11 +2,9 @@ defmodule NotionSDK.FileUploadPageCoverRequestFileUpload do
   @moduledoc """
   FileUploadPageCoverRequestFileUpload
 
-  The file upload for the cover.
-
   ## Fields
 
-    * `id`: ID of a FileUpload object that has the status `uploaded`.
+    * `id`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -35,10 +33,10 @@ defmodule NotionSDK.FileUploadPageCoverRequestFileUpload do
       %{
         default: nil,
         deprecated: false,
-        description: "ID of a FileUpload object that has the status `uploaded`.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,

@@ -6,15 +6,14 @@ defmodule NotionSDK.Codegen.Renderer do
   use OpenAPI.Renderer
 
   alias OpenAPI.Processor.Operation
-  alias OpenAPI.Processor.Operation.Param
   alias OpenAPI.Processor.Schema, as: ProcessedSchema
   alias OpenAPI.Renderer.File
   alias OpenAPI.Renderer.State
   alias OpenAPI.Renderer.Util
   alias Pristine.OpenAPI.DocComposer
+  alias Pristine.OpenAPI.RendererMetadata
+  alias Pristine.OpenAPI.RendererShared
   alias Pristine.OpenAPI.SchemaMaterialization
-
-  @multipart_content_type "multipart/form-data"
 
   @impl OpenAPI.Renderer
   def render(state, file) do
@@ -34,7 +33,18 @@ defmodule NotionSDK.Codegen.Renderer do
   @impl OpenAPI.Renderer
   def render_moduledoc(state, file) do
     moduledoc = DocComposer.module_doc(file, source_contexts: source_contexts(state))
-    quote do: @moduledoc(unquote(moduledoc))
+
+    runtime_alias =
+      if file.schemas == [] do
+        nil
+      else
+        quote(do: alias(NotionSDK.GeneratedRuntime, as: OpenAPIRuntime))
+      end
+
+    Util.clean_list([
+      quote(do: @moduledoc(unquote(moduledoc))),
+      runtime_alias
+    ])
   end
 
   @impl OpenAPI.Renderer
@@ -54,6 +64,13 @@ defmodule NotionSDK.Codegen.Renderer do
 
   @impl OpenAPI.Renderer
   def render_operation_doc(state, operation) do
+    operation =
+      Map.put(
+        operation,
+        :security,
+        RendererShared.security_requirements(operation, config(state))
+      )
+
     docstring = DocComposer.operation_doc(operation, source_contexts: source_contexts(state))
     quote do: @doc(unquote(docstring))
   end
@@ -67,7 +84,9 @@ defmodule NotionSDK.Codegen.Renderer do
       schemas
       |> Enum.filter(&(&1.output_format == :struct))
       |> Enum.group_by(&{&1.module_name, &1.type_name})
-      |> Enum.map(fn {_module_and_type, grouped} -> merge_schema_group(grouped, state) end)
+      |> Enum.map(fn {_module_and_type, grouped} ->
+        RendererShared.merge_schema_group(grouped, state.schemas)
+      end)
       |> List.flatten()
       |> Enum.sort_by(& &1.type_name)
 
@@ -93,7 +112,9 @@ defmodule NotionSDK.Codegen.Renderer do
           false
       end)
       |> Enum.group_by(&{&1.module_name, &1.type_name})
-      |> Enum.map(fn {_module_and_type, grouped} -> merge_schema_group(grouped, state) end)
+      |> Enum.map(fn {_module_and_type, grouped} ->
+        RendererShared.merge_schema_group(grouped, state.schemas)
+      end)
       |> List.flatten()
       |> Enum.sort_by(& &1.type_name)
 
@@ -203,7 +224,7 @@ defmodule NotionSDK.Codegen.Renderer do
       responses: responses
     } = operation
 
-    partition_spec = request_partition_spec(state, operation)
+    partition_spec = RendererShared.request_partition_spec(state, operation)
     oauth_basic? = oauth_basic_operation?(operation)
 
     module_name =
@@ -238,9 +259,9 @@ defmodule NotionSDK.Codegen.Renderer do
         quote(do: {:body, partition.body}),
         quote(do: {:form_data, partition.form_data}),
         quote(do: {:auth, unquote(auth)}),
-        render_security_info(state, operation),
-        render_request_info(state, request_body),
-        render_response_info(state, responses)
+        RendererShared.render_security_info(operation, config(state)),
+        RendererShared.render_request_info(state, request_body, :list, &readable_type/2),
+        RendererShared.render_response_info(state, responses, &readable_type/2)
       ]
       |> Kernel.++(render_runtime_metadata(operation))
       |> Enum.reject(&is_nil/1)
@@ -253,222 +274,6 @@ defmodule NotionSDK.Codegen.Renderer do
           unquote_splicing(request)
         })
       end
-    end
-  end
-
-  defp request_partition_spec(state, operation) do
-    %Operation{
-      request_body: request_body,
-      request_path_parameters: path_params,
-      request_query_parameters: query_params
-    } = operation
-
-    {multipart_request_body, standard_request_body} =
-      Enum.split_with(request_body, fn {content_type, _type} ->
-        String.starts_with?(content_type, @multipart_content_type)
-      end)
-
-    %{
-      auth: {"auth", :auth},
-      path: key_specs(path_params),
-      query: key_specs(query_params),
-      body: payload_spec(state, standard_request_body, {"body", :body}),
-      form_data: payload_spec(state, multipart_request_body, {"form_data", :form_data})
-    }
-  end
-
-  defp payload_spec(_state, [], _fallback_key), do: %{mode: :none}
-
-  defp payload_spec(state, request_body, fallback_key) do
-    keys =
-      request_body
-      |> Enum.reduce(MapSet.new(), fn {_content_type, type}, names ->
-        MapSet.union(names, request_field_names(state, type))
-      end)
-      |> MapSet.to_list()
-      |> Enum.sort()
-
-    if keys == [] do
-      %{mode: :key, key: fallback_key}
-    else
-      %{mode: :keys, keys: Enum.map(keys, &{&1, String.to_atom(&1)})}
-    end
-  end
-
-  defp merge_schema_group(grouped, state) do
-    grouped
-    |> Enum.sort_by(&schema_group_sort_key(&1, state.schemas))
-    |> Enum.reduce(&ProcessedSchema.merge/2)
-  end
-
-  defp schema_group_sort_key(schema, schemas_by_ref) do
-    stable_schema_term(schema, schemas_by_ref)
-  end
-
-  defp key_specs(params) do
-    Enum.map(params, fn %Param{name: name} -> {name, String.to_atom(name)} end)
-  end
-
-  defp request_field_names(state, {:union, types}) do
-    Enum.reduce(types, MapSet.new(), fn type, names ->
-      MapSet.union(names, request_field_names(state, type))
-    end)
-  end
-
-  defp request_field_names(state, ref) when is_reference(ref) do
-    case Map.get(state.schemas, ref) do
-      %{fields: fields} ->
-        Enum.reduce(fields, MapSet.new(), fn field, names -> MapSet.put(names, field.name) end)
-
-      nil ->
-        MapSet.new()
-    end
-  end
-
-  defp request_field_names(_state, _type), do: MapSet.new()
-
-  defp stable_schema_term(schema, schemas_by_ref) do
-    [
-      module_name: stable_module_name(Map.get(schema, :module_name)),
-      type_name: stable_atom(Map.get(schema, :type_name)),
-      output_format: stable_atom(Map.get(schema, :output_format)),
-      title: Map.get(schema, :title),
-      description: Map.get(schema, :description),
-      context:
-        schema
-        |> Map.get(:context, [])
-        |> Enum.map(&stable_term(&1, schemas_by_ref))
-        |> Enum.sort(),
-      fields:
-        schema
-        |> Map.get(:fields, [])
-        |> Enum.map(&stable_field_term(&1, schemas_by_ref))
-        |> Enum.sort()
-    ]
-  end
-
-  defp stable_field_term(field, schemas_by_ref) do
-    [
-      name: Map.get(field, :name),
-      type: stable_term(Map.get(field, :type), schemas_by_ref),
-      required: Map.get(field, :required),
-      nullable: Map.get(field, :nullable),
-      private: Map.get(field, :private),
-      read_only: Map.get(field, :read_only),
-      write_only: Map.get(field, :write_only)
-    ]
-  end
-
-  defp stable_term(reference, schemas_by_ref) when is_reference(reference) do
-    case Map.get(schemas_by_ref, reference) do
-      nil ->
-        {:schema_ref, "missing"}
-
-      schema ->
-        {:schema_ref, shallow_schema_term(schema)}
-    end
-  end
-
-  defp stable_term(%_{} = struct, schemas_by_ref),
-    do: struct |> Map.from_struct() |> stable_term(schemas_by_ref)
-
-  defp stable_term(map, schemas_by_ref) when is_map(map) do
-    map
-    |> Enum.map(fn {key, value} ->
-      {stable_term(key, schemas_by_ref), stable_term(value, schemas_by_ref)}
-    end)
-    |> Enum.sort()
-  end
-
-  defp stable_term(tuple, schemas_by_ref) when is_tuple(tuple) do
-    tuple
-    |> Tuple.to_list()
-    |> Enum.map(&stable_term(&1, schemas_by_ref))
-    |> List.to_tuple()
-  end
-
-  defp stable_term(list, schemas_by_ref) when is_list(list),
-    do: Enum.map(list, &stable_term(&1, schemas_by_ref))
-
-  defp stable_term(atom, _schemas_by_ref) when is_atom(atom), do: Atom.to_string(atom)
-  defp stable_term(value, _schemas_by_ref), do: value
-
-  defp shallow_schema_term(schema) do
-    [
-      module_name: stable_module_name(Map.get(schema, :module_name)),
-      type_name: stable_atom(Map.get(schema, :type_name)),
-      output_format: stable_atom(Map.get(schema, :output_format)),
-      title: Map.get(schema, :title),
-      description: Map.get(schema, :description),
-      field_names:
-        schema
-        |> Map.get(:fields, [])
-        |> Enum.map(&Map.get(&1, :name))
-        |> Enum.sort()
-    ]
-  end
-
-  defp stable_module_name(nil), do: nil
-  defp stable_module_name(module_name) when is_atom(module_name), do: inspect(module_name)
-
-  defp stable_atom(nil), do: nil
-  defp stable_atom(atom) when is_atom(atom), do: Atom.to_string(atom)
-
-  defp render_request_info(_state, []), do: nil
-
-  defp render_request_info(state, request_body) do
-    items =
-      Enum.map(request_body, fn {content_type, type} ->
-        readable = readable_type(state, type)
-
-        quote do
-          {unquote(content_type), unquote(readable)}
-        end
-      end)
-
-    quote do
-      {:request, unquote(items)}
-    end
-  end
-
-  defp render_security_info(
-         state,
-         %Operation{request_method: method, request_path: path} = operation
-       ) do
-    case security_for_operation(state, operation, method, path) do
-      nil -> nil
-      security -> quote(do: {:security, unquote(Macro.escape(security))})
-    end
-  end
-
-  defp security_for_operation(state, operation, method, path) do
-    if is_nil(Map.get(operation, :security)) do
-      state
-      |> config()
-      |> Keyword.get(:security_metadata, %{})
-      |> Map.get(:operations, %{})
-      |> Map.get({method, path})
-    else
-      Map.get(operation, :security)
-    end
-  end
-
-  defp render_response_info(_state, []), do: nil
-
-  defp render_response_info(state, responses) do
-    items =
-      responses
-      |> Enum.sort_by(fn {status_or_default, _schemas} -> status_or_default end)
-      |> Enum.map(fn {status_or_default, schemas} ->
-        type = readable_type(state, {:union, Map.values(schemas)})
-
-        quote do
-          {unquote(status_or_default), unquote(type)}
-        end
-      end)
-
-    quote do
-      {:response, unquote(items)}
     end
   end
 
@@ -515,133 +320,136 @@ defmodule NotionSDK.Codegen.Renderer do
   defp runtime_circuit_breaker("oauth_control"), do: "oauth_control"
   defp runtime_circuit_breaker(_resource), do: "core_api"
 
-  defp render_return_type(_state, []), do: quote(do: :ok)
-
   defp render_oauth_helpers(state) do
     base_module = config(state)[:base_module]
     client_module = Module.concat([base_module, Client])
 
-    quote do
-      @oauth_client_opts [
-        :base_url,
-        :finch,
-        :foundation,
-        :log_level,
-        :logger,
-        :notion_version,
-        :retry,
-        :timeout_ms,
-        :transport,
-        :transport_opts,
-        :typed_responses,
-        :user_agent
-      ]
+    {:__block__, _meta, helper_definitions} =
+      quote do
+        @oauth_client_opts [
+          :base_url,
+          :finch,
+          :foundation,
+          :log_level,
+          :logger,
+          :notion_version,
+          :retry,
+          :timeout_ms,
+          :transport,
+          :transport_opts,
+          :typed_responses,
+          :user_agent
+        ]
 
-      @spec provider() :: Pristine.OAuth2.Provider.t()
-      def provider do
-        Pristine.OAuth2.Provider.new(
-          name: "notion",
-          flow: :authorization_code,
-          site: "https://api.notion.com",
-          authorize_url: "/v1/oauth/authorize",
-          token_url: "/v1/oauth/token",
-          revocation_url: "/v1/oauth/revoke",
-          introspection_url: "/v1/oauth/introspect",
-          client_auth_method: :basic,
-          token_method: :post,
-          token_content_type: "application/json"
-        )
-      end
-
-      @spec authorization_request(keyword()) ::
-              {:ok, Pristine.OAuth2.AuthorizationRequest.t()}
-              | {:error, Pristine.OAuth2.Error.t()}
-      def authorization_request(opts \\ []) when is_list(opts) do
-        with {:ok, authorization_opts} <- authorization_opts(opts) do
-          provider()
-          |> Pristine.OAuth2.authorization_request(authorization_opts)
+        @spec provider() :: OAuth2.Provider.t()
+        def provider do
+          OAuthRuntime.provider_new(
+            name: "notion",
+            flow: :authorization_code,
+            site: "https://api.notion.com",
+            authorize_url: "/v1/oauth/authorize",
+            token_url: "/v1/oauth/token",
+            revocation_url: "/v1/oauth/revoke",
+            introspection_url: "/v1/oauth/introspect",
+            client_auth_method: :basic,
+            token_method: :post,
+            token_content_type: "application/json"
+          )
         end
-      end
 
-      @spec authorize_url(keyword()) :: {:ok, String.t()} | {:error, Pristine.OAuth2.Error.t()}
-      def authorize_url(opts \\ []) when is_list(opts) do
-        with {:ok, authorization_opts} <- authorization_opts(opts) do
-          provider()
-          |> Pristine.OAuth2.authorize_url(authorization_opts)
+        @spec authorization_request(keyword()) ::
+                {:ok, OAuth2.AuthorizationRequest.t()}
+                | {:error, OAuth2.Error.t()}
+        def authorization_request(opts \\ []) when is_list(opts) do
+          with {:ok, authorization_opts} <- authorization_opts(opts) do
+            OAuthRuntime.authorization_request(provider(), authorization_opts)
+          end
         end
-      end
 
-      @spec exchange_code(String.t(), keyword()) ::
-              {:ok, Pristine.OAuth2.Token.t()} | {:error, Pristine.OAuth2.Error.t()}
-      def exchange_code(code, opts \\ []) when is_binary(code) and is_list(opts) do
-        provider()
-        |> Pristine.OAuth2.exchange_code(code, oauth_runtime_opts(opts))
-      end
-
-      @spec refresh_token(String.t(), keyword()) ::
-              {:ok, Pristine.OAuth2.Token.t()} | {:error, Pristine.OAuth2.Error.t()}
-      def refresh_token(refresh_token, opts \\ [])
-          when is_binary(refresh_token) and is_list(opts) do
-        provider()
-        |> Pristine.OAuth2.refresh_token(refresh_token, oauth_runtime_opts(opts))
-      end
-
-      defp authorization_opts(opts) do
-        params =
-          opts
-          |> Keyword.get(:params, [])
-          |> normalize_keyword()
-          |> maybe_put_owner(Keyword.get(opts, :owner))
-
-        case Keyword.get(opts, :redirect_uri) do
-          redirect_uri when is_binary(redirect_uri) and redirect_uri != "" ->
-            {:ok,
-             opts
-             |> Keyword.put(:params, params)
-             |> Keyword.put(:redirect_uri, redirect_uri)}
-
-          _other ->
-            {:error, Pristine.OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)}
+        @spec authorize_url(keyword()) :: {:ok, String.t()} | {:error, OAuth2.Error.t()}
+        def authorize_url(opts \\ []) when is_list(opts) do
+          with {:ok, authorization_opts} <- authorization_opts(opts) do
+            OAuthRuntime.authorize_url(provider(), authorization_opts)
+          end
         end
-      end
 
-      defp oauth_runtime_opts(opts) do
-        client = Keyword.get(opts, :client) || unquote(client_module).new(client_opts(opts))
+        @spec exchange_code(String.t(), keyword()) ::
+                {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
+        def exchange_code(code, opts \\ []) when is_binary(code) and is_list(opts) do
+          OAuthRuntime.exchange_code(provider(), code, oauth_runtime_opts(opts))
+        end
 
-        token_params =
+        @spec refresh_token(String.t(), keyword()) ::
+                {:ok, OAuth2.Token.t()} | {:error, OAuth2.Error.t()}
+        def refresh_token(refresh_token, opts \\ [])
+            when is_binary(refresh_token) and is_list(opts) do
+          OAuthRuntime.refresh_token(provider(), refresh_token, oauth_runtime_opts(opts))
+        end
+
+        defp authorization_opts(opts) do
+          params =
+            opts
+            |> Keyword.get(:params, [])
+            |> normalize_keyword()
+            |> maybe_put_owner(Keyword.get(opts, :owner))
+
+          case Keyword.get(opts, :redirect_uri) do
+            redirect_uri when is_binary(redirect_uri) and redirect_uri != "" ->
+              {:ok,
+               opts
+               |> Keyword.put(:params, params)
+               |> Keyword.put(:redirect_uri, redirect_uri)}
+
+            _other ->
+              {:error, OAuthRuntime.error_new(:missing_redirect_uri, provider: provider().name)}
+          end
+        end
+
+        defp oauth_runtime_opts(opts) do
+          client = Keyword.get(opts, :client) || unquote(client_module).new(client_opts(opts))
+
+          token_params =
+            []
+            |> maybe_put(:external_account, Keyword.get(opts, :external_account))
+            |> Keyword.merge(opts |> Keyword.get(:token_params, []) |> normalize_keyword())
+
           []
-          |> maybe_put(:external_account, Keyword.get(opts, :external_account))
-          |> Keyword.merge(opts |> Keyword.get(:token_params, []) |> normalize_keyword())
+          |> Keyword.put(:context, client.context)
+          |> maybe_put(:client_id, Keyword.get(opts, :client_id))
+          |> maybe_put(:client_secret, Keyword.get(opts, :client_secret))
+          |> maybe_put(:redirect_uri, Keyword.get(opts, :redirect_uri))
+          |> maybe_put(:token_params, token_params)
+        end
 
-        []
-        |> Keyword.put(:context, client.context)
-        |> maybe_put(:client_id, Keyword.get(opts, :client_id))
-        |> maybe_put(:client_secret, Keyword.get(opts, :client_secret))
-        |> maybe_put(:redirect_uri, Keyword.get(opts, :redirect_uri))
-        |> maybe_put(:token_params, token_params)
+        defp client_opts(opts) do
+          Keyword.take(opts, @oauth_client_opts)
+        end
+
+        defp maybe_put_owner(params, value) when is_binary(value) and value != "" do
+          Keyword.put(params, :owner, value)
+        end
+
+        defp maybe_put_owner(params, _value) do
+          Keyword.put_new(params, :owner, "user")
+        end
+
+        defp maybe_put(opts, _key, nil), do: opts
+        defp maybe_put(opts, _key, []), do: opts
+        defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
+
+        defp normalize_keyword(value) when is_list(value), do: value
+        defp normalize_keyword(value) when is_map(value), do: Enum.into(value, [])
+        defp normalize_keyword(_value), do: []
       end
 
-      defp client_opts(opts) do
-        Keyword.take(opts, @oauth_client_opts)
-      end
-
-      defp maybe_put_owner(params, value) when is_binary(value) and value != "" do
-        Keyword.put(params, :owner, value)
-      end
-
-      defp maybe_put_owner(params, _value) do
-        Keyword.put_new(params, :owner, "user")
-      end
-
-      defp maybe_put(opts, _key, nil), do: opts
-      defp maybe_put(opts, _key, []), do: opts
-      defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
-
-      defp normalize_keyword(value) when is_list(value), do: value
-      defp normalize_keyword(value) when is_map(value), do: Enum.into(value, [])
-      defp normalize_keyword(_value), do: []
-    end
+    Util.clean_list([
+      quote(do: alias(NotionSDK.GeneratedOAuth, as: OAuthRuntime)),
+      quote(do: alias(Pristine.OAuth2, as: OAuth2)),
+      helper_definitions
+    ])
   end
+
+  defp render_return_type(_state, []), do: quote(do: :ok)
 
   defp render_return_type(state, responses) do
     %State{implementation: implementation} = state
@@ -936,7 +744,10 @@ defmodule NotionSDK.Codegen.Renderer do
   end
 
   defp config(%State{profile: profile}) do
-    Application.get_env(:oapi_generator, profile, [])
-    |> Keyword.get(:output, [])
+    output =
+      Application.get_env(:oapi_generator, profile, [])
+      |> Keyword.get(:output, [])
+
+    Keyword.merge(output, RendererMetadata.get(profile))
   end
 end

@@ -36,7 +36,7 @@ defmodule NotionSDK.RelationPropertyItemObjectResponseRelation do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,

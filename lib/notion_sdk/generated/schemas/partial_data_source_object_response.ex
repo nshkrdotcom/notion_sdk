@@ -5,8 +5,8 @@ defmodule NotionSDK.PartialDataSourceObjectResponse do
   ## Fields
 
     * `id`: required
-    * `object`: The data source object type name.
-    * `properties`: The properties schema of the data source.
+    * `object`: required
+    * `properties`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -38,7 +38,7 @@ defmodule NotionSDK.PartialDataSourceObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -50,10 +50,10 @@ defmodule NotionSDK.PartialDataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The data source object type name.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -65,10 +65,10 @@ defmodule NotionSDK.PartialDataSourceObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The properties schema of the data source.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "properties",
         nullable: false,

@@ -1,6 +1,6 @@
 defmodule NotionSDK.StringFormulaPropertyResponse do
   @moduledoc """
-  String
+  StringFormulaPropertyResponse
 
   ## Fields
 
@@ -37,7 +37,7 @@ defmodule NotionSDK.StringFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "string",
         nullable: false,
@@ -52,7 +52,7 @@ defmodule NotionSDK.StringFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

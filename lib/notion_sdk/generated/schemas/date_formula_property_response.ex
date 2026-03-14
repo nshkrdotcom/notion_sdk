@@ -1,6 +1,6 @@
 defmodule NotionSDK.DateFormulaPropertyResponse do
   @moduledoc """
-  Date
+  DateFormulaPropertyResponse
 
   ## Fields
 
@@ -37,7 +37,7 @@ defmodule NotionSDK.DateFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "date",
         nullable: false,
@@ -52,7 +52,7 @@ defmodule NotionSDK.DateFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

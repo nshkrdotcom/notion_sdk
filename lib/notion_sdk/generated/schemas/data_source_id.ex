@@ -1,6 +1,6 @@
 defmodule NotionSDK.DataSourceId do
   @moduledoc """
-  Data Source Id
+  DataSourceId
 
   ## Fields
 
@@ -10,7 +10,9 @@ defmodule NotionSDK.DataSourceId do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{data_source_id: String.t(), type: String.t() | nil}
+  @type t :: %__MODULE__{data_source_id: String.t(), type: String.t() | nil}
+
+  defstruct [:data_source_id, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -35,7 +37,7 @@ defmodule NotionSDK.DataSourceId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "data_source_id",
         nullable: false,
@@ -50,7 +52,7 @@ defmodule NotionSDK.DataSourceId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

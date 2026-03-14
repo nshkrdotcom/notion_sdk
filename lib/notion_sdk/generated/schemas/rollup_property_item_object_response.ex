@@ -1,6 +1,6 @@
 defmodule NotionSDK.RollupPropertyItemObjectResponse do
   @moduledoc """
-  Rollup
+  RollupPropertyItemObjectResponse
 
   ## Fields
 
@@ -62,7 +62,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -77,7 +77,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -92,7 +92,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "rollup",
         nullable: false,
@@ -115,7 +115,7 @@ defmodule NotionSDK.RollupPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

@@ -1,6 +1,6 @@
 defmodule NotionSDK.StatusPropertyItemObjectResponse do
   @moduledoc """
-  Status
+  StatusPropertyItemObjectResponse
 
   ## Fields
 
@@ -49,7 +49,7 @@ defmodule NotionSDK.StatusPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -64,7 +64,7 @@ defmodule NotionSDK.StatusPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -79,7 +79,7 @@ defmodule NotionSDK.StatusPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "status",
         nullable: false,
@@ -94,7 +94,7 @@ defmodule NotionSDK.StatusPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

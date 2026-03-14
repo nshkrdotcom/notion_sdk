@@ -1,58 +1,23 @@
 defmodule NotionSDK.NumberedListItem do
   @moduledoc """
-  Provides struct and types for NumberedListItem
+  NumberedListItem
 
-  ## Types
+  ## Fields
 
-    * Numbered List Item
-    * NumberedListItem.t_numbered_list_item
+    * `numbered_list_item`: required
+    * `object`: optional
+    * `type`: optional
+
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{
+  @type t :: %__MODULE__{
           numbered_list_item:
             NotionSDK.ContentWithRichTextAndColorRequest.t()
             | NotionSDK.ContentWithSingleLevelOfChildrenRequest.t()
-            | NotionSDK.NumberedListItem.t_numbered_list_item()
             | NotionSDK.NumberedListItemNumberedListItem.t(),
           object: String.t() | nil,
           type: String.t() | nil
-        }
-
-  @type t_numbered_list_item :: %{
-          children:
-            [
-              NotionSDK.Audio.t()
-              | NotionSDK.Bookmark.t()
-              | NotionSDK.Breadcrumb.t()
-              | NotionSDK.BulletedListItem.t()
-              | NotionSDK.Callout.t()
-              | NotionSDK.Code.t()
-              | NotionSDK.Divider.t()
-              | NotionSDK.Embed.t()
-              | NotionSDK.Equation.t()
-              | NotionSDK.File.t()
-              | NotionSDK.Heading1.t()
-              | NotionSDK.Heading2.t()
-              | NotionSDK.Heading3.t()
-              | NotionSDK.Image.t()
-              | NotionSDK.LinkToPage.t()
-              | NotionSDK.NumberedListItem.t()
-              | NotionSDK.Paragraph.t()
-              | NotionSDK.Pdf.t()
-              | NotionSDK.Quote.t()
-              | NotionSDK.SyncedBlock.t()
-              | NotionSDK.Table.t()
-              | NotionSDK.TableOfContents.t()
-              | NotionSDK.TableRow.t()
-              | NotionSDK.Template.t()
-              | NotionSDK.ToDo.t()
-              | NotionSDK.Toggle.t()
-              | NotionSDK.Video.t()
-            ]
-            | nil,
-          color: String.t() | nil,
-          rich_text: [NotionSDK.RichTextItemRequest.t()]
         }
 
   defstruct [:numbered_list_item, :object, :type]
@@ -66,74 +31,19 @@ defmodule NotionSDK.NumberedListItem do
       numbered_list_item:
         {:union,
          [
+           {NotionSDK.NumberedListItemNumberedListItem, :t},
            {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-           {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-           {NotionSDK.NumberedListItem, :t_numbered_list_item},
-           {NotionSDK.NumberedListItemNumberedListItem, :t}
+           union: [
+             {NotionSDK.ContentWithRichTextAndColorRequest, :t},
+             {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
+             union: [
+               {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
+               {NotionSDK.NumberedListItemNumberedListItem, :t}
+             ]
+           ]
          ]},
       object: {:const, "block"},
       type: {:const, "numbered_list_item"}
-    ]
-  end
-
-  def __fields__(:t_numbered_list_item) do
-    [
-      children: [
-        union: [
-          {NotionSDK.Embed, :t},
-          {NotionSDK.Bookmark, :t},
-          {NotionSDK.Image, :t},
-          {NotionSDK.Video, :t},
-          {NotionSDK.Pdf, :t},
-          {NotionSDK.File, :t},
-          {NotionSDK.Audio, :t},
-          {NotionSDK.Code, :t},
-          {NotionSDK.Equation, :t},
-          {NotionSDK.Divider, :t},
-          {NotionSDK.Breadcrumb, :t},
-          {NotionSDK.TableOfContents, :t},
-          {NotionSDK.LinkToPage, :t},
-          {NotionSDK.TableRow, :t},
-          {NotionSDK.Heading1, :t},
-          {NotionSDK.Heading2, :t},
-          {NotionSDK.Heading3, :t},
-          {NotionSDK.Paragraph, :t},
-          {NotionSDK.BulletedListItem, :t},
-          {NotionSDK.NumberedListItem, :t},
-          {NotionSDK.Quote, :t},
-          {NotionSDK.Table, :t},
-          {NotionSDK.ToDo, :t},
-          {NotionSDK.Toggle, :t},
-          {NotionSDK.Template, :t},
-          {NotionSDK.Callout, :t},
-          {NotionSDK.SyncedBlock, :t}
-        ]
-      ],
-      color:
-        {:enum,
-         [
-           "default",
-           "gray",
-           "brown",
-           "orange",
-           "yellow",
-           "green",
-           "blue",
-           "purple",
-           "pink",
-           "red",
-           "default_background",
-           "gray_background",
-           "brown_background",
-           "orange_background",
-           "yellow_background",
-           "green_background",
-           "blue_background",
-           "purple_background",
-           "pink_background",
-           "red_background"
-         ]},
-      rich_text: [{NotionSDK.RichTextItemRequest, :t}]
     ]
   end
 
@@ -152,7 +62,7 @@ defmodule NotionSDK.NumberedListItem do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "numbered_list_item",
         nullable: false,
@@ -161,10 +71,16 @@ defmodule NotionSDK.NumberedListItem do
         type:
           {:union,
            [
+             {NotionSDK.NumberedListItemNumberedListItem, :t},
              {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-             {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
-             {NotionSDK.NumberedListItem, :t_numbered_list_item},
-             {NotionSDK.NumberedListItemNumberedListItem, :t}
+             union: [
+               {NotionSDK.ContentWithRichTextAndColorRequest, :t},
+               {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
+               union: [
+                 {NotionSDK.ContentWithSingleLevelOfChildrenRequest, :t},
+                 {NotionSDK.NumberedListItemNumberedListItem, :t}
+               ]
+             ]
            ]},
         write_only: false
       },
@@ -174,7 +90,7 @@ defmodule NotionSDK.NumberedListItem do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -189,117 +105,13 @@ defmodule NotionSDK.NumberedListItem do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
         required: false,
         type: {:const, "numbered_list_item"},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:t_numbered_list_item) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "children",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: [
-          union: [
-            {NotionSDK.Embed, :t},
-            {NotionSDK.Bookmark, :t},
-            {NotionSDK.Image, :t},
-            {NotionSDK.Video, :t},
-            {NotionSDK.Pdf, :t},
-            {NotionSDK.File, :t},
-            {NotionSDK.Audio, :t},
-            {NotionSDK.Code, :t},
-            {NotionSDK.Equation, :t},
-            {NotionSDK.Divider, :t},
-            {NotionSDK.Breadcrumb, :t},
-            {NotionSDK.TableOfContents, :t},
-            {NotionSDK.LinkToPage, :t},
-            {NotionSDK.TableRow, :t},
-            {NotionSDK.Heading1, :t},
-            {NotionSDK.Heading2, :t},
-            {NotionSDK.Heading3, :t},
-            {NotionSDK.Paragraph, :t},
-            {NotionSDK.BulletedListItem, :t},
-            {NotionSDK.NumberedListItem, :t},
-            {NotionSDK.Quote, :t},
-            {NotionSDK.Table, :t},
-            {NotionSDK.ToDo, :t},
-            {NotionSDK.Toggle, :t},
-            {NotionSDK.Template, :t},
-            {NotionSDK.Callout, :t},
-            {NotionSDK.SyncedBlock, :t}
-          ]
-        ],
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description:
-          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "color",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:enum,
-           [
-             "default",
-             "gray",
-             "brown",
-             "orange",
-             "yellow",
-             "green",
-             "blue",
-             "purple",
-             "pink",
-             "red",
-             "default_background",
-             "gray_background",
-             "brown_background",
-             "orange_background",
-             "yellow_background",
-             "green_background",
-             "blue_background",
-             "purple_background",
-             "pink_background",
-             "red_background"
-           ]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "rich_text",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
         write_only: false
       }
     ]
@@ -314,10 +126,6 @@ defmodule NotionSDK.NumberedListItem do
 
   def __schema__(:t) do
     OpenAPIRuntime.build_schema(__openapi_fields__(:t))
-  end
-
-  def __schema__(:t_numbered_list_item) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t_numbered_list_item))
   end
 
   (

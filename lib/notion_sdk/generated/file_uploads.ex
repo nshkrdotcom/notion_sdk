@@ -4,16 +4,17 @@ defmodule NotionSDK.FileUploads do
 
   ## Operations
 
-    * List file uploads
-    * Create a file upload
-    * Retrieve a file upload
-    * Complete a multi-part file upload
-    * Upload a file
+    * get `/v1/file_uploads`
+    * post `/v1/file_uploads`
+    * get `/v1/file_uploads/{file_upload_id}`
+    * post `/v1/file_uploads/{file_upload_id}/complete`
+    * post `/v1/file_uploads/{file_upload_id}/send`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @doc """
-  Complete a multi-part file upload
+  post `/v1/file_uploads/{file_upload_id}/complete`
 
   ## Source Context
   Complete a file upload
@@ -21,54 +22,8 @@ defmodule NotionSDK.FileUploads do
 
     * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -94,7 +49,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def complete(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -106,54 +61,14 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :complete},
       path_template: "/v1/file_uploads/{file_upload_id}/complete",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/file_uploads/{file_upload_id}/complete",
-          partition.path_params
-        ),
+      url: render_path("/v1/file_uploads/{file_upload_id}/complete", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.FileUploadObjectResponse, :t}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -173,7 +88,7 @@ defmodule NotionSDK.FileUploads do
   end
 
   @doc """
-  Create a file upload
+  post `/v1/file_uploads`
 
   ## Source Context
   Create a file upload
@@ -187,54 +102,8 @@ defmodule NotionSDK.FileUploads do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -262,7 +131,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -283,50 +152,14 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :create},
       path_template: "/v1/file_uploads",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/file_uploads", partition.path_params),
+      url: render_path("/v1/file_uploads", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.FileUploads, :create_json_req}}],
       response: [
         {200, {NotionSDK.FileUploadObjectResponse, :t}},
@@ -356,7 +189,7 @@ defmodule NotionSDK.FileUploads do
         }
 
   @doc """
-  List file uploads
+  get `/v1/file_uploads`
 
   ## Source Context
   List file uploads
@@ -373,54 +206,8 @@ defmodule NotionSDK.FileUploads do
     * `start_cursor`
     * `page_size`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -447,7 +234,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploads.list_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def list(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -459,50 +246,14 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :list},
       path_template: "/v1/file_uploads",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/file_uploads", partition.path_params),
+      url: render_path("/v1/file_uploads", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.FileUploads, :list_200_json_resp}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -522,7 +273,7 @@ defmodule NotionSDK.FileUploads do
   end
 
   @doc """
-  Retrieve a file upload
+  get `/v1/file_uploads/{file_upload_id}`
 
   ## Source Context
   Retrieve a file upload
@@ -533,54 +284,8 @@ defmodule NotionSDK.FileUploads do
     * [File Upload](https://developers.notion.com/reference/file-upload)
     * [Retrieve a file upload](https://developers.notion.com/reference/retrieve-a-file-upload)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -606,7 +311,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -618,54 +323,14 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :retrieve},
       path_template: "/v1/file_uploads/{file_upload_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/file_uploads/{file_upload_id}",
-          partition.path_params
-        ),
+      url: render_path("/v1/file_uploads/{file_upload_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.FileUploadObjectResponse, :t}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -685,7 +350,7 @@ defmodule NotionSDK.FileUploads do
   end
 
   @doc """
-  Upload a file
+  post `/v1/file_uploads/{file_upload_id}/send`
 
   ## Source Context
   Send a file upload
@@ -715,54 +380,8 @@ defmodule NotionSDK.FileUploads do
   ## Request Body
   **Content Types**: `multipart/form-data`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -799,7 +418,7 @@ defmodule NotionSDK.FileUploads do
           {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def send(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{keys: [{"file", :file}, {"part_number", :part_number}], mode: :keys},
@@ -811,54 +430,14 @@ defmodule NotionSDK.FileUploads do
       args: params,
       call: {NotionSDK.FileUploads, :send},
       path_template: "/v1/file_uploads/{file_upload_id}/send",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/file_uploads/{file_upload_id}/send",
-          partition.path_params
-        ),
+      url: render_path("/v1/file_uploads/{file_upload_id}/send", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"multipart/form-data", {NotionSDK.FileUploads, :send__req}}],
       response: [
         {200, {NotionSDK.FileUploadObjectResponse, :t}},
@@ -919,11 +498,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "MIME type of the file to be created. Recommended when sending the file in multiple parts. Must match the content type of the file that's sent, and the extension of the `filename` parameter if any.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "content_type",
         nullable: false,
@@ -935,11 +513,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "When `mode` is `external_url`, provide the HTTPS URL of a publicly accessible file to import into your workspace.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "external_url",
         nullable: false,
@@ -951,11 +528,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Name of the file to be created. Required when `mode` is `multi_part`. Otherwise optional, and used to override the filename. Must include an extension, or have one inferred from the `content_type` parameter.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "filename",
         nullable: false,
@@ -967,11 +543,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "How the file is being sent. Use `multi_part` for files larger than 20MB. Use `external_url` for files that are temporarily hosted publicly elsewhere. Default is `single_part`.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "mode",
         nullable: false,
@@ -983,11 +558,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "When `mode` is `multi_part`, the number of parts you are uploading. This must match the number of parts as well as the final `part_number` you send.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "number_of_parts",
         nullable: false,
@@ -1007,7 +581,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "file_upload",
         nullable: false,
@@ -1022,7 +596,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -1037,7 +611,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -1049,10 +623,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `list`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -1067,7 +641,7 @@ defmodule NotionSDK.FileUploads do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
@@ -1079,10 +653,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `file_upload`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -1099,10 +673,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description: "The raw binary file contents to upload.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "file",
         nullable: false,
@@ -1114,11 +688,10 @@ defmodule NotionSDK.FileUploads do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "When uploading files greater than 20MB in parts, this is the current part number. Must be an integer between 1 and 1,000.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "part_number",
         nullable: false,

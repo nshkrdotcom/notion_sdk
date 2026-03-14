@@ -1,11 +1,11 @@
 defmodule NotionSDK.ParentOfDataSourceRequest do
   @moduledoc """
-  Database Id
+  ParentOfDataSourceRequest
 
   ## Fields
 
     * `database_id`: required
-    * `type`: Always `database_id`
+    * `type`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -37,7 +37,7 @@ defmodule NotionSDK.ParentOfDataSourceRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "database_id",
         nullable: false,
@@ -49,10 +49,10 @@ defmodule NotionSDK.ParentOfDataSourceRequest do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `database_id`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

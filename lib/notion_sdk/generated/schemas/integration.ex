@@ -4,12 +4,14 @@ defmodule NotionSDK.Integration do
 
   ## Fields
 
-    * `type`: Always `integration`
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{type: String.t()}
+  @type t :: %__MODULE__{type: String.t()}
+
+  defstruct [:type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -31,10 +33,10 @@ defmodule NotionSDK.Integration do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `integration`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

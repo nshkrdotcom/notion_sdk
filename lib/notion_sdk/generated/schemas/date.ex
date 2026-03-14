@@ -5,20 +5,19 @@ defmodule NotionSDK.Date do
   ## Fields
 
     * `date`: required
-    * `property`: required
-    * `type`: optional
+    * `function`: required
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
-          date: map | NotionSDK.DateResponse.t() | nil,
+          date: NotionSDK.DateResponse.t() | nil,
           function: String.t(),
-          property: String.t(),
-          type: String.t() | nil
+          type: String.t()
         }
 
-  defstruct [:date, :function, :property, :type]
+  defstruct [:date, :function, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -26,7 +25,7 @@ defmodule NotionSDK.Date do
 
   def __fields__(:t) do
     [
-      date: {:union, [:null, :map, {NotionSDK.DateResponse, :t}]},
+      date: {:union, [:null, {NotionSDK.DateResponse, :t}]},
       function:
         {:enum,
          [
@@ -55,7 +54,6 @@ defmodule NotionSDK.Date do
            "percent_per_group",
            "show_original"
          ]},
-      property: :string,
       type: {:const, "date"}
     ]
   end
@@ -75,13 +73,13 @@ defmodule NotionSDK.Date do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "date",
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:null, :map, {NotionSDK.DateResponse, :t}]},
+        type: {:union, [:null, {NotionSDK.DateResponse, :t}]},
         write_only: false
       },
       %{
@@ -90,7 +88,7 @@ defmodule NotionSDK.Date do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "function",
         nullable: false,
@@ -132,27 +130,12 @@ defmodule NotionSDK.Date do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "property",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
+        required: true,
         type: {:const, "date"},
         write_only: false
       }

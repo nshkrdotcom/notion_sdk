@@ -15,12 +15,11 @@ defmodule NotionSDK.Relation do
   @type t :: %__MODULE__{
           id: String.t(),
           next_url: String.t() | nil,
-          property: String.t(),
-          relation: map | NotionSDK.EmptyObject.t(),
-          type: String.t() | nil
+          relation: NotionSDK.EmptyObject.t(),
+          type: String.t()
         }
 
-  defstruct [:id, :next_url, :property, :relation, :type]
+  defstruct [:id, :next_url, :relation, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -30,8 +29,7 @@ defmodule NotionSDK.Relation do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      property: :string,
-      relation: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+      relation: {NotionSDK.EmptyObject, :t},
       type: {:const, "relation"}
     ]
   end
@@ -51,7 +49,7 @@ defmodule NotionSDK.Relation do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -66,7 +64,7 @@ defmodule NotionSDK.Relation do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_url",
         nullable: false,
@@ -81,28 +79,13 @@ defmodule NotionSDK.Relation do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "property",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "relation",
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+        type: {NotionSDK.EmptyObject, :t},
         write_only: false
       },
       %{
@@ -111,12 +94,12 @@ defmodule NotionSDK.Relation do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
+        required: true,
         type: {:const, "relation"},
         write_only: false
       }

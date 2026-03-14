@@ -4,35 +4,29 @@ defmodule NotionSDK.PageObjectResponse do
 
   ## Fields
 
-    * `cover`: Page cover image.
+    * `cover`: required
     * `created_by`: required
-    * `created_time`: Date and time when this page was created.
-    * `icon`: Page icon.
+    * `created_time`: required
+    * `icon`: required
     * `id`: required
-    * `in_trash`: Whether the page is in trash.
-    * `is_locked`: Whether the page is locked from editing in the Notion app UI.
+    * `in_trash`: required
+    * `is_locked`: required
     * `last_edited_by`: required
-    * `last_edited_time`: Date and time when this page was last edited.
-    * `object`: The page object type name.
+    * `last_edited_time`: required
+    * `object`: required
     * `parent`: required
-    * `properties`: Property values of this page.
-    * `public_url`: The public URL of the Notion page, if it has been published to the web.
-    * `url`: The URL of the Notion page.
+    * `properties`: required
+    * `public_url`: required
+    * `url`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
-          cover:
-            NotionSDK.ExternalPageCoverResponse.t() | NotionSDK.FilePageCoverResponse.t() | nil,
+          cover: map | nil,
           created_by: NotionSDK.PartialUserObjectResponse.t(),
           created_time: DateTime.t(),
-          icon:
-            NotionSDK.CustomEmojiPageIconResponse.t()
-            | NotionSDK.EmojiPageIconResponse.t()
-            | NotionSDK.ExternalPageIconResponse.t()
-            | NotionSDK.FilePageIconResponse.t()
-            | nil,
+          icon: map | nil,
           id: String.t(),
           in_trash: boolean,
           is_locked: boolean,
@@ -73,20 +67,10 @@ defmodule NotionSDK.PageObjectResponse do
 
   def __fields__(:t) do
     [
-      cover:
-        {:union,
-         [:null, {NotionSDK.FilePageCoverResponse, :t}, {NotionSDK.ExternalPageCoverResponse, :t}]},
+      cover: {:union, [:null, :map]},
       created_by: {NotionSDK.PartialUserObjectResponse, :t},
       created_time: {:string, "date-time"},
-      icon:
-        {:union,
-         [
-           :null,
-           {NotionSDK.EmojiPageIconResponse, :t},
-           {NotionSDK.FilePageIconResponse, :t},
-           {NotionSDK.ExternalPageIconResponse, :t},
-           {NotionSDK.CustomEmojiPageIconResponse, :t}
-         ]},
+      icon: {:union, [:null, :map]},
       id: {:string, "uuid"},
       in_trash: :boolean,
       is_locked: :boolean,
@@ -120,22 +104,16 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Page cover image.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "cover",
         nullable: false,
         read_only: false,
         required: true,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.FilePageCoverResponse, :t},
-             {NotionSDK.ExternalPageCoverResponse, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
@@ -144,7 +122,7 @@ defmodule NotionSDK.PageObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "created_by",
         nullable: false,
@@ -156,10 +134,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Date and time when this page was created.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "created_time",
         nullable: false,
@@ -171,24 +149,16 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Page icon.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
         read_only: false,
         required: true,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.EmojiPageIconResponse, :t},
-             {NotionSDK.FilePageIconResponse, :t},
-             {NotionSDK.ExternalPageIconResponse, :t},
-             {NotionSDK.CustomEmojiPageIconResponse, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
@@ -197,7 +167,7 @@ defmodule NotionSDK.PageObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -209,10 +179,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Whether the page is in trash.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -224,10 +194,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Whether the page is locked from editing in the Notion app UI.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_locked",
         nullable: false,
@@ -242,7 +212,7 @@ defmodule NotionSDK.PageObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "last_edited_by",
         nullable: false,
@@ -254,10 +224,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Date and time when this page was last edited.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "last_edited_time",
         nullable: false,
@@ -269,10 +239,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The page object type name.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -287,7 +257,7 @@ defmodule NotionSDK.PageObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -307,10 +277,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Property values of this page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "properties",
         nullable: false,
@@ -322,10 +292,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The public URL of the Notion page, if it has been published to the web.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "public_url",
         nullable: false,
@@ -337,10 +307,10 @@ defmodule NotionSDK.PageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The URL of the Notion page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "url",
         nullable: false,

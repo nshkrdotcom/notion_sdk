@@ -11,7 +11,7 @@ defmodule NotionSDK.Table do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{
+  @type t :: %__MODULE__{
           object: String.t() | nil,
           table: NotionSDK.TableRequestWithTableRowChildren.t(),
           type: String.t() | nil
@@ -46,7 +46,7 @@ defmodule NotionSDK.Table do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -61,7 +61,7 @@ defmodule NotionSDK.Table do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "table",
         nullable: false,
@@ -76,7 +76,7 @@ defmodule NotionSDK.Table do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

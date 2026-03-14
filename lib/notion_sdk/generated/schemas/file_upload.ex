@@ -1,6 +1,6 @@
 defmodule NotionSDK.FileUpload do
   @moduledoc """
-  File Upload
+  FileUpload
 
   ## Fields
 
@@ -49,7 +49,7 @@ defmodule NotionSDK.FileUpload do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "caption",
         nullable: false,
@@ -64,7 +64,7 @@ defmodule NotionSDK.FileUpload do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "file_upload",
         nullable: false,
@@ -79,7 +79,7 @@ defmodule NotionSDK.FileUpload do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "name",
         nullable: false,
@@ -94,7 +94,7 @@ defmodule NotionSDK.FileUpload do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

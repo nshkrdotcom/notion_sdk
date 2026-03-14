@@ -165,6 +165,31 @@ defmodule NotionSDK.ClientTest do
                "Basic #{Base.encode64("client-id:client-secret")}"
     end
 
+    test "encodes reserved path characters through the generated request path" do
+      client =
+        Client.new(
+          auth: "secret_test_token",
+          transport: TestTransport,
+          transport_opts: [test_pid: self(), response: {:error, :boom}]
+        )
+
+      assert {:error, %NotionSDK.Error{code: :api_connection}} =
+               Client.request(client, %{
+                 args: %{"comment_id" => "a b"},
+                 call: {__MODULE__, :request},
+                 method: :get,
+                 path_template: "/v1/comments/{comment_id}",
+                 url: "/v1/comments/a b",
+                 path_params: %{"comment_id" => "a b"},
+                 query: %{},
+                 body: %{},
+                 form_data: %{}
+               })
+
+      assert_receive {:transport_request, request, _context}
+      assert request.url == "https://api.notion.com/v1/comments/a%20b"
+    end
+
     test "strips inherited auth for a single request with auth false" do
       client =
         Client.new(

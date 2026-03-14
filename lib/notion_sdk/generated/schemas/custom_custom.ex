@@ -1,24 +1,24 @@
-defmodule NotionSDK.ExpressionObjectResponse do
+defmodule NotionSDK.CustomCustom do
   @moduledoc """
-  ExpressionObjectResponse
+  CustomCustom
 
   ## Fields
 
-    * `expression`: required
+    * `name`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{expression: String.t()}
+  @type t :: %__MODULE__{name: String.t()}
 
-  defstruct [:expression]
+  defstruct [:name]
 
   @doc false
   @spec __fields__(atom) :: keyword
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [expression: :string]
+    [name: :string]
   end
 
   (
@@ -36,9 +36,9 @@ defmodule NotionSDK.ExpressionObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
-        name: "expression",
+        name: "name",
         nullable: false,
         read_only: false,
         required: true,

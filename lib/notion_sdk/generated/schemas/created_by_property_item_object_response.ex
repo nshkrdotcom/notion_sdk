@@ -1,6 +1,6 @@
 defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
   @moduledoc """
-  Created By
+  CreatedByPropertyItemObjectResponse
 
   ## Fields
 
@@ -50,7 +50,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "created_by",
         nullable: false,
@@ -67,7 +67,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -82,7 +82,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -97,7 +97,7 @@ defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

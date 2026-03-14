@@ -36,7 +36,7 @@ defmodule NotionSDK.RichTextItemRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "annotations",
         nullable: false,

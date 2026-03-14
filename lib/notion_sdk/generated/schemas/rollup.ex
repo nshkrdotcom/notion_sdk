@@ -15,18 +15,16 @@ defmodule NotionSDK.Rollup do
   @type t :: %__MODULE__{
           id: String.t(),
           next_url: String.t() | nil,
-          property: String.t(),
           rollup:
             NotionSDK.Array.t()
             | NotionSDK.Date.t()
             | NotionSDK.Incomplete.t()
             | NotionSDK.Number.t()
-            | NotionSDK.RollupRollup.t()
             | NotionSDK.Unsupported.t(),
-          type: String.t() | nil
+          type: String.t()
         }
 
-  defstruct [:id, :next_url, :property, :rollup, :type]
+  defstruct [:id, :next_url, :rollup, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -36,11 +34,9 @@ defmodule NotionSDK.Rollup do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      property: :string,
       rollup:
         {:union,
          [
-           {NotionSDK.RollupRollup, :t},
            {NotionSDK.Number, :t},
            {NotionSDK.Date, :t},
            {NotionSDK.Array, :t},
@@ -66,7 +62,7 @@ defmodule NotionSDK.Rollup do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -81,7 +77,7 @@ defmodule NotionSDK.Rollup do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_url",
         nullable: false,
@@ -96,22 +92,7 @@ defmodule NotionSDK.Rollup do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "property",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "rollup",
         nullable: false,
@@ -120,7 +101,6 @@ defmodule NotionSDK.Rollup do
         type:
           {:union,
            [
-             {NotionSDK.RollupRollup, :t},
              {NotionSDK.Number, :t},
              {NotionSDK.Date, :t},
              {NotionSDK.Array, :t},
@@ -135,12 +115,12 @@ defmodule NotionSDK.Rollup do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
+        required: true,
         type: {:const, "rollup"},
         write_only: false
       }

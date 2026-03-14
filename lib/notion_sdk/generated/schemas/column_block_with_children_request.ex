@@ -1,6 +1,6 @@
 defmodule NotionSDK.ColumnBlockWithChildrenRequest do
   @moduledoc """
-  Column
+  ColumnBlockWithChildrenRequest
 
   ## Fields
 
@@ -46,7 +46,7 @@ defmodule NotionSDK.ColumnBlockWithChildrenRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "column",
         nullable: false,
@@ -61,7 +61,7 @@ defmodule NotionSDK.ColumnBlockWithChildrenRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -76,7 +76,7 @@ defmodule NotionSDK.ColumnBlockWithChildrenRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

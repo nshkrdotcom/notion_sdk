@@ -40,10 +40,13 @@ defmodule NotionSDK.GeneratedSourceTest do
     assert source =~ "alias NotionSDK.GeneratedOAuth, as: OAuthRuntime"
     assert source =~ "OAuthRuntime.provider_new("
     assert source =~ "with {:ok, authorization_opts} <- authorization_opts(opts) do"
-    assert source =~ "OAuthRuntime.authorization_request(authorization_opts)"
-    assert source =~ "OAuthRuntime.authorize_url(authorization_opts)"
-    assert source =~ "OAuthRuntime.exchange_code(code, oauth_runtime_opts(opts))"
-    assert source =~ "OAuthRuntime.refresh_token(refresh_token, oauth_runtime_opts(opts))"
+    assert source =~ "OAuthRuntime.authorization_request(provider(), authorization_opts)"
+    assert source =~ "OAuthRuntime.authorize_url(provider(), authorization_opts)"
+    assert source =~ "OAuthRuntime.exchange_code(provider(), code, oauth_runtime_opts(opts))"
+
+    assert source =~
+             "OAuthRuntime.refresh_token(provider(), refresh_token, oauth_runtime_opts(opts))"
+
     assert source =~ "Keyword.put_new(params, :owner, \"user\")"
     assert source =~ "OAuthRuntime.error_new(:missing_redirect_uri, provider: provider().name)"
     refute source =~ "OAuth2.Provider.new("
@@ -67,7 +70,7 @@ defmodule NotionSDK.GeneratedSourceTest do
     source = File.read!(@page_schema_source)
 
     refute source =~ "Provides struct and types for PageObjectResponse"
-    assert source =~ "@moduledoc \"\"\"\n  PageObjectResponse"
+    assert source =~ ~r/@moduledoc\s+"""\n\s+PageObjectResponse/
     assert source =~ "description:"
     assert source =~ "deprecated:"
     assert source =~ "example:"
@@ -101,6 +104,27 @@ defmodule NotionSDK.GeneratedSourceTest do
     assert oauth_source =~ ~s(circuit_breaker: "oauth_control")
   end
 
+  test "generated operations use the shared pristine operation helper and emit path templates" do
+    users_source = File.read!(@users_source)
+    pages_source = File.read!(@pages_source)
+
+    assert users_source =~ "use Pristine.OpenAPI.Operation"
+    assert pages_source =~ "path_template: \"/v1/pages/{page_id}\""
+    refute users_source =~ "NotionSDK.GeneratedOperation"
+    refute pages_source =~ "NotionSDK.GeneratedOperation"
+  end
+
+  test "generated security docs and metadata deduplicate bearer auth requirements" do
+    pages_source = File.read!(@pages_source)
+
+    assert pages_source =~ "## Security"
+    assert pages_source =~ "* `bearerAuth`"
+    refute pages_source =~ "* `bearerAuth`\n    * `bearerAuth`"
+
+    refute pages_source =~
+             ~s(%{"bearerAuth" => []},\n        %{"bearerAuth" => []})
+  end
+
   test "generated source avoids credo-triggering blank lines and todo labels" do
     sources =
       @generated_dir
@@ -112,7 +136,7 @@ defmodule NotionSDK.GeneratedSourceTest do
 
     source = File.read!(@todo_schema_source)
 
-    assert source =~ "@moduledoc \"\"\"\n  To Do To Do"
+    assert source =~ ~r/@moduledoc\s+"""\n\s+To Do To Do/
     refute source =~ "@moduledoc \"\"\"\n  ToDoToDo"
   end
 end

@@ -4,37 +4,31 @@ defmodule NotionSDK.DatabaseObjectResponse do
 
   ## Fields
 
-    * `cover`: The cover of the database.
-    * `created_time`: The time when the database was created.
-    * `data_sources`: The data sources of the database.
-    * `description`: The description of the database.
-    * `icon`: The icon of the database.
+    * `cover`: required
+    * `created_time`: required
+    * `data_sources`: required
+    * `description`: required
+    * `icon`: required
     * `id`: required
-    * `in_trash`: Whether the database is in the trash.
-    * `is_inline`: Whether the database is inline.
-    * `is_locked`: Whether the database is locked from editing in the Notion app UI.
-    * `last_edited_time`: The time when the database was last edited.
-    * `object`: The database object type name.
+    * `in_trash`: required
+    * `is_inline`: required
+    * `is_locked`: required
+    * `last_edited_time`: required
+    * `object`: required
     * `parent`: required
-    * `public_url`: The public URL of the database if it is publicly accessible.
-    * `title`: The title of the database.
-    * `url`: The URL of the database.
+    * `public_url`: required
+    * `title`: required
+    * `url`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
   @type t :: %__MODULE__{
-          cover:
-            NotionSDK.ExternalPageCoverResponse.t() | NotionSDK.FilePageCoverResponse.t() | nil,
+          cover: map | nil,
           created_time: DateTime.t(),
           data_sources: [NotionSDK.DataSourceReferenceResponse.t()],
           description: [NotionSDK.RichTextItemResponse.t()],
-          icon:
-            NotionSDK.CustomEmojiPageIconResponse.t()
-            | NotionSDK.EmojiPageIconResponse.t()
-            | NotionSDK.ExternalPageIconResponse.t()
-            | NotionSDK.FilePageIconResponse.t()
-            | nil,
+          icon: map | nil,
           id: String.t(),
           in_trash: boolean,
           is_inline: boolean,
@@ -75,21 +69,11 @@ defmodule NotionSDK.DatabaseObjectResponse do
 
   def __fields__(:t) do
     [
-      cover:
-        {:union,
-         [:null, {NotionSDK.FilePageCoverResponse, :t}, {NotionSDK.ExternalPageCoverResponse, :t}]},
+      cover: {:union, [:null, :map]},
       created_time: {:string, "date-time"},
       data_sources: [{NotionSDK.DataSourceReferenceResponse, :t}],
       description: [{NotionSDK.RichTextItemResponse, :t}],
-      icon:
-        {:union,
-         [
-           :null,
-           {NotionSDK.EmojiPageIconResponse, :t},
-           {NotionSDK.FilePageIconResponse, :t},
-           {NotionSDK.ExternalPageIconResponse, :t},
-           {NotionSDK.CustomEmojiPageIconResponse, :t}
-         ]},
+      icon: {:union, [:null, :map]},
       id: {:string, "uuid"},
       in_trash: :boolean,
       is_inline: :boolean,
@@ -122,31 +106,25 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The cover of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "cover",
         nullable: false,
         read_only: false,
         required: true,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.FilePageCoverResponse, :t},
-             {NotionSDK.ExternalPageCoverResponse, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
         default: nil,
         deprecated: false,
-        description: "The time when the database was created.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "created_time",
         nullable: false,
@@ -158,10 +136,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The data sources of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "data_sources",
         nullable: false,
@@ -173,10 +151,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The description of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "description",
         nullable: false,
@@ -188,24 +166,16 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The icon of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
         read_only: false,
         required: true,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.EmojiPageIconResponse, :t},
-             {NotionSDK.FilePageIconResponse, :t},
-             {NotionSDK.ExternalPageIconResponse, :t},
-             {NotionSDK.CustomEmojiPageIconResponse, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
@@ -214,7 +184,7 @@ defmodule NotionSDK.DatabaseObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -226,10 +196,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Whether the database is in the trash.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -241,10 +211,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Whether the database is inline.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_inline",
         nullable: false,
@@ -256,10 +226,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Whether the database is locked from editing in the Notion app UI.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_locked",
         nullable: false,
@@ -271,10 +241,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The time when the database was last edited.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "last_edited_time",
         nullable: false,
@@ -286,10 +256,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The database object type name.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -304,7 +274,7 @@ defmodule NotionSDK.DatabaseObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -323,10 +293,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The public URL of the database if it is publicly accessible.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "public_url",
         nullable: false,
@@ -338,10 +308,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The title of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -353,10 +323,10 @@ defmodule NotionSDK.DatabaseObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The URL of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "url",
         nullable: false,

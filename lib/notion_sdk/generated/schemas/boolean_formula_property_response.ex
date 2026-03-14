@@ -1,6 +1,6 @@
 defmodule NotionSDK.BooleanFormulaPropertyResponse do
   @moduledoc """
-  Boolean
+  BooleanFormulaPropertyResponse
 
   ## Fields
 
@@ -37,7 +37,7 @@ defmodule NotionSDK.BooleanFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "boolean",
         nullable: false,
@@ -52,7 +52,7 @@ defmodule NotionSDK.BooleanFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

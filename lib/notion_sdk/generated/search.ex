@@ -4,26 +4,22 @@ defmodule NotionSDK.Search do
 
   ## Operations
 
-    * Search by title
+    * post `/v1/search`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @type search_200_json_resp :: %{
           has_more: boolean,
           next_cursor: String.t() | nil,
           object: String.t(),
           page_or_data_source: NotionSDK.EmptyObject.t(),
-          results: [
-            NotionSDK.DataSourceObjectResponse.t()
-            | NotionSDK.PageObjectResponse.t()
-            | NotionSDK.PartialDataSourceObjectResponse.t()
-            | NotionSDK.PartialPageObjectResponse.t()
-          ],
+          results: [map],
           type: String.t()
         }
 
   @doc """
-  Search by title
+  post `/v1/search`
 
   ## Source Context
   Search by title
@@ -51,54 +47,8 @@ defmodule NotionSDK.Search do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -132,7 +82,7 @@ defmodule NotionSDK.Search do
           {:ok, NotionSDK.Search.search_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def search(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -153,50 +103,14 @@ defmodule NotionSDK.Search do
       args: params,
       call: {NotionSDK.Search, :search},
       path_template: "/v1/search",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/search", partition.path_params),
+      url: render_path("/v1/search", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Search, :search_json_req}}],
       response: [
         {200, {NotionSDK.Search, :search_200_json_resp}},
@@ -226,14 +140,7 @@ defmodule NotionSDK.Search do
       next_cursor: {:union, [:null, :string]},
       object: {:const, "list"},
       page_or_data_source: {NotionSDK.EmptyObject, :t},
-      results: [
-        union: [
-          {NotionSDK.PageObjectResponse, :t},
-          {NotionSDK.PartialPageObjectResponse, :t},
-          {NotionSDK.PartialDataSourceObjectResponse, :t},
-          {NotionSDK.DataSourceObjectResponse, :t}
-        ]
-      ],
+      results: [:map],
       type: {:const, "page_or_data_source"}
     ]
   end
@@ -271,7 +178,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -286,7 +193,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -301,7 +208,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -316,7 +223,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "page_or_data_source",
         nullable: false,
@@ -331,20 +238,13 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
         read_only: false,
         required: true,
-        type: [
-          union: [
-            {NotionSDK.PageObjectResponse, :t},
-            {NotionSDK.PartialPageObjectResponse, :t},
-            {NotionSDK.PartialDataSourceObjectResponse, :t},
-            {NotionSDK.DataSourceObjectResponse, :t}
-          ]
-        ],
+        type: [:map],
         write_only: false
       },
       %{
@@ -353,7 +253,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -373,7 +273,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "filter",
         nullable: false,
@@ -388,7 +288,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "page_size",
         nullable: false,
@@ -403,7 +303,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "query",
         nullable: false,
@@ -418,7 +318,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "sort",
         nullable: false,
@@ -433,7 +333,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "start_cursor",
         nullable: false,
@@ -453,7 +353,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "property",
         nullable: false,
@@ -468,7 +368,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "value",
         nullable: false,
@@ -488,7 +388,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "direction",
         nullable: false,
@@ -503,7 +403,7 @@ defmodule NotionSDK.Search do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "timestamp",
         nullable: false,

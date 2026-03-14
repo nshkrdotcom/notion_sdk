@@ -4,14 +4,15 @@ defmodule NotionSDK.Users do
 
   ## Operations
 
-    * List all users
-    * Retrieve your token's bot user
-    * Retrieve a user
+    * get `/v1/users`
+    * get `/v1/users/me`
+    * get `/v1/users/{user_id}`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @doc """
-  Retrieve your token's bot user
+  get `/v1/users/me`
 
   ## Source Context
   Retrieve your token's bot user
@@ -35,54 +36,8 @@ defmodule NotionSDK.Users do
     * [capabilities guide](https://developers.notion.com/reference/capabilities)
     * [Retrieve your token's bot user](https://developers.notion.com/reference/get-self)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -106,7 +61,7 @@ defmodule NotionSDK.Users do
           {:ok, NotionSDK.UserObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def get_self(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -118,50 +73,14 @@ defmodule NotionSDK.Users do
       args: params,
       call: {NotionSDK.Users, :get_self},
       path_template: "/v1/users/me",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/users/me", partition.path_params),
+      url: render_path("/v1/users/me", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.UserObjectResponse, :t}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -190,7 +109,7 @@ defmodule NotionSDK.Users do
         }
 
   @doc """
-  List all users
+  get `/v1/users`
 
   ## Source Context
   List all users
@@ -220,54 +139,8 @@ defmodule NotionSDK.Users do
     * `start_cursor`
     * `page_size`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -294,7 +167,7 @@ defmodule NotionSDK.Users do
           {:ok, NotionSDK.Users.list_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def list(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -306,50 +179,14 @@ defmodule NotionSDK.Users do
       args: params,
       call: {NotionSDK.Users, :list},
       path_template: "/v1/users",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/users", partition.path_params),
+      url: render_path("/v1/users", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.Users, :list_200_json_resp}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -369,7 +206,7 @@ defmodule NotionSDK.Users do
   end
 
   @doc """
-  Retrieve a user
+  get `/v1/users/{user_id}`
 
   ## Source Context
   Retrieve a user
@@ -392,54 +229,8 @@ defmodule NotionSDK.Users do
     * [capabilities guide](https://developers.notion.com/reference/capabilities)
     * [Retrieve a user](https://developers.notion.com/reference/get-user)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -465,7 +256,7 @@ defmodule NotionSDK.Users do
           {:ok, NotionSDK.UserObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -477,50 +268,14 @@ defmodule NotionSDK.Users do
       args: params,
       call: {NotionSDK.Users, :retrieve},
       path_template: "/v1/users/{user_id}",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/users/{user_id}", partition.path_params),
+      url: render_path("/v1/users/{user_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.UserObjectResponse, :t}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -569,7 +324,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -584,7 +339,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -599,7 +354,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -614,7 +369,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
@@ -629,7 +384,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -644,7 +399,7 @@ defmodule NotionSDK.Users do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "user",
         nullable: false,

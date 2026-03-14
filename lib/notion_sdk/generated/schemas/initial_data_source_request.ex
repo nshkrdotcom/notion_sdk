@@ -4,7 +4,7 @@ defmodule NotionSDK.InitialDataSourceRequest do
 
   ## Fields
 
-    * `properties`: Property schema for the initial data source, if you'd like to create one.
+    * `properties`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -33,10 +33,10 @@ defmodule NotionSDK.InitialDataSourceRequest do
       %{
         default: nil,
         deprecated: false,
-        description: "Property schema for the initial data source, if you'd like to create one.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "properties",
         nullable: false,

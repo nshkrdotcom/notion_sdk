@@ -6,7 +6,7 @@ defmodule NotionSDK.DataSourceParentResponse do
 
     * `data_source_id`: required
     * `database_id`: required
-    * `type`: The parent type.
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -42,7 +42,7 @@ defmodule NotionSDK.DataSourceParentResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "data_source_id",
         nullable: false,
@@ -57,7 +57,7 @@ defmodule NotionSDK.DataSourceParentResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "database_id",
         nullable: false,
@@ -69,10 +69,10 @@ defmodule NotionSDK.DataSourceParentResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The parent type.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

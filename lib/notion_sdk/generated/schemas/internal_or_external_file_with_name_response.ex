@@ -4,7 +4,7 @@ defmodule NotionSDK.InternalOrExternalFileWithNameResponse do
 
   ## Fields
 
-    * `name`: The name of the file.
+    * `name`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -33,10 +33,10 @@ defmodule NotionSDK.InternalOrExternalFileWithNameResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The name of the file.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "name",
         nullable: false,

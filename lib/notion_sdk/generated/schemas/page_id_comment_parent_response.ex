@@ -1,11 +1,11 @@
 defmodule NotionSDK.PageIdCommentParentResponse do
   @moduledoc """
-  Page Id
+  PageIdCommentParentResponse
 
   ## Fields
 
     * `page_id`: required
-    * `type`: Always `page_id`
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -37,7 +37,7 @@ defmodule NotionSDK.PageIdCommentParentResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "page_id",
         nullable: false,
@@ -49,10 +49,10 @@ defmodule NotionSDK.PageIdCommentParentResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `page_id`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

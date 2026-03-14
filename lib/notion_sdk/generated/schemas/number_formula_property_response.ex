@@ -1,6 +1,6 @@
 defmodule NotionSDK.NumberFormulaPropertyResponse do
   @moduledoc """
-  Number
+  NumberFormulaPropertyResponse
 
   ## Fields
 
@@ -37,7 +37,7 @@ defmodule NotionSDK.NumberFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "number",
         nullable: false,
@@ -52,7 +52,7 @@ defmodule NotionSDK.NumberFormulaPropertyResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

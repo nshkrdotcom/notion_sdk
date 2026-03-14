@@ -1,6 +1,6 @@
 defmodule NotionSDK.RichText do
   @moduledoc """
-  Rich Text
+  RichText
 
   ## Fields
 
@@ -15,12 +15,11 @@ defmodule NotionSDK.RichText do
   @type t :: %__MODULE__{
           id: String.t(),
           next_url: String.t() | nil,
-          property: String.t(),
-          rich_text: map | NotionSDK.EmptyObject.t(),
-          type: String.t() | nil
+          rich_text: NotionSDK.EmptyObject.t(),
+          type: String.t()
         }
 
-  defstruct [:id, :next_url, :property, :rich_text, :type]
+  defstruct [:id, :next_url, :rich_text, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword
@@ -30,8 +29,7 @@ defmodule NotionSDK.RichText do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      property: :string,
-      rich_text: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+      rich_text: {NotionSDK.EmptyObject, :t},
       type: {:const, "rich_text"}
     ]
   end
@@ -51,7 +49,7 @@ defmodule NotionSDK.RichText do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -66,7 +64,7 @@ defmodule NotionSDK.RichText do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_url",
         nullable: false,
@@ -81,28 +79,13 @@ defmodule NotionSDK.RichText do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "property",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "rich_text",
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:map, {NotionSDK.EmptyObject, :t}]},
+        type: {NotionSDK.EmptyObject, :t},
         write_only: false
       },
       %{
@@ -111,12 +94,12 @@ defmodule NotionSDK.RichText do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
+        required: true,
         type: {:const, "rich_text"},
         write_only: false
       }

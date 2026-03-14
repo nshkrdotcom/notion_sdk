@@ -4,16 +4,17 @@ defmodule NotionSDK.DataSources do
 
   ## Operations
 
-    * Create a data source
-    * Retrieve a data source
-    * Update a data source
-    * Query a data source
-    * List templates in a data source
+    * post `/v1/data_sources`
+    * get `/v1/data_sources/{data_source_id}`
+    * patch `/v1/data_sources/{data_source_id}`
+    * post `/v1/data_sources/{data_source_id}/query`
+    * get `/v1/data_sources/{data_source_id}/templates`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @doc """
-  Create a data source
+  post `/v1/data_sources`
 
   ## Source Context
   Create a data source
@@ -24,54 +25,8 @@ defmodule NotionSDK.DataSources do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -115,7 +70,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -135,50 +90,14 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :create},
       path_template: "/v1/data_sources",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/data_sources", partition.path_params),
+      url: render_path("/v1/data_sources", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.DataSources, :create_json_req}}],
       response: [
         {200,
@@ -216,7 +135,7 @@ defmodule NotionSDK.DataSources do
         }
 
   @doc """
-  List templates in a data source
+  get `/v1/data_sources/{data_source_id}/templates`
 
   ## Source Context
   List data source templates
@@ -230,54 +149,8 @@ defmodule NotionSDK.DataSources do
     * `start_cursor`
     * `page_size`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -305,7 +178,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def list_templates(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -317,54 +190,14 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :list_templates},
       path_template: "/v1/data_sources/{data_source_id}/templates",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/data_sources/{data_source_id}/templates",
-          partition.path_params
-        ),
+      url: render_path("/v1/data_sources/{data_source_id}/templates", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.DataSources, :list_templates_200_json_resp}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -388,17 +221,12 @@ defmodule NotionSDK.DataSources do
           next_cursor: String.t() | nil,
           object: String.t(),
           page_or_data_source: NotionSDK.EmptyObject.t(),
-          results: [
-            NotionSDK.DataSourceObjectResponse.t()
-            | NotionSDK.PageObjectResponse.t()
-            | NotionSDK.PartialDataSourceObjectResponse.t()
-            | NotionSDK.PartialPageObjectResponse.t()
-          ],
+          results: [map],
           type: String.t()
         }
 
   @doc """
-  Query a data source
+  post `/v1/data_sources/{data_source_id}/query`
 
   ## Source Context
   Query a data source
@@ -569,54 +397,8 @@ defmodule NotionSDK.DataSources do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -652,7 +434,7 @@ defmodule NotionSDK.DataSources do
           {:ok, NotionSDK.DataSources.query_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def query(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -674,54 +456,14 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :query},
       path_template: "/v1/data_sources/{data_source_id}/query",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/data_sources/{data_source_id}/query",
-          partition.path_params
-        ),
+      url: render_path("/v1/data_sources/{data_source_id}/query", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.DataSources, :query_json_req}}],
       response: [
         {200, {NotionSDK.DataSources, :query_200_json_resp}},
@@ -742,7 +484,7 @@ defmodule NotionSDK.DataSources do
   end
 
   @doc """
-  Retrieve a data source
+  get `/v1/data_sources/{data_source_id}`
 
   ## Source Context
   Retrieve a data source
@@ -791,54 +533,8 @@ defmodule NotionSDK.DataSources do
     * [linked data source](https://www.notion.so/help/guides/using-linked-databases)
     * [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -868,7 +564,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -880,54 +576,14 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :retrieve},
       path_template: "/v1/data_sources/{data_source_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/data_sources/{data_source_id}",
-          partition.path_params
-        ),
+      url: render_path("/v1/data_sources/{data_source_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200,
          {:union,
@@ -952,7 +608,7 @@ defmodule NotionSDK.DataSources do
   end
 
   @doc """
-  Update a data source
+  patch `/v1/data_sources/{data_source_id}`
 
   ## Source Context
   Update a data source
@@ -1003,54 +659,8 @@ defmodule NotionSDK.DataSources do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -1081,7 +691,7 @@ defmodule NotionSDK.DataSources do
           | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -1102,54 +712,14 @@ defmodule NotionSDK.DataSources do
       args: params,
       call: {NotionSDK.DataSources, :update},
       path_template: "/v1/data_sources/{data_source_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/data_sources/{data_source_id}",
-          partition.path_params
-        ),
+      url: render_path("/v1/data_sources/{data_source_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.DataSources, :update_json_req}}],
       response: [
         {200,
@@ -1180,15 +750,7 @@ defmodule NotionSDK.DataSources do
 
   def __fields__(:create_json_req) do
     [
-      icon:
-        {:union,
-         [
-           :null,
-           {NotionSDK.FileUploadPageIconRequest, :t},
-           {NotionSDK.EmojiPageIconRequest, :t},
-           {NotionSDK.ExternalPageIconRequest, :t},
-           {NotionSDK.CustomEmojiPageIconRequest, :t}
-         ]},
+      icon: {:union, [:null, :map]},
       parent: {NotionSDK.ParentOfDataSourceRequest, :t},
       properties: :map,
       title: [{NotionSDK.RichTextItemRequest, :t}]
@@ -1213,117 +775,19 @@ defmodule NotionSDK.DataSources do
       next_cursor: {:union, [:null, :string]},
       object: {:const, "list"},
       page_or_data_source: {NotionSDK.EmptyObject, :t},
-      results: [
-        union: [
-          {NotionSDK.PageObjectResponse, :t},
-          {NotionSDK.PartialPageObjectResponse, :t},
-          {NotionSDK.PartialDataSourceObjectResponse, :t},
-          {NotionSDK.DataSourceObjectResponse, :t}
-        ]
-      ],
+      results: [:map],
       type: {:const, "page_or_data_source"}
     ]
   end
 
   def __fields__(:query_json_req) do
     [
-      filter:
-        {:union,
-         [
-           {NotionSDK.DataSources, :query_json_req_filter},
-           {NotionSDK.Title, :t},
-           {NotionSDK.RichText, :t},
-           {NotionSDK.Number, :t},
-           {NotionSDK.Checkbox, :t},
-           {NotionSDK.Select, :t},
-           {NotionSDK.MultiSelect, :t},
-           {NotionSDK.Status, :t},
-           {NotionSDK.Date, :t},
-           {NotionSDK.People, :t},
-           {NotionSDK.Files, :t},
-           {NotionSDK.Url, :t},
-           {NotionSDK.Email, :t},
-           {NotionSDK.PhoneNumber, :t},
-           {NotionSDK.Relation, :t},
-           {NotionSDK.CreatedBy, :t},
-           {NotionSDK.CreatedTime, :t},
-           {NotionSDK.LastEditedBy, :t},
-           {NotionSDK.LastEditedTime, :t},
-           {NotionSDK.Formula, :t},
-           {NotionSDK.UniqueId, :t},
-           {NotionSDK.Rollup, :t},
-           {NotionSDK.Verification, :t},
-           {NotionSDK.TimestampCreatedTimeFilter, :t},
-           {NotionSDK.TimestampLastEditedTimeFilter, :t}
-         ]},
+      filter: :map,
       in_trash: :boolean,
       page_size: :number,
       result_type: {:enum, ["page", "data_source"]},
       sorts: [{NotionSDK.DataSources, :query_json_req_sorts}],
       start_cursor: {:string, "uuid"}
-    ]
-  end
-
-  def __fields__(:query_json_req_filter) do
-    [
-      and: [
-        union: [
-          {NotionSDK.Title, :t},
-          {NotionSDK.RichText, :t},
-          {NotionSDK.Number, :t},
-          {NotionSDK.Checkbox, :t},
-          {NotionSDK.Select, :t},
-          {NotionSDK.MultiSelect, :t},
-          {NotionSDK.Status, :t},
-          {NotionSDK.Date, :t},
-          {NotionSDK.People, :t},
-          {NotionSDK.Files, :t},
-          {NotionSDK.Url, :t},
-          {NotionSDK.Email, :t},
-          {NotionSDK.PhoneNumber, :t},
-          {NotionSDK.Relation, :t},
-          {NotionSDK.CreatedBy, :t},
-          {NotionSDK.CreatedTime, :t},
-          {NotionSDK.LastEditedBy, :t},
-          {NotionSDK.LastEditedTime, :t},
-          {NotionSDK.Formula, :t},
-          {NotionSDK.UniqueId, :t},
-          {NotionSDK.Rollup, :t},
-          {NotionSDK.Verification, :t},
-          {NotionSDK.TimestampCreatedTimeFilter, :t},
-          {NotionSDK.TimestampLastEditedTimeFilter, :t},
-          :map
-        ]
-      ],
-      or: [
-        union: [
-          {NotionSDK.Title, :t},
-          {NotionSDK.RichText, :t},
-          {NotionSDK.Number, :t},
-          {NotionSDK.Checkbox, :t},
-          {NotionSDK.Select, :t},
-          {NotionSDK.MultiSelect, :t},
-          {NotionSDK.Status, :t},
-          {NotionSDK.Date, :t},
-          {NotionSDK.People, :t},
-          {NotionSDK.Files, :t},
-          {NotionSDK.Url, :t},
-          {NotionSDK.Email, :t},
-          {NotionSDK.PhoneNumber, :t},
-          {NotionSDK.Relation, :t},
-          {NotionSDK.CreatedBy, :t},
-          {NotionSDK.CreatedTime, :t},
-          {NotionSDK.LastEditedBy, :t},
-          {NotionSDK.LastEditedTime, :t},
-          {NotionSDK.Formula, :t},
-          {NotionSDK.UniqueId, :t},
-          {NotionSDK.Rollup, :t},
-          {NotionSDK.Verification, :t},
-          {NotionSDK.TimestampCreatedTimeFilter, :t},
-          {NotionSDK.TimestampLastEditedTimeFilter, :t},
-          :map
-        ]
-      ]
     ]
   end
 
@@ -1337,15 +801,7 @@ defmodule NotionSDK.DataSources do
 
   def __fields__(:update_json_req) do
     [
-      icon:
-        {:union,
-         [
-           :null,
-           {NotionSDK.FileUploadPageIconRequest, :t},
-           {NotionSDK.EmojiPageIconRequest, :t},
-           {NotionSDK.ExternalPageIconRequest, :t},
-           {NotionSDK.CustomEmojiPageIconRequest, :t}
-         ]},
+      icon: {:union, [:null, :map]},
       in_trash: :boolean,
       parent: {NotionSDK.ParentOfDataSourceRequest, :t},
       properties: :map,
@@ -1365,24 +821,16 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Page icon.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
         read_only: false,
         required: false,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.FileUploadPageIconRequest, :t},
-             {NotionSDK.EmojiPageIconRequest, :t},
-             {NotionSDK.ExternalPageIconRequest, :t},
-             {NotionSDK.CustomEmojiPageIconRequest, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
@@ -1391,7 +839,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -1403,10 +851,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Property schema of data source.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "properties",
         nullable: false,
@@ -1418,10 +866,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Title of data source as it appears in Notion.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -1438,10 +886,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Whether there are more templates available beyond this page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -1453,11 +901,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Cursor to use for the next page of results. Null if there are no more results.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -1469,10 +916,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Array of templates available in this data source.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "templates",
         nullable: false,
@@ -1492,7 +939,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -1504,10 +951,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Whether this template is the default template for the data source.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_default",
         nullable: false,
@@ -1519,10 +966,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Name of the template.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "name",
         nullable: false,
@@ -1542,7 +989,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -1557,7 +1004,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -1572,7 +1019,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -1587,7 +1034,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "page_or_data_source",
         nullable: false,
@@ -1602,20 +1049,13 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
         read_only: false,
         required: true,
-        type: [
-          union: [
-            {NotionSDK.PageObjectResponse, :t},
-            {NotionSDK.PartialPageObjectResponse, :t},
-            {NotionSDK.PartialDataSourceObjectResponse, :t},
-            {NotionSDK.DataSourceObjectResponse, :t}
-          ]
-        ],
+        type: [:map],
         write_only: false
       },
       %{
@@ -1624,7 +1064,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -1644,41 +1084,13 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "filter",
         nullable: false,
         read_only: false,
         required: false,
-        type:
-          {:union,
-           [
-             {NotionSDK.DataSources, :query_json_req_filter},
-             {NotionSDK.Title, :t},
-             {NotionSDK.RichText, :t},
-             {NotionSDK.Number, :t},
-             {NotionSDK.Checkbox, :t},
-             {NotionSDK.Select, :t},
-             {NotionSDK.MultiSelect, :t},
-             {NotionSDK.Status, :t},
-             {NotionSDK.Date, :t},
-             {NotionSDK.People, :t},
-             {NotionSDK.Files, :t},
-             {NotionSDK.Url, :t},
-             {NotionSDK.Email, :t},
-             {NotionSDK.PhoneNumber, :t},
-             {NotionSDK.Relation, :t},
-             {NotionSDK.CreatedBy, :t},
-             {NotionSDK.CreatedTime, :t},
-             {NotionSDK.LastEditedBy, :t},
-             {NotionSDK.LastEditedTime, :t},
-             {NotionSDK.Formula, :t},
-             {NotionSDK.UniqueId, :t},
-             {NotionSDK.Rollup, :t},
-             {NotionSDK.Verification, :t},
-             {NotionSDK.TimestampCreatedTimeFilter, :t},
-             {NotionSDK.TimestampLastEditedTimeFilter, :t}
-           ]},
+        type: :map,
         write_only: false
       },
       %{
@@ -1687,7 +1099,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -1702,7 +1114,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "page_size",
         nullable: false,
@@ -1714,11 +1126,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Optionally filter the results to only include pages or data sources. Regular, non-wiki databases only support page children. The default behavior is no result type filtering, in other words, returning both pages and data sources for wikis.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "result_type",
         nullable: false,
@@ -1733,7 +1144,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "sorts",
         nullable: false,
@@ -1748,104 +1159,13 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "start_cursor",
         nullable: false,
         read_only: false,
         required: false,
         type: {:string, "uuid"},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:query_json_req_filter) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "and",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: [
-          union: [
-            {NotionSDK.Title, :t},
-            {NotionSDK.RichText, :t},
-            {NotionSDK.Number, :t},
-            {NotionSDK.Checkbox, :t},
-            {NotionSDK.Select, :t},
-            {NotionSDK.MultiSelect, :t},
-            {NotionSDK.Status, :t},
-            {NotionSDK.Date, :t},
-            {NotionSDK.People, :t},
-            {NotionSDK.Files, :t},
-            {NotionSDK.Url, :t},
-            {NotionSDK.Email, :t},
-            {NotionSDK.PhoneNumber, :t},
-            {NotionSDK.Relation, :t},
-            {NotionSDK.CreatedBy, :t},
-            {NotionSDK.CreatedTime, :t},
-            {NotionSDK.LastEditedBy, :t},
-            {NotionSDK.LastEditedTime, :t},
-            {NotionSDK.Formula, :t},
-            {NotionSDK.UniqueId, :t},
-            {NotionSDK.Rollup, :t},
-            {NotionSDK.Verification, :t},
-            {NotionSDK.TimestampCreatedTimeFilter, :t},
-            {NotionSDK.TimestampLastEditedTimeFilter, :t},
-            :map
-          ]
-        ],
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "or",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: [
-          union: [
-            {NotionSDK.Title, :t},
-            {NotionSDK.RichText, :t},
-            {NotionSDK.Number, :t},
-            {NotionSDK.Checkbox, :t},
-            {NotionSDK.Select, :t},
-            {NotionSDK.MultiSelect, :t},
-            {NotionSDK.Status, :t},
-            {NotionSDK.Date, :t},
-            {NotionSDK.People, :t},
-            {NotionSDK.Files, :t},
-            {NotionSDK.Url, :t},
-            {NotionSDK.Email, :t},
-            {NotionSDK.PhoneNumber, :t},
-            {NotionSDK.Relation, :t},
-            {NotionSDK.CreatedBy, :t},
-            {NotionSDK.CreatedTime, :t},
-            {NotionSDK.LastEditedBy, :t},
-            {NotionSDK.LastEditedTime, :t},
-            {NotionSDK.Formula, :t},
-            {NotionSDK.UniqueId, :t},
-            {NotionSDK.Rollup, :t},
-            {NotionSDK.Verification, :t},
-            {NotionSDK.TimestampCreatedTimeFilter, :t},
-            {NotionSDK.TimestampLastEditedTimeFilter, :t},
-            :map
-          ]
-        ],
         write_only: false
       }
     ]
@@ -1859,7 +1179,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "direction",
         nullable: false,
@@ -1874,7 +1194,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "property",
         nullable: false,
@@ -1889,7 +1209,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "timestamp",
         nullable: false,
@@ -1906,34 +1226,25 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Page icon.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
         read_only: false,
         required: false,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.FileUploadPageIconRequest, :t},
-             {NotionSDK.EmojiPageIconRequest, :t},
-             {NotionSDK.ExternalPageIconRequest, :t},
-             {NotionSDK.CustomEmojiPageIconRequest, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Whether the database should be moved to or from the trash. If not provided, the trash status will not be updated.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -1948,7 +1259,7 @@ defmodule NotionSDK.DataSources do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -1960,11 +1271,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "The property schema of the data source. The keys are property names or IDs, and the values are property configuration objects. Properties set to null will be removed.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "properties",
         nullable: false,
@@ -1976,10 +1286,10 @@ defmodule NotionSDK.DataSources do
       %{
         default: nil,
         deprecated: false,
-        description: "Title of data source as it appears in Notion.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -2016,10 +1326,6 @@ defmodule NotionSDK.DataSources do
 
   def __schema__(:query_json_req) do
     OpenAPIRuntime.build_schema(__openapi_fields__(:query_json_req))
-  end
-
-  def __schema__(:query_json_req_filter) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:query_json_req_filter))
   end
 
   def __schema__(:query_json_req_sorts) do

@@ -1,26 +1,24 @@
-defmodule NotionSDK.UniqueId do
+defmodule NotionSDK.PersonPerson do
   @moduledoc """
-  Unique Id
+  PersonPerson
 
   ## Fields
 
-    * `property`: required
-    * `type`: optional
-    * `unique_id`: required
+    * `email`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{property: String.t(), type: String.t() | nil, unique_id: map}
+  @type t :: %__MODULE__{email: String.t()}
 
-  defstruct [:property, :type, :unique_id]
+  defstruct [:email]
 
   @doc false
   @spec __fields__(atom) :: keyword
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [property: :string, type: {:const, "unique_id"}, unique_id: :map]
+    [email: :string]
   end
 
   (
@@ -38,43 +36,13 @@ defmodule NotionSDK.UniqueId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
-        name: "property",
+        name: "email",
         nullable: false,
         read_only: false,
         required: true,
         type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "type",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: {:const, "unique_id"},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "unique_id",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :map,
         write_only: false
       }
     ]

@@ -46,7 +46,7 @@ The checked-in generated code already includes several newer additive concepts:
 - `NotionSDK.Blocks.append_children/2` accepts `position` with `after_block`, `start`, and `end`
 - `NotionSDK.Pages.create/2` accepts `position` with `after_block`, `page_start`, and `page_end`
 - modern page, block, database, data source, and file-upload response models expose `in_trash`
-- the generated schema set includes `NotionSDK.MeetingNotesBlockObjectResponse`
+- the committed compatibility surface includes `meeting_notes` block response support
 
 These are real generated surface facts, not just README claims.
 

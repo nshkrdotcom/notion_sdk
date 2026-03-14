@@ -4,14 +4,15 @@ defmodule NotionSDK.Comments do
 
   ## Operations
 
-    * List comments
-    * Create a comment
-    * Retrieve a comment
+    * get `/v1/comments`
+    * post `/v1/comments`
+    * get `/v1/comments/{comment_id}`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @doc """
-  Create a comment
+  post `/v1/comments`
 
   ## Source Context
   Create comment
@@ -37,54 +38,8 @@ defmodule NotionSDK.Comments do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -113,7 +68,7 @@ defmodule NotionSDK.Comments do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -132,50 +87,14 @@ defmodule NotionSDK.Comments do
       args: params,
       call: {NotionSDK.Comments, :create},
       path_template: "/v1/comments",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/comments", partition.path_params),
+      url: render_path("/v1/comments", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Comments, :create_json_req}}],
       response: [
         {200,
@@ -207,7 +126,7 @@ defmodule NotionSDK.Comments do
         }
 
   @doc """
-  List comments
+  get `/v1/comments`
 
   ## Source Context
   List comments
@@ -239,54 +158,8 @@ defmodule NotionSDK.Comments do
     * `start_cursor`
     * `page_size`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -314,7 +187,7 @@ defmodule NotionSDK.Comments do
           {:ok, NotionSDK.Comments.list_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def list(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -330,50 +203,14 @@ defmodule NotionSDK.Comments do
       args: params,
       call: {NotionSDK.Comments, :list},
       path_template: "/v1/comments",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/comments", partition.path_params),
+      url: render_path("/v1/comments", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.Comments, :list_200_json_resp}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -393,7 +230,7 @@ defmodule NotionSDK.Comments do
   end
 
   @doc """
-  Retrieve a comment
+  get `/v1/comments/{comment_id}`
 
   ## Source Context
   Retrieve a comment
@@ -419,54 +256,8 @@ defmodule NotionSDK.Comments do
     * [integration dashboard](https://www.notion.so/profile/integrations)
     * [Retrieve a comment](https://developers.notion.com/reference/retrieve-comment)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -494,7 +285,7 @@ defmodule NotionSDK.Comments do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -506,54 +297,14 @@ defmodule NotionSDK.Comments do
       args: params,
       call: {NotionSDK.Comments, :retrieve},
       path_template: "/v1/comments/{comment_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/comments/{comment_id}",
-          partition.path_params
-        ),
+      url: render_path("/v1/comments/{comment_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200,
          {:union,
@@ -614,10 +365,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: "An array of files to attach to the comment. Maximum of 3 allowed.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "attachments",
         nullable: false,
@@ -629,10 +380,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: "Display name for the comment.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "display_name",
         nullable: false,
@@ -645,10 +396,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: "An array of rich text objects that represent the content of the comment.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "rich_text",
         nullable: false,
@@ -665,10 +416,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: "ID of a FileUpload object that has the status `uploaded`.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "file_upload_id",
         nullable: false,
@@ -680,10 +431,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `file_upload`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -703,7 +454,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "comment",
         nullable: false,
@@ -718,7 +469,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -733,7 +484,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -745,10 +496,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `list`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -763,7 +514,7 @@ defmodule NotionSDK.Comments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
@@ -775,10 +526,10 @@ defmodule NotionSDK.Comments do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `comment`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

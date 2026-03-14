@@ -4,7 +4,7 @@ defmodule NotionSDK.CommentObjectResponseAttachments do
 
   ## Fields
 
-    * `category`: One of: `audio`, `image`, `pdf`, `productivity`, `video`
+    * `category`: required
     * `file`: required
 
   """
@@ -37,10 +37,10 @@ defmodule NotionSDK.CommentObjectResponseAttachments do
       %{
         default: nil,
         deprecated: false,
-        description: "One of: `audio`, `image`, `pdf`, `productivity`, `video`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "category",
         nullable: false,
@@ -55,7 +55,7 @@ defmodule NotionSDK.CommentObjectResponseAttachments do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "file",
         nullable: false,

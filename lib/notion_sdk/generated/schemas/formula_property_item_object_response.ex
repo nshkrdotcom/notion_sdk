@@ -1,6 +1,6 @@
 defmodule NotionSDK.FormulaPropertyItemObjectResponse do
   @moduledoc """
-  Formula
+  FormulaPropertyItemObjectResponse
 
   ## Fields
 
@@ -60,7 +60,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "formula",
         nullable: false,
@@ -82,7 +82,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -97,7 +97,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -112,7 +112,7 @@ defmodule NotionSDK.FormulaPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

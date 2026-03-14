@@ -4,8 +4,8 @@ defmodule NotionSDK.InternalFileResponse do
 
   ## Fields
 
-    * `expiry_time`: The time when the URL will expire.
-    * `url`: The URL of the file.
+    * `expiry_time`: required
+    * `url`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -34,10 +34,10 @@ defmodule NotionSDK.InternalFileResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The time when the URL will expire.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "expiry_time",
         nullable: false,
@@ -49,10 +49,10 @@ defmodule NotionSDK.InternalFileResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The URL of the file.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "url",
         nullable: false,

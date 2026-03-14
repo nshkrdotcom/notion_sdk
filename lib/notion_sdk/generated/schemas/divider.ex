@@ -11,7 +11,7 @@ defmodule NotionSDK.Divider do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{
+  @type t :: %__MODULE__{
           divider: NotionSDK.EmptyObject.t(),
           object: String.t() | nil,
           type: String.t() | nil
@@ -42,7 +42,7 @@ defmodule NotionSDK.Divider do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "divider",
         nullable: false,
@@ -57,7 +57,7 @@ defmodule NotionSDK.Divider do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -72,7 +72,7 @@ defmodule NotionSDK.Divider do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

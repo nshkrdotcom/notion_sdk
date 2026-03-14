@@ -1,11 +1,11 @@
 defmodule NotionSDK.ExternalPageIconRequest do
   @moduledoc """
-  External
+  ExternalPageIconRequest
 
   ## Fields
 
     * `external`: required
-    * `type`: Always `external`
+    * `type`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -40,7 +40,7 @@ defmodule NotionSDK.ExternalPageIconRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "external",
         nullable: false,
@@ -52,10 +52,10 @@ defmodule NotionSDK.ExternalPageIconRequest do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `external`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

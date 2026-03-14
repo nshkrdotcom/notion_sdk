@@ -36,7 +36,7 @@ defmodule NotionSDK.ColumnListRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "children",
         nullable: false,

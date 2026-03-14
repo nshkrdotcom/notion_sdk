@@ -1,6 +1,6 @@
 defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
   @moduledoc """
-  Last Edited By
+  LastEditedByPropertyItemObjectResponse
 
   ## Fields
 
@@ -51,7 +51,7 @@ defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -66,7 +66,7 @@ defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "last_edited_by",
         nullable: false,
@@ -83,7 +83,7 @@ defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -98,7 +98,7 @@ defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

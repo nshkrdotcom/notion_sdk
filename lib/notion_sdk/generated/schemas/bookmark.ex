@@ -11,7 +11,7 @@ defmodule NotionSDK.Bookmark do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{
+  @type t :: %__MODULE__{
           bookmark: NotionSDK.MediaContentWithUrlAndCaptionRequest.t(),
           object: String.t() | nil,
           type: String.t() | nil
@@ -46,7 +46,7 @@ defmodule NotionSDK.Bookmark do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "bookmark",
         nullable: false,
@@ -61,7 +61,7 @@ defmodule NotionSDK.Bookmark do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -76,7 +76,7 @@ defmodule NotionSDK.Bookmark do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

@@ -5,7 +5,7 @@ defmodule NotionSDK.PartialPageObjectResponse do
   ## Fields
 
     * `id`: required
-    * `object`: The page object type name.
+    * `object`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -37,7 +37,7 @@ defmodule NotionSDK.PartialPageObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -49,10 +49,10 @@ defmodule NotionSDK.PartialPageObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The page object type name.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,

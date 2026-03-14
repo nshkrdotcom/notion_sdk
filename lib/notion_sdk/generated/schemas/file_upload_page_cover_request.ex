@@ -1,11 +1,11 @@
 defmodule NotionSDK.FileUploadPageCoverRequest do
   @moduledoc """
-  File Upload
+  FileUploadPageCoverRequest
 
   ## Fields
 
-    * `file_upload`: The file upload for the cover.
-    * `type`: Always `file_upload`
+    * `file_upload`: required
+    * `type`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -40,10 +40,10 @@ defmodule NotionSDK.FileUploadPageCoverRequest do
       %{
         default: nil,
         deprecated: false,
-        description: "The file upload for the cover.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "file_upload",
         nullable: false,
@@ -55,10 +55,10 @@ defmodule NotionSDK.FileUploadPageCoverRequest do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `file_upload`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

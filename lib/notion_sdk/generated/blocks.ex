@@ -4,61 +4,26 @@ defmodule NotionSDK.Blocks do
 
   ## Operations
 
-    * Retrieve a block
-    * Delete a block
-    * Update a block
-    * Retrieve block children
-    * Append block children
+    * get `/v1/blocks/{block_id}`
+    * delete `/v1/blocks/{block_id}`
+    * patch `/v1/blocks/{block_id}`
+    * get `/v1/blocks/{block_id}/children`
+    * patch `/v1/blocks/{block_id}/children`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @type append_children_200_json_resp :: %{
           block: NotionSDK.EmptyObject.t(),
           has_more: boolean,
           next_cursor: String.t() | nil,
           object: String.t(),
-          results: [
-            NotionSDK.AudioBlockObjectResponse.t()
-            | NotionSDK.BookmarkBlockObjectResponse.t()
-            | NotionSDK.BreadcrumbBlockObjectResponse.t()
-            | NotionSDK.BulletedListItemBlockObjectResponse.t()
-            | NotionSDK.CalloutBlockObjectResponse.t()
-            | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-            | NotionSDK.ChildPageBlockObjectResponse.t()
-            | NotionSDK.CodeBlockObjectResponse.t()
-            | NotionSDK.ColumnBlockObjectResponse.t()
-            | NotionSDK.ColumnListBlockObjectResponse.t()
-            | NotionSDK.DividerBlockObjectResponse.t()
-            | NotionSDK.EmbedBlockObjectResponse.t()
-            | NotionSDK.EquationBlockObjectResponse.t()
-            | NotionSDK.FileBlockObjectResponse.t()
-            | NotionSDK.Heading1BlockObjectResponse.t()
-            | NotionSDK.Heading2BlockObjectResponse.t()
-            | NotionSDK.Heading3BlockObjectResponse.t()
-            | NotionSDK.ImageBlockObjectResponse.t()
-            | NotionSDK.LinkPreviewBlockObjectResponse.t()
-            | NotionSDK.LinkToPageBlockObjectResponse.t()
-            | NotionSDK.MeetingNotesBlockObjectResponse.t()
-            | NotionSDK.NumberedListItemBlockObjectResponse.t()
-            | NotionSDK.ParagraphBlockObjectResponse.t()
-            | NotionSDK.PartialBlockObjectResponse.t()
-            | NotionSDK.PdfBlockObjectResponse.t()
-            | NotionSDK.QuoteBlockObjectResponse.t()
-            | NotionSDK.SyncedBlockBlockObjectResponse.t()
-            | NotionSDK.TableBlockObjectResponse.t()
-            | NotionSDK.TableOfContentsBlockObjectResponse.t()
-            | NotionSDK.TableRowBlockObjectResponse.t()
-            | NotionSDK.TemplateBlockObjectResponse.t()
-            | NotionSDK.ToDoBlockObjectResponse.t()
-            | NotionSDK.ToggleBlockObjectResponse.t()
-            | NotionSDK.UnsupportedBlockObjectResponse.t()
-            | NotionSDK.VideoBlockObjectResponse.t()
-          ],
+          results: [map | NotionSDK.PartialBlockObjectResponse.t()],
           type: String.t()
         }
 
   @doc """
-  Append block children
+  patch `/v1/blocks/{block_id}/children`
 
   ## Source Context
   Append block children
@@ -123,54 +88,8 @@ defmodule NotionSDK.Blocks do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -204,7 +123,7 @@ defmodule NotionSDK.Blocks do
           {:ok, NotionSDK.Blocks.append_children_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def append_children(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{keys: [{"children", :children}, {"position", :position}], mode: :keys},
         form_data: %{mode: :none},
@@ -216,54 +135,14 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :append_children},
       path_template: "/v1/blocks/{block_id}/children",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/blocks/{block_id}/children",
-          partition.path_params
-        ),
+      url: render_path("/v1/blocks/{block_id}/children", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Blocks, :append_children_json_req}}],
       response: [
         {200, {NotionSDK.Blocks, :append_children_200_json_resp}},
@@ -284,7 +163,7 @@ defmodule NotionSDK.Blocks do
   end
 
   @doc """
-  Delete a block
+  delete `/v1/blocks/{block_id}`
 
   ## Source Context
   Delete a block
@@ -307,54 +186,8 @@ defmodule NotionSDK.Blocks do
     * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
     * [Delete a block](https://developers.notion.com/reference/delete-a-block)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -375,84 +208,12 @@ defmodule NotionSDK.Blocks do
   ```
   """
   @spec delete(client :: NotionSDK.Client.t()) ::
-          {:ok,
-           NotionSDK.AudioBlockObjectResponse.t()
-           | NotionSDK.BookmarkBlockObjectResponse.t()
-           | NotionSDK.BreadcrumbBlockObjectResponse.t()
-           | NotionSDK.BulletedListItemBlockObjectResponse.t()
-           | NotionSDK.CalloutBlockObjectResponse.t()
-           | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-           | NotionSDK.ChildPageBlockObjectResponse.t()
-           | NotionSDK.CodeBlockObjectResponse.t()
-           | NotionSDK.ColumnBlockObjectResponse.t()
-           | NotionSDK.ColumnListBlockObjectResponse.t()
-           | NotionSDK.DividerBlockObjectResponse.t()
-           | NotionSDK.EmbedBlockObjectResponse.t()
-           | NotionSDK.EquationBlockObjectResponse.t()
-           | NotionSDK.FileBlockObjectResponse.t()
-           | NotionSDK.Heading1BlockObjectResponse.t()
-           | NotionSDK.Heading2BlockObjectResponse.t()
-           | NotionSDK.Heading3BlockObjectResponse.t()
-           | NotionSDK.ImageBlockObjectResponse.t()
-           | NotionSDK.LinkPreviewBlockObjectResponse.t()
-           | NotionSDK.LinkToPageBlockObjectResponse.t()
-           | NotionSDK.MeetingNotesBlockObjectResponse.t()
-           | NotionSDK.NumberedListItemBlockObjectResponse.t()
-           | NotionSDK.ParagraphBlockObjectResponse.t()
-           | NotionSDK.PartialBlockObjectResponse.t()
-           | NotionSDK.PdfBlockObjectResponse.t()
-           | NotionSDK.QuoteBlockObjectResponse.t()
-           | NotionSDK.SyncedBlockBlockObjectResponse.t()
-           | NotionSDK.TableBlockObjectResponse.t()
-           | NotionSDK.TableOfContentsBlockObjectResponse.t()
-           | NotionSDK.TableRowBlockObjectResponse.t()
-           | NotionSDK.TemplateBlockObjectResponse.t()
-           | NotionSDK.ToDoBlockObjectResponse.t()
-           | NotionSDK.ToggleBlockObjectResponse.t()
-           | NotionSDK.UnsupportedBlockObjectResponse.t()
-           | NotionSDK.VideoBlockObjectResponse.t()}
-          | {:error, NotionSDK.Error.t()}
+          {:ok, map | NotionSDK.PartialBlockObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   @spec delete(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok,
-           NotionSDK.AudioBlockObjectResponse.t()
-           | NotionSDK.BookmarkBlockObjectResponse.t()
-           | NotionSDK.BreadcrumbBlockObjectResponse.t()
-           | NotionSDK.BulletedListItemBlockObjectResponse.t()
-           | NotionSDK.CalloutBlockObjectResponse.t()
-           | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-           | NotionSDK.ChildPageBlockObjectResponse.t()
-           | NotionSDK.CodeBlockObjectResponse.t()
-           | NotionSDK.ColumnBlockObjectResponse.t()
-           | NotionSDK.ColumnListBlockObjectResponse.t()
-           | NotionSDK.DividerBlockObjectResponse.t()
-           | NotionSDK.EmbedBlockObjectResponse.t()
-           | NotionSDK.EquationBlockObjectResponse.t()
-           | NotionSDK.FileBlockObjectResponse.t()
-           | NotionSDK.Heading1BlockObjectResponse.t()
-           | NotionSDK.Heading2BlockObjectResponse.t()
-           | NotionSDK.Heading3BlockObjectResponse.t()
-           | NotionSDK.ImageBlockObjectResponse.t()
-           | NotionSDK.LinkPreviewBlockObjectResponse.t()
-           | NotionSDK.LinkToPageBlockObjectResponse.t()
-           | NotionSDK.MeetingNotesBlockObjectResponse.t()
-           | NotionSDK.NumberedListItemBlockObjectResponse.t()
-           | NotionSDK.ParagraphBlockObjectResponse.t()
-           | NotionSDK.PartialBlockObjectResponse.t()
-           | NotionSDK.PdfBlockObjectResponse.t()
-           | NotionSDK.QuoteBlockObjectResponse.t()
-           | NotionSDK.SyncedBlockBlockObjectResponse.t()
-           | NotionSDK.TableBlockObjectResponse.t()
-           | NotionSDK.TableOfContentsBlockObjectResponse.t()
-           | NotionSDK.TableRowBlockObjectResponse.t()
-           | NotionSDK.TemplateBlockObjectResponse.t()
-           | NotionSDK.ToDoBlockObjectResponse.t()
-           | NotionSDK.ToggleBlockObjectResponse.t()
-           | NotionSDK.UnsupportedBlockObjectResponse.t()
-           | NotionSDK.VideoBlockObjectResponse.t()}
-          | {:error, NotionSDK.Error.t()}
+          {:ok, map | NotionSDK.PartialBlockObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def delete(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -464,91 +225,16 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :delete},
       path_template: "/v1/blocks/{block_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path("/v1/blocks/{block_id}", partition.path_params),
+      url: render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :delete,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
-        {200,
-         {:union,
-          [
-            {NotionSDK.PartialBlockObjectResponse, :t},
-            {NotionSDK.ParagraphBlockObjectResponse, :t},
-            {NotionSDK.Heading1BlockObjectResponse, :t},
-            {NotionSDK.Heading2BlockObjectResponse, :t},
-            {NotionSDK.Heading3BlockObjectResponse, :t},
-            {NotionSDK.BulletedListItemBlockObjectResponse, :t},
-            {NotionSDK.NumberedListItemBlockObjectResponse, :t},
-            {NotionSDK.QuoteBlockObjectResponse, :t},
-            {NotionSDK.ToDoBlockObjectResponse, :t},
-            {NotionSDK.ToggleBlockObjectResponse, :t},
-            {NotionSDK.TemplateBlockObjectResponse, :t},
-            {NotionSDK.SyncedBlockBlockObjectResponse, :t},
-            {NotionSDK.ChildPageBlockObjectResponse, :t},
-            {NotionSDK.ChildDatabaseBlockObjectResponse, :t},
-            {NotionSDK.EquationBlockObjectResponse, :t},
-            {NotionSDK.CodeBlockObjectResponse, :t},
-            {NotionSDK.CalloutBlockObjectResponse, :t},
-            {NotionSDK.DividerBlockObjectResponse, :t},
-            {NotionSDK.BreadcrumbBlockObjectResponse, :t},
-            {NotionSDK.TableOfContentsBlockObjectResponse, :t},
-            {NotionSDK.ColumnListBlockObjectResponse, :t},
-            {NotionSDK.ColumnBlockObjectResponse, :t},
-            {NotionSDK.LinkToPageBlockObjectResponse, :t},
-            {NotionSDK.TableBlockObjectResponse, :t},
-            {NotionSDK.TableRowBlockObjectResponse, :t},
-            {NotionSDK.MeetingNotesBlockObjectResponse, :t},
-            {NotionSDK.EmbedBlockObjectResponse, :t},
-            {NotionSDK.BookmarkBlockObjectResponse, :t},
-            {NotionSDK.ImageBlockObjectResponse, :t},
-            {NotionSDK.VideoBlockObjectResponse, :t},
-            {NotionSDK.PdfBlockObjectResponse, :t},
-            {NotionSDK.FileBlockObjectResponse, :t},
-            {NotionSDK.AudioBlockObjectResponse, :t},
-            {NotionSDK.LinkPreviewBlockObjectResponse, :t},
-            {NotionSDK.UnsupportedBlockObjectResponse, :t}
-          ]}},
+        {200, {:union, [{NotionSDK.PartialBlockObjectResponse, :t}, :map]}},
         {400, {NotionSDK.ErrorApi400, :t}},
         {401, {NotionSDK.ErrorApi401, :t}},
         {403, {NotionSDK.ErrorApi403, :t}},
@@ -570,48 +256,12 @@ defmodule NotionSDK.Blocks do
           has_more: boolean,
           next_cursor: String.t() | nil,
           object: String.t(),
-          results: [
-            NotionSDK.AudioBlockObjectResponse.t()
-            | NotionSDK.BookmarkBlockObjectResponse.t()
-            | NotionSDK.BreadcrumbBlockObjectResponse.t()
-            | NotionSDK.BulletedListItemBlockObjectResponse.t()
-            | NotionSDK.CalloutBlockObjectResponse.t()
-            | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-            | NotionSDK.ChildPageBlockObjectResponse.t()
-            | NotionSDK.CodeBlockObjectResponse.t()
-            | NotionSDK.ColumnBlockObjectResponse.t()
-            | NotionSDK.ColumnListBlockObjectResponse.t()
-            | NotionSDK.DividerBlockObjectResponse.t()
-            | NotionSDK.EmbedBlockObjectResponse.t()
-            | NotionSDK.EquationBlockObjectResponse.t()
-            | NotionSDK.FileBlockObjectResponse.t()
-            | NotionSDK.Heading1BlockObjectResponse.t()
-            | NotionSDK.Heading2BlockObjectResponse.t()
-            | NotionSDK.Heading3BlockObjectResponse.t()
-            | NotionSDK.ImageBlockObjectResponse.t()
-            | NotionSDK.LinkPreviewBlockObjectResponse.t()
-            | NotionSDK.LinkToPageBlockObjectResponse.t()
-            | NotionSDK.MeetingNotesBlockObjectResponse.t()
-            | NotionSDK.NumberedListItemBlockObjectResponse.t()
-            | NotionSDK.ParagraphBlockObjectResponse.t()
-            | NotionSDK.PartialBlockObjectResponse.t()
-            | NotionSDK.PdfBlockObjectResponse.t()
-            | NotionSDK.QuoteBlockObjectResponse.t()
-            | NotionSDK.SyncedBlockBlockObjectResponse.t()
-            | NotionSDK.TableBlockObjectResponse.t()
-            | NotionSDK.TableOfContentsBlockObjectResponse.t()
-            | NotionSDK.TableRowBlockObjectResponse.t()
-            | NotionSDK.TemplateBlockObjectResponse.t()
-            | NotionSDK.ToDoBlockObjectResponse.t()
-            | NotionSDK.ToggleBlockObjectResponse.t()
-            | NotionSDK.UnsupportedBlockObjectResponse.t()
-            | NotionSDK.VideoBlockObjectResponse.t()
-          ],
+          results: [map | NotionSDK.PartialBlockObjectResponse.t()],
           type: String.t()
         }
 
   @doc """
-  Retrieve block children
+  get `/v1/blocks/{block_id}/children`
 
   ## Source Context
   Retrieve block children
@@ -642,54 +292,8 @@ defmodule NotionSDK.Blocks do
     * `start_cursor`
     * `page_size`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -717,7 +321,7 @@ defmodule NotionSDK.Blocks do
           {:ok, NotionSDK.Blocks.list_children_200_json_resp()} | {:error, NotionSDK.Error.t()}
   def list_children(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -729,54 +333,14 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :list_children},
       path_template: "/v1/blocks/{block_id}/children",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/blocks/{block_id}/children",
-          partition.path_params
-        ),
+      url: render_path("/v1/blocks/{block_id}/children", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.Blocks, :list_children_200_json_resp}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -796,7 +360,7 @@ defmodule NotionSDK.Blocks do
   end
 
   @doc """
-  Retrieve a block
+  get `/v1/blocks/{block_id}`
 
   ## Source Context
   Retrieve a block
@@ -822,54 +386,8 @@ defmodule NotionSDK.Blocks do
     * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
     * [Retrieve a block](https://developers.notion.com/reference/retrieve-a-block)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -890,84 +408,12 @@ defmodule NotionSDK.Blocks do
   ```
   """
   @spec retrieve(client :: NotionSDK.Client.t()) ::
-          {:ok,
-           NotionSDK.AudioBlockObjectResponse.t()
-           | NotionSDK.BookmarkBlockObjectResponse.t()
-           | NotionSDK.BreadcrumbBlockObjectResponse.t()
-           | NotionSDK.BulletedListItemBlockObjectResponse.t()
-           | NotionSDK.CalloutBlockObjectResponse.t()
-           | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-           | NotionSDK.ChildPageBlockObjectResponse.t()
-           | NotionSDK.CodeBlockObjectResponse.t()
-           | NotionSDK.ColumnBlockObjectResponse.t()
-           | NotionSDK.ColumnListBlockObjectResponse.t()
-           | NotionSDK.DividerBlockObjectResponse.t()
-           | NotionSDK.EmbedBlockObjectResponse.t()
-           | NotionSDK.EquationBlockObjectResponse.t()
-           | NotionSDK.FileBlockObjectResponse.t()
-           | NotionSDK.Heading1BlockObjectResponse.t()
-           | NotionSDK.Heading2BlockObjectResponse.t()
-           | NotionSDK.Heading3BlockObjectResponse.t()
-           | NotionSDK.ImageBlockObjectResponse.t()
-           | NotionSDK.LinkPreviewBlockObjectResponse.t()
-           | NotionSDK.LinkToPageBlockObjectResponse.t()
-           | NotionSDK.MeetingNotesBlockObjectResponse.t()
-           | NotionSDK.NumberedListItemBlockObjectResponse.t()
-           | NotionSDK.ParagraphBlockObjectResponse.t()
-           | NotionSDK.PartialBlockObjectResponse.t()
-           | NotionSDK.PdfBlockObjectResponse.t()
-           | NotionSDK.QuoteBlockObjectResponse.t()
-           | NotionSDK.SyncedBlockBlockObjectResponse.t()
-           | NotionSDK.TableBlockObjectResponse.t()
-           | NotionSDK.TableOfContentsBlockObjectResponse.t()
-           | NotionSDK.TableRowBlockObjectResponse.t()
-           | NotionSDK.TemplateBlockObjectResponse.t()
-           | NotionSDK.ToDoBlockObjectResponse.t()
-           | NotionSDK.ToggleBlockObjectResponse.t()
-           | NotionSDK.UnsupportedBlockObjectResponse.t()
-           | NotionSDK.VideoBlockObjectResponse.t()}
-          | {:error, NotionSDK.Error.t()}
+          {:ok, map | NotionSDK.PartialBlockObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   @spec retrieve(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok,
-           NotionSDK.AudioBlockObjectResponse.t()
-           | NotionSDK.BookmarkBlockObjectResponse.t()
-           | NotionSDK.BreadcrumbBlockObjectResponse.t()
-           | NotionSDK.BulletedListItemBlockObjectResponse.t()
-           | NotionSDK.CalloutBlockObjectResponse.t()
-           | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-           | NotionSDK.ChildPageBlockObjectResponse.t()
-           | NotionSDK.CodeBlockObjectResponse.t()
-           | NotionSDK.ColumnBlockObjectResponse.t()
-           | NotionSDK.ColumnListBlockObjectResponse.t()
-           | NotionSDK.DividerBlockObjectResponse.t()
-           | NotionSDK.EmbedBlockObjectResponse.t()
-           | NotionSDK.EquationBlockObjectResponse.t()
-           | NotionSDK.FileBlockObjectResponse.t()
-           | NotionSDK.Heading1BlockObjectResponse.t()
-           | NotionSDK.Heading2BlockObjectResponse.t()
-           | NotionSDK.Heading3BlockObjectResponse.t()
-           | NotionSDK.ImageBlockObjectResponse.t()
-           | NotionSDK.LinkPreviewBlockObjectResponse.t()
-           | NotionSDK.LinkToPageBlockObjectResponse.t()
-           | NotionSDK.MeetingNotesBlockObjectResponse.t()
-           | NotionSDK.NumberedListItemBlockObjectResponse.t()
-           | NotionSDK.ParagraphBlockObjectResponse.t()
-           | NotionSDK.PartialBlockObjectResponse.t()
-           | NotionSDK.PdfBlockObjectResponse.t()
-           | NotionSDK.QuoteBlockObjectResponse.t()
-           | NotionSDK.SyncedBlockBlockObjectResponse.t()
-           | NotionSDK.TableBlockObjectResponse.t()
-           | NotionSDK.TableOfContentsBlockObjectResponse.t()
-           | NotionSDK.TableRowBlockObjectResponse.t()
-           | NotionSDK.TemplateBlockObjectResponse.t()
-           | NotionSDK.ToDoBlockObjectResponse.t()
-           | NotionSDK.ToggleBlockObjectResponse.t()
-           | NotionSDK.UnsupportedBlockObjectResponse.t()
-           | NotionSDK.VideoBlockObjectResponse.t()}
-          | {:error, NotionSDK.Error.t()}
+          {:ok, map | NotionSDK.PartialBlockObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -979,91 +425,16 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :retrieve},
       path_template: "/v1/blocks/{block_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path("/v1/blocks/{block_id}", partition.path_params),
+      url: render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
-        {200,
-         {:union,
-          [
-            {NotionSDK.PartialBlockObjectResponse, :t},
-            {NotionSDK.ParagraphBlockObjectResponse, :t},
-            {NotionSDK.Heading1BlockObjectResponse, :t},
-            {NotionSDK.Heading2BlockObjectResponse, :t},
-            {NotionSDK.Heading3BlockObjectResponse, :t},
-            {NotionSDK.BulletedListItemBlockObjectResponse, :t},
-            {NotionSDK.NumberedListItemBlockObjectResponse, :t},
-            {NotionSDK.QuoteBlockObjectResponse, :t},
-            {NotionSDK.ToDoBlockObjectResponse, :t},
-            {NotionSDK.ToggleBlockObjectResponse, :t},
-            {NotionSDK.TemplateBlockObjectResponse, :t},
-            {NotionSDK.SyncedBlockBlockObjectResponse, :t},
-            {NotionSDK.ChildPageBlockObjectResponse, :t},
-            {NotionSDK.ChildDatabaseBlockObjectResponse, :t},
-            {NotionSDK.EquationBlockObjectResponse, :t},
-            {NotionSDK.CodeBlockObjectResponse, :t},
-            {NotionSDK.CalloutBlockObjectResponse, :t},
-            {NotionSDK.DividerBlockObjectResponse, :t},
-            {NotionSDK.BreadcrumbBlockObjectResponse, :t},
-            {NotionSDK.TableOfContentsBlockObjectResponse, :t},
-            {NotionSDK.ColumnListBlockObjectResponse, :t},
-            {NotionSDK.ColumnBlockObjectResponse, :t},
-            {NotionSDK.LinkToPageBlockObjectResponse, :t},
-            {NotionSDK.TableBlockObjectResponse, :t},
-            {NotionSDK.TableRowBlockObjectResponse, :t},
-            {NotionSDK.MeetingNotesBlockObjectResponse, :t},
-            {NotionSDK.EmbedBlockObjectResponse, :t},
-            {NotionSDK.BookmarkBlockObjectResponse, :t},
-            {NotionSDK.ImageBlockObjectResponse, :t},
-            {NotionSDK.VideoBlockObjectResponse, :t},
-            {NotionSDK.PdfBlockObjectResponse, :t},
-            {NotionSDK.FileBlockObjectResponse, :t},
-            {NotionSDK.AudioBlockObjectResponse, :t},
-            {NotionSDK.LinkPreviewBlockObjectResponse, :t},
-            {NotionSDK.UnsupportedBlockObjectResponse, :t}
-          ]}},
+        {200, {:union, [{NotionSDK.PartialBlockObjectResponse, :t}, :map]}},
         {400, {NotionSDK.ErrorApi400, :t}},
         {401, {NotionSDK.ErrorApi401, :t}},
         {403, {NotionSDK.ErrorApi403, :t}},
@@ -1081,7 +452,7 @@ defmodule NotionSDK.Blocks do
   end
 
   @doc """
-  Update a block
+  patch `/v1/blocks/{block_id}`
 
   ## Source Context
   Update a block
@@ -1128,54 +499,8 @@ defmodule NotionSDK.Blocks do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -1199,120 +524,14 @@ defmodule NotionSDK.Blocks do
   ```
   """
   @spec update(client :: NotionSDK.Client.t()) ::
-          {:ok,
-           NotionSDK.AudioBlockObjectResponse.t()
-           | NotionSDK.BookmarkBlockObjectResponse.t()
-           | NotionSDK.BreadcrumbBlockObjectResponse.t()
-           | NotionSDK.BulletedListItemBlockObjectResponse.t()
-           | NotionSDK.CalloutBlockObjectResponse.t()
-           | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-           | NotionSDK.ChildPageBlockObjectResponse.t()
-           | NotionSDK.CodeBlockObjectResponse.t()
-           | NotionSDK.ColumnBlockObjectResponse.t()
-           | NotionSDK.ColumnListBlockObjectResponse.t()
-           | NotionSDK.DividerBlockObjectResponse.t()
-           | NotionSDK.EmbedBlockObjectResponse.t()
-           | NotionSDK.EquationBlockObjectResponse.t()
-           | NotionSDK.FileBlockObjectResponse.t()
-           | NotionSDK.Heading1BlockObjectResponse.t()
-           | NotionSDK.Heading2BlockObjectResponse.t()
-           | NotionSDK.Heading3BlockObjectResponse.t()
-           | NotionSDK.ImageBlockObjectResponse.t()
-           | NotionSDK.LinkPreviewBlockObjectResponse.t()
-           | NotionSDK.LinkToPageBlockObjectResponse.t()
-           | NotionSDK.MeetingNotesBlockObjectResponse.t()
-           | NotionSDK.NumberedListItemBlockObjectResponse.t()
-           | NotionSDK.ParagraphBlockObjectResponse.t()
-           | NotionSDK.PartialBlockObjectResponse.t()
-           | NotionSDK.PdfBlockObjectResponse.t()
-           | NotionSDK.QuoteBlockObjectResponse.t()
-           | NotionSDK.SyncedBlockBlockObjectResponse.t()
-           | NotionSDK.TableBlockObjectResponse.t()
-           | NotionSDK.TableOfContentsBlockObjectResponse.t()
-           | NotionSDK.TableRowBlockObjectResponse.t()
-           | NotionSDK.TemplateBlockObjectResponse.t()
-           | NotionSDK.ToDoBlockObjectResponse.t()
-           | NotionSDK.ToggleBlockObjectResponse.t()
-           | NotionSDK.UnsupportedBlockObjectResponse.t()
-           | NotionSDK.VideoBlockObjectResponse.t()}
-          | {:error, NotionSDK.Error.t()}
+          {:ok, map | NotionSDK.PartialBlockObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   @spec update(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok,
-           NotionSDK.AudioBlockObjectResponse.t()
-           | NotionSDK.BookmarkBlockObjectResponse.t()
-           | NotionSDK.BreadcrumbBlockObjectResponse.t()
-           | NotionSDK.BulletedListItemBlockObjectResponse.t()
-           | NotionSDK.CalloutBlockObjectResponse.t()
-           | NotionSDK.ChildDatabaseBlockObjectResponse.t()
-           | NotionSDK.ChildPageBlockObjectResponse.t()
-           | NotionSDK.CodeBlockObjectResponse.t()
-           | NotionSDK.ColumnBlockObjectResponse.t()
-           | NotionSDK.ColumnListBlockObjectResponse.t()
-           | NotionSDK.DividerBlockObjectResponse.t()
-           | NotionSDK.EmbedBlockObjectResponse.t()
-           | NotionSDK.EquationBlockObjectResponse.t()
-           | NotionSDK.FileBlockObjectResponse.t()
-           | NotionSDK.Heading1BlockObjectResponse.t()
-           | NotionSDK.Heading2BlockObjectResponse.t()
-           | NotionSDK.Heading3BlockObjectResponse.t()
-           | NotionSDK.ImageBlockObjectResponse.t()
-           | NotionSDK.LinkPreviewBlockObjectResponse.t()
-           | NotionSDK.LinkToPageBlockObjectResponse.t()
-           | NotionSDK.MeetingNotesBlockObjectResponse.t()
-           | NotionSDK.NumberedListItemBlockObjectResponse.t()
-           | NotionSDK.ParagraphBlockObjectResponse.t()
-           | NotionSDK.PartialBlockObjectResponse.t()
-           | NotionSDK.PdfBlockObjectResponse.t()
-           | NotionSDK.QuoteBlockObjectResponse.t()
-           | NotionSDK.SyncedBlockBlockObjectResponse.t()
-           | NotionSDK.TableBlockObjectResponse.t()
-           | NotionSDK.TableOfContentsBlockObjectResponse.t()
-           | NotionSDK.TableRowBlockObjectResponse.t()
-           | NotionSDK.TemplateBlockObjectResponse.t()
-           | NotionSDK.ToDoBlockObjectResponse.t()
-           | NotionSDK.ToggleBlockObjectResponse.t()
-           | NotionSDK.UnsupportedBlockObjectResponse.t()
-           | NotionSDK.VideoBlockObjectResponse.t()}
-          | {:error, NotionSDK.Error.t()}
+          {:ok, map | NotionSDK.PartialBlockObjectResponse.t()} | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
-        body: %{
-          keys: [
-            {"audio", :audio},
-            {"bookmark", :bookmark},
-            {"breadcrumb", :breadcrumb},
-            {"bulleted_list_item", :bulleted_list_item},
-            {"callout", :callout},
-            {"code", :code},
-            {"column", :column},
-            {"divider", :divider},
-            {"embed", :embed},
-            {"equation", :equation},
-            {"file", :file},
-            {"heading_1", :heading_1},
-            {"heading_2", :heading_2},
-            {"heading_3", :heading_3},
-            {"image", :image},
-            {"in_trash", :in_trash},
-            {"link_to_page", :link_to_page},
-            {"numbered_list_item", :numbered_list_item},
-            {"paragraph", :paragraph},
-            {"pdf", :pdf},
-            {"quote", :quote},
-            {"synced_block", :synced_block},
-            {"table", :table},
-            {"table_of_contents", :table_of_contents},
-            {"table_row", :table_row},
-            {"template", :template},
-            {"to_do", :to_do},
-            {"toggle", :toggle},
-            {"type", :type},
-            {"video", :video}
-          ],
-          mode: :keys
-        },
+        body: %{keys: [{"in_trash", :in_trash}], mode: :keys},
         form_data: %{mode: :none},
         path: [{"block_id", :block_id}],
         query: []
@@ -1322,92 +541,17 @@ defmodule NotionSDK.Blocks do
       args: params,
       call: {NotionSDK.Blocks, :update},
       path_template: "/v1/blocks/{block_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path("/v1/blocks/{block_id}", partition.path_params),
+      url: render_path("/v1/blocks/{block_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
-      request: [{"application/json", {NotionSDK.Blocks, :update_json_req}}],
+      security: [%{"bearerAuth" => []}],
+      request: [{"application/json", {:union, [{NotionSDK.Blocks, :update_json_req}, :map]}}],
       response: [
-        {200,
-         {:union,
-          [
-            {NotionSDK.PartialBlockObjectResponse, :t},
-            {NotionSDK.ParagraphBlockObjectResponse, :t},
-            {NotionSDK.Heading1BlockObjectResponse, :t},
-            {NotionSDK.Heading2BlockObjectResponse, :t},
-            {NotionSDK.Heading3BlockObjectResponse, :t},
-            {NotionSDK.BulletedListItemBlockObjectResponse, :t},
-            {NotionSDK.NumberedListItemBlockObjectResponse, :t},
-            {NotionSDK.QuoteBlockObjectResponse, :t},
-            {NotionSDK.ToDoBlockObjectResponse, :t},
-            {NotionSDK.ToggleBlockObjectResponse, :t},
-            {NotionSDK.TemplateBlockObjectResponse, :t},
-            {NotionSDK.SyncedBlockBlockObjectResponse, :t},
-            {NotionSDK.ChildPageBlockObjectResponse, :t},
-            {NotionSDK.ChildDatabaseBlockObjectResponse, :t},
-            {NotionSDK.EquationBlockObjectResponse, :t},
-            {NotionSDK.CodeBlockObjectResponse, :t},
-            {NotionSDK.CalloutBlockObjectResponse, :t},
-            {NotionSDK.DividerBlockObjectResponse, :t},
-            {NotionSDK.BreadcrumbBlockObjectResponse, :t},
-            {NotionSDK.TableOfContentsBlockObjectResponse, :t},
-            {NotionSDK.ColumnListBlockObjectResponse, :t},
-            {NotionSDK.ColumnBlockObjectResponse, :t},
-            {NotionSDK.LinkToPageBlockObjectResponse, :t},
-            {NotionSDK.TableBlockObjectResponse, :t},
-            {NotionSDK.TableRowBlockObjectResponse, :t},
-            {NotionSDK.MeetingNotesBlockObjectResponse, :t},
-            {NotionSDK.EmbedBlockObjectResponse, :t},
-            {NotionSDK.BookmarkBlockObjectResponse, :t},
-            {NotionSDK.ImageBlockObjectResponse, :t},
-            {NotionSDK.VideoBlockObjectResponse, :t},
-            {NotionSDK.PdfBlockObjectResponse, :t},
-            {NotionSDK.FileBlockObjectResponse, :t},
-            {NotionSDK.AudioBlockObjectResponse, :t},
-            {NotionSDK.LinkPreviewBlockObjectResponse, :t},
-            {NotionSDK.UnsupportedBlockObjectResponse, :t}
-          ]}},
+        {200, {:union, [{NotionSDK.PartialBlockObjectResponse, :t}, :map]}},
         {400, {NotionSDK.ErrorApi400, :t}},
         {401, {NotionSDK.ErrorApi401, :t}},
         {403, {NotionSDK.ErrorApi403, :t}},
@@ -1434,45 +578,7 @@ defmodule NotionSDK.Blocks do
       has_more: :boolean,
       next_cursor: {:union, [:null, :string]},
       object: {:const, "list"},
-      results: [
-        union: [
-          {NotionSDK.PartialBlockObjectResponse, :t},
-          {NotionSDK.ParagraphBlockObjectResponse, :t},
-          {NotionSDK.Heading1BlockObjectResponse, :t},
-          {NotionSDK.Heading2BlockObjectResponse, :t},
-          {NotionSDK.Heading3BlockObjectResponse, :t},
-          {NotionSDK.BulletedListItemBlockObjectResponse, :t},
-          {NotionSDK.NumberedListItemBlockObjectResponse, :t},
-          {NotionSDK.QuoteBlockObjectResponse, :t},
-          {NotionSDK.ToDoBlockObjectResponse, :t},
-          {NotionSDK.ToggleBlockObjectResponse, :t},
-          {NotionSDK.TemplateBlockObjectResponse, :t},
-          {NotionSDK.SyncedBlockBlockObjectResponse, :t},
-          {NotionSDK.ChildPageBlockObjectResponse, :t},
-          {NotionSDK.ChildDatabaseBlockObjectResponse, :t},
-          {NotionSDK.EquationBlockObjectResponse, :t},
-          {NotionSDK.CodeBlockObjectResponse, :t},
-          {NotionSDK.CalloutBlockObjectResponse, :t},
-          {NotionSDK.DividerBlockObjectResponse, :t},
-          {NotionSDK.BreadcrumbBlockObjectResponse, :t},
-          {NotionSDK.TableOfContentsBlockObjectResponse, :t},
-          {NotionSDK.ColumnListBlockObjectResponse, :t},
-          {NotionSDK.ColumnBlockObjectResponse, :t},
-          {NotionSDK.LinkToPageBlockObjectResponse, :t},
-          {NotionSDK.TableBlockObjectResponse, :t},
-          {NotionSDK.TableRowBlockObjectResponse, :t},
-          {NotionSDK.MeetingNotesBlockObjectResponse, :t},
-          {NotionSDK.EmbedBlockObjectResponse, :t},
-          {NotionSDK.BookmarkBlockObjectResponse, :t},
-          {NotionSDK.ImageBlockObjectResponse, :t},
-          {NotionSDK.VideoBlockObjectResponse, :t},
-          {NotionSDK.PdfBlockObjectResponse, :t},
-          {NotionSDK.FileBlockObjectResponse, :t},
-          {NotionSDK.AudioBlockObjectResponse, :t},
-          {NotionSDK.LinkPreviewBlockObjectResponse, :t},
-          {NotionSDK.UnsupportedBlockObjectResponse, :t}
-        ]
-      ],
+      results: [union: [{NotionSDK.PartialBlockObjectResponse, :t}, :map]],
       type: {:const, "block"}
     ]
   end
@@ -1533,325 +639,13 @@ defmodule NotionSDK.Blocks do
       has_more: :boolean,
       next_cursor: {:union, [:null, :string]},
       object: {:const, "list"},
-      results: [
-        union: [
-          {NotionSDK.PartialBlockObjectResponse, :t},
-          {NotionSDK.ParagraphBlockObjectResponse, :t},
-          {NotionSDK.Heading1BlockObjectResponse, :t},
-          {NotionSDK.Heading2BlockObjectResponse, :t},
-          {NotionSDK.Heading3BlockObjectResponse, :t},
-          {NotionSDK.BulletedListItemBlockObjectResponse, :t},
-          {NotionSDK.NumberedListItemBlockObjectResponse, :t},
-          {NotionSDK.QuoteBlockObjectResponse, :t},
-          {NotionSDK.ToDoBlockObjectResponse, :t},
-          {NotionSDK.ToggleBlockObjectResponse, :t},
-          {NotionSDK.TemplateBlockObjectResponse, :t},
-          {NotionSDK.SyncedBlockBlockObjectResponse, :t},
-          {NotionSDK.ChildPageBlockObjectResponse, :t},
-          {NotionSDK.ChildDatabaseBlockObjectResponse, :t},
-          {NotionSDK.EquationBlockObjectResponse, :t},
-          {NotionSDK.CodeBlockObjectResponse, :t},
-          {NotionSDK.CalloutBlockObjectResponse, :t},
-          {NotionSDK.DividerBlockObjectResponse, :t},
-          {NotionSDK.BreadcrumbBlockObjectResponse, :t},
-          {NotionSDK.TableOfContentsBlockObjectResponse, :t},
-          {NotionSDK.ColumnListBlockObjectResponse, :t},
-          {NotionSDK.ColumnBlockObjectResponse, :t},
-          {NotionSDK.LinkToPageBlockObjectResponse, :t},
-          {NotionSDK.TableBlockObjectResponse, :t},
-          {NotionSDK.TableRowBlockObjectResponse, :t},
-          {NotionSDK.MeetingNotesBlockObjectResponse, :t},
-          {NotionSDK.EmbedBlockObjectResponse, :t},
-          {NotionSDK.BookmarkBlockObjectResponse, :t},
-          {NotionSDK.ImageBlockObjectResponse, :t},
-          {NotionSDK.VideoBlockObjectResponse, :t},
-          {NotionSDK.PdfBlockObjectResponse, :t},
-          {NotionSDK.FileBlockObjectResponse, :t},
-          {NotionSDK.AudioBlockObjectResponse, :t},
-          {NotionSDK.LinkPreviewBlockObjectResponse, :t},
-          {NotionSDK.UnsupportedBlockObjectResponse, :t}
-        ]
-      ],
+      results: [union: [{NotionSDK.PartialBlockObjectResponse, :t}, :map]],
       type: {:const, "block"}
     ]
   end
 
   def __fields__(:update_json_req) do
-    [
-      audio: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t},
-      bookmark: {NotionSDK.UpdateMediaContentWithUrlAndCaptionRequest, :t},
-      breadcrumb: {NotionSDK.EmptyObject, :t},
-      bulleted_list_item: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-      callout: {NotionSDK.Blocks, :update_json_req_callout},
-      code: {NotionSDK.Blocks, :update_json_req_code},
-      column: {NotionSDK.Blocks, :update_json_req_column},
-      divider: {NotionSDK.EmptyObject, :t},
-      embed: {NotionSDK.UpdateMediaContentWithUrlAndCaptionRequest, :t},
-      equation: {NotionSDK.ContentWithExpressionRequest, :t},
-      file: {NotionSDK.UpdateMediaContentWithFileNameAndCaptionRequest, :t},
-      heading_1: {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-      heading_2: {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-      heading_3: {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-      image: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t},
-      in_trash: :boolean,
-      link_to_page:
-        {:union, [{NotionSDK.PageId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.CommentId, :t}]},
-      numbered_list_item: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-      paragraph: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-      pdf: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t},
-      quote: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-      synced_block: {NotionSDK.Blocks, :update_json_req_synced_block},
-      table: {NotionSDK.Blocks, :update_json_req_table},
-      table_of_contents: {NotionSDK.Blocks, :update_json_req_table_of_contents},
-      table_row: {NotionSDK.ContentWithTableRowRequest, :t},
-      template: {NotionSDK.ContentWithRichTextRequest, :t},
-      to_do: {NotionSDK.Blocks, :update_json_req_to_do},
-      toggle: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-      type:
-        {:enum,
-         [
-           "audio",
-           "bookmark",
-           "breadcrumb",
-           "bulleted_list_item",
-           "callout",
-           "code",
-           "column",
-           "divider",
-           "embed",
-           "equation",
-           "file",
-           "heading_1",
-           "heading_2",
-           "heading_3",
-           "image",
-           "link_to_page",
-           "numbered_list_item",
-           "paragraph",
-           "pdf",
-           "quote",
-           "synced_block",
-           "table",
-           "table_of_contents",
-           "table_row",
-           "template",
-           "to_do",
-           "toggle",
-           "video"
-         ]},
-      video: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t}
-    ]
-  end
-
-  def __fields__(:update_json_req_callout) do
-    [
-      color:
-        {:enum,
-         [
-           "default",
-           "gray",
-           "brown",
-           "orange",
-           "yellow",
-           "green",
-           "blue",
-           "purple",
-           "pink",
-           "red",
-           "default_background",
-           "gray_background",
-           "brown_background",
-           "orange_background",
-           "yellow_background",
-           "green_background",
-           "blue_background",
-           "purple_background",
-           "pink_background",
-           "red_background"
-         ]},
-      icon:
-        {:union,
-         [
-           {NotionSDK.FileUploadPageIconRequest, :t},
-           {NotionSDK.EmojiPageIconRequest, :t},
-           {NotionSDK.ExternalPageIconRequest, :t},
-           {NotionSDK.CustomEmojiPageIconRequest, :t}
-         ]},
-      rich_text: [{NotionSDK.RichTextItemRequest, :t}]
-    ]
-  end
-
-  def __fields__(:update_json_req_code) do
-    [
-      caption: [{NotionSDK.RichTextItemRequest, :t}],
-      language:
-        {:enum,
-         [
-           "abap",
-           "abc",
-           "agda",
-           "arduino",
-           "ascii art",
-           "assembly",
-           "bash",
-           "basic",
-           "bnf",
-           "c",
-           "c#",
-           "c++",
-           "clojure",
-           "coffeescript",
-           "coq",
-           "css",
-           "dart",
-           "dhall",
-           "diff",
-           "docker",
-           "ebnf",
-           "elixir",
-           "elm",
-           "erlang",
-           "f#",
-           "flow",
-           "fortran",
-           "gherkin",
-           "glsl",
-           "go",
-           "graphql",
-           "groovy",
-           "haskell",
-           "hcl",
-           "html",
-           "idris",
-           "java",
-           "javascript",
-           "json",
-           "julia",
-           "kotlin",
-           "latex",
-           "less",
-           "lisp",
-           "livescript",
-           "llvm ir",
-           "lua",
-           "makefile",
-           "markdown",
-           "markup",
-           "matlab",
-           "mathematica",
-           "mermaid",
-           "nix",
-           "notion formula",
-           "objective-c",
-           "ocaml",
-           "pascal",
-           "perl",
-           "php",
-           "plain text",
-           "powershell",
-           "prolog",
-           "protobuf",
-           "purescript",
-           "python",
-           "r",
-           "racket",
-           "reason",
-           "ruby",
-           "rust",
-           "sass",
-           "scala",
-           "scheme",
-           "scss",
-           "shell",
-           "smalltalk",
-           "solidity",
-           "sql",
-           "swift",
-           "toml",
-           "typescript",
-           "vb.net",
-           "verilog",
-           "vhdl",
-           "visual basic",
-           "webassembly",
-           "xml",
-           "yaml",
-           "java/c/c++/c#"
-         ]},
-      rich_text: [{NotionSDK.RichTextItemRequest, :t}]
-    ]
-  end
-
-  def __fields__(:update_json_req_column) do
-    [width_ratio: :number]
-  end
-
-  def __fields__(:update_json_req_synced_block) do
-    [synced_from: {:union, [:null, {NotionSDK.BlockId, :t}]}]
-  end
-
-  def __fields__(:update_json_req_table) do
-    [has_column_header: :boolean, has_row_header: :boolean]
-  end
-
-  def __fields__(:update_json_req_table_of_contents) do
-    [
-      color:
-        {:enum,
-         [
-           "default",
-           "gray",
-           "brown",
-           "orange",
-           "yellow",
-           "green",
-           "blue",
-           "purple",
-           "pink",
-           "red",
-           "default_background",
-           "gray_background",
-           "brown_background",
-           "orange_background",
-           "yellow_background",
-           "green_background",
-           "blue_background",
-           "purple_background",
-           "pink_background",
-           "red_background"
-         ]}
-    ]
-  end
-
-  def __fields__(:update_json_req_to_do) do
-    [
-      checked: :boolean,
-      color:
-        {:enum,
-         [
-           "default",
-           "gray",
-           "brown",
-           "orange",
-           "yellow",
-           "green",
-           "blue",
-           "purple",
-           "pink",
-           "red",
-           "default_background",
-           "gray_background",
-           "brown_background",
-           "orange_background",
-           "yellow_background",
-           "green_background",
-           "blue_background",
-           "purple_background",
-           "pink_background",
-           "red_background"
-         ]},
-      rich_text: [{NotionSDK.RichTextItemRequest, :t}]
-    ]
+    [in_trash: :boolean]
   end
 
   (
@@ -1869,7 +663,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "block",
         nullable: false,
@@ -1884,7 +678,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -1899,7 +693,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -1914,7 +708,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -1929,51 +723,13 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
         read_only: false,
         required: true,
-        type: [
-          union: [
-            {NotionSDK.PartialBlockObjectResponse, :t},
-            {NotionSDK.ParagraphBlockObjectResponse, :t},
-            {NotionSDK.Heading1BlockObjectResponse, :t},
-            {NotionSDK.Heading2BlockObjectResponse, :t},
-            {NotionSDK.Heading3BlockObjectResponse, :t},
-            {NotionSDK.BulletedListItemBlockObjectResponse, :t},
-            {NotionSDK.NumberedListItemBlockObjectResponse, :t},
-            {NotionSDK.QuoteBlockObjectResponse, :t},
-            {NotionSDK.ToDoBlockObjectResponse, :t},
-            {NotionSDK.ToggleBlockObjectResponse, :t},
-            {NotionSDK.TemplateBlockObjectResponse, :t},
-            {NotionSDK.SyncedBlockBlockObjectResponse, :t},
-            {NotionSDK.ChildPageBlockObjectResponse, :t},
-            {NotionSDK.ChildDatabaseBlockObjectResponse, :t},
-            {NotionSDK.EquationBlockObjectResponse, :t},
-            {NotionSDK.CodeBlockObjectResponse, :t},
-            {NotionSDK.CalloutBlockObjectResponse, :t},
-            {NotionSDK.DividerBlockObjectResponse, :t},
-            {NotionSDK.BreadcrumbBlockObjectResponse, :t},
-            {NotionSDK.TableOfContentsBlockObjectResponse, :t},
-            {NotionSDK.ColumnListBlockObjectResponse, :t},
-            {NotionSDK.ColumnBlockObjectResponse, :t},
-            {NotionSDK.LinkToPageBlockObjectResponse, :t},
-            {NotionSDK.TableBlockObjectResponse, :t},
-            {NotionSDK.TableRowBlockObjectResponse, :t},
-            {NotionSDK.MeetingNotesBlockObjectResponse, :t},
-            {NotionSDK.EmbedBlockObjectResponse, :t},
-            {NotionSDK.BookmarkBlockObjectResponse, :t},
-            {NotionSDK.ImageBlockObjectResponse, :t},
-            {NotionSDK.VideoBlockObjectResponse, :t},
-            {NotionSDK.PdfBlockObjectResponse, :t},
-            {NotionSDK.FileBlockObjectResponse, :t},
-            {NotionSDK.AudioBlockObjectResponse, :t},
-            {NotionSDK.LinkPreviewBlockObjectResponse, :t},
-            {NotionSDK.UnsupportedBlockObjectResponse, :t}
-          ]
-        ],
+        type: [union: [{NotionSDK.PartialBlockObjectResponse, :t}, :map]],
         write_only: false
       },
       %{
@@ -1982,7 +738,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2002,7 +758,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "children",
         nullable: false,
@@ -2049,7 +805,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "position",
         nullable: false,
@@ -2069,7 +825,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "after_block",
         nullable: false,
@@ -2084,7 +840,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2104,7 +860,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -2124,7 +880,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "block",
         nullable: false,
@@ -2139,7 +895,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -2154,7 +910,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -2169,7 +925,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -2184,51 +940,13 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
         read_only: false,
         required: true,
-        type: [
-          union: [
-            {NotionSDK.PartialBlockObjectResponse, :t},
-            {NotionSDK.ParagraphBlockObjectResponse, :t},
-            {NotionSDK.Heading1BlockObjectResponse, :t},
-            {NotionSDK.Heading2BlockObjectResponse, :t},
-            {NotionSDK.Heading3BlockObjectResponse, :t},
-            {NotionSDK.BulletedListItemBlockObjectResponse, :t},
-            {NotionSDK.NumberedListItemBlockObjectResponse, :t},
-            {NotionSDK.QuoteBlockObjectResponse, :t},
-            {NotionSDK.ToDoBlockObjectResponse, :t},
-            {NotionSDK.ToggleBlockObjectResponse, :t},
-            {NotionSDK.TemplateBlockObjectResponse, :t},
-            {NotionSDK.SyncedBlockBlockObjectResponse, :t},
-            {NotionSDK.ChildPageBlockObjectResponse, :t},
-            {NotionSDK.ChildDatabaseBlockObjectResponse, :t},
-            {NotionSDK.EquationBlockObjectResponse, :t},
-            {NotionSDK.CodeBlockObjectResponse, :t},
-            {NotionSDK.CalloutBlockObjectResponse, :t},
-            {NotionSDK.DividerBlockObjectResponse, :t},
-            {NotionSDK.BreadcrumbBlockObjectResponse, :t},
-            {NotionSDK.TableOfContentsBlockObjectResponse, :t},
-            {NotionSDK.ColumnListBlockObjectResponse, :t},
-            {NotionSDK.ColumnBlockObjectResponse, :t},
-            {NotionSDK.LinkToPageBlockObjectResponse, :t},
-            {NotionSDK.TableBlockObjectResponse, :t},
-            {NotionSDK.TableRowBlockObjectResponse, :t},
-            {NotionSDK.MeetingNotesBlockObjectResponse, :t},
-            {NotionSDK.EmbedBlockObjectResponse, :t},
-            {NotionSDK.BookmarkBlockObjectResponse, :t},
-            {NotionSDK.ImageBlockObjectResponse, :t},
-            {NotionSDK.VideoBlockObjectResponse, :t},
-            {NotionSDK.PdfBlockObjectResponse, :t},
-            {NotionSDK.FileBlockObjectResponse, :t},
-            {NotionSDK.AudioBlockObjectResponse, :t},
-            {NotionSDK.LinkPreviewBlockObjectResponse, :t},
-            {NotionSDK.UnsupportedBlockObjectResponse, :t}
-          ]
-        ],
+        type: [union: [{NotionSDK.PartialBlockObjectResponse, :t}, :map]],
         write_only: false
       },
       %{
@@ -2237,7 +955,7 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2257,899 +975,13 @@ defmodule NotionSDK.Blocks do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "audio",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "bookmark",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.UpdateMediaContentWithUrlAndCaptionRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "breadcrumb",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.EmptyObject, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "bulleted_list_item",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "callout",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Blocks, :update_json_req_callout},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "code",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Blocks, :update_json_req_code},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "column",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Blocks, :update_json_req_column},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "divider",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.EmptyObject, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "embed",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.UpdateMediaContentWithUrlAndCaptionRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "equation",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithExpressionRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "file",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.UpdateMediaContentWithFileNameAndCaptionRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "heading_1",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "heading_2",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "heading_3",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.HeaderContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "image",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "in_trash",
         nullable: false,
         read_only: false,
         required: false,
         type: :boolean,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "link_to_page",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type:
-          {:union,
-           [{NotionSDK.PageId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.CommentId, :t}]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "numbered_list_item",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "paragraph",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "pdf",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "quote",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "synced_block",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Blocks, :update_json_req_synced_block},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "table",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Blocks, :update_json_req_table},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "table_of_contents",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Blocks, :update_json_req_table_of_contents},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "table_row",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithTableRowRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "template",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithRichTextRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "to_do",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.Blocks, :update_json_req_to_do},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "toggle",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.ContentWithRichTextAndColorRequest, :t},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "type",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:enum,
-           [
-             "audio",
-             "bookmark",
-             "breadcrumb",
-             "bulleted_list_item",
-             "callout",
-             "code",
-             "column",
-             "divider",
-             "embed",
-             "equation",
-             "file",
-             "heading_1",
-             "heading_2",
-             "heading_3",
-             "image",
-             "link_to_page",
-             "numbered_list_item",
-             "paragraph",
-             "pdf",
-             "quote",
-             "synced_block",
-             "table",
-             "table_of_contents",
-             "table_row",
-             "template",
-             "to_do",
-             "toggle",
-             "video"
-           ]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "video",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {NotionSDK.UpdateMediaContentWithFileAndCaptionRequest, :t},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req_callout) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description:
-          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "color",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:enum,
-           [
-             "default",
-             "gray",
-             "brown",
-             "orange",
-             "yellow",
-             "green",
-             "blue",
-             "purple",
-             "pink",
-             "red",
-             "default_background",
-             "gray_background",
-             "brown_background",
-             "orange_background",
-             "yellow_background",
-             "green_background",
-             "blue_background",
-             "purple_background",
-             "pink_background",
-             "red_background"
-           ]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "icon",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:union,
-           [
-             {NotionSDK.FileUploadPageIconRequest, :t},
-             {NotionSDK.EmojiPageIconRequest, :t},
-             {NotionSDK.ExternalPageIconRequest, :t},
-             {NotionSDK.CustomEmojiPageIconRequest, :t}
-           ]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "rich_text",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req_code) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "caption",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "language",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:enum,
-           [
-             "abap",
-             "abc",
-             "agda",
-             "arduino",
-             "ascii art",
-             "assembly",
-             "bash",
-             "basic",
-             "bnf",
-             "c",
-             "c#",
-             "c++",
-             "clojure",
-             "coffeescript",
-             "coq",
-             "css",
-             "dart",
-             "dhall",
-             "diff",
-             "docker",
-             "ebnf",
-             "elixir",
-             "elm",
-             "erlang",
-             "f#",
-             "flow",
-             "fortran",
-             "gherkin",
-             "glsl",
-             "go",
-             "graphql",
-             "groovy",
-             "haskell",
-             "hcl",
-             "html",
-             "idris",
-             "java",
-             "javascript",
-             "json",
-             "julia",
-             "kotlin",
-             "latex",
-             "less",
-             "lisp",
-             "livescript",
-             "llvm ir",
-             "lua",
-             "makefile",
-             "markdown",
-             "markup",
-             "matlab",
-             "mathematica",
-             "mermaid",
-             "nix",
-             "notion formula",
-             "objective-c",
-             "ocaml",
-             "pascal",
-             "perl",
-             "php",
-             "plain text",
-             "powershell",
-             "prolog",
-             "protobuf",
-             "purescript",
-             "python",
-             "r",
-             "racket",
-             "reason",
-             "ruby",
-             "rust",
-             "sass",
-             "scala",
-             "scheme",
-             "scss",
-             "shell",
-             "smalltalk",
-             "solidity",
-             "sql",
-             "swift",
-             "toml",
-             "typescript",
-             "vb.net",
-             "verilog",
-             "vhdl",
-             "visual basic",
-             "webassembly",
-             "xml",
-             "yaml",
-             "java/c/c++/c#"
-           ]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "rich_text",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req_column) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description:
-          "Ratio between 0 and 1 of the width of this column relative to all columns in the list. If not provided, uses an equal width.",
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "width_ratio",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :number,
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req_synced_block) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "synced_from",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: {:union, [:null, {NotionSDK.BlockId, :t}]},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req_table) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "has_column_header",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :boolean,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "has_row_header",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :boolean,
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req_table_of_contents) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description:
-          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "color",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:enum,
-           [
-             "default",
-             "gray",
-             "brown",
-             "orange",
-             "yellow",
-             "green",
-             "blue",
-             "purple",
-             "pink",
-             "red",
-             "default_background",
-             "gray_background",
-             "brown_background",
-             "orange_background",
-             "yellow_background",
-             "green_background",
-             "blue_background",
-             "purple_background",
-             "pink_background",
-             "red_background"
-           ]},
-        write_only: false
-      }
-    ]
-  end
-
-  def __openapi_fields__(:update_json_req_to_do) do
-    [
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "checked",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: :boolean,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description:
-          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`",
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "color",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type:
-          {:enum,
-           [
-             "default",
-             "gray",
-             "brown",
-             "orange",
-             "yellow",
-             "green",
-             "blue",
-             "purple",
-             "pink",
-             "red",
-             "default_background",
-             "gray_background",
-             "brown_background",
-             "orange_background",
-             "yellow_background",
-             "green_background",
-             "blue_background",
-             "purple_background",
-             "pink_background",
-             "red_background"
-           ]},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
-        name: "rich_text",
-        nullable: false,
-        read_only: false,
-        required: false,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
         write_only: false
       }
     ]
@@ -3186,34 +1018,6 @@ defmodule NotionSDK.Blocks do
 
   def __schema__(:update_json_req) do
     OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req))
-  end
-
-  def __schema__(:update_json_req_callout) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req_callout))
-  end
-
-  def __schema__(:update_json_req_code) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req_code))
-  end
-
-  def __schema__(:update_json_req_column) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req_column))
-  end
-
-  def __schema__(:update_json_req_synced_block) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req_synced_block))
-  end
-
-  def __schema__(:update_json_req_table) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req_table))
-  end
-
-  def __schema__(:update_json_req_table_of_contents) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req_table_of_contents))
-  end
-
-  def __schema__(:update_json_req_to_do) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:update_json_req_to_do))
   end
 
   (

@@ -5,7 +5,7 @@ defmodule NotionSDK.FileUploadObjectResponseCreatedBy do
   ## Fields
 
     * `id`: required
-    * `type`: One of: `person`, `bot`, `agent`
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -37,7 +37,7 @@ defmodule NotionSDK.FileUploadObjectResponseCreatedBy do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -49,10 +49,10 @@ defmodule NotionSDK.FileUploadObjectResponseCreatedBy do
       %{
         default: nil,
         deprecated: false,
-        description: "One of: `person`, `bot`, `agent`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

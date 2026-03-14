@@ -5,7 +5,7 @@ defmodule NotionSDK.PageIdParentForBlockBasedObjectResponse do
   ## Fields
 
     * `page_id`: required
-    * `type`: The parent type.
+    * `type`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -37,7 +37,7 @@ defmodule NotionSDK.PageIdParentForBlockBasedObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "page_id",
         nullable: false,
@@ -49,10 +49,10 @@ defmodule NotionSDK.PageIdParentForBlockBasedObjectResponse do
       %{
         default: nil,
         deprecated: false,
-        description: "The parent type.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

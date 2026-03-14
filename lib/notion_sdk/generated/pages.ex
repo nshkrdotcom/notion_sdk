@@ -4,18 +4,19 @@ defmodule NotionSDK.Pages do
 
   ## Operations
 
-    * Create a page
-    * Retrieve a page
-    * Update page
-    * Retrieve a page as markdown
-    * Update a page's content as markdown
-    * Move a page
-    * Retrieve a page property item
+    * post `/v1/pages`
+    * get `/v1/pages/{page_id}`
+    * patch `/v1/pages/{page_id}`
+    * get `/v1/pages/{page_id}/markdown`
+    * patch `/v1/pages/{page_id}/markdown`
+    * post `/v1/pages/{page_id}/move`
+    * get `/v1/pages/{page_id}/properties/{property_id}`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @doc """
-  Create a page
+  post `/v1/pages`
 
   ## Source Context
   Create a page
@@ -92,54 +93,8 @@ defmodule NotionSDK.Pages do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -174,7 +129,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -199,50 +154,14 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :create},
       path_template: "/v1/pages",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/pages", partition.path_params),
+      url: render_path("/v1/pages", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Pages, :create_json_req}}],
       response: [
         {200,
@@ -264,7 +183,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  Move a page
+  post `/v1/pages/{page_id}/move`
 
   ## Source Context
   Move a page
@@ -375,54 +294,8 @@ defmodule NotionSDK.Pages do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -453,7 +326,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def move(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{keys: [{"parent", :parent}], mode: :keys},
         form_data: %{mode: :none},
@@ -465,54 +338,14 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :move},
       path_template: "/v1/pages/{page_id}/move",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/pages/{page_id}/move",
-          partition.path_params
-        ),
+      url: render_path("/v1/pages/{page_id}/move", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Pages, :move_json_req}}],
       response: [
         {200,
@@ -534,7 +367,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  Retrieve a page
+  get `/v1/pages/{page_id}`
 
   ## Source Context
   Retrieve a page
@@ -602,54 +435,8 @@ defmodule NotionSDK.Pages do
 
     * `filter_properties`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -677,7 +464,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -689,50 +476,14 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :retrieve},
       path_template: "/v1/pages/{page_id}",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/pages/{page_id}", partition.path_params),
+      url: render_path("/v1/pages/{page_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200,
          {:union, [{NotionSDK.PartialPageObjectResponse, :t}, {NotionSDK.PageObjectResponse, :t}]}},
@@ -753,7 +504,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  Retrieve a page as markdown
+  get `/v1/pages/{page_id}/markdown`
 
   ## Source Context
   Retrieve a page as markdown
@@ -813,54 +564,8 @@ defmodule NotionSDK.Pages do
 
     * `include_transcript`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -888,7 +593,7 @@ defmodule NotionSDK.Pages do
           {:ok, NotionSDK.PageMarkdownResponse.t()} | {:error, NotionSDK.Error.t()}
   def retrieve_markdown(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -900,54 +605,14 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :retrieve_markdown},
       path_template: "/v1/pages/{page_id}/markdown",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/pages/{page_id}/markdown",
-          partition.path_params
-        ),
+      url: render_path("/v1/pages/{page_id}/markdown", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200, {NotionSDK.PageMarkdownResponse, :t}},
         {400, {NotionSDK.ErrorApi400, :t}},
@@ -967,7 +632,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  Retrieve a page property item
+  get `/v1/pages/{page_id}/properties/{property_id}`
 
   ## Source Context
   Retrieve a page property item
@@ -1037,54 +702,8 @@ defmodule NotionSDK.Pages do
     * `start_cursor`
     * `page_size`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -1163,7 +782,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def retrieve_property(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -1175,83 +794,45 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :retrieve_property},
       path_template: "/v1/pages/{page_id}/properties/{property_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/pages/{page_id}/properties/{property_id}",
-          partition.path_params
-        ),
+      url: render_path("/v1/pages/{page_id}/properties/{property_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200,
          {:union,
           [
-            {NotionSDK.NumberPropertyItemObjectResponse, :t},
-            {NotionSDK.UrlPropertyItemObjectResponse, :t},
-            {NotionSDK.SelectPropertyItemObjectResponse, :t},
-            {NotionSDK.MultiSelectPropertyItemObjectResponse, :t},
-            {NotionSDK.StatusPropertyItemObjectResponse, :t},
-            {NotionSDK.DatePropertyItemObjectResponse, :t},
-            {NotionSDK.EmailPropertyItemObjectResponse, :t},
-            {NotionSDK.PhoneNumberPropertyItemObjectResponse, :t},
-            {NotionSDK.CheckboxPropertyItemObjectResponse, :t},
-            {NotionSDK.FilesPropertyItemObjectResponse, :t},
-            {NotionSDK.CreatedByPropertyItemObjectResponse, :t},
-            {NotionSDK.CreatedTimePropertyItemObjectResponse, :t},
-            {NotionSDK.LastEditedByPropertyItemObjectResponse, :t},
-            {NotionSDK.LastEditedTimePropertyItemObjectResponse, :t},
-            {NotionSDK.FormulaPropertyItemObjectResponse, :t},
-            {NotionSDK.ButtonPropertyItemObjectResponse, :t},
-            {NotionSDK.UniqueIdPropertyItemObjectResponse, :t},
-            {NotionSDK.VerificationPropertyItemObjectResponse, :t},
-            {NotionSDK.PlacePropertyItemObjectResponse, :t},
-            {NotionSDK.TitlePropertyItemObjectResponse, :t},
-            {NotionSDK.RichTextPropertyItemObjectResponse, :t},
-            {NotionSDK.PeoplePropertyItemObjectResponse, :t},
-            {NotionSDK.RelationPropertyItemObjectResponse, :t},
-            {NotionSDK.RollupPropertyItemObjectResponse, :t},
-            {NotionSDK.PropertyItemPropertyItemListResponse, :t}
+            {NotionSDK.PropertyItemPropertyItemListResponse, :t},
+            union: [
+              {NotionSDK.NumberPropertyItemObjectResponse, :t},
+              {NotionSDK.UrlPropertyItemObjectResponse, :t},
+              {NotionSDK.SelectPropertyItemObjectResponse, :t},
+              {NotionSDK.MultiSelectPropertyItemObjectResponse, :t},
+              {NotionSDK.StatusPropertyItemObjectResponse, :t},
+              {NotionSDK.DatePropertyItemObjectResponse, :t},
+              {NotionSDK.EmailPropertyItemObjectResponse, :t},
+              {NotionSDK.PhoneNumberPropertyItemObjectResponse, :t},
+              {NotionSDK.CheckboxPropertyItemObjectResponse, :t},
+              {NotionSDK.FilesPropertyItemObjectResponse, :t},
+              {NotionSDK.CreatedByPropertyItemObjectResponse, :t},
+              {NotionSDK.CreatedTimePropertyItemObjectResponse, :t},
+              {NotionSDK.LastEditedByPropertyItemObjectResponse, :t},
+              {NotionSDK.LastEditedTimePropertyItemObjectResponse, :t},
+              {NotionSDK.FormulaPropertyItemObjectResponse, :t},
+              {NotionSDK.ButtonPropertyItemObjectResponse, :t},
+              {NotionSDK.UniqueIdPropertyItemObjectResponse, :t},
+              {NotionSDK.VerificationPropertyItemObjectResponse, :t},
+              {NotionSDK.PlacePropertyItemObjectResponse, :t},
+              {NotionSDK.TitlePropertyItemObjectResponse, :t},
+              {NotionSDK.RichTextPropertyItemObjectResponse, :t},
+              {NotionSDK.PeoplePropertyItemObjectResponse, :t},
+              {NotionSDK.RelationPropertyItemObjectResponse, :t},
+              {NotionSDK.RollupPropertyItemObjectResponse, :t}
+            ]
           ]}},
         {400, {NotionSDK.ErrorApi400, :t}},
         {401, {NotionSDK.ErrorApi401, :t}},
@@ -1270,7 +851,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  Update page
+  patch `/v1/pages/{page_id}`
 
   ## Source Context
   Update page
@@ -1348,54 +929,8 @@ defmodule NotionSDK.Pages do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -1428,7 +963,7 @@ defmodule NotionSDK.Pages do
           | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -1451,50 +986,14 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :update},
       path_template: "/v1/pages/{page_id}",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/pages/{page_id}", partition.path_params),
+      url: render_path("/v1/pages/{page_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Pages, :update_json_req}}],
       response: [
         {200,
@@ -1516,7 +1015,7 @@ defmodule NotionSDK.Pages do
   end
 
   @doc """
-  Update a page's content as markdown
+  patch `/v1/pages/{page_id}/markdown`
 
   ## Source Context
   Update a page's content as markdown
@@ -1577,54 +1076,8 @@ defmodule NotionSDK.Pages do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -1655,7 +1108,7 @@ defmodule NotionSDK.Pages do
           {:ok, NotionSDK.PageMarkdownResponse.t()} | {:error, NotionSDK.Error.t()}
   def update_markdown(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -1674,54 +1127,14 @@ defmodule NotionSDK.Pages do
       args: params,
       call: {NotionSDK.Pages, :update_markdown},
       path_template: "/v1/pages/{page_id}/markdown",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/pages/{page_id}/markdown",
-          partition.path_params
-        ),
+      url: render_path("/v1/pages/{page_id}/markdown", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Pages, :update_markdown_json_req}}],
       response: [
         {200, {NotionSDK.PageMarkdownResponse, :t}},
@@ -1813,13 +1226,7 @@ defmodule NotionSDK.Pages do
           {NotionSDK.SyncedBlock, :t}
         ]
       ],
-      cover:
-        {:union,
-         [
-           :null,
-           {NotionSDK.FileUploadPageCoverRequest, :t},
-           {NotionSDK.ExternalPageCoverRequest, :t}
-         ]},
+      cover: {:union, [:null, :map]},
       icon:
         {:union,
          [
@@ -1869,23 +1276,9 @@ defmodule NotionSDK.Pages do
 
   def __fields__(:update_json_req) do
     [
-      cover:
-        {:union,
-         [
-           :null,
-           {NotionSDK.FileUploadPageCoverRequest, :t},
-           {NotionSDK.ExternalPageCoverRequest, :t}
-         ]},
+      cover: {:union, [:null, :map]},
       erase_content: :boolean,
-      icon:
-        {:union,
-         [
-           :null,
-           {NotionSDK.FileUploadPageIconRequest, :t},
-           {NotionSDK.EmojiPageIconRequest, :t},
-           {NotionSDK.ExternalPageIconRequest, :t},
-           {NotionSDK.CustomEmojiPageIconRequest, :t}
-         ]},
+      icon: {:union, [:null, :map]},
       in_trash: :boolean,
       is_locked: :boolean,
       properties: :map,
@@ -1928,7 +1321,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "children",
         nullable: false,
@@ -1975,7 +1368,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "content",
         nullable: false,
@@ -2022,19 +1415,13 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "cover",
         nullable: false,
         read_only: false,
         required: false,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.FileUploadPageCoverRequest, :t},
-             {NotionSDK.ExternalPageCoverRequest, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
@@ -2043,7 +1430,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
@@ -2063,11 +1450,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Page content as Notion-flavored Markdown. Mutually exclusive with content/children.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "markdown",
         nullable: false,
@@ -2082,7 +1468,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -2104,7 +1490,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "position",
         nullable: false,
@@ -2119,7 +1505,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "properties",
         nullable: false,
@@ -2134,7 +1520,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "template",
         nullable: false,
@@ -2154,7 +1540,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "after_block",
         nullable: false,
@@ -2169,7 +1555,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2189,7 +1575,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -2209,7 +1595,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "template_id",
         nullable: false,
@@ -2221,11 +1607,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "IANA timezone to use when resolving template variables like @now and @today (e.g. 'America/New_York'). Defaults to the authorizing user's timezone for public integrations, or UTC for internal integrations.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "timezone",
         nullable: false,
@@ -2240,7 +1625,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2257,10 +1642,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: "The new parent of the page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -2280,7 +1665,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "data_source_id",
         nullable: false,
@@ -2295,7 +1680,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "page_id",
         nullable: false,
@@ -2307,10 +1692,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `page_id`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2330,29 +1715,22 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "cover",
         nullable: false,
         read_only: false,
         required: false,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.FileUploadPageCoverRequest, :t},
-             {NotionSDK.ExternalPageCoverRequest, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Whether to erase all existing content from the page. When used with a template, the template content replaces the existing content. When used without a template, simply clears the page content.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "erase_content",
         nullable: false,
@@ -2367,21 +1745,13 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
         read_only: false,
         required: false,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.FileUploadPageIconRequest, :t},
-             {NotionSDK.EmojiPageIconRequest, :t},
-             {NotionSDK.ExternalPageIconRequest, :t},
-             {NotionSDK.CustomEmojiPageIconRequest, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       },
       %{
@@ -2390,7 +1760,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -2402,11 +1772,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Whether the page should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_locked",
         nullable: false,
@@ -2421,7 +1790,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "properties",
         nullable: false,
@@ -2436,7 +1805,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "template",
         nullable: false,
@@ -2456,7 +1825,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "template_id",
         nullable: false,
@@ -2468,11 +1837,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "IANA timezone to use when resolving template variables like @now and @today (e.g. 'America/New_York'). Defaults to the authorizing user's timezone for public integrations, or UTC for internal integrations.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "timezone",
         nullable: false,
@@ -2487,7 +1855,7 @@ defmodule NotionSDK.Pages do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2504,10 +1872,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: "Insert new content into the page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "insert_content",
         nullable: false,
@@ -2519,10 +1887,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: "Replace a range of content in the page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "replace_content_range",
         nullable: false,
@@ -2534,10 +1902,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `replace_content_range`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -2554,11 +1922,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Selection of existing content to insert after, using the ellipsis format (\"start text...end text\"). Omit to append at the end of the page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "after",
         nullable: false,
@@ -2570,10 +1937,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: "The enhanced markdown content to insert into the page.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "content",
         nullable: false,
@@ -2590,11 +1957,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Set to true to allow the operation to delete child pages or databases. Defaults to false.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "allow_deleting_content",
         nullable: false,
@@ -2606,10 +1972,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description: "The new enhanced markdown content to replace the matched range.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "content",
         nullable: false,
@@ -2621,11 +1987,10 @@ defmodule NotionSDK.Pages do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Selection of existing content to replace, using the ellipsis format (\"start text...end text\").",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "content_range",
         nullable: false,

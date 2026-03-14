@@ -180,7 +180,7 @@ That generated surface currently includes newer concepts such as:
 - block append `position` with `after_block`, `start`, and `end`
 - page create `position` with `after_block`, `page_start`, and `page_end`
 - `in_trash` fields on modern page, block, database, data source, and upload responses
-- `NotionSDK.MeetingNotesBlockObjectResponse`
+- `meeting_notes` block response support in the committed compatibility surface
 
 Use [Versioning and Compatibility](guides/versioning-and-compatibility.md) for
 the detailed support contract and migration guidance.

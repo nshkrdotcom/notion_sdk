@@ -1,6 +1,6 @@
 defmodule NotionSDK.PropertyItemPropertyItemListResponse do
   @moduledoc """
-  Property Item
+  PropertyItemPropertyItemListResponse
 
   ## Fields
 
@@ -120,7 +120,7 @@ defmodule NotionSDK.PropertyItemPropertyItemListResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "has_more",
         nullable: false,
@@ -135,7 +135,7 @@ defmodule NotionSDK.PropertyItemPropertyItemListResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "next_cursor",
         nullable: false,
@@ -150,7 +150,7 @@ defmodule NotionSDK.PropertyItemPropertyItemListResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -165,7 +165,7 @@ defmodule NotionSDK.PropertyItemPropertyItemListResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "property_item",
         nullable: false,
@@ -188,7 +188,7 @@ defmodule NotionSDK.PropertyItemPropertyItemListResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "results",
         nullable: false,
@@ -230,7 +230,7 @@ defmodule NotionSDK.PropertyItemPropertyItemListResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

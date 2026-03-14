@@ -5,7 +5,7 @@ defmodule NotionSDK.ColumnWithChildrenRequest do
   ## Fields
 
     * `children`: required
-    * `width_ratio`: Ratio between 0 and 1 of the width of this column relative to all columns in the list. If not provided, uses an equal width.
+    * `width_ratio`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -101,7 +101,7 @@ defmodule NotionSDK.ColumnWithChildrenRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "children",
         nullable: false,
@@ -143,11 +143,10 @@ defmodule NotionSDK.ColumnWithChildrenRequest do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Ratio between 0 and 1 of the width of this column relative to all columns in the list. If not provided, uses an equal width.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "width_ratio",
         nullable: false,

@@ -1,16 +1,16 @@
 defmodule NotionSDK.BlockId do
   @moduledoc """
-  Block Id
+  BlockId
 
   ## Fields
 
     * `block_id`: required
-    * `type`: required
+    * `type`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{block_id: String.t(), type: String.t() | nil}
+  @type t :: %__MODULE__{block_id: String.t(), type: String.t() | nil}
 
   defstruct [:block_id, :type]
 
@@ -37,7 +37,7 @@ defmodule NotionSDK.BlockId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "block_id",
         nullable: false,
@@ -52,7 +52,7 @@ defmodule NotionSDK.BlockId do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

@@ -1,11 +1,11 @@
 defmodule NotionSDK.FileUploadPageIconRequest do
   @moduledoc """
-  File Upload
+  FileUploadPageIconRequest
 
   ## Fields
 
     * `file_upload`: required
-    * `type`: Always `file_upload`
+    * `type`: optional
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -43,7 +43,7 @@ defmodule NotionSDK.FileUploadPageIconRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "file_upload",
         nullable: false,
@@ -55,10 +55,10 @@ defmodule NotionSDK.FileUploadPageIconRequest do
       %{
         default: nil,
         deprecated: false,
-        description: "Always `file_upload`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

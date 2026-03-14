@@ -36,7 +36,7 @@ defmodule NotionSDK.ExternalFileRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "url",
         nullable: false,

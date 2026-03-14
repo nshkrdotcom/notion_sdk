@@ -1,6 +1,6 @@
 defmodule NotionSDK.VerificationPropertyItemObjectResponse do
   @moduledoc """
-  Verification
+  VerificationPropertyItemObjectResponse
 
   ## Fields
 
@@ -16,10 +16,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
           id: String.t(),
           object: String.t(),
           type: String.t(),
-          verification:
-            NotionSDK.VerificationPropertyResponse.t()
-            | NotionSDK.VerificationPropertyUnverifiedResponse.t()
-            | nil
+          verification: map | nil
         }
 
   defstruct [:id, :object, :type, :verification]
@@ -33,13 +30,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
       id: :string,
       object: {:const, "property_item"},
       type: {:const, "verification"},
-      verification:
-        {:union,
-         [
-           :null,
-           {NotionSDK.VerificationPropertyUnverifiedResponse, :t},
-           {NotionSDK.VerificationPropertyResponse, :t}
-         ]}
+      verification: {:union, [:null, :map]}
     ]
   end
 
@@ -58,7 +49,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -73,7 +64,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -88,7 +79,7 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -103,19 +94,13 @@ defmodule NotionSDK.VerificationPropertyItemObjectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "verification",
         nullable: false,
         read_only: false,
         required: true,
-        type:
-          {:union,
-           [
-             :null,
-             {NotionSDK.VerificationPropertyUnverifiedResponse, :t},
-             {NotionSDK.VerificationPropertyResponse, :t}
-           ]},
+        type: {:union, [:null, :map]},
         write_only: false
       }
     ]

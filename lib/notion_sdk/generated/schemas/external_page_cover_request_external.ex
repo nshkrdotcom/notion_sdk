@@ -2,11 +2,9 @@ defmodule NotionSDK.ExternalPageCoverRequestExternal do
   @moduledoc """
   ExternalPageCoverRequestExternal
 
-  External URL for the cover.
-
   ## Fields
 
-    * `url`: The URL of the external file.
+    * `url`: required
 
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
@@ -35,10 +33,10 @@ defmodule NotionSDK.ExternalPageCoverRequestExternal do
       %{
         default: nil,
         deprecated: false,
-        description: "The URL of the external file.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "url",
         nullable: false,

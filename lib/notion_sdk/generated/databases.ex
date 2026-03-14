@@ -4,14 +4,15 @@ defmodule NotionSDK.Databases do
 
   ## Operations
 
-    * Create a database
-    * Retrieve a database
-    * Update a database
+    * post `/v1/databases`
+    * get `/v1/databases/{database_id}`
+    * patch `/v1/databases/{database_id}`
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
+  use Pristine.OpenAPI.Operation
 
   @doc """
-  Create a database
+  post `/v1/databases`
 
   ## Source Context
   Create a database
@@ -43,54 +44,8 @@ defmodule NotionSDK.Databases do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -124,7 +79,7 @@ defmodule NotionSDK.Databases do
           | {:error, NotionSDK.Error.t()}
   def create(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -147,50 +102,14 @@ defmodule NotionSDK.Databases do
       args: params,
       call: {NotionSDK.Databases, :create},
       path_template: "/v1/databases",
-      url: NotionSDK.GeneratedOperation.render_path("/v1/databases", partition.path_params),
+      url: render_path("/v1/databases", partition.path_params),
       method: :post,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Databases, :create_json_req}}],
       response: [
         {200,
@@ -213,7 +132,7 @@ defmodule NotionSDK.Databases do
   end
 
   @doc """
-  Retrieve a database
+  get `/v1/databases/{database_id}`
 
   ## Source Context
   Retrieve a database
@@ -275,54 +194,8 @@ defmodule NotionSDK.Databases do
     * [linked database](https://www.notion.so/help/guides/using-linked-databases)
     * [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -352,7 +225,7 @@ defmodule NotionSDK.Databases do
           | {:error, NotionSDK.Error.t()}
   def retrieve(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{mode: :none},
         form_data: %{mode: :none},
@@ -364,54 +237,14 @@ defmodule NotionSDK.Databases do
       args: params,
       call: {NotionSDK.Databases, :retrieve},
       path_template: "/v1/databases/{database_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/databases/{database_id}",
-          partition.path_params
-        ),
+      url: render_path("/v1/databases/{database_id}", partition.path_params),
       method: :get,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       response: [
         {200,
          {:union,
@@ -433,7 +266,7 @@ defmodule NotionSDK.Databases do
   end
 
   @doc """
-  Update a database
+  patch `/v1/databases/{database_id}`
 
   ## Source Context
   Update a database
@@ -485,54 +318,8 @@ defmodule NotionSDK.Databases do
   ## Request Body
   **Content Types**: `application/json`
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
   ## Security
 
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
-    * `bearerAuth`
     * `bearerAuth`
 
   ## Resources
@@ -563,7 +350,7 @@ defmodule NotionSDK.Databases do
           | {:error, NotionSDK.Error.t()}
   def update(client, params \\ %{}) when is_map(params) do
     partition =
-      NotionSDK.GeneratedOperation.partition(params, %{
+      partition(params, %{
         auth: {"auth", :auth},
         body: %{
           keys: [
@@ -587,54 +374,14 @@ defmodule NotionSDK.Databases do
       args: params,
       call: {NotionSDK.Databases, :update},
       path_template: "/v1/databases/{database_id}",
-      url:
-        NotionSDK.GeneratedOperation.render_path(
-          "/v1/databases/{database_id}",
-          partition.path_params
-        ),
+      url: render_path("/v1/databases/{database_id}", partition.path_params),
       method: :patch,
       path_params: partition.path_params,
       query: partition.query,
       body: partition.body,
       form_data: partition.form_data,
       auth: partition.auth,
-      security: [
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []},
-        %{"bearerAuth" => []}
-      ],
+      security: [%{"bearerAuth" => []}],
       request: [{"application/json", {NotionSDK.Databases, :update_json_req}}],
       response: [
         {200,
@@ -726,7 +473,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "cover",
         nullable: false,
@@ -740,10 +487,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: "The description of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "description",
         nullable: false,
@@ -758,7 +505,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
@@ -780,7 +527,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "initial_data_source",
         nullable: false,
@@ -792,11 +539,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Whether the database should be displayed inline in the parent page. Defaults to false.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_inline",
         nullable: false,
@@ -808,10 +554,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: "The parent page or workspace where the database will be created.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -823,10 +569,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: "The title of the database.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -843,10 +589,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: "The type of parent.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,
@@ -866,7 +612,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "cover",
         nullable: false,
@@ -880,11 +626,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "The updated description of the database, if any. If not provided, the description will not be updated.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "description",
         nullable: false,
@@ -899,7 +644,7 @@ defmodule NotionSDK.Databases do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "icon",
         nullable: false,
@@ -918,11 +663,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Whether the database should be moved to or from the trash. If not provided, the trash status will not be updated.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "in_trash",
         nullable: false,
@@ -934,11 +678,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Whether the database should be displayed inline in the parent page. If not provided, the inline status will not be updated.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_inline",
         nullable: false,
@@ -950,11 +693,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "Whether the database should be locked from editing in the Notion app UI. If not provided, the locked state will not be updated.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "is_locked",
         nullable: false,
@@ -966,11 +708,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "The parent page or workspace to move the database to. If not provided, the database will not be moved.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "parent",
         nullable: false,
@@ -982,11 +723,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "The updated title of the database, if any. If not provided, the title will not be updated.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "title",
         nullable: false,
@@ -1003,10 +743,10 @@ defmodule NotionSDK.Databases do
       %{
         default: nil,
         deprecated: false,
-        description: "The type of parent.",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

@@ -36,7 +36,7 @@ defmodule NotionSDK.ContentWithTableRowRequest do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "cells",
         nullable: false,

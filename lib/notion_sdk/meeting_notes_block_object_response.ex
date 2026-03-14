@@ -1,45 +1,47 @@
-defmodule NotionSDK.TableRow do
-  @moduledoc """
-  TableRow
+defmodule NotionSDK.MeetingNotesBlockObjectResponse do
+  @moduledoc false
 
-  ## Fields
-
-    * `object`: optional
-    * `table_row`: required
-    * `type`: optional
-
-  """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
+  defstruct [:meeting_notes, :object, :type]
+
   @type t :: %__MODULE__{
+          meeting_notes: term(),
           object: String.t() | nil,
-          table_row: NotionSDK.ContentWithTableRowRequest.t(),
           type: String.t() | nil
         }
 
-  defstruct [:object, :table_row, :type]
-
   @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
+  @spec __fields__(atom()) :: keyword()
   def __fields__(:t) do
     [
-      object: {:const, "block"},
-      table_row: {NotionSDK.ContentWithTableRowRequest, :t},
-      type: {:const, "table_row"}
+      meeting_notes: {NotionSDK.TranscriptionBlockResponse, :t},
+      object: :string,
+      type: {:const, "meeting_notes"}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
+  def __fields__(_type), do: __fields__(:t)
 
-  def __openapi_fields__(type \\ :t)
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(:t) do
     [
+      %{
+        default: nil,
+        deprecated: false,
+        description: nil,
+        example: nil,
+        examples: nil,
+        extensions: nil,
+        external_docs: nil,
+        name: "meeting_notes",
+        nullable: false,
+        read_only: false,
+        required: true,
+        type: {NotionSDK.TranscriptionBlockResponse, :t},
+        write_only: false
+      },
       %{
         default: nil,
         deprecated: false,
@@ -51,23 +53,8 @@ defmodule NotionSDK.TableRow do
         name: "object",
         nullable: false,
         read_only: false,
-        required: false,
-        type: {:const, "block"},
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: nil,
-        external_docs: nil,
-        name: "table_row",
-        nullable: false,
-        read_only: false,
         required: true,
-        type: {NotionSDK.ContentWithTableRowRequest, :t},
+        type: :string,
         write_only: false
       },
       %{
@@ -81,31 +68,24 @@ defmodule NotionSDK.TableRow do
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
-        type: {:const, "table_row"},
+        required: true,
+        type: {:const, "meeting_notes"},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
+  def __openapi_fields__(_type), do: __openapi_fields__(:t)
 
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(_type \\ :t) do
     OpenAPIRuntime.build_schema(__openapi_fields__(:t))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
-
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  @doc false
+  @spec decode(term(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t) do
+    OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
+  end
 end

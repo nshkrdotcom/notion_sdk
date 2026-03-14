@@ -11,7 +11,7 @@ defmodule NotionSDK.Breadcrumb do
   """
   alias NotionSDK.GeneratedRuntime, as: OpenAPIRuntime
 
-  @type t :: %{
+  @type t :: %__MODULE__{
           breadcrumb: NotionSDK.EmptyObject.t(),
           object: String.t() | nil,
           type: String.t() | nil
@@ -46,7 +46,7 @@ defmodule NotionSDK.Breadcrumb do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "breadcrumb",
         nullable: false,
@@ -61,7 +61,7 @@ defmodule NotionSDK.Breadcrumb do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "object",
         nullable: false,
@@ -76,7 +76,7 @@ defmodule NotionSDK.Breadcrumb do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "type",
         nullable: false,

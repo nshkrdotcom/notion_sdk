@@ -4,7 +4,7 @@ defmodule NotionSDK.PartialSelectResponse do
 
   ## Fields
 
-    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`
+    * `color`: required
     * `id`: required
     * `name`: required
 
@@ -52,11 +52,10 @@ defmodule NotionSDK.PartialSelectResponse do
       %{
         default: nil,
         deprecated: false,
-        description:
-          "One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`",
+        description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "color",
         nullable: false,
@@ -84,7 +83,7 @@ defmodule NotionSDK.PartialSelectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "id",
         nullable: false,
@@ -99,7 +98,7 @@ defmodule NotionSDK.PartialSelectResponse do
         description: nil,
         example: nil,
         examples: nil,
-        extensions: %{},
+        extensions: nil,
         external_docs: nil,
         name: "name",
         nullable: false,
