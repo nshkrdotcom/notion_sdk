@@ -61,8 +61,21 @@ Only completed uploads are useful as downstream attachments.
 ## External URL import flow
 
 If the source file already lives at a stable HTTPS URL, you can create an
-external upload instead of sending bytes yourself. The existing live examples
-show that path in `examples/13_create_external_file_upload.exs`.
+external upload instead of sending bytes yourself:
+
+```elixir
+{:ok, upload} =
+  NotionSDK.FileUploads.create(client, %{
+    "mode" => "external_url",
+    "external_url" => "https://example.com/path/to/export.pdf",
+    "filename" => "export.pdf",
+    "content_type" => "application/pdf"
+  })
+```
+
+That is the same shape used by `examples/13_create_external_file_upload.exs`.
+You can retrieve the resulting upload later with
+`NotionSDK.FileUploads.retrieve/2`.
 
 ## Attach an uploaded file to a page cover
 

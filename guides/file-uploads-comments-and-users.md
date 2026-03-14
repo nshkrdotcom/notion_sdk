@@ -32,8 +32,6 @@ Send a file part. The SDK accepts a multipart payload in the same map shape used
   })
 ```
 
-You can also pass an explicit file path through the lower stack with `{:path, "/tmp/roadmap.pdf"}` when that is more convenient than in-memory bytes.
-
 For multipart uploads, create with `"mode" => "multi_part"` and `"number_of_parts" => n`, send each part, then finalize:
 
 ```elixir
@@ -79,8 +77,23 @@ Retrieve a single comment:
   })
 ```
 
-For comment-creation flows that need the full parent-or-discussion body shape,
-use `NotionSDK.Client.request/2` with `method: :post` and `path: "/v1/comments"`.
+`NotionSDK.Comments.create/2` exists in the generated surface, but the current
+live examples still use raw `POST /v1/comments` requests so the full `parent`
+or `discussion_id` body can pass through unchanged.
+
+Use `NotionSDK.Client.request/2` for that flow:
+
+```elixir
+{:ok, comment} =
+  NotionSDK.Client.request(client, %{
+    method: :post,
+    path: "/v1/comments",
+    body: %{
+      "parent" => %{"page_id" => page_id},
+      "rich_text" => [%{"text" => %{"content" => "Created from a raw request"}}]
+    }
+  })
+```
 
 ## Inspect workspace users
 

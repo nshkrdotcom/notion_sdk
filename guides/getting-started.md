@@ -69,6 +69,9 @@ client =
   )
 ```
 
+If you only need OAuth control endpoints such as token exchange, introspection,
+or revoke, `NotionSDK.Client.new()` without `auth:` is valid too.
+
 Examples in these guides use string keys. That matches the upstream JSON field names and mirrors the shapes exercised in the test suite.
 
 The client does not take a page id or other workspace fixture ids at initialization time. Those ids are per-request inputs:

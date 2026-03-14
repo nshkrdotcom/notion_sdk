@@ -63,6 +63,11 @@ Use the high-level helper layer when onboarding a public integration:
 request.url
 ```
 
+`NotionSDK.OAuth.authorization_request/1` is the helper that can generate and
+return request state for you. Use `NotionSDK.OAuth.authorize_url/1` only when
+your application already manages explicit `state` or other authorization inputs
+itself.
+
 The current Notion OAuth docs require `redirect_uri` and `owner: "user"` on the
 authorization URL. `NotionSDK.OAuth.authorization_request/1` defaults
 `owner=user` and fails clearly if `redirect_uri` is missing. `pristine`
@@ -79,6 +84,8 @@ Exchange the returned authorization code programmatically:
     redirect_uri: "https://example.com/callback"
   )
 ```
+
+That helper returns a `Pristine.SDK.OAuth2.Token`.
 
 `NOTION_OAUTH_ACCESS_TOKEN` is an example input after that exchange step. It is
 not shown on the Notion integration settings page. `NOTION_OAUTH_TOKEN_PATH` is
@@ -218,6 +225,9 @@ client =
     ]
   )
 ```
+
+File-backed token sources are consulted at request time, so an existing client
+will pick up a rotated saved token file without being rebuilt.
 
 Set `NOTION_OAUTH_TOKEN_PATH` only if you want to override that default save
 location.

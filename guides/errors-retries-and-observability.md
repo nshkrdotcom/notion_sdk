@@ -33,6 +33,19 @@ The struct includes:
 - `body`
 - `additional_data`
 
+Use `NotionSDK.Error.retryable?/1` when you want the same coarse retryability
+check the SDK uses for common caller logic:
+
+```elixir
+{:error, %NotionSDK.Error{} = error} = NotionSDK.Users.get_self(client)
+
+if NotionSDK.Error.retryable?(error) do
+  {:retry, error}
+else
+  {:error, error}
+end
+```
+
 ## Error code mapping
 
 The SDK maps the common Notion API codes into atoms such as:

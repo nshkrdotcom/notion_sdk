@@ -180,10 +180,9 @@ client =
   )
 ```
 
-The vendored JS SDK README documents newer upstream versions as well.
-`notion_sdk` does not automatically move its default header forward; the
+`notion_sdk` does not automatically move its default header forward. The
 supported default in this repo stays `2025-09-03` until the committed fixtures,
-generated code, and tests are updated together.
+generated code, and tests move together.
 
 The committed generated surface currently includes fields and request shapes such as:
 
