@@ -5,6 +5,7 @@
 <p align="center">
   <a href="https://hex.pm/packages/notion_sdk"><img src="https://img.shields.io/hexpm/v/notion_sdk.svg" alt="Hex.pm"/></a>
   <a href="https://hexdocs.pm/notion_sdk"><img src="https://img.shields.io/badge/hex-docs-blue.svg" alt="HexDocs"/></a>
+  <a href="https://github.com/nshkrdotcom/notion_sdk"><img src="https://img.shields.io/badge/GitHub-repo-black?logo=github" alt="GitHub"/></a>
   <a href="https://hex.pm/packages/notion_sdk"><img src="https://img.shields.io/hexpm/l/notion_sdk.svg" alt="License"/></a>
 </p>
 

@@ -18,6 +18,7 @@ defmodule NotionSDK.MixProject do
       deps: deps(),
       dialyzer: dialyzer(),
       description: description(),
+      package: package(),
       name: "NotionSDK",
       source_url: @source_url,
       homepage_url: @source_url,
@@ -38,7 +39,7 @@ defmodule NotionSDK.MixProject do
 
   defp deps do
     [
-      {:pristine, path: "../pristine"},
+      {:pristine, "~> 0.1.0"},
       {:oapi_generator,
        github: "nshkrdotcom/open-api-generator",
        branch: "doc-generator-fix",
@@ -86,6 +87,19 @@ defmodule NotionSDK.MixProject do
     """
   end
 
+  defp package do
+    [
+      name: "notion_sdk",
+      description: description(),
+      files: ~w(lib mix.exs README.md CHANGELOG.md LICENSE config),
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => @source_url
+      },
+      maintainers: ["nshkrdotcom"]
+    ]
+  end
+
   defp docs do
     [
       main: "readme-1",
@@ -93,7 +107,7 @@ defmodule NotionSDK.MixProject do
       logo: "assets/notion_sdk.svg",
       canonical: "https://hexdocs.pm/notion_sdk",
       source_url: @source_url,
-      source_ref: "main",
+      source_ref: "v#{@version}",
       extras: extras(),
       groups_for_extras: groups_for_extras(),
       groups_for_modules: groups_for_modules()
