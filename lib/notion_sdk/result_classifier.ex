@@ -96,8 +96,8 @@ defmodule NotionSDK.ResultClassifier do
     Map.get(endpoint, :retry) || Map.get(endpoint, "retry") || "notion.write"
   end
 
-  defp retryable_transport_error?(%Mint.TransportError{}), do: true
-  defp retryable_transport_error?(%Mint.HTTPError{}), do: true
+  defp retryable_transport_error?(%{__struct__: Mint.TransportError}), do: true
+  defp retryable_transport_error?(%{__struct__: Mint.HTTPError}), do: true
   defp retryable_transport_error?(:timeout), do: true
   defp retryable_transport_error?(_reason), do: false
 

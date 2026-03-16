@@ -73,4 +73,20 @@ defmodule NotionSDK.ResultClassifierTest do
     assert non_transient.breaker_outcome == :failure
     assert non_transient.telemetry.classification == :transport_error
   end
+
+  test "retries transport errors identified by __struct__" do
+    for reason <- [%{__struct__: Mint.TransportError}, %{__struct__: Mint.HTTPError}] do
+      classification =
+        ResultClassifier.classify(
+          {:error, reason},
+          %{resource: "core_api", retry: "notion.read"},
+          nil,
+          []
+        )
+
+      assert classification.retry? == true
+      assert classification.breaker_outcome == :failure
+      assert classification.telemetry.classification == :transport_error
+    end
+  end
 end

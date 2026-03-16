@@ -73,11 +73,21 @@ defmodule NotionSDK.MixProject do
   defp path_dependency?(%Mix.Dep{opts: opts}), do: is_binary(opts[:path])
 
   defp path_dependencies do
-    Mix.Dep.load_and_cache()
-    |> Enum.filter(&path_dependency?/1)
-    |> Enum.map(fn %Mix.Dep{app: app, opts: opts} ->
-      %{app: app, path: Path.expand(opts[:path], __DIR__)}
-    end)
+    if dependency_checkout?() do
+      []
+    else
+      Mix.Dep.load_and_cache()
+      |> Enum.filter(&path_dependency?/1)
+      |> Enum.map(fn %Mix.Dep{app: app, opts: opts} ->
+        %{app: app, path: Path.expand(opts[:path], __DIR__)}
+      end)
+    end
+  end
+
+  defp dependency_checkout? do
+    __DIR__
+    |> Path.split()
+    |> Enum.member?("deps")
   end
 
   defp description do
@@ -91,7 +101,7 @@ defmodule NotionSDK.MixProject do
     [
       name: "notion_sdk",
       description: description(),
-      files: ~w(lib mix.exs README.md CHANGELOG.md LICENSE config),
+      files: ~w(build_support config lib priv mix.exs README.md CHANGELOG.md LICENSE),
       licenses: ["MIT"],
       links: %{
         "GitHub" => @source_url
