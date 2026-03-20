@@ -1,32 +1,21 @@
 defmodule NotionSDK.AnnotationResponse do
   @moduledoc """
-  AnnotationResponse
-
-  ## Fields
-
-    * `bold`: required
-    * `code`: required
-    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`
-    * `italic`: required
-    * `strikethrough`: required
-    * `underline`: required
-
+  Generated Notion Sdk type for annotation response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          bold: boolean,
-          code: boolean,
-          color: String.t(),
-          italic: boolean,
-          strikethrough: boolean,
-          underline: boolean
-        }
-
+  @enforce_keys [:bold, :code, :color, :italic, :strikethrough, :underline]
   defstruct [:bold, :code, :color, :italic, :strikethrough, :underline]
 
+  @type t :: %__MODULE__{
+          bold: boolean(),
+          code: boolean(),
+          color: String.t(),
+          italic: boolean(),
+          strikethrough: boolean(),
+          underline: boolean()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -63,11 +52,8 @@ defmodule NotionSDK.AnnotationResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -189,24 +175,17 @@ defmodule NotionSDK.AnnotationResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.AnnotationResponse, type, data)
+  end
 end

@@ -49,8 +49,8 @@ means they keep:
 - the client's configured transport, retry, telemetry, and Foundation adapters
 - Notion-specific resource, retry-group, rate-limit, and circuit-breaker inference when you omit those fields
 
-This escape hatch is still implemented on top of `Pristine.execute_request/3`
-and the `Pristine.SDK.*` boundary.
+This escape hatch is implemented by rendering a `Pristine.Operation` and
+executing it through `Pristine.execute/3`.
 
 On non-OAuth paths, raw requests inherit the client's bearer auth unless you
 override or disable it. OAuth control paths do not inherit bearer auth
@@ -204,7 +204,7 @@ override it explicitly when necessary:
 - `id` to force a stable request identifier
 - `resource`, `retry`, `rate_limit`, `circuit_breaker`, and `telemetry` to override Foundation metadata
 - `timeout` to override the client's default timeout for one request
-- `retry_opts` to pass retry execution options through to `Pristine.execute_request/3`
+- `retry_opts` to pass retry execution options through to `Pristine.execute/3`
 
 If you do not set these fields, `NotionSDK.Client` infers them from the path
 and method in the same way it does for generated wrappers.

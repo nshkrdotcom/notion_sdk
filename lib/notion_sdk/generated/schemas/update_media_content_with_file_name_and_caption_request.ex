@@ -1,44 +1,32 @@
 defmodule NotionSDK.UpdateMediaContentWithFileNameAndCaptionRequest do
   @moduledoc """
-  UpdateMediaContentWithFileNameAndCaptionRequest
-
-  ## Fields
-
-    * `caption`: optional
-    * `external`: optional
-    * `file_upload`: optional
-    * `name`: optional
-
+  Generated Notion Sdk type for update media content with file name and caption request.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          caption: [NotionSDK.RichTextItemRequest.t()] | nil,
-          external: NotionSDK.ExternalFileRequest.t() | nil,
-          file_upload: NotionSDK.FileUploadIdRequest.t() | nil,
-          name: String.t() | nil
-        }
-
+  @enforce_keys []
   defstruct [:caption, :external, :file_upload, :name]
 
+  @type t :: %__MODULE__{
+          caption: [NotionSDK.RichTextItemRequest.t()],
+          external: NotionSDK.ExternalFileRequest.t(),
+          file_upload: NotionSDK.FileUploadIdRequest.t(),
+          name: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
-      caption: [{NotionSDK.RichTextItemRequest, :t}],
+      caption: {:array, {NotionSDK.RichTextItemRequest, :t}},
       external: {NotionSDK.ExternalFileRequest, :t},
       file_upload: {NotionSDK.FileUploadIdRequest, :t},
       name: :string
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -55,7 +43,7 @@ defmodule NotionSDK.UpdateMediaContentWithFileNameAndCaptionRequest do
         nullable: false,
         read_only: false,
         required: false,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
+        type: {:array, {NotionSDK.RichTextItemRequest, :t}},
         write_only: false
       },
       %{
@@ -106,24 +94,21 @@ defmodule NotionSDK.UpdateMediaContentWithFileNameAndCaptionRequest do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.UpdateMediaContentWithFileNameAndCaptionRequest,
+      type,
+      data
+    )
+  end
 end

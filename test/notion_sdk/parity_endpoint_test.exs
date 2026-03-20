@@ -1,24 +1,28 @@
 defmodule NotionSDK.ParityEndpointTest do
   use ExUnit.Case, async: true
 
-  @manifest_path Path.expand("../../priv/generated/manifest.json", __DIR__)
+  @provider_ir_path Path.expand("../../priv/generated/provider_ir.json", __DIR__)
   @inventory_path Path.expand("../../priv/upstream/parity_inventory.json", __DIR__)
   @js_sdk_package_path Path.expand("../../notion-sdk-js/package.json", __DIR__)
 
   test "matches the committed bounded parity inventory" do
-    manifest = Jason.decode!(File.read!(@manifest_path))
+    provider_ir = Jason.decode!(File.read!(@provider_ir_path))
     inventory = NotionSDK.ParityInventory.load!()
     expected_operations = NotionSDK.ParityInventory.expected_operations()
 
     actual_operations =
-      manifest["operations"]
+      provider_ir["operations"]
       |> Enum.map(fn operation ->
-        {operation["module"], operation["function"], operation["method"], operation["path"]}
+        module =
+          operation["module"]
+          |> String.trim_leading("NotionSDK.")
+
+        {module, operation["function"], operation["method"], operation["path_template"]}
       end)
       |> Enum.sort()
 
     assert File.exists?(@inventory_path)
-    assert manifest["operation_count"] == length(expected_operations)
+    assert length(provider_ir["operations"]) == length(expected_operations)
     assert actual_operations == Enum.sort(expected_operations)
 
     namespace_modules =

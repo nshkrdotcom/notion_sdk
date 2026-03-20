@@ -1,30 +1,20 @@
 defmodule NotionSDK.ErrorApi401 do
   @moduledoc """
-  ErrorApi401
-
-  ## Fields
-
-    * `additional_data`: optional
-    * `code`: optional
-    * `message`: optional
-    * `object`: optional
-    * `status`: optional
-
+  Generated Notion Sdk type for error api401.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          additional_data: map | nil,
-          code: String.t() | nil,
-          message: String.t() | nil,
-          object: String.t() | nil,
-          status: 401 | nil
-        }
-
+  @enforce_keys []
   defstruct [:additional_data, :code, :message, :object, :status]
 
+  @type t :: %__MODULE__{
+          additional_data: map(),
+          code: String.t(),
+          message: String.t(),
+          object: String.t(),
+          status: 401
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -37,11 +27,8 @@ defmodule NotionSDK.ErrorApi401 do
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -124,24 +111,17 @@ defmodule NotionSDK.ErrorApi401 do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.ErrorApi401, type, data)
+  end
 end

@@ -1,32 +1,21 @@
 defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
   @moduledoc """
-  PlacePropertyItemObjectResponsePlace
-
-  ## Fields
-
-    * `address`: optional
-    * `aws_place_id`: optional
-    * `google_place_id`: optional
-    * `lat`: required
-    * `lon`: required
-    * `name`: optional
-
+  Generated Notion Sdk type for place property item object response place.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          address: String.t() | nil,
-          aws_place_id: String.t() | nil,
-          google_place_id: String.t() | nil,
-          lat: number,
-          lon: number,
-          name: String.t() | nil
-        }
-
+  @enforce_keys [:lat, :lon]
   defstruct [:address, :aws_place_id, :google_place_id, :lat, :lon, :name]
 
+  @type t :: %__MODULE__{
+          address: nil | String.t(),
+          aws_place_id: nil | String.t(),
+          google_place_id: nil | String.t(),
+          lat: number(),
+          lon: number(),
+          name: nil | String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -40,11 +29,8 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -142,24 +128,21 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.PlacePropertyItemObjectResponsePlace,
+      type,
+      data
+    )
+  end
 end

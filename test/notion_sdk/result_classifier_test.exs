@@ -2,7 +2,7 @@ defmodule NotionSDK.ResultClassifierTest do
   use ExUnit.Case, async: true
 
   alias NotionSDK.ResultClassifier
-  alias Pristine.SDK.Response
+  alias Pristine.Response
 
   test "treats caller-side 4xx responses as breaker ignore" do
     for status <- [401, 404, 422] do

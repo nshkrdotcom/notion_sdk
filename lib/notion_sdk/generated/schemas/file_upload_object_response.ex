@@ -1,46 +1,21 @@
 defmodule NotionSDK.FileUploadObjectResponse do
   @moduledoc """
-  FileUploadObjectResponse
-
-  ## Fields
-
-    * `complete_url`: optional
-    * `content_length`: required
-    * `content_type`: required
-    * `created_by`: required
-    * `created_time`: required
-    * `expiry_time`: required
-    * `file_import_result`: optional
-    * `filename`: required
-    * `id`: required
-    * `in_trash`: required
-    * `last_edited_time`: required
-    * `number_of_parts`: optional
-    * `object`: Always `file_upload`
-    * `status`: One of: `pending`, `uploaded`, `expired`, `failed`
-    * `upload_url`: optional
-
+  Generated Notion Sdk type for file upload object response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          complete_url: String.t() | nil,
-          content_length: integer | nil,
-          content_type: String.t() | nil,
-          created_by: NotionSDK.FileUploadObjectResponseCreatedBy.t(),
-          created_time: DateTime.t(),
-          expiry_time: DateTime.t() | nil,
-          file_import_result: NotionSDK.FileUploadObjectResponseFileImportResult.t() | nil,
-          filename: String.t() | nil,
-          id: String.t(),
-          in_trash: boolean,
-          last_edited_time: DateTime.t(),
-          number_of_parts: NotionSDK.FileUploadObjectResponseNumberOfParts.t() | nil,
-          object: String.t(),
-          status: String.t(),
-          upload_url: String.t() | nil
-        }
-
+  @enforce_keys [
+    :content_length,
+    :content_type,
+    :created_by,
+    :created_time,
+    :expiry_time,
+    :filename,
+    :id,
+    :in_trash,
+    :last_edited_time,
+    :object,
+    :status
+  ]
   defstruct [
     :complete_url,
     :content_length,
@@ -59,8 +34,25 @@ defmodule NotionSDK.FileUploadObjectResponse do
     :upload_url
   ]
 
+  @type t :: %__MODULE__{
+          complete_url: String.t(),
+          content_length: integer() | nil,
+          content_type: nil | String.t(),
+          created_by: NotionSDK.FileUploadObjectResponseCreatedBy.t(),
+          created_time: DateTime.t(),
+          expiry_time: nil | DateTime.t(),
+          file_import_result: NotionSDK.FileUploadObjectResponseFileImportResult.t(),
+          filename: nil | String.t(),
+          id: String.t(),
+          in_trash: boolean(),
+          last_edited_time: DateTime.t(),
+          number_of_parts: NotionSDK.FileUploadObjectResponseNumberOfParts.t(),
+          object: String.t(),
+          status: String.t(),
+          upload_url: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -83,11 +75,8 @@ defmodule NotionSDK.FileUploadObjectResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -320,24 +309,17 @@ defmodule NotionSDK.FileUploadObjectResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.FileUploadObjectResponse, type, data)
+  end
 end

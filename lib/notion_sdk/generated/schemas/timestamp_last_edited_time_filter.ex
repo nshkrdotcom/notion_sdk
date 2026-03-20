@@ -1,37 +1,61 @@
 defmodule NotionSDK.TimestampLastEditedTimeFilter do
   @moduledoc """
-  Last Edited Time
-
-  ## Fields
-
-    * `last_edited_time`: required
-    * `timestamp`: required
-    * `type`: optional
-
+  Generated Notion Sdk type for timestamp last edited time filter.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{last_edited_time: map, timestamp: String.t(), type: String.t() | nil}
-
+  @enforce_keys [:last_edited_time, :timestamp]
   defstruct [:last_edited_time, :timestamp, :type]
 
+  @type t :: %__MODULE__{
+          last_edited_time:
+            NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t(),
+          timestamp: String.t(),
+          type: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
-      last_edited_time: :map,
+      last_edited_time:
+        {:union,
+         [
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map}
+         ]},
       timestamp: {:const, "last_edited_time"},
       type: {:const, "last_edited_time"}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -48,7 +72,24 @@ defmodule NotionSDK.TimestampLastEditedTimeFilter do
         nullable: false,
         read_only: false,
         required: true,
-        type: :map,
+        type:
+          {:union,
+           [
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map}
+           ]},
         write_only: false
       },
       %{
@@ -84,24 +125,21 @@ defmodule NotionSDK.TimestampLastEditedTimeFilter do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.TimestampLastEditedTimeFilter,
+      type,
+      data
+    )
+  end
 end

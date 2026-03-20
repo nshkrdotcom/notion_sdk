@@ -1,33 +1,49 @@
 defmodule NotionSDK.UniqueId do
   @moduledoc """
-  Unique Id
-
-  ## Fields
-
-    * `property`: required
-    * `type`: optional
-    * `unique_id`: required
-
+  Generated Notion Sdk type for unique id.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{property: String.t(), type: String.t() | nil, unique_id: map}
-
+  @enforce_keys [:property, :unique_id]
   defstruct [:property, :type, :unique_id]
 
+  @type t :: %__MODULE__{
+          property: String.t(),
+          type: String.t(),
+          unique_id:
+            NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+            | NotionSDK.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [property: :string, type: {:const, "unique_id"}, unique_id: :map]
+    [
+      property: :string,
+      type: {:const, "unique_id"},
+      unique_id:
+        {:union,
+         [
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map},
+           {NotionSDK, :map}
+         ]}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -74,30 +90,34 @@ defmodule NotionSDK.UniqueId do
         nullable: false,
         read_only: false,
         required: true,
-        type: :map,
+        type:
+          {:union,
+           [
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map},
+             {NotionSDK, :map}
+           ]},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.UniqueId, type, data)
+  end
 end

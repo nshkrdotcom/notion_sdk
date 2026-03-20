@@ -4,18 +4,18 @@ defmodule NotionSDK.Codegen do
   """
 
   alias Jason.OrderedObject
+  alias NotionSDK.Codegen.Provider
   alias NotionSDK.Codegen.Source.Extractor
   alias NotionSDK.Codegen.Source.PageContext
   alias NotionSDK.ParityInventory
-  alias Pristine.OpenAPI.Bridge
-
-  @profile :notion_sdk
+  alias PristineCodegen.Compiler
 
   @type path_options :: keyword()
-  @type state :: map()
-
-  @spec profile() :: atom()
-  def profile, do: @profile
+  @type state :: %{
+          required(:compilation) => PristineCodegen.Compilation.t(),
+          required(:ir) => PristineCodegen.ProviderIR.t(),
+          required(:paths) => map()
+        }
 
   @spec reference_pages() :: [String.t()]
   def reference_pages, do: ParityInventory.reference_pages()
@@ -97,29 +97,23 @@ defmodule NotionSDK.Codegen do
       ensure_extracted_upstream!(paths)
     end
 
-    state =
-      Bridge.run(
-        profile(),
-        reference_spec_files(opts),
-        source_contexts: source_contexts(opts),
-        base_module: NotionSDK,
-        output_dir: paths.generated_dir,
-        default_client: NotionSDK.Client,
-        operation_use: Pristine.SDK.OpenAPI.Operation,
-        error_type: NotionSDK.Error,
-        processor: NotionSDK.Codegen.Processor,
-        renderer: NotionSDK.Codegen.Renderer,
-        supplemental_files: supplemental_spec_files(opts),
-        profile_overrides: [
-          output: [
-            schema_subdirectory: "schemas",
-            types: [specs: :spec_comprehensive]
-          ]
-        ]
-      )
+    {:ok, compilation} = Compiler.generate(Provider, opts)
 
-    persist_artifacts!(state, paths)
-    state
+    %{
+      compilation: compilation,
+      ir: compilation.provider_ir,
+      paths: paths
+    }
+  end
+
+  @spec verify(path_options()) :: :ok | {:error, map()}
+  def verify(opts \\ []) when is_list(opts) do
+    Compiler.verify(Provider, opts)
+  end
+
+  @spec emit_ir(path_options()) :: {:ok, String.t()}
+  def emit_ir(opts \\ []) when is_list(opts) do
+    Compiler.emit_ir(Provider, opts)
   end
 
   @spec extract_upstream!(path_options()) :: :ok
@@ -266,207 +260,6 @@ defmodule NotionSDK.Codegen do
   end
 
   defp normalize_context_key(_artifact), do: nil
-
-  defp persist_artifacts!(state, paths) do
-    operations = state.ir.operations
-    schemas = state.ir.schemas
-    generated_files = Map.get(state.docs_manifest, "generated_files", [])
-    snapshot = canonical_snapshot(state)
-
-    summary = %{
-      profile: Atom.to_string(profile()),
-      operation_count: length(operations),
-      schema_count: length(schemas),
-      operation_modules: operations |> Enum.map(&module_name/1) |> Enum.uniq() |> Enum.sort(),
-      operations: Enum.map(operations, &operation_summary/1),
-      generated_files: generated_files
-    }
-
-    summary
-    |> ordered_json!()
-    |> then(&File.write!(Path.join(paths.generated_artifact_dir, "manifest.json"), &1))
-
-    File.write!(
-      Path.join(paths.generated_artifact_dir, "open_api_state.snapshot.term"),
-      :erlang.term_to_binary(snapshot)
-    )
-
-    File.write!(
-      Path.join(paths.generated_artifact_dir, "docs_manifest.json"),
-      ordered_json!(state.docs_manifest)
-    )
-  end
-
-  defp operation_summary(operation) do
-    %{
-      function: Atom.to_string(operation.function_name),
-      method: Atom.to_string(operation.method),
-      module: module_name(operation),
-      path: operation.path
-    }
-  end
-
-  defp canonical_snapshot(state) do
-    schemas_by_ref = Map.new(state.ir.schemas, &{Map.get(&1, :ref), &1})
-
-    ref_labels =
-      Enum.into(schemas_by_ref, %{}, fn {ref, schema} ->
-        {ref, schema_ref_label(schema, schemas_by_ref)}
-      end)
-
-    [
-      operations:
-        state.ir.operations
-        |> Enum.map(&canonical_term(&1, ref_labels))
-        |> Enum.sort(),
-      schemas:
-        state.ir.schemas
-        |> Enum.map(fn schema ->
-          ref = Map.get(schema, :ref)
-          {Map.fetch!(ref_labels, ref), canonical_term(schema, ref_labels)}
-        end)
-        |> Enum.sort()
-    ]
-  end
-
-  defp canonical_term(%_{} = struct, ref_labels),
-    do: struct |> Map.from_struct() |> canonical_term(ref_labels)
-
-  defp canonical_term(map, ref_labels) when is_map(map) do
-    map
-    |> Enum.map(fn {key, value} ->
-      {canonical_term(key, ref_labels), canonical_term(value, ref_labels)}
-    end)
-    |> Enum.sort()
-  end
-
-  defp canonical_term(list, ref_labels) when is_list(list),
-    do: Enum.map(list, &canonical_term(&1, ref_labels))
-
-  defp canonical_term(tuple, ref_labels) when is_tuple(tuple) do
-    tuple
-    |> Tuple.to_list()
-    |> Enum.map(&canonical_term(&1, ref_labels))
-    |> List.to_tuple()
-  end
-
-  defp canonical_term(reference, ref_labels) when is_reference(reference) do
-    Map.get(ref_labels, reference, "<schema_ref>")
-  end
-
-  defp canonical_term(value, _ref_labels), do: value
-
-  defp schema_ref_label(schema, schemas_by_ref) do
-    [
-      module_name(schema) || "anonymous_schema",
-      Map.get(schema, :type_name) |> stable_atom() || "anonymous_type",
-      Map.get(schema, :output_format) |> stable_atom() || "none",
-      stable_schema_hash(schema, schemas_by_ref)
-    ]
-    |> Enum.join(".")
-  end
-
-  defp module_name(%{module_name: module_name})
-       when is_atom(module_name) and not is_nil(module_name) do
-    module_name
-    |> Module.split()
-    |> Enum.join(".")
-  end
-
-  defp module_name(_schema), do: nil
-
-  defp stable_schema_hash(schema, schemas_by_ref) do
-    schema
-    |> stable_schema_term(schemas_by_ref)
-    |> :erlang.term_to_binary()
-    |> then(&:crypto.hash(:sha256, &1))
-    |> Base.encode16(case: :lower)
-    |> binary_part(0, 12)
-  end
-
-  defp stable_schema_term(schema, schemas_by_ref) do
-    [
-      module_name: module_name(schema),
-      type_name: stable_atom(Map.get(schema, :type_name)),
-      output_format: stable_atom(Map.get(schema, :output_format)),
-      title: Map.get(schema, :title),
-      description: Map.get(schema, :description),
-      context:
-        schema
-        |> Map.get(:context, [])
-        |> Enum.map(&stable_term(&1, schemas_by_ref))
-        |> Enum.sort(),
-      fields:
-        schema
-        |> Map.get(:fields, [])
-        |> Enum.map(&stable_field_term(&1, schemas_by_ref))
-        |> Enum.sort()
-    ]
-  end
-
-  defp stable_field_term(field, schemas_by_ref) do
-    [
-      name: Map.get(field, :name),
-      type: stable_term(Map.get(field, :type), schemas_by_ref),
-      required: Map.get(field, :required),
-      nullable: Map.get(field, :nullable),
-      private: Map.get(field, :private),
-      read_only: Map.get(field, :read_only),
-      write_only: Map.get(field, :write_only)
-    ]
-  end
-
-  defp stable_term(reference, schemas_by_ref) when is_reference(reference) do
-    case Map.get(schemas_by_ref, reference) do
-      nil ->
-        {:schema_ref, "missing"}
-
-      schema ->
-        {:schema_ref, shallow_schema_term(schema)}
-    end
-  end
-
-  defp stable_term(%_{} = struct, schemas_by_ref),
-    do: struct |> Map.from_struct() |> stable_term(schemas_by_ref)
-
-  defp stable_term(map, schemas_by_ref) when is_map(map) do
-    map
-    |> Enum.map(fn {key, value} ->
-      {stable_term(key, schemas_by_ref), stable_term(value, schemas_by_ref)}
-    end)
-    |> Enum.sort()
-  end
-
-  defp stable_term(tuple, schemas_by_ref) when is_tuple(tuple) do
-    tuple
-    |> Tuple.to_list()
-    |> Enum.map(&stable_term(&1, schemas_by_ref))
-    |> List.to_tuple()
-  end
-
-  defp stable_term(list, schemas_by_ref) when is_list(list),
-    do: Enum.map(list, &stable_term(&1, schemas_by_ref))
-
-  defp stable_term(atom, _schemas_by_ref) when is_atom(atom), do: Atom.to_string(atom)
-  defp stable_term(value, _schemas_by_ref), do: value
-
-  defp shallow_schema_term(schema) do
-    [
-      module_name: module_name(schema),
-      type_name: stable_atom(Map.get(schema, :type_name)),
-      output_format: stable_atom(Map.get(schema, :output_format)),
-      title: Map.get(schema, :title),
-      description: Map.get(schema, :description),
-      field_names:
-        schema
-        |> Map.get(:fields, [])
-        |> Enum.map(&Map.get(&1, :name))
-        |> Enum.sort()
-    ]
-  end
-
-  defp stable_atom(nil), do: nil
-  defp stable_atom(atom) when is_atom(atom), do: Atom.to_string(atom)
 
   defp ordered_json!(term) do
     term

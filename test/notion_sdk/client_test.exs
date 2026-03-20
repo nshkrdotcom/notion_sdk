@@ -3,8 +3,8 @@ defmodule NotionSDK.ClientTest do
 
   alias NotionSDK.Client
   alias NotionSDK.TestTransport
-  alias Pristine.SDK.OAuth2.Token, as: OAuth2Token
-  alias Pristine.SDK.Response
+  alias Pristine.OAuth2.Token, as: OAuth2Token
+  alias Pristine.Response
 
   @moduletag :tmp_dir
 

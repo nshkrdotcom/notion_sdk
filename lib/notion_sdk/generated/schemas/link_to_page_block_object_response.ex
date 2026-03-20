@@ -1,43 +1,21 @@
 defmodule NotionSDK.LinkToPageBlockObjectResponse do
   @moduledoc """
-  Link To Page
-
-  ## Fields
-
-    * `created_by`: required
-    * `created_time`: required
-    * `has_children`: required
-    * `id`: required
-    * `in_trash`: required
-    * `last_edited_by`: required
-    * `last_edited_time`: required
-    * `link_to_page`: required
-    * `object`: required
-    * `parent`: required
-    * `type`: required
-
+  Generated Notion Sdk type for link to page block object response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          created_by: NotionSDK.PartialUserObjectResponse.t(),
-          created_time: DateTime.t(),
-          has_children: boolean,
-          id: String.t(),
-          in_trash: boolean,
-          last_edited_by: NotionSDK.PartialUserObjectResponse.t(),
-          last_edited_time: DateTime.t(),
-          link_to_page: NotionSDK.CommentId.t() | NotionSDK.DatabaseId.t() | NotionSDK.PageId.t(),
-          object: String.t(),
-          parent:
-            NotionSDK.BlockIdParentForBlockBasedObjectResponse.t()
-            | NotionSDK.DataSourceParentResponse.t()
-            | NotionSDK.DatabaseParentResponse.t()
-            | NotionSDK.PageIdParentForBlockBasedObjectResponse.t()
-            | NotionSDK.WorkspaceParentForBlockBasedObjectResponse.t(),
-          type: String.t()
-        }
-
+  @enforce_keys [
+    :created_by,
+    :created_time,
+    :has_children,
+    :id,
+    :in_trash,
+    :last_edited_by,
+    :last_edited_time,
+    :link_to_page,
+    :object,
+    :parent,
+    :type
+  ]
   defstruct [
     :created_by,
     :created_time,
@@ -52,8 +30,26 @@ defmodule NotionSDK.LinkToPageBlockObjectResponse do
     :type
   ]
 
+  @type t :: %__MODULE__{
+          created_by: NotionSDK.PartialUserObjectResponse.t(),
+          created_time: DateTime.t(),
+          has_children: boolean(),
+          id: String.t(),
+          in_trash: boolean(),
+          last_edited_by: NotionSDK.PartialUserObjectResponse.t(),
+          last_edited_time: DateTime.t(),
+          link_to_page: NotionSDK.CommentId.t() | NotionSDK.DatabaseId.t() | NotionSDK.PageId.t(),
+          object: String.t(),
+          parent:
+            NotionSDK.BlockIdParentForBlockBasedObjectResponse.t()
+            | NotionSDK.DataSourceParentResponse.t()
+            | NotionSDK.DatabaseParentResponse.t()
+            | NotionSDK.PageIdParentForBlockBasedObjectResponse.t()
+            | NotionSDK.WorkspaceParentForBlockBasedObjectResponse.t(),
+          type: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -66,26 +62,23 @@ defmodule NotionSDK.LinkToPageBlockObjectResponse do
       last_edited_by: {NotionSDK.PartialUserObjectResponse, :t},
       last_edited_time: {:string, "date-time"},
       link_to_page:
-        {:union, [{NotionSDK.PageId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.CommentId, :t}]},
+        {:union, [{NotionSDK.CommentId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.PageId, :t}]},
       object: {:const, "block"},
       parent:
         {:union,
          [
-           {NotionSDK.DatabaseParentResponse, :t},
-           {NotionSDK.DataSourceParentResponse, :t},
-           {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
            {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
+           {NotionSDK.DataSourceParentResponse, :t},
+           {NotionSDK.DatabaseParentResponse, :t},
+           {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
            {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
          ]},
       type: {:const, "link_to_page"}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -209,7 +202,7 @@ defmodule NotionSDK.LinkToPageBlockObjectResponse do
         required: true,
         type:
           {:union,
-           [{NotionSDK.PageId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.CommentId, :t}]},
+           [{NotionSDK.CommentId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.PageId, :t}]},
         write_only: false
       },
       %{
@@ -242,10 +235,10 @@ defmodule NotionSDK.LinkToPageBlockObjectResponse do
         type:
           {:union,
            [
-             {NotionSDK.DatabaseParentResponse, :t},
-             {NotionSDK.DataSourceParentResponse, :t},
-             {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
              {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
+             {NotionSDK.DataSourceParentResponse, :t},
+             {NotionSDK.DatabaseParentResponse, :t},
+             {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
              {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
            ]},
         write_only: false
@@ -268,24 +261,21 @@ defmodule NotionSDK.LinkToPageBlockObjectResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.LinkToPageBlockObjectResponse,
+      type,
+      data
+    )
+  end
 end

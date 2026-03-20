@@ -1,30 +1,28 @@
 defmodule NotionSDK.Workspace do
   @moduledoc """
-  Workspace
-
-  ## Fields
-
-    * `type`: required
-    * `workspace`: required
-
+  Generated Notion Sdk type for workspace.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %{type: String.t() | nil, workspace: true}
+  @enforce_keys [:type, :workspace]
+  defstruct [:type, :workspace]
 
+  @type t :: %__MODULE__{
+          type: String.t(),
+          workspace: true
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [type: {:const, "workspace"}, workspace: {:const, true}]
+    [
+      type: {:const, "workspace"},
+      workspace: {:const, true}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -40,7 +38,7 @@ defmodule NotionSDK.Workspace do
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
+        required: true,
         type: {:const, "workspace"},
         write_only: false
       },
@@ -62,24 +60,17 @@ defmodule NotionSDK.Workspace do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Workspace, type, data)
+  end
 end

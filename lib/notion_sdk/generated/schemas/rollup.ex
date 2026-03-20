@@ -1,61 +1,45 @@
 defmodule NotionSDK.Rollup do
   @moduledoc """
-  Rollup
-
-  ## Fields
-
-    * `id`: required
-    * `next_url`: required
-    * `rollup`: required
-    * `type`: required
-
+  Generated Notion Sdk type for rollup.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+
+  @enforce_keys [:id, :next_url, :rollup, :type]
+  defstruct [:id, :next_url, :rollup, :type]
 
   @type t :: %__MODULE__{
           id: String.t(),
-          next_url: String.t() | nil,
-          property: String.t(),
+          next_url: nil | String.t(),
           rollup:
             NotionSDK.Array.t()
             | NotionSDK.Date.t()
             | NotionSDK.Incomplete.t()
             | NotionSDK.Number.t()
-            | NotionSDK.RollupRollup.t()
             | NotionSDK.Unsupported.t(),
-          type: String.t() | nil
+          type: String.t()
         }
-
-  defstruct [:id, :next_url, :property, :rollup, :type]
-
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
       id: :string,
       next_url: {:union, [:null, :string]},
-      property: :string,
       rollup:
         {:union,
          [
-           {NotionSDK.RollupRollup, :t},
-           {NotionSDK.Number, :t},
-           {NotionSDK.Date, :t},
            {NotionSDK.Array, :t},
-           {NotionSDK.Unsupported, :t},
-           {NotionSDK.Incomplete, :t}
+           {NotionSDK.Date, :t},
+           {NotionSDK.Incomplete, :t},
+           {NotionSDK.Number, :t},
+           {NotionSDK.Unsupported, :t}
          ]},
       type: {:const, "rollup"}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -98,21 +82,6 @@ defmodule NotionSDK.Rollup do
         examples: nil,
         extensions: %{},
         external_docs: nil,
-        name: "property",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
         name: "rollup",
         nullable: false,
         read_only: false,
@@ -120,12 +89,11 @@ defmodule NotionSDK.Rollup do
         type:
           {:union,
            [
-             {NotionSDK.RollupRollup, :t},
-             {NotionSDK.Number, :t},
-             {NotionSDK.Date, :t},
              {NotionSDK.Array, :t},
-             {NotionSDK.Unsupported, :t},
-             {NotionSDK.Incomplete, :t}
+             {NotionSDK.Date, :t},
+             {NotionSDK.Incomplete, :t},
+             {NotionSDK.Number, :t},
+             {NotionSDK.Unsupported, :t}
            ]},
         write_only: false
       },
@@ -140,31 +108,24 @@ defmodule NotionSDK.Rollup do
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
+        required: true,
         type: {:const, "rollup"},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Rollup, type, data)
+  end
 end

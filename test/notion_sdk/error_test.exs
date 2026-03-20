@@ -2,7 +2,7 @@ defmodule NotionSDK.ErrorTest do
   use ExUnit.Case, async: true
 
   alias NotionSDK.Error
-  alias Pristine.SDK.Response
+  alias Pristine.Response
 
   describe "from_response/3" do
     test "maps Notion API codes from the body" do

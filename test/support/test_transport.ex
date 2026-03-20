@@ -3,7 +3,7 @@ defmodule NotionSDK.TestTransport do
 
   @behaviour Pristine.Ports.Transport
 
-  alias Pristine.SDK.Response
+  alias Pristine.Response
 
   @impl true
   def send(request, %{transport_opts: transport_opts} = context)

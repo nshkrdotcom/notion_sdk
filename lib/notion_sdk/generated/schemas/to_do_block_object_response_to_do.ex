@@ -1,26 +1,18 @@
 defmodule NotionSDK.ToDoBlockObjectResponseToDo do
   @moduledoc """
-  To Do Block Object Response To Do
-
-  ## Fields
-
-    * `checked`: required
-    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`
-    * `rich_text`: required
-
+  Generated Notion Sdk type for to do block object response to do.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+
+  @enforce_keys [:checked, :color, :rich_text]
+  defstruct [:checked, :color, :rich_text]
 
   @type t :: %__MODULE__{
-          checked: boolean,
+          checked: boolean(),
           color: String.t(),
           rich_text: [NotionSDK.RichTextItemResponse.t()]
         }
-
-  defstruct [:checked, :color, :rich_text]
-
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -50,15 +42,12 @@ defmodule NotionSDK.ToDoBlockObjectResponseToDo do
            "pink_background",
            "red_background"
          ]},
-      rich_text: [{NotionSDK.RichTextItemResponse, :t}]
+      rich_text: {:array, {NotionSDK.RichTextItemResponse, :t}}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -129,30 +118,23 @@ defmodule NotionSDK.ToDoBlockObjectResponseToDo do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.RichTextItemResponse, :t}],
+        type: {:array, {NotionSDK.RichTextItemResponse, :t}},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.ToDoBlockObjectResponseToDo, type, data)
+  end
 end

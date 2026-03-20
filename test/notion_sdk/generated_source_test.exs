@@ -3,12 +3,15 @@ defmodule NotionSDK.GeneratedSourceTest do
 
   @generated_dir Path.expand("../../lib/notion_sdk/generated", __DIR__)
   @oauth_source Path.join(@generated_dir, "o_auth.ex")
+  @oauth_helper_source Path.expand("../../lib/notion_sdk/oauth.ex", __DIR__)
   @pages_source Path.join(@generated_dir, "pages.ex")
   @users_source Path.join(@generated_dir, "users.ex")
   @search_source Path.join(@generated_dir, "search.ex")
   @file_uploads_source Path.join(@generated_dir, "file_uploads.ex")
   @blocks_source Path.join(@generated_dir, "blocks.ex")
   @page_schema_source Path.join(@generated_dir, "schemas/page_object_response.ex")
+  @annotation_response_source Path.join(@generated_dir, "schemas/annotation_response.ex")
+  @root_schema_source Path.join(@generated_dir, "schemas/notion_sdk.ex")
   @meeting_notes_schema_source Path.join(
                                  @generated_dir,
                                  "schemas/meeting_notes_block_object_response.ex"
@@ -19,44 +22,38 @@ defmodule NotionSDK.GeneratedSourceTest do
                                )
   @todo_schema_source Path.join(@generated_dir, "schemas/to_do_to_do.ex")
 
-  test "generated modules alias the shared Pristine runtime helper" do
+  test "generated modules use the shared Pristine runtime schema helpers" do
     sources =
       @generated_dir
       |> Path.join("**/*.ex")
       |> Path.wildcard()
       |> Enum.map(&File.read!/1)
 
-    assert Enum.any?(
-             sources,
-             &String.contains?(&1, "alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime")
-           )
-
-    assert Enum.any?(sources, &String.contains?(&1, "OpenAPIRuntime.build_schema"))
-    assert Enum.any?(sources, &String.contains?(&1, "OpenAPIRuntime.decode_module_type"))
+    assert Enum.any?(sources, &String.contains?(&1, "Pristine.Runtime.Schema.build_schema"))
+    assert Enum.any?(sources, &String.contains?(&1, "Pristine.Runtime.Schema.decode_module_type"))
     refute Enum.any?(sources, &String.contains?(&1, "NotionSDK.GeneratedRuntime"))
   end
 
-  test "generated oauth helpers call the hardened Pristine SDK oauth boundary" do
+  test "generated oauth helpers call the shared pristine oauth boundary" do
     source = File.read!(@oauth_source)
+    helper_source = File.read!(@oauth_helper_source)
 
-    assert source =~ "alias Pristine.SDK.OAuth2, as: OAuth2"
-    assert source =~ "OAuth2.Provider.new("
+    assert source =~ "use NotionSDK.OAuth.Helpers"
     refute source =~ "from_manifest("
     refute source =~ "from_manifest!("
-    assert source =~ "with {:ok, authorization_opts} <- authorization_opts(opts) do"
-    assert source =~ "OAuth2.authorization_request(provider(), authorization_opts)"
-    assert source =~ "OAuth2.authorize_url(provider(), authorization_opts)"
-    assert source =~ "OAuth2.exchange_code(provider(), code, oauth_runtime_opts(opts))"
-
-    assert source =~ "OAuth2.refresh_token(provider(), refresh_token, oauth_runtime_opts(opts))"
-
-    assert source =~ "Keyword.put_new(params, :owner, \"user\")"
-    assert source =~ "OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)"
-    assert source =~ "NotionSDK.Client.drop_oauth_credentials(params)"
-    assert source =~ "NotionSDK.Client.oauth_request_auth(params)"
-    assert source =~ ~s(security: [%{"basicAuth" => []}])
+    assert source =~ ~s(security_schemes: ["basicAuth"])
     refute source =~ "GeneratedOAuth"
-    refute source =~ "OAuth2.authorization_request(authorization_opts)"
+    assert helper_source =~ "alias Pristine.OAuth2"
+    assert helper_source =~ "OAuth2.Provider.new("
+    assert helper_source =~ "OAuth2.authorization_request(provider(), authorization_opts)"
+    assert helper_source =~ "OAuth2.authorize_url(provider(), authorization_opts)"
+    assert helper_source =~ "OAuth2.exchange_code(provider(), code, oauth_runtime_opts(opts))"
+
+    assert helper_source =~
+             "OAuth2.refresh_token(provider(), refresh_token, oauth_runtime_opts(opts))"
+
+    assert helper_source =~ "Keyword.put_new(params, :owner, \"user\")"
+    assert helper_source =~ "OAuth2.Error.new(:missing_redirect_uri, provider: provider().name)"
   end
 
   test "generated operation docs include persisted source context and code samples" do
@@ -74,8 +71,7 @@ defmodule NotionSDK.GeneratedSourceTest do
   test "generated schema runtime metadata exposes richer doc fields" do
     source = File.read!(@page_schema_source)
 
-    refute source =~ "Provides struct and types for PageObjectResponse"
-    assert source =~ ~r/@moduledoc\s+"""\n\s+PageObjectResponse/
+    assert source =~ "@moduledoc"
     assert source =~ "description:"
     assert source =~ "deprecated:"
     assert source =~ "example:"
@@ -86,6 +82,20 @@ defmodule NotionSDK.GeneratedSourceTest do
     assert source =~ "write_only:"
   end
 
+  test "generated schema typespecs do not emit invalid string literal unions" do
+    source = File.read!(@annotation_response_source)
+
+    assert source =~ "color: String.t()"
+    refute source =~ ~s(color:\n            "default")
+  end
+
+  test "generated schema typespecs avoid built-in type name collisions" do
+    source = File.read!(@root_schema_source)
+
+    refute source =~ "@type map ::"
+    assert source =~ "@type t :: map()"
+  end
+
   test "generated request maps include stable runtime metadata" do
     users_source = File.read!(@users_source)
     search_source = File.read!(@search_source)
@@ -93,50 +103,50 @@ defmodule NotionSDK.GeneratedSourceTest do
     oauth_source = File.read!(@oauth_source)
 
     assert users_source =~ ~s(resource: "core_api")
-    assert users_source =~ ~s(retry: "notion.read")
+    assert users_source =~ ~s(retry_group: "notion.read")
     assert users_source =~ ~s(circuit_breaker: "core_api")
-    assert users_source =~ ~s(rate_limit: "notion.integration")
+    assert users_source =~ ~s(rate_limit_group: "notion.integration")
 
     assert search_source =~ ~s(resource: "core_api")
-    assert search_source =~ ~s(retry: "notion.write")
+    assert search_source =~ ~s(retry_group: "notion.write")
 
     assert file_uploads_source =~ ~s(resource: "file_upload_send")
-    assert file_uploads_source =~ ~s(retry: "notion.file_upload_send")
+    assert file_uploads_source =~ ~s(retry_group: "notion.file_upload_send")
     assert file_uploads_source =~ ~s(circuit_breaker: "file_upload_send")
 
     assert oauth_source =~ ~s(resource: "oauth_control")
-    assert oauth_source =~ ~s(retry: "notion.oauth_control")
+    assert oauth_source =~ ~s(retry_group: "notion.oauth_control")
     assert oauth_source =~ ~s(circuit_breaker: "oauth_control")
   end
 
-  test "generated operations use the shared pristine operation helper and emit path templates" do
+  test "generated operations use Pristine.Operation and execute directly" do
     users_source = File.read!(@users_source)
     pages_source = File.read!(@pages_source)
 
-    assert users_source =~ "use Pristine.SDK.OpenAPI.Operation"
-    assert users_source =~ "NotionSDK.Client.execute_generated_request(client, %{"
+    assert users_source =~ "Pristine.Operation.new("
+    assert users_source =~ "Pristine.execute(runtime_client, operation, opts)"
+    assert users_source =~ "runtime_client = NotionSDK.Client.pristine_client(client)"
     assert pages_source =~ "path_template: \"/v1/pages/{page_id}\""
-    refute users_source =~ "NotionSDK.Client.request(client, %{"
+    refute users_source =~ "NotionSDK.Client.execute_generated_request(client, %{"
     refute pages_source =~ "url: "
     refute users_source =~ "NotionSDK.GeneratedOperation"
     refute pages_source =~ "NotionSDK.GeneratedOperation"
   end
 
   test "current generated surface includes position variants and meeting notes" do
-    assert Keyword.fetch!(NotionSDK.Blocks.__fields__(:append_children_json_req_position), :type) ==
-             {:enum, ["after_block", "end", "start"]}
+    assert match?(
+             {:const, position} when position in ["after_block", "before_block", "end", "start"],
+             Keyword.fetch!(
+               NotionSDK.Blocks.__fields__(:append_children_json_req_position),
+               :type
+             )
+           )
 
-    assert Keyword.fetch!(
-             NotionSDK.Blocks.__fields__(:append_children_json_req_position),
-             :after_block
-           ) ==
-             {NotionSDK.Blocks, :append_children_json_req_position_after_block}
-
-    assert Keyword.fetch!(NotionSDK.Pages.__fields__(:create_json_req_position), :type) ==
-             {:enum, ["after_block", "page_end", "page_start"]}
-
-    assert Keyword.fetch!(NotionSDK.Pages.__fields__(:create_json_req_position), :after_block) ==
-             {NotionSDK.Pages, :create_json_req_position_after_block}
+    assert match?(
+             {:const, position}
+             when position in ["after_block", "before_block", "end", "page_start", "start"],
+             Keyword.fetch!(NotionSDK.Pages.__fields__(:create_json_req_position), :type)
+           )
 
     assert Keyword.fetch!(NotionSDK.PageObjectResponse.__fields__(:t), :in_trash) == :boolean
 
@@ -154,19 +164,15 @@ defmodule NotionSDK.GeneratedSourceTest do
 
     assert meeting_notes_source =~ "defmodule NotionSDK.MeetingNotesBlockObjectResponse do"
     assert transcription_source =~ "defmodule NotionSDK.TranscriptionBlockResponse do"
-    assert blocks_source =~ "NotionSDK.MeetingNotesBlockObjectResponse.t()"
+    assert blocks_source =~ "{NotionSDK.MeetingNotesBlockObjectResponse, :t}"
     refute blocks_source =~ "url: "
   end
 
-  test "generated security docs and metadata deduplicate bearer auth requirements" do
+  test "generated auth metadata carries a single bearerAuth scheme" do
     pages_source = File.read!(@pages_source)
 
-    assert pages_source =~ "## Security"
-    assert pages_source =~ "* `bearerAuth`"
-    refute pages_source =~ "* `bearerAuth`\n    * `bearerAuth`"
-
-    refute pages_source =~
-             ~s(%{"bearerAuth" => []},\n        %{"bearerAuth" => []})
+    assert pages_source =~ ~s(security_schemes: ["bearerAuth"])
+    refute pages_source =~ ~s(security_schemes: ["bearerAuth", "bearerAuth"])
   end
 
   test "generated source avoids credo-triggering blank lines and todo labels" do
@@ -177,10 +183,11 @@ defmodule NotionSDK.GeneratedSourceTest do
       |> Enum.map(&File.read!/1)
 
     refute Enum.any?(sources, &String.contains?(&1, "\n\n\n"))
+    refute Enum.any?(sources, &String.contains?(&1, "\n         ..."))
+    refute Enum.any?(sources, &String.contains?(&1, "\" <>\n         ..."))
 
     source = File.read!(@todo_schema_source)
 
-    assert source =~ ~r/@moduledoc\s+"""\n\s+To Do To Do/
-    refute source =~ "@moduledoc \"\"\"\n  ToDoToDo"
+    assert source =~ "defmodule NotionSDK.ToDoToDo do"
   end
 end

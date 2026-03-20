@@ -1,31 +1,26 @@
 defmodule NotionSDK.ContentWithTableRowResponse do
   @moduledoc """
-  ContentWithTableRowResponse
-
-  ## Fields
-
-    * `cells`: required
-
+  Generated Notion Sdk type for content with table row response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{cells: [[NotionSDK.RichTextItemResponse.t()]]}
-
+  @enforce_keys [:cells]
   defstruct [:cells]
 
+  @type t :: %__MODULE__{
+          cells: [[NotionSDK.RichTextItemResponse.t()]]
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [cells: [[{NotionSDK.RichTextItemResponse, :t}]]]
+    [
+      cells: {:array, {:array, {NotionSDK.RichTextItemResponse, :t}}}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -42,30 +37,23 @@ defmodule NotionSDK.ContentWithTableRowResponse do
         nullable: false,
         read_only: false,
         required: true,
-        type: [[{NotionSDK.RichTextItemResponse, :t}]],
+        type: {:array, {:array, {NotionSDK.RichTextItemResponse, :t}}},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.ContentWithTableRowResponse, type, data)
+  end
 end

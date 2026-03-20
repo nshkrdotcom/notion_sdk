@@ -1,519 +1,352 @@
 defmodule NotionSDK.FileUploads do
   @moduledoc """
-  Provides API endpoints related to file uploads
-
-  ## Operations
-
-    * List file uploads
-    * Create a file upload
-    * Retrieve a file upload
-    * Complete a multi-part file upload
-    * Upload a file
+  Generated Notion Sdk operations for file uploads.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
-  use Pristine.SDK.OpenAPI.Operation
 
-  @doc """
-  Complete a multi-part file upload
+  @complete_partition_spec %{
+    path: [{"file_upload_id", :file_upload_id}],
+    auth: {"auth", :auth},
+    body: %{mode: :none},
+    query: [],
+    headers: [],
+    form_data: %{mode: :none}
+  }
 
-  ## Source Context
-  Complete a file upload
-  ### Resources
+  @doc "Complete a file upload\n## Source Context\n### Resources\n\n  * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.complete({\n  file_upload_id: \"a02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})\n```\n"
+  @spec complete(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
+  def complete(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
+    operation = build_complete_operation(params)
+    Pristine.execute(runtime_client, operation, opts)
+  end
 
-    * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)
+  defp build_complete_operation(params) when is_map(params) do
+    partition = Pristine.Operation.partition(params, @complete_partition_spec)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
-  ## Security
-
-    * `bearerAuth`
-
-  ## Resources
-
-    * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)
-
-  ## Code Samples
-
-  TypeScript SDK
-  ```javascript
-  import { Client } from "@notionhq/client"
-
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
-  const response = await notion.fileUploads.complete({
-    file_upload_id: "a02fc1d3-db8b-45c5-a222-27595b15aea7"
-  })
-  ```
-  """
-  @spec complete(client :: NotionSDK.Client.t()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  @spec complete(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  def complete(client, params \\ %{}) when is_map(params) do
-    partition =
-      partition(params, %{
-        auth: {"auth", :auth},
-        body: %{mode: :none},
-        form_data: %{mode: :none},
-        path: [{"file_upload_id", :file_upload_id}],
-        query: []
-      })
-
-    NotionSDK.Client.execute_generated_request(client, %{
-      args: params,
-      call: {NotionSDK.FileUploads, :complete},
+    Pristine.Operation.new(%{
+      id: "file_uploads/complete",
+      method: :post,
       path_template: "/v1/file_uploads/{file_upload_id}/complete",
-      method: :post,
       path_params: partition.path_params,
       query: partition.query,
+      headers: partition.headers,
       body: partition.body,
       form_data: partition.form_data,
-      auth: partition.auth,
-      security: [%{"bearerAuth" => []}],
-      response: [
-        {200, {NotionSDK.FileUploadObjectResponse, :t}},
-        {400, {NotionSDK.ErrorApi400, :t}},
-        {401, {NotionSDK.ErrorApi401, :t}},
-        {403, {NotionSDK.ErrorApi403, :t}},
-        {404, {NotionSDK.ErrorApi404, :t}},
-        {409, {NotionSDK.ErrorApi409, :t}},
-        {429, {NotionSDK.ErrorApi429, :t}},
-        {500, {NotionSDK.ErrorApi500, :t}},
-        {503, {NotionSDK.ErrorApi503, :t}}
-      ],
-      resource: "file_upload_control",
-      retry: "notion.write",
-      circuit_breaker: "core_api",
-      rate_limit: "notion.integration"
+      request_schema: nil,
+      response_schemas: %{
+        200 => {NotionSDK.FileUploadObjectResponse, :t},
+        400 => {NotionSDK.ErrorApi400, :t},
+        401 => {NotionSDK.ErrorApi401, :t},
+        403 => {NotionSDK.ErrorApi403, :t},
+        404 => {NotionSDK.ErrorApi404, :t},
+        409 => {NotionSDK.ErrorApi409, :t},
+        429 => {NotionSDK.ErrorApi429, :t},
+        500 => {NotionSDK.ErrorApi500, :t},
+        503 => {NotionSDK.ErrorApi503, :t}
+      },
+      auth: %{
+        use_client_default?: true,
+        override: partition.auth,
+        security_schemes: ["bearerAuth"]
+      },
+      runtime: %{
+        circuit_breaker: "core_api",
+        rate_limit_group: "notion.integration",
+        resource: "file_upload_control",
+        retry_group: "notion.write",
+        telemetry_event: [:notion_sdk, :file_uploads, :complete],
+        timeout_ms: nil
+      },
+      pagination: nil
     })
   end
 
-  @doc """
-  Create a file upload
+  @create_partition_spec %{
+    path: [],
+    auth: {"auth", :auth},
+    body: %{
+      keys: [
+        {"content_type", :content_type},
+        {"external_url", :external_url},
+        {"filename", :filename},
+        {"mode", :mode},
+        {"number_of_parts", :number_of_parts}
+      ],
+      mode: :keys
+    },
+    query: [],
+    headers: [],
+    form_data: %{mode: :none}
+  }
 
-  ## Source Context
-  Create a file upload
-  Use this API to initiate the process of [uploading a file](https://developers.notion.com/guides/data-apis/working-with-files-and-media) to your Notion workspace.
+  @doc "Create a file upload\n## Source Context\nUse this API to initiate the process of [uploading a file](https://developers.notion.com/guides/data-apis/working-with-files-and-media) to your Notion workspace.\n\n### Resources\n\n  * [uploading a file](https://developers.notion.com/guides/data-apis/working-with-files-and-media)\n  * [Create a file upload](https://developers.notion.com/reference/create-a-file-upload)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.create({\n  mode: \"single_part\",\n  filename: \"document.pdf\",\n  content_type: \"application/pdf\"\n})\n```\n"
+  @spec create(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
+  def create(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
+    operation = build_create_operation(params)
+    Pristine.execute(runtime_client, operation, opts)
+  end
 
-  ### Resources
+  defp build_create_operation(params) when is_map(params) do
+    partition = Pristine.Operation.partition(params, @create_partition_spec)
 
-    * [uploading a file](https://developers.notion.com/guides/data-apis/working-with-files-and-media)
-    * [Create a file upload](https://developers.notion.com/reference/create-a-file-upload)
-
-  ## Request Body
-  **Content Types**: `application/json`
-
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
-  ## Security
-
-    * `bearerAuth`
-
-  ## Resources
-
-    * [Create a file upload](https://developers.notion.com/reference/create-a-file-upload)
-
-  ## Code Samples
-
-  TypeScript SDK
-  ```javascript
-  import { Client } from "@notionhq/client"
-
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
-  const response = await notion.fileUploads.create({
-    mode: "single_part",
-    filename: "document.pdf",
-    content_type: "application/pdf"
-  })
-  ```
-  """
-  @spec create(client :: NotionSDK.Client.t()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  @spec create(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  def create(client, params \\ %{}) when is_map(params) do
-    partition =
-      partition(params, %{
-        auth: {"auth", :auth},
-        body: %{
-          keys: [
-            {"content_type", :content_type},
-            {"external_url", :external_url},
-            {"filename", :filename},
-            {"mode", :mode},
-            {"number_of_parts", :number_of_parts}
-          ],
-          mode: :keys
-        },
-        form_data: %{mode: :none},
-        path: [],
-        query: []
-      })
-
-    NotionSDK.Client.execute_generated_request(client, %{
-      args: params,
-      call: {NotionSDK.FileUploads, :create},
-      path_template: "/v1/file_uploads",
+    Pristine.Operation.new(%{
+      id: "file_uploads/create",
       method: :post,
+      path_template: "/v1/file_uploads",
       path_params: partition.path_params,
       query: partition.query,
+      headers: partition.headers,
       body: partition.body,
       form_data: partition.form_data,
-      auth: partition.auth,
-      security: [%{"bearerAuth" => []}],
-      request: [{"application/json", {NotionSDK.FileUploads, :create_json_req}}],
-      response: [
-        {200, {NotionSDK.FileUploadObjectResponse, :t}},
-        {400, {NotionSDK.ErrorApi400, :t}},
-        {401, {NotionSDK.ErrorApi401, :t}},
-        {403, {NotionSDK.ErrorApi403, :t}},
-        {404, {NotionSDK.ErrorApi404, :t}},
-        {409, {NotionSDK.ErrorApi409, :t}},
-        {429, {NotionSDK.ErrorApi429, :t}},
-        {500, {NotionSDK.ErrorApi500, :t}},
-        {503, {NotionSDK.ErrorApi503, :t}}
-      ],
-      resource: "file_upload_control",
-      retry: "notion.write",
-      circuit_breaker: "core_api",
-      rate_limit: "notion.integration"
+      request_schema: {NotionSDK.FileUploads, :create_json_req},
+      response_schemas: %{
+        200 => {NotionSDK.FileUploadObjectResponse, :t},
+        400 => {NotionSDK.ErrorApi400, :t},
+        401 => {NotionSDK.ErrorApi401, :t},
+        403 => {NotionSDK.ErrorApi403, :t},
+        404 => {NotionSDK.ErrorApi404, :t},
+        409 => {NotionSDK.ErrorApi409, :t},
+        429 => {NotionSDK.ErrorApi429, :t},
+        500 => {NotionSDK.ErrorApi500, :t},
+        503 => {NotionSDK.ErrorApi503, :t}
+      },
+      auth: %{
+        use_client_default?: true,
+        override: partition.auth,
+        security_schemes: ["bearerAuth"]
+      },
+      runtime: %{
+        circuit_breaker: "core_api",
+        rate_limit_group: "notion.integration",
+        resource: "file_upload_control",
+        retry_group: "notion.write",
+        telemetry_event: [:notion_sdk, :file_uploads, :create],
+        timeout_ms: nil
+      },
+      pagination: nil
     })
   end
 
-  @type list_200_json_resp :: %{
-          file_upload: NotionSDK.EmptyObject.t(),
-          has_more: boolean,
-          next_cursor: String.t() | nil,
-          object: String.t(),
-          results: [NotionSDK.FileUploadObjectResponse.t()],
-          type: String.t()
-        }
+  @list_partition_spec %{
+    path: [],
+    auth: {"auth", :auth},
+    body: %{mode: :none},
+    query: [
+      {"status", :status},
+      {"start_cursor", :start_cursor},
+      {"page_size", :page_size}
+    ],
+    headers: [],
+    form_data: %{mode: :none}
+  }
 
-  @doc """
-  List file uploads
+  @doc "List file uploads\n## Source Context\nUse this API to retrieve [file uploads](https://developers.notion.com/reference/file-upload) for the current bot integration, sorted by most recent first.\n\n### Resources\n\n  * [file uploads](https://developers.notion.com/reference/file-upload)\n  * [List file uploads](https://developers.notion.com/reference/list-file-uploads)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.list({\n  start_cursor: undefined,\n  page_size: 50\n})\n```\n"
+  @spec list(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
+  def list(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
+    operation = build_list_operation(params)
+    Pristine.execute(runtime_client, operation, opts)
+  end
 
-  ## Source Context
-  List file uploads
-  Use this API to retrieve [file uploads](https://developers.notion.com/reference/file-upload) for the current bot integration, sorted by most recent first.
+  @spec stream_list(term(), map(), keyword()) :: Enumerable.t()
+  def stream_list(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
 
-  ### Resources
+    Stream.resource(
+      fn -> build_list_operation(params) end,
+      fn
+        nil ->
+          {:halt, nil}
 
-    * [file uploads](https://developers.notion.com/reference/file-upload)
-    * [List file uploads](https://developers.notion.com/reference/list-file-uploads)
+        %Pristine.Operation{} = operation ->
+          case Pristine.execute(runtime_client, operation, opts) do
+            {:ok, response} ->
+              items = List.wrap(Pristine.Operation.items(operation, response))
+              {items, Pristine.Operation.next_page(operation, response)}
 
-  ## Options
+            {:error, reason} ->
+              raise "pagination failed: " <> inspect(reason)
+          end
+      end,
+      fn _state -> :ok end
+    )
+  end
 
-    * `status`
-    * `start_cursor`
-    * `page_size`
+  defp build_list_operation(params) when is_map(params) do
+    partition = Pristine.Operation.partition(params, @list_partition_spec)
 
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
-  ## Security
-
-    * `bearerAuth`
-
-  ## Resources
-
-    * [List file uploads](https://developers.notion.com/reference/list-file-uploads)
-
-  ## Code Samples
-
-  TypeScript SDK
-  ```javascript
-  import { Client } from "@notionhq/client"
-
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
-  const response = await notion.fileUploads.list({
-    start_cursor: undefined,
-    page_size: 50
-  })
-  ```
-  """
-  @spec list(client :: NotionSDK.Client.t()) ::
-          {:ok, NotionSDK.FileUploads.list_200_json_resp()} | {:error, NotionSDK.Error.t()}
-  @spec list(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok, NotionSDK.FileUploads.list_200_json_resp()} | {:error, NotionSDK.Error.t()}
-  def list(client, params \\ %{}) when is_map(params) do
-    partition =
-      partition(params, %{
-        auth: {"auth", :auth},
-        body: %{mode: :none},
-        form_data: %{mode: :none},
-        path: [],
-        query: [{"status", :status}, {"start_cursor", :start_cursor}, {"page_size", :page_size}]
-      })
-
-    NotionSDK.Client.execute_generated_request(client, %{
-      args: params,
-      call: {NotionSDK.FileUploads, :list},
-      path_template: "/v1/file_uploads",
+    Pristine.Operation.new(%{
+      id: "file_uploads/list",
       method: :get,
+      path_template: "/v1/file_uploads",
       path_params: partition.path_params,
       query: partition.query,
+      headers: partition.headers,
       body: partition.body,
       form_data: partition.form_data,
-      auth: partition.auth,
-      security: [%{"bearerAuth" => []}],
-      response: [
-        {200, {NotionSDK.FileUploads, :list_200_json_resp}},
-        {400, {NotionSDK.ErrorApi400, :t}},
-        {401, {NotionSDK.ErrorApi401, :t}},
-        {403, {NotionSDK.ErrorApi403, :t}},
-        {404, {NotionSDK.ErrorApi404, :t}},
-        {409, {NotionSDK.ErrorApi409, :t}},
-        {429, {NotionSDK.ErrorApi429, :t}},
-        {500, {NotionSDK.ErrorApi500, :t}},
-        {503, {NotionSDK.ErrorApi503, :t}}
-      ],
-      resource: "file_upload_control",
-      retry: "notion.read",
-      circuit_breaker: "core_api",
-      rate_limit: "notion.integration"
+      request_schema: nil,
+      response_schemas: %{
+        200 => {NotionSDK.FileUploads, :list_200_json_resp},
+        400 => {NotionSDK.ErrorApi400, :t},
+        401 => {NotionSDK.ErrorApi401, :t},
+        403 => {NotionSDK.ErrorApi403, :t},
+        404 => {NotionSDK.ErrorApi404, :t},
+        409 => {NotionSDK.ErrorApi409, :t},
+        429 => {NotionSDK.ErrorApi429, :t},
+        500 => {NotionSDK.ErrorApi500, :t},
+        503 => {NotionSDK.ErrorApi503, :t}
+      },
+      auth: %{
+        use_client_default?: true,
+        override: partition.auth,
+        security_schemes: ["bearerAuth"]
+      },
+      runtime: %{
+        circuit_breaker: "core_api",
+        rate_limit_group: "notion.integration",
+        resource: "file_upload_control",
+        retry_group: "notion.read",
+        telemetry_event: [:notion_sdk, :file_uploads, :list],
+        timeout_ms: nil
+      },
+      pagination: %{
+        default_limit: nil,
+        items_path: ["results"],
+        request_mapping: %{cursor_location: :query, cursor_param: "start_cursor"},
+        response_mapping: %{cursor_path: ["next_cursor"]},
+        strategy: :cursor
+      }
     })
   end
 
-  @doc """
-  Retrieve a file upload
+  @retrieve_partition_spec %{
+    path: [{"file_upload_id", :file_upload_id}],
+    auth: {"auth", :auth},
+    body: %{mode: :none},
+    query: [],
+    headers: [],
+    form_data: %{mode: :none}
+  }
 
-  ## Source Context
-  Retrieve a file upload
-  Use this API to get the details of a [File Upload](https://developers.notion.com/reference/file-upload) object.
+  @doc "Retrieve a file upload\n## Source Context\nUse this API to get the details of a [File Upload](https://developers.notion.com/reference/file-upload) object.\n\n### Resources\n\n  * [File Upload](https://developers.notion.com/reference/file-upload)\n  * [Retrieve a file upload](https://developers.notion.com/reference/retrieve-a-file-upload)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.fileUploads.retrieve({\n  file_upload_id: \"a02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})\n```\n"
+  @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
+  def retrieve(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
+    operation = build_retrieve_operation(params)
+    Pristine.execute(runtime_client, operation, opts)
+  end
 
-  ### Resources
+  defp build_retrieve_operation(params) when is_map(params) do
+    partition = Pristine.Operation.partition(params, @retrieve_partition_spec)
 
-    * [File Upload](https://developers.notion.com/reference/file-upload)
-    * [Retrieve a file upload](https://developers.notion.com/reference/retrieve-a-file-upload)
-
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
-  ## Security
-
-    * `bearerAuth`
-
-  ## Resources
-
-    * [Retrieve a file upload](https://developers.notion.com/reference/retrieve-a-file-upload)
-
-  ## Code Samples
-
-  TypeScript SDK
-  ```javascript
-  import { Client } from "@notionhq/client"
-
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
-  const response = await notion.fileUploads.retrieve({
-    file_upload_id: "a02fc1d3-db8b-45c5-a222-27595b15aea7"
-  })
-  ```
-  """
-  @spec retrieve(client :: NotionSDK.Client.t()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  @spec retrieve(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  def retrieve(client, params \\ %{}) when is_map(params) do
-    partition =
-      partition(params, %{
-        auth: {"auth", :auth},
-        body: %{mode: :none},
-        form_data: %{mode: :none},
-        path: [{"file_upload_id", :file_upload_id}],
-        query: []
-      })
-
-    NotionSDK.Client.execute_generated_request(client, %{
-      args: params,
-      call: {NotionSDK.FileUploads, :retrieve},
+    Pristine.Operation.new(%{
+      id: "file_uploads/retrieve",
+      method: :get,
       path_template: "/v1/file_uploads/{file_upload_id}",
-      method: :get,
       path_params: partition.path_params,
       query: partition.query,
+      headers: partition.headers,
       body: partition.body,
       form_data: partition.form_data,
-      auth: partition.auth,
-      security: [%{"bearerAuth" => []}],
-      response: [
-        {200, {NotionSDK.FileUploadObjectResponse, :t}},
-        {400, {NotionSDK.ErrorApi400, :t}},
-        {401, {NotionSDK.ErrorApi401, :t}},
-        {403, {NotionSDK.ErrorApi403, :t}},
-        {404, {NotionSDK.ErrorApi404, :t}},
-        {409, {NotionSDK.ErrorApi409, :t}},
-        {429, {NotionSDK.ErrorApi429, :t}},
-        {500, {NotionSDK.ErrorApi500, :t}},
-        {503, {NotionSDK.ErrorApi503, :t}}
-      ],
-      resource: "file_upload_control",
-      retry: "notion.read",
-      circuit_breaker: "core_api",
-      rate_limit: "notion.integration"
+      request_schema: nil,
+      response_schemas: %{
+        200 => {NotionSDK.FileUploadObjectResponse, :t},
+        400 => {NotionSDK.ErrorApi400, :t},
+        401 => {NotionSDK.ErrorApi401, :t},
+        403 => {NotionSDK.ErrorApi403, :t},
+        404 => {NotionSDK.ErrorApi404, :t},
+        409 => {NotionSDK.ErrorApi409, :t},
+        429 => {NotionSDK.ErrorApi429, :t},
+        500 => {NotionSDK.ErrorApi500, :t},
+        503 => {NotionSDK.ErrorApi503, :t}
+      },
+      auth: %{
+        use_client_default?: true,
+        override: partition.auth,
+        security_schemes: ["bearerAuth"]
+      },
+      runtime: %{
+        circuit_breaker: "core_api",
+        rate_limit_group: "notion.integration",
+        resource: "file_upload_control",
+        retry_group: "notion.read",
+        telemetry_event: [:notion_sdk, :file_uploads, :retrieve],
+        timeout_ms: nil
+      },
+      pagination: nil
     })
   end
 
-  @doc """
-  Upload a file
-
-  ## Source Context
-  Send a file upload
-  When `mode=multi_part`, each part must include a form field `part_number` to indicate which part is being sent. Parts may be sent concurrently up to standard Notion API [rate limits](https://developers.notion.com/reference/request-limits), and may be sent out of order as long as all parts (1, ..., `part_number`) are successfully sent before calling the [complete file upload API](https://developers.notion.com/reference/complete-a-file-upload).
-
-  ### Notes
-
-  The use of multipart form data is unique to this endpoint. Other Notion APIs, including [Create a file upload](https://developers.notion.com/reference/create-a-file-upload) and [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload), use JSON parameters.
-  Include a `boundary` with the `Content-Type` header of your request as per [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388). Most request libraries (e.g. `fetch`, `ky`) automatically handle this as long as you provide a form data object but don't overwrite the `Content-Type` explicitly.
-  For more tips and examples, view the [file upload guide](https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents).
-
-  ### Overview
-
-  The maximum allowed length of a file name is 900 bytes, including any file extension included in the file name or inferred based on the `content_type`. However, we recommend using shorter names for performance and easier file management and lookup using the [List file uploads](https://developers.notion.com/reference/list-file-uploads) API.
-
-  ### Resources
-
-    * [Create a file upload](https://developers.notion.com/reference/create-a-file-upload)
-    * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)
-    * [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388)
-    * [file upload guide](https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents)
-    * [rate limits](https://developers.notion.com/reference/request-limits)
-    * [complete file upload API](https://developers.notion.com/reference/complete-a-file-upload)
-    * [List file uploads](https://developers.notion.com/reference/list-file-uploads)
-    * [Send a file upload](https://developers.notion.com/reference/send-a-file-upload)
-
-  ## Request Body
-  **Content Types**: `multipart/form-data`
-
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
-  ## Security
-
-    * `bearerAuth`
-
-  ## Resources
-
-    * [Send a file upload](https://developers.notion.com/reference/send-a-file-upload)
-
-  ## Code Samples
-
-  TypeScript SDK
-  ```javascript
-  import { Client } from "@notionhq/client"
-
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
-  import { readFile } from "fs/promises"
-  import { basename } from "path"
-
-  const filePath = "./document.pdf"
-
-  const response = await notion.fileUploads.send({
-    file_upload_id: "a02fc1d3-db8b-45c5-a222-27595b15aea7",
-    file: {
-      filename: basename(filePath),
-      data: new Blob([await readFile(filePath)], {
-        type: "application/pdf"
-      })
+  @send_partition_spec %{
+    path: [{"file_upload_id", :file_upload_id}],
+    auth: {"auth", :auth},
+    body: %{mode: :none},
+    query: [],
+    headers: [],
+    form_data: %{
+      keys: [{"file", :file}, {"part_number", :part_number}],
+      mode: :keys
     }
-  })
-  ```
-  """
-  @spec send(client :: NotionSDK.Client.t()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  @spec send(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok, NotionSDK.FileUploadObjectResponse.t()} | {:error, NotionSDK.Error.t()}
-  def send(client, params \\ %{}) when is_map(params) do
-    partition =
-      partition(params, %{
-        auth: {"auth", :auth},
-        body: %{mode: :none},
-        form_data: %{keys: [{"file", :file}, {"part_number", :part_number}], mode: :keys},
-        path: [{"file_upload_id", :file_upload_id}],
-        query: []
-      })
+  }
 
-    NotionSDK.Client.execute_generated_request(client, %{
-      args: params,
-      call: {NotionSDK.FileUploads, :send},
-      path_template: "/v1/file_uploads/{file_upload_id}/send",
+  @doc "Send a file upload\n## Source Context\nWhen `mode=multi_part`, each part must include a form field `part_number` to indicate which part is being sent. Parts may be sent concurrently up to standard Notion API [rate limits](https://developers.notion.com/reference/request-limits), and may be sent out of order as long as all parts (1, ..., `part_number`) are successfully sent before calling the [complete file upload API](https://developers.notion.com/reference/complete-a-file-upload).\n\n### Notes\n\nThe use of multipart form data is unique to this endpoint. Other Notion APIs, including [Create a file upload](https://developers.notion.com/reference/create-a-file-upload) and [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload), use JSON parameters.\nInclude a `boundary` with the `Content-Type` header of your request as per [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388). Most request libraries (e.g. `fetch`, `ky`) automatically handle this as long as you provide a form data object but don't overwrite the `Content-Type` explicitly.\nFor more tips and examples, view the [file upload guide](https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents).\n\n### Overview\n\nThe maximum allowed length of a file name is 900 bytes, including any file extension included in the file name or inferred based on the `content_type`. However, we recommend using shorter names for performance and easier file management and lookup using the [List file uploads](https://developers.notion.com/reference/list-file-uploads) API.\n\n### Resources\n\n  * [Create a file upload](https://developers.notion.com/reference/create-a-file-upload)\n  * [Complete a file upload](https://developers.notion.com/reference/complete-a-file-upload)\n  * [RFC 2388](https://datatracker.ietf.org/doc/html/rfc2388)\n  * [file upload guide](https://developers.notion.com/guides/data-apis/uploading-small-files#step-2-upload-file-contents)\n  * [rate limits](https://developers.notion.com/reference/request-limits)\n  * [complete file upload API](https://developers.notion.com/reference/complete-a-file-upload)\n  * [List file uploads](https://developers.notion.com/reference/list-file-uploads)\n  * [Send a file upload](https://developers.notion.com/reference/send-a-file-upload)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nimport { readFile } from \"fs/promises\"\nimport { basename } from \"path\"\n\nconst filePath = \"./document.pdf\"\n\nconst response = await notion.fileUploads.send({\n  file_upload_id: \"a02fc1d3-db8b-45c5-a222-27595b15aea7\",\n  file: {\n    filename: basename(filePath),\n    data: new Blob([await readFile(filePath)], {\n      type: \"application/pdf\"\n    })\n  }\n})\n```\n"
+  @spec send(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
+  def send(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
+    operation = build_send_operation(params)
+    Pristine.execute(runtime_client, operation, opts)
+  end
+
+  defp build_send_operation(params) when is_map(params) do
+    partition = Pristine.Operation.partition(params, @send_partition_spec)
+
+    Pristine.Operation.new(%{
+      id: "file_uploads/send",
       method: :post,
+      path_template: "/v1/file_uploads/{file_upload_id}/send",
       path_params: partition.path_params,
       query: partition.query,
+      headers: partition.headers,
       body: partition.body,
       form_data: partition.form_data,
-      auth: partition.auth,
-      security: [%{"bearerAuth" => []}],
-      request: [{"multipart/form-data", {NotionSDK.FileUploads, :send__req}}],
-      response: [
-        {200, {NotionSDK.FileUploadObjectResponse, :t}},
-        {400, {NotionSDK.ErrorApi400, :t}},
-        {401, {NotionSDK.ErrorApi401, :t}},
-        {403, {NotionSDK.ErrorApi403, :t}},
-        {404, {NotionSDK.ErrorApi404, :t}},
-        {409, {NotionSDK.ErrorApi409, :t}},
-        {429, {NotionSDK.ErrorApi429, :t}},
-        {500, {NotionSDK.ErrorApi500, :t}},
-        {503, {NotionSDK.ErrorApi503, :t}}
-      ],
-      resource: "file_upload_send",
-      retry: "notion.file_upload_send",
-      circuit_breaker: "file_upload_send",
-      rate_limit: "notion.integration"
+      request_schema: {NotionSDK.FileUploads, :send__req},
+      response_schemas: %{
+        200 => {NotionSDK.FileUploadObjectResponse, :t},
+        400 => {NotionSDK.ErrorApi400, :t},
+        401 => {NotionSDK.ErrorApi401, :t},
+        403 => {NotionSDK.ErrorApi403, :t},
+        404 => {NotionSDK.ErrorApi404, :t},
+        409 => {NotionSDK.ErrorApi409, :t},
+        429 => {NotionSDK.ErrorApi429, :t},
+        500 => {NotionSDK.ErrorApi500, :t},
+        503 => {NotionSDK.ErrorApi503, :t}
+      },
+      auth: %{
+        use_client_default?: true,
+        override: partition.auth,
+        security_schemes: ["bearerAuth"]
+      },
+      runtime: %{
+        circuit_breaker: "file_upload_send",
+        rate_limit_group: "notion.integration",
+        resource: "file_upload_send",
+        retry_group: "notion.file_upload_send",
+        telemetry_event: [:notion_sdk, :file_uploads, :send],
+        timeout_ms: nil
+      },
+      pagination: nil
     })
   end
 
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :create_json_req)
 
   def __fields__(:create_json_req) do
@@ -532,20 +365,20 @@ defmodule NotionSDK.FileUploads do
       has_more: :boolean,
       next_cursor: {:union, [:null, string: "uuid"]},
       object: {:const, "list"},
-      results: [{NotionSDK.FileUploadObjectResponse, :t}],
+      results: {:array, {NotionSDK.FileUploadObjectResponse, :t}},
       type: {:const, "file_upload"}
     ]
   end
 
   def __fields__(:send__req) do
-    [file: :map, part_number: :string]
+    [
+      file: :map,
+      part_number: :string
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :create_json_req)
 
   def __openapi_fields__(:create_json_req) do
@@ -556,7 +389,7 @@ defmodule NotionSDK.FileUploads do
         description:
           "MIME type of the file to be created. Recommended when sending the file in multiple parts. Must match the content type of the file that's sent, and the extension of the `filename` parameter if any.",
         example: nil,
-        examples: nil,
+        examples: ["application/pdf"],
         extensions: %{},
         external_docs: nil,
         name: "content_type",
@@ -588,7 +421,7 @@ defmodule NotionSDK.FileUploads do
         description:
           "Name of the file to be created. Required when `mode` is `multi_part`. Otherwise optional, and used to override the filename. Must include an extension, or have one inferred from the `content_type` parameter.",
         example: nil,
-        examples: nil,
+        examples: ["business_summary.pdf"],
         extensions: %{},
         external_docs: nil,
         name: "filename",
@@ -707,7 +540,7 @@ defmodule NotionSDK.FileUploads do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.FileUploadObjectResponse, :t}],
+        type: {:array, {NotionSDK.FileUploadObjectResponse, :t}},
         write_only: false
       },
       %{
@@ -764,32 +597,17 @@ defmodule NotionSDK.FileUploads do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :create_json_req)
-
-  def __schema__(:create_json_req) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:create_json_req))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :create_json_req) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  def __schema__(:list_200_json_resp) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:list_200_json_resp))
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :create_json_req)
+
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.FileUploads, type, data)
   end
-
-  def __schema__(:send__req) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:send__req))
-  end
-
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :create_json_req)
-
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
 end

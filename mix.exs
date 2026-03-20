@@ -39,7 +39,10 @@ defmodule NotionSDK.MixProject do
 
   defp deps do
     [
-      {:pristine, "~> 0.1.0"},
+      {:pristine, path: "../pristine/apps/pristine_runtime"},
+      {:pristine_codegen, path: "../pristine/apps/pristine_codegen"},
+      {:pristine_provider_testkit,
+       path: "../pristine/apps/pristine_provider_testkit", only: :test},
       {:oapi_generator,
        github: "nshkrdotcom/open-api-generator",
        branch: "doc-generator-fix",
@@ -57,7 +60,7 @@ defmodule NotionSDK.MixProject do
 
   defp dialyzer do
     [
-      plt_add_apps: [:ex_unit, :mix, :oapi_generator, :pristine],
+      plt_add_apps: [:ex_unit, :mix, :oapi_generator, :pristine, :pristine_codegen],
       plt_core_path: "priv/plts/core",
       plt_local_path: Path.join("priv/plts/project", project_plt_fingerprint())
     ]
@@ -218,8 +221,9 @@ defmodule NotionSDK.MixProject do
       {"Tooling",
        [
          NotionSDK.Codegen,
-         NotionSDK.Codegen.Processor,
-         NotionSDK.Codegen.Renderer,
+         NotionSDK.Codegen.OpenAPIProcessor,
+         NotionSDK.Codegen.Provider,
+         NotionSDK.Codegen.Plugins.Source,
          NotionSDK.Codegen.Source.Extractor,
          NotionSDK.Codegen.Source.PageContext,
          Mix.Tasks.Notion.Oauth,

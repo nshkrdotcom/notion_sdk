@@ -6,7 +6,7 @@ defmodule NotionSDK.Examples.LiveTest do
   @moduletag :tmp_dir
 
   alias NotionSDK.Examples.Live
-  alias Pristine.SDK.{Error, Response}
+  alias Pristine.{Error, Response}
 
   @example_envs [
     "NOTION_EXAMPLE_BLOCK_ID",

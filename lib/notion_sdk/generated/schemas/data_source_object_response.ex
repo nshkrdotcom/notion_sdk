@@ -1,60 +1,27 @@
 defmodule NotionSDK.DataSourceObjectResponse do
   @moduledoc """
-  DataSourceObjectResponse
-
-  ## Fields
-
-    * `cover`: The cover of the data source.
-    * `created_by`: required
-    * `created_time`: The time when the data source was created.
-    * `database_parent`: required
-    * `description`: The description of the data source.
-    * `icon`: The icon of the data source.
-    * `id`: required
-    * `in_trash`: Whether the data source is in the trash.
-    * `is_inline`: Whether the data source is inline.
-    * `last_edited_by`: required
-    * `last_edited_time`: The time when the data source was last edited.
-    * `object`: The data source object type name.
-    * `parent`: The parent of the data source. This is typically a database (`database_id`), but for externally synced data sources, can be another data source (`data_source_id`).
-    * `properties`: The properties schema of the data source.
-    * `public_url`: The public URL of the data source if it is publicly accessible.
-    * `title`: The title of the data source.
-    * `url`: The URL of the data source.
-
+  Generated Notion Sdk type for data source object response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          cover:
-            NotionSDK.ExternalPageCoverResponse.t() | NotionSDK.FilePageCoverResponse.t() | nil,
-          created_by: NotionSDK.PartialUserObjectResponse.t(),
-          created_time: DateTime.t(),
-          database_parent:
-            NotionSDK.BlockIdParentForBlockBasedObjectResponse.t()
-            | NotionSDK.DatabaseParentResponse.t()
-            | NotionSDK.PageIdParentForBlockBasedObjectResponse.t()
-            | NotionSDK.WorkspaceParentForBlockBasedObjectResponse.t(),
-          description: [NotionSDK.RichTextItemResponse.t()],
-          icon:
-            NotionSDK.CustomEmojiPageIconResponse.t()
-            | NotionSDK.EmojiPageIconResponse.t()
-            | NotionSDK.ExternalPageIconResponse.t()
-            | NotionSDK.FilePageIconResponse.t()
-            | nil,
-          id: String.t(),
-          in_trash: boolean,
-          is_inline: boolean,
-          last_edited_by: NotionSDK.PartialUserObjectResponse.t(),
-          last_edited_time: DateTime.t(),
-          object: String.t(),
-          parent: NotionSDK.DataSourceParentResponse.t() | NotionSDK.DatabaseParentResponse.t(),
-          properties: map,
-          public_url: String.t() | nil,
-          title: [NotionSDK.RichTextItemResponse.t()],
-          url: String.t()
-        }
-
+  @enforce_keys [
+    :cover,
+    :created_by,
+    :created_time,
+    :database_parent,
+    :description,
+    :icon,
+    :id,
+    :in_trash,
+    :is_inline,
+    :last_edited_by,
+    :last_edited_time,
+    :object,
+    :parent,
+    :properties,
+    :public_url,
+    :title,
+    :url
+  ]
   defstruct [
     :cover,
     :created_by,
@@ -75,34 +42,63 @@ defmodule NotionSDK.DataSourceObjectResponse do
     :url
   ]
 
+  @type t :: %__MODULE__{
+          cover:
+            nil | NotionSDK.ExternalPageCoverResponse.t() | NotionSDK.FilePageCoverResponse.t(),
+          created_by: NotionSDK.PartialUserObjectResponse.t(),
+          created_time: DateTime.t(),
+          database_parent:
+            NotionSDK.BlockIdParentForBlockBasedObjectResponse.t()
+            | NotionSDK.DatabaseParentResponse.t()
+            | NotionSDK.PageIdParentForBlockBasedObjectResponse.t()
+            | NotionSDK.WorkspaceParentForBlockBasedObjectResponse.t(),
+          description: [NotionSDK.RichTextItemResponse.t()],
+          icon:
+            nil
+            | NotionSDK.CustomEmojiPageIconResponse.t()
+            | NotionSDK.EmojiPageIconResponse.t()
+            | NotionSDK.ExternalPageIconResponse.t()
+            | NotionSDK.FilePageIconResponse.t(),
+          id: String.t(),
+          in_trash: boolean(),
+          is_inline: boolean(),
+          last_edited_by: NotionSDK.PartialUserObjectResponse.t(),
+          last_edited_time: DateTime.t(),
+          object: String.t(),
+          parent: NotionSDK.DataSourceParentResponse.t() | NotionSDK.DatabaseParentResponse.t(),
+          properties: map(),
+          public_url: nil | String.t(),
+          title: [NotionSDK.RichTextItemResponse.t()],
+          url: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
       cover:
         {:union,
-         [:null, {NotionSDK.FilePageCoverResponse, :t}, {NotionSDK.ExternalPageCoverResponse, :t}]},
+         [:null, {NotionSDK.ExternalPageCoverResponse, :t}, {NotionSDK.FilePageCoverResponse, :t}]},
       created_by: {NotionSDK.PartialUserObjectResponse, :t},
       created_time: {:string, "date-time"},
       database_parent:
         {:union,
          [
-           {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
-           {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t},
+           {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
            {NotionSDK.DatabaseParentResponse, :t},
-           {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t}
+           {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
+           {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
          ]},
-      description: [{NotionSDK.RichTextItemResponse, :t}],
+      description: {:array, {NotionSDK.RichTextItemResponse, :t}},
       icon:
         {:union,
          [
            :null,
+           {NotionSDK.CustomEmojiPageIconResponse, :t},
            {NotionSDK.EmojiPageIconResponse, :t},
-           {NotionSDK.FilePageIconResponse, :t},
            {NotionSDK.ExternalPageIconResponse, :t},
-           {NotionSDK.CustomEmojiPageIconResponse, :t}
+           {NotionSDK.FilePageIconResponse, :t}
          ]},
       id: {:string, "uuid"},
       in_trash: :boolean,
@@ -112,19 +108,16 @@ defmodule NotionSDK.DataSourceObjectResponse do
       object: {:const, "data_source"},
       parent:
         {:union,
-         [{NotionSDK.DatabaseParentResponse, :t}, {NotionSDK.DataSourceParentResponse, :t}]},
+         [{NotionSDK.DataSourceParentResponse, :t}, {NotionSDK.DatabaseParentResponse, :t}]},
       properties: :map,
       public_url: {:union, [:null, :string]},
-      title: [{NotionSDK.RichTextItemResponse, :t}],
+      title: {:array, {NotionSDK.RichTextItemResponse, :t}},
       url: :string
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -145,8 +138,8 @@ defmodule NotionSDK.DataSourceObjectResponse do
           {:union,
            [
              :null,
-             {NotionSDK.FilePageCoverResponse, :t},
-             {NotionSDK.ExternalPageCoverResponse, :t}
+             {NotionSDK.ExternalPageCoverResponse, :t},
+             {NotionSDK.FilePageCoverResponse, :t}
            ]},
         write_only: false
       },
@@ -195,10 +188,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
         type:
           {:union,
            [
-             {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
-             {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t},
+             {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
              {NotionSDK.DatabaseParentResponse, :t},
-             {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t}
+             {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
+             {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
            ]},
         write_only: false
       },
@@ -214,7 +207,7 @@ defmodule NotionSDK.DataSourceObjectResponse do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.RichTextItemResponse, :t}],
+        type: {:array, {NotionSDK.RichTextItemResponse, :t}},
         write_only: false
       },
       %{
@@ -233,10 +226,10 @@ defmodule NotionSDK.DataSourceObjectResponse do
           {:union,
            [
              :null,
+             {NotionSDK.CustomEmojiPageIconResponse, :t},
              {NotionSDK.EmojiPageIconResponse, :t},
-             {NotionSDK.FilePageIconResponse, :t},
              {NotionSDK.ExternalPageIconResponse, :t},
-             {NotionSDK.CustomEmojiPageIconResponse, :t}
+             {NotionSDK.FilePageIconResponse, :t}
            ]},
         write_only: false
       },
@@ -345,7 +338,7 @@ defmodule NotionSDK.DataSourceObjectResponse do
         required: true,
         type:
           {:union,
-           [{NotionSDK.DatabaseParentResponse, :t}, {NotionSDK.DataSourceParentResponse, :t}]},
+           [{NotionSDK.DataSourceParentResponse, :t}, {NotionSDK.DatabaseParentResponse, :t}]},
         write_only: false
       },
       %{
@@ -390,7 +383,7 @@ defmodule NotionSDK.DataSourceObjectResponse do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.RichTextItemResponse, :t}],
+        type: {:array, {NotionSDK.RichTextItemResponse, :t}},
         write_only: false
       },
       %{
@@ -411,24 +404,17 @@ defmodule NotionSDK.DataSourceObjectResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.DataSourceObjectResponse, type, data)
+  end
 end

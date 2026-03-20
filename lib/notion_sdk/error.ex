@@ -101,13 +101,13 @@ defmodule NotionSDK.Error do
     }
   end
 
-  @spec from_response(Pristine.SDK.Response.t() | map(), term(), non_neg_integer() | nil) :: t()
+  @spec from_response(Pristine.Response.t() | map(), term(), non_neg_integer() | nil) :: t()
   def from_response(%{status: _status} = response, body, retry_after_ms) do
     from_response(response, body, retry_after_ms, [])
   end
 
   @spec from_response(
-          Pristine.SDK.Response.t() | map(),
+          Pristine.Response.t() | map(),
           term(),
           non_neg_integer() | nil,
           keyword()

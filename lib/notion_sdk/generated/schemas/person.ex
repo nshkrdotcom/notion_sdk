@@ -1,27 +1,23 @@
 defmodule NotionSDK.Person do
   @moduledoc """
-  Provides struct and types for Person
-
-  ## Types
-
-    * Person
-    * Person.t_person
+  Generated Notion Sdk type for person.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %{
-          avatar_url: String.t() | nil,
+  @enforce_keys [:avatar_url, :id, :name, :object, :person, :type]
+  defstruct [:avatar_url, :id, :name, :object, :person, :type]
+
+  @type t :: %__MODULE__{
+          avatar_url: nil | String.t(),
           id: String.t(),
-          name: String.t() | nil,
+          name: nil | String.t(),
           object: String.t(),
-          person: NotionSDK.Person.t_person(),
+          person: t_person(),
           type: String.t()
         }
 
-  @type t_person :: %{email: String.t()}
-
+  @type t_person :: map()
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -36,14 +32,13 @@ defmodule NotionSDK.Person do
   end
 
   def __fields__(:t_person) do
-    [email: :string]
+    [
+      email: :string
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -161,28 +156,17 @@ defmodule NotionSDK.Person do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  def __schema__(:t_person) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t_person))
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
+
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Person, type, data)
   end
-
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
-
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
 end

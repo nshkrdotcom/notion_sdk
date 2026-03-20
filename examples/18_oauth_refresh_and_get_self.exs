@@ -3,8 +3,8 @@ Code.require_file("support/live_example.exs", __DIR__)
 alias NotionSDK.Examples.Live
 alias NotionSDK.Users
 alias Pristine.Adapters.TokenSource.File, as: FileTokenSource
-alias Pristine.SDK.OAuth2
-alias Pristine.SDK.OAuth2.Token
+alias Pristine.OAuth2
+alias Pristine.OAuth2.Token
 
 Live.banner!("18_oauth_refresh_and_get_self.exs")
 
@@ -48,7 +48,7 @@ refreshed_token =
     client_secret: credentials["client_secret"],
     context: oauth_client.context
   )
-  |> Live.ok!("Pristine.SDK.OAuth2.refresh_token/3")
+  |> Live.ok!("Pristine.OAuth2.refresh_token/3")
 
 persisted_token =
   Token.from_map(%{

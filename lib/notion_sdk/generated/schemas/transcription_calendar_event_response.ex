@@ -1,37 +1,30 @@
 defmodule NotionSDK.TranscriptionCalendarEventResponse do
   @moduledoc """
-  TranscriptionCalendarEventResponse
-
-  ## Fields
-
-    * `attendees`: optional
-    * `end_time`: required
-    * `start_time`: required
-
+  Generated Notion Sdk type for transcription calendar event response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+
+  @enforce_keys [:end_time, :start_time]
+  defstruct [:attendees, :end_time, :start_time]
 
   @type t :: %__MODULE__{
-          attendees: [String.t()] | nil,
+          attendees: [String.t()],
           end_time: DateTime.t(),
           start_time: DateTime.t()
         }
-
-  defstruct [:attendees, :end_time, :start_time]
-
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [attendees: [:string], end_time: {:string, "date-time"}, start_time: {:string, "date-time"}]
+    [
+      attendees: {:array, :string},
+      end_time: {:string, "date-time"},
+      start_time: {:string, "date-time"}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -48,7 +41,7 @@ defmodule NotionSDK.TranscriptionCalendarEventResponse do
         nullable: false,
         read_only: false,
         required: false,
-        type: [:string],
+        type: {:array, :string},
         write_only: false
       },
       %{
@@ -84,24 +77,21 @@ defmodule NotionSDK.TranscriptionCalendarEventResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.TranscriptionCalendarEventResponse,
+      type,
+      data
+    )
+  end
 end

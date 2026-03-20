@@ -1,39 +1,26 @@
 defmodule NotionSDK.TableOfContents do
   @moduledoc """
-  Provides struct and types for TableOfContents
-
-  ## Types
-
-    * Table Of Contents
-    * TableOfContents.t_table_of_contents
+  Generated Notion Sdk type for table of contents.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %{
-          object: String.t() | nil,
-          table_of_contents:
-            NotionSDK.TableOfContents.t_table_of_contents()
-            | NotionSDK.TableOfContentsTableOfContents.t(),
-          type: String.t() | nil
-        }
-
-  @type t_table_of_contents :: %{color: String.t() | nil}
-
+  @enforce_keys [:table_of_contents]
   defstruct [:object, :table_of_contents, :type]
 
+  @type t :: %__MODULE__{
+          object: String.t(),
+          table_of_contents: NotionSDK.TableOfContentsTableOfContents.t(),
+          type: String.t()
+        }
+
+  @type t_table_of_contents :: map()
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
       object: {:const, "block"},
-      table_of_contents:
-        {:union,
-         [
-           {NotionSDK.TableOfContents, :t_table_of_contents},
-           {NotionSDK.TableOfContentsTableOfContents, :t}
-         ]},
+      table_of_contents: {NotionSDK.TableOfContentsTableOfContents, :t},
       type: {:const, "table_of_contents"}
     ]
   end
@@ -67,11 +54,8 @@ defmodule NotionSDK.TableOfContents do
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -103,12 +87,7 @@ defmodule NotionSDK.TableOfContents do
         nullable: false,
         read_only: false,
         required: true,
-        type:
-          {:union,
-           [
-             {NotionSDK.TableOfContents, :t_table_of_contents},
-             {NotionSDK.TableOfContentsTableOfContents, :t}
-           ]},
+        type: {NotionSDK.TableOfContentsTableOfContents, :t},
         write_only: false
       },
       %{
@@ -173,28 +152,17 @@ defmodule NotionSDK.TableOfContents do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  def __schema__(:t_table_of_contents) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t_table_of_contents))
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
+
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.TableOfContents, type, data)
   end
-
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
-
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
 end

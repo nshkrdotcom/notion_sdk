@@ -1,32 +1,23 @@
 defmodule NotionSDK.Date do
   @moduledoc """
-  Date
-
-  ## Fields
-
-    * `date`: required
-    * `property`: required
-    * `type`: optional
-
+  Generated Notion Sdk type for date.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+
+  @enforce_keys [:date, :function, :type]
+  defstruct [:date, :function, :type]
 
   @type t :: %__MODULE__{
-          date: map | NotionSDK.DateResponse.t() | nil,
+          date: nil | NotionSDK.DateResponse.t(),
           function: String.t(),
-          property: String.t(),
-          type: String.t() | nil
+          type: String.t()
         }
-
-  defstruct [:date, :function, :property, :type]
-
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
-      date: {:union, [:null, :map, {NotionSDK.DateResponse, :t}]},
+      date: {:union, [:null, {NotionSDK.DateResponse, :t}]},
       function:
         {:enum,
          [
@@ -55,16 +46,12 @@ defmodule NotionSDK.Date do
            "percent_per_group",
            "show_original"
          ]},
-      property: :string,
       type: {:const, "date"}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -81,7 +68,7 @@ defmodule NotionSDK.Date do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [:null, :map, {NotionSDK.DateResponse, :t}]},
+        type: {:union, [:null, {NotionSDK.DateResponse, :t}]},
         write_only: false
       },
       %{
@@ -134,49 +121,27 @@ defmodule NotionSDK.Date do
         examples: nil,
         extensions: %{},
         external_docs: nil,
-        name: "property",
-        nullable: false,
-        read_only: false,
-        required: true,
-        type: :string,
-        write_only: false
-      },
-      %{
-        default: nil,
-        deprecated: false,
-        description: nil,
-        example: nil,
-        examples: nil,
-        extensions: %{},
-        external_docs: nil,
         name: "type",
         nullable: false,
         read_only: false,
-        required: false,
+        required: true,
         type: {:const, "date"},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Date, type, data)
+  end
 end

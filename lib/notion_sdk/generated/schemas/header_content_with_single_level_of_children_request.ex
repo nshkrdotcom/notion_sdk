@@ -1,91 +1,81 @@
 defmodule NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest do
   @moduledoc """
-  HeaderContentWithSingleLevelOfChildrenRequest
-
-  ## Fields
-
-    * `children`: optional
-    * `color`: One of: `default`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`, `default_background`, `gray_background`, `brown_background`, `orange_background`, `yellow_background`, `green_background`, `blue_background`, `purple_background`, `pink_background`, `red_background`
-    * `is_toggleable`: optional
-    * `rich_text`: required
-
+  Generated Notion Sdk type for header content with single level of children request.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          children:
-            [
-              NotionSDK.Audio.t()
-              | NotionSDK.Bookmark.t()
-              | NotionSDK.Breadcrumb.t()
-              | NotionSDK.BulletedListItem.t()
-              | NotionSDK.Callout.t()
-              | NotionSDK.Code.t()
-              | NotionSDK.Divider.t()
-              | NotionSDK.Embed.t()
-              | NotionSDK.Equation.t()
-              | NotionSDK.File.t()
-              | NotionSDK.Heading1.t()
-              | NotionSDK.Heading2.t()
-              | NotionSDK.Heading3.t()
-              | NotionSDK.Image.t()
-              | NotionSDK.LinkToPage.t()
-              | NotionSDK.NumberedListItem.t()
-              | NotionSDK.Paragraph.t()
-              | NotionSDK.Pdf.t()
-              | NotionSDK.Quote.t()
-              | NotionSDK.SyncedBlock.t()
-              | NotionSDK.TableOfContents.t()
-              | NotionSDK.TableRow.t()
-              | NotionSDK.Template.t()
-              | NotionSDK.ToDo.t()
-              | NotionSDK.Toggle.t()
-              | NotionSDK.Video.t()
-            ]
-            | nil,
-          color: String.t() | nil,
-          is_toggleable: boolean | nil,
-          rich_text: [NotionSDK.RichTextItemRequest.t()]
-        }
-
+  @enforce_keys [:rich_text]
   defstruct [:children, :color, :is_toggleable, :rich_text]
 
+  @type t :: %__MODULE__{
+          children: [
+            NotionSDK.Audio.t()
+            | NotionSDK.Bookmark.t()
+            | NotionSDK.Breadcrumb.t()
+            | NotionSDK.BulletedListItem.t()
+            | NotionSDK.Callout.t()
+            | NotionSDK.Code.t()
+            | NotionSDK.Divider.t()
+            | NotionSDK.Embed.t()
+            | NotionSDK.Equation.t()
+            | NotionSDK.File.t()
+            | NotionSDK.Heading1.t()
+            | NotionSDK.Heading2.t()
+            | NotionSDK.Heading3.t()
+            | NotionSDK.Image.t()
+            | NotionSDK.LinkToPage.t()
+            | NotionSDK.NumberedListItem.t()
+            | NotionSDK.Paragraph.t()
+            | NotionSDK.Pdf.t()
+            | NotionSDK.Quote.t()
+            | NotionSDK.SyncedBlock.t()
+            | NotionSDK.TableOfContents.t()
+            | NotionSDK.TableRow.t()
+            | NotionSDK.Template.t()
+            | NotionSDK.ToDo.t()
+            | NotionSDK.Toggle.t()
+            | NotionSDK.Video.t()
+          ],
+          color: String.t(),
+          is_toggleable: boolean(),
+          rich_text: [NotionSDK.RichTextItemRequest.t()]
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
-      children: [
-        union: [
-          {NotionSDK.Embed, :t},
-          {NotionSDK.Bookmark, :t},
-          {NotionSDK.Image, :t},
-          {NotionSDK.Video, :t},
-          {NotionSDK.Pdf, :t},
-          {NotionSDK.File, :t},
-          {NotionSDK.Audio, :t},
-          {NotionSDK.Code, :t},
-          {NotionSDK.Equation, :t},
-          {NotionSDK.Divider, :t},
-          {NotionSDK.Breadcrumb, :t},
-          {NotionSDK.TableOfContents, :t},
-          {NotionSDK.LinkToPage, :t},
-          {NotionSDK.TableRow, :t},
-          {NotionSDK.Heading1, :t},
-          {NotionSDK.Heading2, :t},
-          {NotionSDK.Heading3, :t},
-          {NotionSDK.Paragraph, :t},
-          {NotionSDK.BulletedListItem, :t},
-          {NotionSDK.NumberedListItem, :t},
-          {NotionSDK.Quote, :t},
-          {NotionSDK.ToDo, :t},
-          {NotionSDK.Toggle, :t},
-          {NotionSDK.Template, :t},
-          {NotionSDK.Callout, :t},
-          {NotionSDK.SyncedBlock, :t}
-        ]
-      ],
+      children:
+        {:array,
+         {:union,
+          [
+            {NotionSDK.Audio, :t},
+            {NotionSDK.Bookmark, :t},
+            {NotionSDK.Breadcrumb, :t},
+            {NotionSDK.BulletedListItem, :t},
+            {NotionSDK.Callout, :t},
+            {NotionSDK.Code, :t},
+            {NotionSDK.Divider, :t},
+            {NotionSDK.Embed, :t},
+            {NotionSDK.Equation, :t},
+            {NotionSDK.File, :t},
+            {NotionSDK.Heading1, :t},
+            {NotionSDK.Heading2, :t},
+            {NotionSDK.Heading3, :t},
+            {NotionSDK.Image, :t},
+            {NotionSDK.LinkToPage, :t},
+            {NotionSDK.NumberedListItem, :t},
+            {NotionSDK.Paragraph, :t},
+            {NotionSDK.Pdf, :t},
+            {NotionSDK.Quote, :t},
+            {NotionSDK.SyncedBlock, :t},
+            {NotionSDK.TableOfContents, :t},
+            {NotionSDK.TableRow, :t},
+            {NotionSDK.Template, :t},
+            {NotionSDK.ToDo, :t},
+            {NotionSDK.Toggle, :t},
+            {NotionSDK.Video, :t}
+          ]}},
       color:
         {:enum,
          [
@@ -111,15 +101,12 @@ defmodule NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest do
            "red_background"
          ]},
       is_toggleable: :boolean,
-      rich_text: [{NotionSDK.RichTextItemRequest, :t}]
+      rich_text: {:array, {NotionSDK.RichTextItemRequest, :t}}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -136,36 +123,37 @@ defmodule NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest do
         nullable: false,
         read_only: false,
         required: false,
-        type: [
-          union: [
-            {NotionSDK.Embed, :t},
-            {NotionSDK.Bookmark, :t},
-            {NotionSDK.Image, :t},
-            {NotionSDK.Video, :t},
-            {NotionSDK.Pdf, :t},
-            {NotionSDK.File, :t},
-            {NotionSDK.Audio, :t},
-            {NotionSDK.Code, :t},
-            {NotionSDK.Equation, :t},
-            {NotionSDK.Divider, :t},
-            {NotionSDK.Breadcrumb, :t},
-            {NotionSDK.TableOfContents, :t},
-            {NotionSDK.LinkToPage, :t},
-            {NotionSDK.TableRow, :t},
-            {NotionSDK.Heading1, :t},
-            {NotionSDK.Heading2, :t},
-            {NotionSDK.Heading3, :t},
-            {NotionSDK.Paragraph, :t},
-            {NotionSDK.BulletedListItem, :t},
-            {NotionSDK.NumberedListItem, :t},
-            {NotionSDK.Quote, :t},
-            {NotionSDK.ToDo, :t},
-            {NotionSDK.Toggle, :t},
-            {NotionSDK.Template, :t},
-            {NotionSDK.Callout, :t},
-            {NotionSDK.SyncedBlock, :t}
-          ]
-        ],
+        type:
+          {:array,
+           {:union,
+            [
+              {NotionSDK.Audio, :t},
+              {NotionSDK.Bookmark, :t},
+              {NotionSDK.Breadcrumb, :t},
+              {NotionSDK.BulletedListItem, :t},
+              {NotionSDK.Callout, :t},
+              {NotionSDK.Code, :t},
+              {NotionSDK.Divider, :t},
+              {NotionSDK.Embed, :t},
+              {NotionSDK.Equation, :t},
+              {NotionSDK.File, :t},
+              {NotionSDK.Heading1, :t},
+              {NotionSDK.Heading2, :t},
+              {NotionSDK.Heading3, :t},
+              {NotionSDK.Image, :t},
+              {NotionSDK.LinkToPage, :t},
+              {NotionSDK.NumberedListItem, :t},
+              {NotionSDK.Paragraph, :t},
+              {NotionSDK.Pdf, :t},
+              {NotionSDK.Quote, :t},
+              {NotionSDK.SyncedBlock, :t},
+              {NotionSDK.TableOfContents, :t},
+              {NotionSDK.TableRow, :t},
+              {NotionSDK.Template, :t},
+              {NotionSDK.ToDo, :t},
+              {NotionSDK.Toggle, :t},
+              {NotionSDK.Video, :t}
+            ]}},
         write_only: false
       },
       %{
@@ -234,30 +222,27 @@ defmodule NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
+        type: {:array, {NotionSDK.RichTextItemRequest, :t}},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest,
+      type,
+      data
+    )
+  end
 end

@@ -584,7 +584,7 @@ defmodule NotionSDK.Examples.Live do
 
   def save_oauth_exchange_token!(response) when is_map(response) do
     path = oauth_exchange_token_path()
-    token = Pristine.SDK.OAuth2.Token.from_backend_token(response)
+    token = Pristine.OAuth2.Token.from_backend_token(response)
 
     case FileTokenSource.put(token, path: path, create_dirs?: true) do
       :ok ->

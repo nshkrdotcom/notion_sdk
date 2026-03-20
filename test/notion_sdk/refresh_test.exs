@@ -101,13 +101,23 @@ defmodule NotionSDK.RefreshTest do
           File.mkdir_p!(paths.generated_artifact_dir)
 
           File.write!(
-            Path.join(paths.generated_artifact_dir, "manifest.json"),
+            Path.join(paths.generated_artifact_dir, "generation_manifest.json"),
             ~s({"operation_count":1})
           )
 
           File.write!(
-            Path.join(paths.generated_artifact_dir, "docs_manifest.json"),
+            Path.join(paths.generated_artifact_dir, "docs_inventory.json"),
+            ~s({"operations":{}})
+          )
+
+          File.write!(
+            Path.join(paths.generated_artifact_dir, "provider_ir.json"),
             ~s({"operations":[]})
+          )
+
+          File.write!(
+            Path.join(paths.generated_artifact_dir, "source_inventory.json"),
+            ~s({"sources":[]})
           )
 
           :ok
@@ -135,9 +145,11 @@ defmodule NotionSDK.RefreshTest do
     assert report.generated_code.added == ["users.ex"]
 
     assert report.bridge_artifacts.added == [
-             "docs_manifest.json",
-             "manifest.json",
-             "refresh_report.json"
+             "docs_inventory.json",
+             "generation_manifest.json",
+             "provider_ir.json",
+             "refresh_report.json",
+             "source_inventory.json"
            ]
 
     assert metadata["reference_pages"] == ["get-self.md"]

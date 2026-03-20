@@ -4,7 +4,7 @@ defmodule NotionSDK.ResultClassifier do
   @behaviour Pristine.Ports.ResultClassifier
 
   alias NotionSDK.Retry
-  alias Pristine.SDK.ResultClassification
+  alias Pristine.Core.ResultClassification
 
   @upstream_failure_statuses [408, 500, 502, 503, 504]
   @retryable_groups ["notion.read", "notion.delete", "notion.file_upload_send"]

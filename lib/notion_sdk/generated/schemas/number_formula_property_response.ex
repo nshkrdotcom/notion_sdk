@@ -1,32 +1,28 @@
 defmodule NotionSDK.NumberFormulaPropertyResponse do
   @moduledoc """
-  Number
-
-  ## Fields
-
-    * `number`: required
-    * `type`: required
-
+  Generated Notion Sdk type for number formula property response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{number: number | nil, type: String.t()}
-
+  @enforce_keys [:number, :type]
   defstruct [:number, :type]
 
+  @type t :: %__MODULE__{
+          number: nil | number(),
+          type: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [number: {:union, [:null, :number]}, type: {:const, "number"}]
+    [
+      number: {:union, [:null, :number]},
+      type: {:const, "number"}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -64,24 +60,21 @@ defmodule NotionSDK.NumberFormulaPropertyResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.NumberFormulaPropertyResponse,
+      type,
+      data
+    )
+  end
 end

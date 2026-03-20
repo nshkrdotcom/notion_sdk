@@ -1,44 +1,32 @@
 defmodule NotionSDK.TableRequestWithTableRowChildren do
   @moduledoc """
-  TableRequestWithTableRowChildren
-
-  ## Fields
-
-    * `children`: required
-    * `has_column_header`: optional
-    * `has_row_header`: optional
-    * `table_width`: required
-
+  Generated Notion Sdk type for table request with table row children.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+
+  @enforce_keys [:children, :table_width]
+  defstruct [:children, :has_column_header, :has_row_header, :table_width]
 
   @type t :: %__MODULE__{
           children: [NotionSDK.TableRowRequest.t()],
-          has_column_header: boolean | nil,
-          has_row_header: boolean | nil,
-          table_width: integer
+          has_column_header: boolean(),
+          has_row_header: boolean(),
+          table_width: integer()
         }
-
-  defstruct [:children, :has_column_header, :has_row_header, :table_width]
-
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
-      children: [{NotionSDK.TableRowRequest, :t}],
+      children: {:array, {NotionSDK.TableRowRequest, :t}},
       has_column_header: :boolean,
       has_row_header: :boolean,
       table_width: :integer
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -55,7 +43,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.TableRowRequest, :t}],
+        type: {:array, {NotionSDK.TableRowRequest, :t}},
         write_only: false
       },
       %{
@@ -106,24 +94,21 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.TableRequestWithTableRowChildren,
+      type,
+      data
+    )
+  end
 end

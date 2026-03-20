@@ -152,8 +152,10 @@ defmodule NotionSDK.Codegen.PageContextTest do
       |> Path.wildcard()
 
     assert generated_files != []
-    assert File.exists?(Path.join(project_root, "priv/generated/manifest.json"))
-    assert File.exists?(Path.join(project_root, "priv/generated/docs_manifest.json"))
+    assert File.exists?(Path.join(project_root, "priv/generated/provider_ir.json"))
+    assert File.exists?(Path.join(project_root, "priv/generated/generation_manifest.json"))
+    assert File.exists?(Path.join(project_root, "priv/generated/docs_inventory.json"))
+    assert File.exists?(Path.join(project_root, "priv/generated/source_inventory.json"))
   end
 
   test "extracts markdown resources without treating inline code brackets as links" do

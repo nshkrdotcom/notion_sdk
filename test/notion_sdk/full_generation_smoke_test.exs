@@ -19,22 +19,21 @@ defmodule NotionSDK.FullGenerationSmokeTest do
         generated_artifact_dir: Path.join(tmp_dir, "priv/generated")
       )
 
-    manifest_path = Path.join(tmp_dir, "priv/generated/manifest.json")
-    docs_manifest_path = Path.join(tmp_dir, "priv/generated/docs_manifest.json")
-    snapshot_path = Path.join(tmp_dir, "priv/generated/open_api_state.snapshot.term")
+    generation_manifest_path = Path.join(tmp_dir, "priv/generated/generation_manifest.json")
+    docs_inventory_path = Path.join(tmp_dir, "priv/generated/docs_inventory.json")
+    provider_ir_path = Path.join(tmp_dir, "priv/generated/provider_ir.json")
 
-    manifest = Jason.decode!(File.read!(manifest_path))
-    docs_manifest = Jason.decode!(File.read!(docs_manifest_path))
+    generation_manifest = Jason.decode!(File.read!(generation_manifest_path))
+    docs_inventory = Jason.decode!(File.read!(docs_inventory_path))
+    provider_ir = Jason.decode!(File.read!(provider_ir_path))
 
     assert length(state.ir.operations) == inventory["operation_count"]
     assert state.ir.schemas != []
-    assert manifest["operation_count"] == inventory["operation_count"]
-    assert manifest["schema_count"] > 0
-    assert manifest["operation_modules"] != []
-    refute Map.has_key?(manifest, "compatibility")
-    refute Map.has_key?(docs_manifest, "compatibility")
-    assert length(docs_manifest["operations"]) == inventory["operation_count"]
-    assert File.exists?(snapshot_path)
+    assert generation_manifest["operation_count"] == inventory["operation_count"]
+    assert generation_manifest["schema_count"] > 0
+    assert generation_manifest["generated_files"] != []
+    assert is_list(provider_ir["operations"])
+    assert map_size(docs_inventory["operations"]) == inventory["operation_count"]
 
     generated_files =
       tmp_dir

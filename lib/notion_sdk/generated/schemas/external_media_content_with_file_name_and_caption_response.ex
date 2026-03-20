@@ -1,16 +1,10 @@
 defmodule NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponse do
   @moduledoc """
-  External
-
-  ## Fields
-
-    * `caption`: required
-    * `external`: required
-    * `name`: required
-    * `type`: required
-
+  Generated Notion Sdk type for external media content with file name and caption response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+
+  @enforce_keys [:caption, :external, :name, :type]
+  defstruct [:caption, :external, :name, :type]
 
   @type t :: %__MODULE__{
           caption: [NotionSDK.RichTextItemResponse.t()],
@@ -18,27 +12,21 @@ defmodule NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponse do
           name: String.t(),
           type: String.t()
         }
-
-  defstruct [:caption, :external, :name, :type]
-
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
-      caption: [{NotionSDK.RichTextItemResponse, :t}],
+      caption: {:array, {NotionSDK.RichTextItemResponse, :t}},
       external: {NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponseExternal, :t},
       name: :string,
       type: {:const, "external"}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -55,7 +43,7 @@ defmodule NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponse do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.RichTextItemResponse, :t}],
+        type: {:array, {NotionSDK.RichTextItemResponse, :t}},
         write_only: false
       },
       %{
@@ -106,24 +94,21 @@ defmodule NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponse,
+      type,
+      data
+    )
+  end
 end

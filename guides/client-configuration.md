@@ -44,9 +44,9 @@ Both return a `%NotionSDK.Client{}` configured with:
 The generic transport, retry, telemetry, and path-validation behavior behind
 these options comes from `pristine`. `notion_sdk` keeps the Notion-specific
 classifier, retry groups, breaker grouping, and default headers locally.
-It depends on the SDK-facing `Pristine.SDK.*` boundary plus
-`Pristine.execute_request/3` / `Pristine.foundation_context/1`, not broad
-runtime internals.
+It depends on `Pristine.Operation`, `Pristine.execute/3`,
+`Pristine.Client.foundation/1`, `Pristine.Profiles.Foundation`, and
+`Pristine.OAuth2`, not broad runtime internals.
 
 ## Foundation-backed production runtime
 
@@ -71,7 +71,7 @@ client =
 ```
 
 This is a provider-specific facade over the shared
-`Pristine.foundation_context/1` / `Pristine.SDK.Profiles.Foundation.context/1`
+`Pristine.Client.foundation/1` / `Pristine.Profiles.Foundation.context/1`
 runtime builder. NotionSDK adds Notion-specific classification, retry groups,
 breaker naming, and integration-key behavior on top of that generic Pristine
 profile.
@@ -120,14 +120,14 @@ reporter:
 
 ```elixir
 {:ok, handler_id} =
-  Pristine.SDK.Profiles.Foundation.attach_reporter(
+  Pristine.Profiles.Foundation.attach_reporter(
     client.context,
     reporter: MyApp.NotionTelemetryReporter
   )
 ```
 
 Create the reporter under supervision with
-`Pristine.SDK.Profiles.Foundation.reporter_child_spec/1`.
+`Pristine.Profiles.Foundation.reporter_child_spec/1`.
 
 ## Explicit OAuth-backed bearer auth
 
@@ -139,7 +139,7 @@ client =
     oauth2: [
       token_source:
         {Pristine.Adapters.TokenSource.Static,
-         token: Pristine.SDK.OAuth2.Token.from_map(%{access_token: "secret_..."})},
+         token: Pristine.OAuth2.Token.from_map(%{access_token: "secret_..."})},
       allow_stale?: false
     ]
   )
@@ -228,8 +228,8 @@ NotionSDK.OAuth.introspect(client, %{
 })
 ```
 
-These overrides are passed through to the underlying `Pristine.execute_request/3`
-call instead of mutating the client context, so bearer overrides, Basic
+These overrides are partitioned into a rendered `Pristine.Operation` and passed
+through `Pristine.execute/3` instead of mutating the client context, so bearer overrides, Basic
 overrides, and `auth: false` / `auth: []` all stay request-scoped.
 
 Remove the client's default auth from one request with `false` or `[]`:

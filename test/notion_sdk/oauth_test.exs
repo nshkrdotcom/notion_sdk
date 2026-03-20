@@ -2,8 +2,8 @@ defmodule NotionSDK.OAuthTest do
   use ExUnit.Case, async: true
 
   alias NotionSDK.TestTransport
-  alias Pristine.SDK.OAuth2.Token
-  alias Pristine.SDK.Response
+  alias Pristine.OAuth2.Token
+  alias Pristine.Response
 
   test "builds Notion authorization requests programmatically with owner=user by default" do
     assert {:ok, request} =

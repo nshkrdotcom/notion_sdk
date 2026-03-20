@@ -1,30 +1,20 @@
 defmodule NotionSDK.PageMarkdownResponse do
   @moduledoc """
-  PageMarkdownResponse
-
-  ## Fields
-
-    * `id`: required
-    * `markdown`: The page content rendered as enhanced Markdown.
-    * `object`: The type of object, always 'page_markdown'.
-    * `truncated`: Whether the content was truncated due to exceeding the record count limit.
-    * `unknown_block_ids`: Block IDs that could not be loaded (appeared as <unknown> tags in the markdown). Pass these IDs back to this endpoint to fetch their content separately.
-
+  Generated Notion Sdk type for page markdown response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
+
+  @enforce_keys [:id, :markdown, :object, :truncated, :unknown_block_ids]
+  defstruct [:id, :markdown, :object, :truncated, :unknown_block_ids]
 
   @type t :: %__MODULE__{
           id: String.t(),
           markdown: String.t(),
           object: String.t(),
-          truncated: boolean,
+          truncated: boolean(),
           unknown_block_ids: [String.t()]
         }
-
-  defstruct [:id, :markdown, :object, :truncated, :unknown_block_ids]
-
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -33,15 +23,12 @@ defmodule NotionSDK.PageMarkdownResponse do
       markdown: :string,
       object: {:const, "page_markdown"},
       truncated: :boolean,
-      unknown_block_ids: [string: "uuid"]
+      unknown_block_ids: {:array, {:string, "uuid"}}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -119,30 +106,23 @@ defmodule NotionSDK.PageMarkdownResponse do
         nullable: false,
         read_only: false,
         required: true,
-        type: [string: "uuid"],
+        type: {:array, {:string, "uuid"}},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.PageMarkdownResponse, type, data)
+  end
 end

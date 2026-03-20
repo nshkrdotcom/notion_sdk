@@ -1,43 +1,21 @@
 defmodule NotionSDK.UnsupportedBlockObjectResponse do
   @moduledoc """
-  Unsupported
-
-  ## Fields
-
-    * `created_by`: required
-    * `created_time`: required
-    * `has_children`: required
-    * `id`: required
-    * `in_trash`: required
-    * `last_edited_by`: required
-    * `last_edited_time`: required
-    * `object`: required
-    * `parent`: required
-    * `type`: required
-    * `unsupported`: required
-
+  Generated Notion Sdk type for unsupported block object response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          created_by: NotionSDK.PartialUserObjectResponse.t(),
-          created_time: DateTime.t(),
-          has_children: boolean,
-          id: String.t(),
-          in_trash: boolean,
-          last_edited_by: NotionSDK.PartialUserObjectResponse.t(),
-          last_edited_time: DateTime.t(),
-          object: String.t(),
-          parent:
-            NotionSDK.BlockIdParentForBlockBasedObjectResponse.t()
-            | NotionSDK.DataSourceParentResponse.t()
-            | NotionSDK.DatabaseParentResponse.t()
-            | NotionSDK.PageIdParentForBlockBasedObjectResponse.t()
-            | NotionSDK.WorkspaceParentForBlockBasedObjectResponse.t(),
-          type: String.t(),
-          unsupported: NotionSDK.UnsupportedBlockObjectResponseUnsupported.t()
-        }
-
+  @enforce_keys [
+    :created_by,
+    :created_time,
+    :has_children,
+    :id,
+    :in_trash,
+    :last_edited_by,
+    :last_edited_time,
+    :object,
+    :parent,
+    :type,
+    :unsupported
+  ]
   defstruct [
     :created_by,
     :created_time,
@@ -52,8 +30,26 @@ defmodule NotionSDK.UnsupportedBlockObjectResponse do
     :unsupported
   ]
 
+  @type t :: %__MODULE__{
+          created_by: NotionSDK.PartialUserObjectResponse.t(),
+          created_time: DateTime.t(),
+          has_children: boolean(),
+          id: String.t(),
+          in_trash: boolean(),
+          last_edited_by: NotionSDK.PartialUserObjectResponse.t(),
+          last_edited_time: DateTime.t(),
+          object: String.t(),
+          parent:
+            NotionSDK.BlockIdParentForBlockBasedObjectResponse.t()
+            | NotionSDK.DataSourceParentResponse.t()
+            | NotionSDK.DatabaseParentResponse.t()
+            | NotionSDK.PageIdParentForBlockBasedObjectResponse.t()
+            | NotionSDK.WorkspaceParentForBlockBasedObjectResponse.t(),
+          type: String.t(),
+          unsupported: NotionSDK.UnsupportedBlockObjectResponseUnsupported.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -69,10 +65,10 @@ defmodule NotionSDK.UnsupportedBlockObjectResponse do
       parent:
         {:union,
          [
-           {NotionSDK.DatabaseParentResponse, :t},
-           {NotionSDK.DataSourceParentResponse, :t},
-           {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
            {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
+           {NotionSDK.DataSourceParentResponse, :t},
+           {NotionSDK.DatabaseParentResponse, :t},
+           {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
            {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
          ]},
       type: {:const, "unsupported"},
@@ -80,11 +76,8 @@ defmodule NotionSDK.UnsupportedBlockObjectResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -224,10 +217,10 @@ defmodule NotionSDK.UnsupportedBlockObjectResponse do
         type:
           {:union,
            [
-             {NotionSDK.DatabaseParentResponse, :t},
-             {NotionSDK.DataSourceParentResponse, :t},
-             {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
              {NotionSDK.BlockIdParentForBlockBasedObjectResponse, :t},
+             {NotionSDK.DataSourceParentResponse, :t},
+             {NotionSDK.DatabaseParentResponse, :t},
+             {NotionSDK.PageIdParentForBlockBasedObjectResponse, :t},
              {NotionSDK.WorkspaceParentForBlockBasedObjectResponse, :t}
            ]},
         write_only: false
@@ -265,24 +258,21 @@ defmodule NotionSDK.UnsupportedBlockObjectResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.UnsupportedBlockObjectResponse,
+      type,
+      data
+    )
+  end
 end

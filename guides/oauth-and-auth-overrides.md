@@ -85,7 +85,7 @@ Exchange the returned authorization code programmatically:
   )
 ```
 
-That helper returns a `Pristine.SDK.OAuth2.Token`.
+That helper returns a `Pristine.OAuth2.Token`.
 
 `NOTION_OAUTH_ACCESS_TOKEN` is an example input after that exchange step. It is
 not shown on the Notion integration settings page. `NOTION_OAUTH_TOKEN_PATH` is
@@ -128,7 +128,7 @@ mix notion.oauth refresh
 ```
 
 That command loads the saved token JSON, sends a real
-`grant_type=refresh_token` request through `Pristine.SDK.OAuth2`, and writes any
+`grant_type=refresh_token` request through `Pristine.OAuth2`, and writes any
 rotated refresh token back to disk before you reuse the file for bearer auth.
 The generic load/refresh/merge/save workflow now lives upstream in
 `Pristine.OAuth2.SavedToken`; `mix notion.oauth refresh` remains the Notion-
@@ -203,7 +203,7 @@ client =
       token_source:
         {Pristine.Adapters.TokenSource.Static,
          token:
-           Pristine.SDK.OAuth2.Token.from_map(%{
+           Pristine.OAuth2.Token.from_map(%{
              access_token: System.fetch_env!("NOTION_OAUTH_ACCESS_TOKEN")
            })}
     ]

@@ -1,67 +1,26 @@
 defmodule NotionSDK.ToDo do
   @moduledoc """
-  Provides struct and types for ToDo
-
-  ## Types
-
-    * To Do
-    * To Do.t_to_do
+  Generated Notion Sdk type for to do.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %{
-          object: String.t() | nil,
-          to_do: NotionSDK.ToDo.t_to_do() | NotionSDK.ToDoToDo.t(),
-          type: String.t() | nil
-        }
-
-  @type t_to_do :: %{
-          checked: boolean | nil,
-          children:
-            [
-              NotionSDK.Audio.t()
-              | NotionSDK.Bookmark.t()
-              | NotionSDK.Breadcrumb.t()
-              | NotionSDK.BulletedListItem.t()
-              | NotionSDK.Callout.t()
-              | NotionSDK.Code.t()
-              | NotionSDK.Divider.t()
-              | NotionSDK.Embed.t()
-              | NotionSDK.Equation.t()
-              | NotionSDK.File.t()
-              | NotionSDK.Heading1.t()
-              | NotionSDK.Heading2.t()
-              | NotionSDK.Heading3.t()
-              | NotionSDK.Image.t()
-              | NotionSDK.LinkToPage.t()
-              | NotionSDK.NumberedListItem.t()
-              | NotionSDK.Paragraph.t()
-              | NotionSDK.Pdf.t()
-              | NotionSDK.Quote.t()
-              | NotionSDK.SyncedBlock.t()
-              | NotionSDK.Table.t()
-              | NotionSDK.TableOfContents.t()
-              | NotionSDK.TableRow.t()
-              | NotionSDK.Template.t()
-              | NotionSDK.ToDo.t()
-              | NotionSDK.Toggle.t()
-              | NotionSDK.Video.t()
-            ]
-            | nil,
-          color: String.t() | nil,
-          rich_text: [NotionSDK.RichTextItemRequest.t()]
-        }
-
+  @enforce_keys [:to_do]
   defstruct [:object, :to_do, :type]
 
+  @type t :: %__MODULE__{
+          object: String.t(),
+          to_do: NotionSDK.ToDoToDo.t(),
+          type: String.t()
+        }
+
+  @type t_to_do :: map()
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
       object: {:const, "block"},
-      to_do: {:union, [{NotionSDK.ToDoToDo, :t}, {NotionSDK.ToDo, :t_to_do}]},
+      to_do: {NotionSDK.ToDoToDo, :t},
       type: {:const, "to_do"}
     ]
   end
@@ -69,37 +28,38 @@ defmodule NotionSDK.ToDo do
   def __fields__(:t_to_do) do
     [
       checked: :boolean,
-      children: [
-        union: [
-          {NotionSDK.Embed, :t},
-          {NotionSDK.Bookmark, :t},
-          {NotionSDK.Image, :t},
-          {NotionSDK.Video, :t},
-          {NotionSDK.Pdf, :t},
-          {NotionSDK.File, :t},
-          {NotionSDK.Audio, :t},
-          {NotionSDK.Code, :t},
-          {NotionSDK.Equation, :t},
-          {NotionSDK.Divider, :t},
-          {NotionSDK.Breadcrumb, :t},
-          {NotionSDK.TableOfContents, :t},
-          {NotionSDK.LinkToPage, :t},
-          {NotionSDK.TableRow, :t},
-          {NotionSDK.Heading1, :t},
-          {NotionSDK.Heading2, :t},
-          {NotionSDK.Heading3, :t},
-          {NotionSDK.Paragraph, :t},
-          {NotionSDK.BulletedListItem, :t},
-          {NotionSDK.NumberedListItem, :t},
-          {NotionSDK.Quote, :t},
-          {NotionSDK.Table, :t},
-          {NotionSDK.ToDo, :t},
-          {NotionSDK.Toggle, :t},
-          {NotionSDK.Template, :t},
-          {NotionSDK.Callout, :t},
-          {NotionSDK.SyncedBlock, :t}
-        ]
-      ],
+      children:
+        {:array,
+         {:union,
+          [
+            {NotionSDK.Audio, :t},
+            {NotionSDK.Bookmark, :t},
+            {NotionSDK.Breadcrumb, :t},
+            {NotionSDK.BulletedListItem, :t},
+            {NotionSDK.Callout, :t},
+            {NotionSDK.Code, :t},
+            {NotionSDK.Divider, :t},
+            {NotionSDK.Embed, :t},
+            {NotionSDK.Equation, :t},
+            {NotionSDK.File, :t},
+            {NotionSDK.Heading1, :t},
+            {NotionSDK.Heading2, :t},
+            {NotionSDK.Heading3, :t},
+            {NotionSDK.Image, :t},
+            {NotionSDK.LinkToPage, :t},
+            {NotionSDK.NumberedListItem, :t},
+            {NotionSDK.Paragraph, :t},
+            {NotionSDK.Pdf, :t},
+            {NotionSDK.Quote, :t},
+            {NotionSDK.SyncedBlock, :t},
+            {NotionSDK.Table, :t},
+            {NotionSDK.TableOfContents, :t},
+            {NotionSDK.TableRow, :t},
+            {NotionSDK.Template, :t},
+            {NotionSDK.ToDo, :t},
+            {NotionSDK.Toggle, :t},
+            {NotionSDK.Video, :t}
+          ]}},
       color:
         {:enum,
          [
@@ -124,15 +84,12 @@ defmodule NotionSDK.ToDo do
            "pink_background",
            "red_background"
          ]},
-      rich_text: [{NotionSDK.RichTextItemRequest, :t}]
+      rich_text: {:array, {NotionSDK.RichTextItemRequest, :t}}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -164,7 +121,7 @@ defmodule NotionSDK.ToDo do
         nullable: false,
         read_only: false,
         required: true,
-        type: {:union, [{NotionSDK.ToDoToDo, :t}, {NotionSDK.ToDo, :t_to_do}]},
+        type: {NotionSDK.ToDoToDo, :t},
         write_only: false
       },
       %{
@@ -214,37 +171,38 @@ defmodule NotionSDK.ToDo do
         nullable: false,
         read_only: false,
         required: false,
-        type: [
-          union: [
-            {NotionSDK.Embed, :t},
-            {NotionSDK.Bookmark, :t},
-            {NotionSDK.Image, :t},
-            {NotionSDK.Video, :t},
-            {NotionSDK.Pdf, :t},
-            {NotionSDK.File, :t},
-            {NotionSDK.Audio, :t},
-            {NotionSDK.Code, :t},
-            {NotionSDK.Equation, :t},
-            {NotionSDK.Divider, :t},
-            {NotionSDK.Breadcrumb, :t},
-            {NotionSDK.TableOfContents, :t},
-            {NotionSDK.LinkToPage, :t},
-            {NotionSDK.TableRow, :t},
-            {NotionSDK.Heading1, :t},
-            {NotionSDK.Heading2, :t},
-            {NotionSDK.Heading3, :t},
-            {NotionSDK.Paragraph, :t},
-            {NotionSDK.BulletedListItem, :t},
-            {NotionSDK.NumberedListItem, :t},
-            {NotionSDK.Quote, :t},
-            {NotionSDK.Table, :t},
-            {NotionSDK.ToDo, :t},
-            {NotionSDK.Toggle, :t},
-            {NotionSDK.Template, :t},
-            {NotionSDK.Callout, :t},
-            {NotionSDK.SyncedBlock, :t}
-          ]
-        ],
+        type:
+          {:array,
+           {:union,
+            [
+              {NotionSDK.Audio, :t},
+              {NotionSDK.Bookmark, :t},
+              {NotionSDK.Breadcrumb, :t},
+              {NotionSDK.BulletedListItem, :t},
+              {NotionSDK.Callout, :t},
+              {NotionSDK.Code, :t},
+              {NotionSDK.Divider, :t},
+              {NotionSDK.Embed, :t},
+              {NotionSDK.Equation, :t},
+              {NotionSDK.File, :t},
+              {NotionSDK.Heading1, :t},
+              {NotionSDK.Heading2, :t},
+              {NotionSDK.Heading3, :t},
+              {NotionSDK.Image, :t},
+              {NotionSDK.LinkToPage, :t},
+              {NotionSDK.NumberedListItem, :t},
+              {NotionSDK.Paragraph, :t},
+              {NotionSDK.Pdf, :t},
+              {NotionSDK.Quote, :t},
+              {NotionSDK.SyncedBlock, :t},
+              {NotionSDK.Table, :t},
+              {NotionSDK.TableOfContents, :t},
+              {NotionSDK.TableRow, :t},
+              {NotionSDK.Template, :t},
+              {NotionSDK.ToDo, :t},
+              {NotionSDK.Toggle, :t},
+              {NotionSDK.Video, :t}
+            ]}},
         write_only: false
       },
       %{
@@ -298,34 +256,23 @@ defmodule NotionSDK.ToDo do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.RichTextItemRequest, :t}],
+        type: {:array, {NotionSDK.RichTextItemRequest, :t}},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  def __schema__(:t_to_do) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t_to_do))
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
+
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.ToDo, type, data)
   end
-
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
-
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
 end

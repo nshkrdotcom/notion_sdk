@@ -1,30 +1,20 @@
 defmodule NotionSDK.TranscriptionBlockResponse do
   @moduledoc """
-  TranscriptionBlockResponse
-
-  ## Fields
-
-    * `calendar_event`: optional
-    * `children`: optional
-    * `recording`: optional
-    * `status`: optional
-    * `title`: optional
-
+  Generated Notion Sdk type for transcription block response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          calendar_event: NotionSDK.TranscriptionCalendarEventResponse.t() | nil,
-          children: NotionSDK.TranscriptionChildrenResponse.t() | nil,
-          recording: NotionSDK.TranscriptionRecordingResponse.t() | nil,
-          status: String.t() | nil,
-          title: [NotionSDK.RichTextItemResponse.t()] | nil
-        }
-
+  @enforce_keys []
   defstruct [:calendar_event, :children, :recording, :status, :title]
 
+  @type t :: %__MODULE__{
+          calendar_event: NotionSDK.TranscriptionCalendarEventResponse.t(),
+          children: NotionSDK.TranscriptionChildrenResponse.t(),
+          recording: NotionSDK.TranscriptionRecordingResponse.t(),
+          status: String.t(),
+          title: [NotionSDK.RichTextItemResponse.t()]
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
@@ -41,15 +31,12 @@ defmodule NotionSDK.TranscriptionBlockResponse do
            "summary_in_progress",
            "notes_ready"
          ]},
-      title: [{NotionSDK.RichTextItemResponse, :t}]
+      title: {:array, {NotionSDK.RichTextItemResponse, :t}}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -134,30 +121,23 @@ defmodule NotionSDK.TranscriptionBlockResponse do
         nullable: false,
         read_only: false,
         required: false,
-        type: [{NotionSDK.RichTextItemResponse, :t}],
+        type: {:array, {NotionSDK.RichTextItemResponse, :t}},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.TranscriptionBlockResponse, type, data)
+  end
 end

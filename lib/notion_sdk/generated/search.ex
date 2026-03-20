@@ -1,153 +1,109 @@
 defmodule NotionSDK.Search do
   @moduledoc """
-  Provides API endpoint related to search
-
-  ## Operations
-
-    * Search by title
+  Generated Notion Sdk operations for search.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
-  use Pristine.SDK.OpenAPI.Operation
 
-  @type search_200_json_resp :: %{
-          has_more: boolean,
-          next_cursor: String.t() | nil,
-          object: String.t(),
-          page_or_data_source: NotionSDK.EmptyObject.t(),
-          results: [
-            NotionSDK.DataSourceObjectResponse.t()
-            | NotionSDK.PageObjectResponse.t()
-            | NotionSDK.PartialDataSourceObjectResponse.t()
-            | NotionSDK.PartialPageObjectResponse.t()
-          ],
-          type: String.t()
-        }
-
-  @doc """
-  Search by title
-
-  ## Source Context
-  Search by title
-  Searches all parent or child pages and data_sources that have been shared with an integration.
-
-  ### Warnings
-
-  To search a specific data\_source — not all sources shared with the integration — use the [Query a data\_source](https://developers.notion.com/reference/query-a-data-source) endpoint instead.
-
-  ### Notes
-
-  The Search endpoint supports pagination. To learn more about working with [paginated](https://developers.notion.com/reference/intro#pagination) responses, see the pagination section of the Notion API Introduction.
-
-  ### Errors
-
-  Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.
-
-  ### Resources
-
-    * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
-    * [paginated](https://developers.notion.com/reference/intro#pagination)
-    * [Query a data\_source](https://developers.notion.com/reference/query-a-data-source)
-    * [Search by title](https://developers.notion.com/reference/post-search)
-
-  ## Request Body
-  **Content Types**: `application/json`
-
-  ## Responses
-
-    * `200` (application/json)
-    * `400` (application/json)
-    * `401` (application/json)
-    * `403` (application/json)
-    * `404` (application/json)
-    * `409` (application/json)
-    * `429` (application/json)
-    * `500` (application/json)
-    * `503` (application/json)
-
-  ## Security
-
-    * `bearerAuth`
-
-  ## Resources
-
-    * [Search by title](https://developers.notion.com/reference/post-search)
-
-  ## Code Samples
-
-  TypeScript SDK
-  ```javascript
-  import { Client } from "@notionhq/client"
-
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
-  const response = await notion.search({
-    query: "meeting notes",
-    filter: {
-      property: "object",
-      value: "page"
+  @search_partition_spec %{
+    path: [],
+    auth: {"auth", :auth},
+    body: %{
+      keys: [
+        {"filter", :filter},
+        {"page_size", :page_size},
+        {"query", :query},
+        {"sort", :sort},
+        {"start_cursor", :start_cursor}
+      ],
+      mode: :keys
     },
-    sort: {
-      direction: "descending",
-      timestamp: "last_edited_time"
-    }
-  })
-  ```
-  """
-  @spec search(client :: NotionSDK.Client.t()) ::
-          {:ok, NotionSDK.Search.search_200_json_resp()} | {:error, NotionSDK.Error.t()}
-  @spec search(client :: NotionSDK.Client.t(), params :: map()) ::
-          {:ok, NotionSDK.Search.search_200_json_resp()} | {:error, NotionSDK.Error.t()}
-  def search(client, params \\ %{}) when is_map(params) do
-    partition =
-      partition(params, %{
-        auth: {"auth", :auth},
-        body: %{
-          keys: [
-            {"filter", :filter},
-            {"page_size", :page_size},
-            {"query", :query},
-            {"sort", :sort},
-            {"start_cursor", :start_cursor}
-          ],
-          mode: :keys
-        },
-        form_data: %{mode: :none},
-        path: [],
-        query: []
-      })
+    query: [],
+    headers: [],
+    form_data: %{mode: :none}
+  }
 
-    NotionSDK.Client.execute_generated_request(client, %{
-      args: params,
-      call: {NotionSDK.Search, :search},
-      path_template: "/v1/search",
+  @doc "Search by title\n## Source Context\nSearches all parent or child pages and data_sources that have been shared with an integration.\n\n### Warnings\n\nTo search a specific data\\_source — not all sources shared with the integration — use the [Query a data\\_source](https://developers.notion.com/reference/query-a-data-source) endpoint instead.\n\n### Notes\n\nThe Search endpoint supports pagination. To learn more about working with [paginated](https://developers.notion.com/reference/intro#pagination) responses, see the pagination section of the Notion API Introduction.\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [paginated](https://developers.notion.com/reference/intro#pagination)\n  * [Query a data\\_source](https://developers.notion.com/reference/query-a-data-source)\n  * [Search by title](https://developers.notion.com/reference/post-search)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.search({\n  query: \"meeting notes\",\n  filter: {\n    property: \"object\",\n    value: \"page\"\n  },\n  sort: {\n    direction: \"descending\",\n    timestamp: \"last_edited_time\"\n  }\n})\n```\n"
+  @spec search(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
+  def search(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
+    operation = build_search_operation(params)
+    Pristine.execute(runtime_client, operation, opts)
+  end
+
+  @spec stream_search(term(), map(), keyword()) :: Enumerable.t()
+  def stream_search(client, params \\ %{}, opts \\ [])
+      when is_map(params) and is_list(opts) do
+    runtime_client = NotionSDK.Client.pristine_client(client)
+
+    Stream.resource(
+      fn -> build_search_operation(params) end,
+      fn
+        nil ->
+          {:halt, nil}
+
+        %Pristine.Operation{} = operation ->
+          case Pristine.execute(runtime_client, operation, opts) do
+            {:ok, response} ->
+              items = List.wrap(Pristine.Operation.items(operation, response))
+              {items, Pristine.Operation.next_page(operation, response)}
+
+            {:error, reason} ->
+              raise "pagination failed: " <> inspect(reason)
+          end
+      end,
+      fn _state -> :ok end
+    )
+  end
+
+  defp build_search_operation(params) when is_map(params) do
+    partition = Pristine.Operation.partition(params, @search_partition_spec)
+
+    Pristine.Operation.new(%{
+      id: "search/search",
       method: :post,
+      path_template: "/v1/search",
       path_params: partition.path_params,
       query: partition.query,
+      headers: partition.headers,
       body: partition.body,
       form_data: partition.form_data,
-      auth: partition.auth,
-      security: [%{"bearerAuth" => []}],
-      request: [{"application/json", {NotionSDK.Search, :search_json_req}}],
-      response: [
-        {200, {NotionSDK.Search, :search_200_json_resp}},
-        {400, {NotionSDK.ErrorApi400, :t}},
-        {401, {NotionSDK.ErrorApi401, :t}},
-        {403, {NotionSDK.ErrorApi403, :t}},
-        {404, {NotionSDK.ErrorApi404, :t}},
-        {409, {NotionSDK.ErrorApi409, :t}},
-        {429, {NotionSDK.ErrorApi429, :t}},
-        {500, {NotionSDK.ErrorApi500, :t}},
-        {503, {NotionSDK.ErrorApi503, :t}}
-      ],
-      resource: "core_api",
-      retry: "notion.write",
-      circuit_breaker: "core_api",
-      rate_limit: "notion.integration"
+      request_schema: {NotionSDK.Search, :search_json_req},
+      response_schemas: %{
+        200 => {NotionSDK.Search, :search_200_json_resp},
+        400 => {NotionSDK.ErrorApi400, :t},
+        401 => {NotionSDK.ErrorApi401, :t},
+        403 => {NotionSDK.ErrorApi403, :t},
+        404 => {NotionSDK.ErrorApi404, :t},
+        409 => {NotionSDK.ErrorApi409, :t},
+        429 => {NotionSDK.ErrorApi429, :t},
+        500 => {NotionSDK.ErrorApi500, :t},
+        503 => {NotionSDK.ErrorApi503, :t}
+      },
+      auth: %{
+        use_client_default?: true,
+        override: partition.auth,
+        security_schemes: ["bearerAuth"]
+      },
+      runtime: %{
+        circuit_breaker: "core_api",
+        rate_limit_group: "notion.integration",
+        resource: "core_api",
+        retry_group: "notion.write",
+        telemetry_event: [:notion_sdk, :search, :search],
+        timeout_ms: nil
+      },
+      pagination: %{
+        default_limit: nil,
+        items_path: ["results"],
+        request_mapping: %{cursor_location: :body, cursor_param: "start_cursor"},
+        response_mapping: %{cursor_path: ["next_cursor"]},
+        strategy: :cursor
+      }
     })
   end
 
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :search_200_json_resp)
 
   def __fields__(:search_200_json_resp) do
@@ -156,14 +112,15 @@ defmodule NotionSDK.Search do
       next_cursor: {:union, [:null, :string]},
       object: {:const, "list"},
       page_or_data_source: {NotionSDK.EmptyObject, :t},
-      results: [
-        union: [
-          {NotionSDK.PageObjectResponse, :t},
-          {NotionSDK.PartialPageObjectResponse, :t},
-          {NotionSDK.PartialDataSourceObjectResponse, :t},
-          {NotionSDK.DataSourceObjectResponse, :t}
-        ]
-      ],
+      results:
+        {:array,
+         {:union,
+          [
+            {NotionSDK.DataSourceObjectResponse, :t},
+            {NotionSDK.PageObjectResponse, :t},
+            {NotionSDK.PartialDataSourceObjectResponse, :t},
+            {NotionSDK.PartialPageObjectResponse, :t}
+          ]}},
       type: {:const, "page_or_data_source"}
     ]
   end
@@ -179,18 +136,21 @@ defmodule NotionSDK.Search do
   end
 
   def __fields__(:search_json_req_filter) do
-    [property: {:const, "object"}, value: {:enum, ["page", "data_source"]}]
+    [
+      property: {:const, "object"},
+      value: {:enum, ["page", "data_source"]}
+    ]
   end
 
   def __fields__(:search_json_req_sort) do
-    [direction: {:enum, ["ascending", "descending"]}, timestamp: {:const, "last_edited_time"}]
+    [
+      direction: {:enum, ["ascending", "descending"]},
+      timestamp: {:const, "last_edited_time"}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :search_200_json_resp)
 
   def __openapi_fields__(:search_200_json_resp) do
@@ -267,14 +227,15 @@ defmodule NotionSDK.Search do
         nullable: false,
         read_only: false,
         required: true,
-        type: [
-          union: [
-            {NotionSDK.PageObjectResponse, :t},
-            {NotionSDK.PartialPageObjectResponse, :t},
-            {NotionSDK.PartialDataSourceObjectResponse, :t},
-            {NotionSDK.DataSourceObjectResponse, :t}
-          ]
-        ],
+        type:
+          {:array,
+           {:union,
+            [
+              {NotionSDK.DataSourceObjectResponse, :t},
+              {NotionSDK.PageObjectResponse, :t},
+              {NotionSDK.PartialDataSourceObjectResponse, :t},
+              {NotionSDK.PartialPageObjectResponse, :t}
+            ]}},
         write_only: false
       },
       %{
@@ -445,36 +406,17 @@ defmodule NotionSDK.Search do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :search_200_json_resp)
-
-  def __schema__(:search_200_json_resp) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:search_200_json_resp))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :search_200_json_resp) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  def __schema__(:search_json_req) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:search_json_req))
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :search_200_json_resp)
+
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Search, type, data)
   end
-
-  def __schema__(:search_json_req_filter) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:search_json_req_filter))
-  end
-
-  def __schema__(:search_json_req_sort) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:search_json_req_sort))
-  end
-
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :search_200_json_resp)
-
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
 end

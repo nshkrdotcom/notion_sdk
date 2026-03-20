@@ -1,42 +1,31 @@
 defmodule NotionSDK.LinkToPage do
   @moduledoc """
-  Link To Page
-
-  ## Fields
-
-    * `link_to_page`: required
-    * `object`: optional
-    * `type`: optional
-
+  Generated Notion Sdk type for link to page.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %{
-          link_to_page: NotionSDK.CommentId.t() | NotionSDK.DatabaseId.t() | NotionSDK.PageId.t(),
-          object: String.t() | nil,
-          type: String.t() | nil
-        }
-
+  @enforce_keys [:link_to_page]
   defstruct [:link_to_page, :object, :type]
 
+  @type t :: %__MODULE__{
+          link_to_page: NotionSDK.CommentId.t() | NotionSDK.DatabaseId.t() | NotionSDK.PageId.t(),
+          object: String.t(),
+          type: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
       link_to_page:
-        {:union, [{NotionSDK.PageId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.CommentId, :t}]},
+        {:union, [{NotionSDK.CommentId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.PageId, :t}]},
       object: {:const, "block"},
       type: {:const, "link_to_page"}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -55,7 +44,7 @@ defmodule NotionSDK.LinkToPage do
         required: true,
         type:
           {:union,
-           [{NotionSDK.PageId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.CommentId, :t}]},
+           [{NotionSDK.CommentId, :t}, {NotionSDK.DatabaseId, :t}, {NotionSDK.PageId, :t}]},
         write_only: false
       },
       %{
@@ -91,24 +80,17 @@ defmodule NotionSDK.LinkToPage do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.LinkToPage, type, data)
+  end
 end

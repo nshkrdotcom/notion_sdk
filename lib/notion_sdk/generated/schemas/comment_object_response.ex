@@ -1,37 +1,19 @@
 defmodule NotionSDK.CommentObjectResponse do
   @moduledoc """
-  CommentObjectResponse
-
-  ## Fields
-
-    * `attachments`: Any file attachments associated with the comment.
-    * `created_by`: required
-    * `created_time`: The time when the comment was created.
-    * `discussion_id`: required
-    * `display_name`: The display name of the comment.
-    * `id`: required
-    * `last_edited_time`: The time when the comment was last edited.
-    * `object`: The comment object type name.
-    * `parent`: required
-    * `rich_text`: The rich text content of the comment.
-
+  Generated Notion Sdk type for comment object response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{
-          attachments: [NotionSDK.CommentObjectResponseAttachments.t()] | nil,
-          created_by: NotionSDK.PartialUserObjectResponse.t(),
-          created_time: DateTime.t(),
-          discussion_id: String.t(),
-          display_name: NotionSDK.CommentObjectResponseDisplayName.t(),
-          id: String.t(),
-          last_edited_time: DateTime.t(),
-          object: String.t(),
-          parent:
-            NotionSDK.BlockIdCommentParentResponse.t() | NotionSDK.PageIdCommentParentResponse.t(),
-          rich_text: [NotionSDK.RichTextItemResponse.t()]
-        }
-
+  @enforce_keys [
+    :created_by,
+    :created_time,
+    :discussion_id,
+    :display_name,
+    :id,
+    :last_edited_time,
+    :object,
+    :parent,
+    :rich_text
+  ]
   defstruct [
     :attachments,
     :created_by,
@@ -45,13 +27,26 @@ defmodule NotionSDK.CommentObjectResponse do
     :rich_text
   ]
 
+  @type t :: %__MODULE__{
+          attachments: [NotionSDK.CommentObjectResponseAttachments.t()],
+          created_by: NotionSDK.PartialUserObjectResponse.t(),
+          created_time: DateTime.t(),
+          discussion_id: String.t(),
+          display_name: NotionSDK.CommentObjectResponseDisplayName.t(),
+          id: String.t(),
+          last_edited_time: DateTime.t(),
+          object: String.t(),
+          parent:
+            NotionSDK.BlockIdCommentParentResponse.t() | NotionSDK.PageIdCommentParentResponse.t(),
+          rich_text: [NotionSDK.RichTextItemResponse.t()]
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
     [
-      attachments: [{NotionSDK.CommentObjectResponseAttachments, :t}],
+      attachments: {:array, {NotionSDK.CommentObjectResponseAttachments, :t}},
       created_by: {NotionSDK.PartialUserObjectResponse, :t},
       created_time: {:string, "date-time"},
       discussion_id: {:string, "uuid"},
@@ -62,18 +57,15 @@ defmodule NotionSDK.CommentObjectResponse do
       parent:
         {:union,
          [
-           {NotionSDK.PageIdCommentParentResponse, :t},
-           {NotionSDK.BlockIdCommentParentResponse, :t}
+           {NotionSDK.BlockIdCommentParentResponse, :t},
+           {NotionSDK.PageIdCommentParentResponse, :t}
          ]},
-      rich_text: [{NotionSDK.RichTextItemResponse, :t}]
+      rich_text: {:array, {NotionSDK.RichTextItemResponse, :t}}
     ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -90,7 +82,7 @@ defmodule NotionSDK.CommentObjectResponse do
         nullable: false,
         read_only: false,
         required: false,
-        type: [{NotionSDK.CommentObjectResponseAttachments, :t}],
+        type: {:array, {NotionSDK.CommentObjectResponseAttachments, :t}},
         write_only: false
       },
       %{
@@ -213,8 +205,8 @@ defmodule NotionSDK.CommentObjectResponse do
         type:
           {:union,
            [
-             {NotionSDK.PageIdCommentParentResponse, :t},
-             {NotionSDK.BlockIdCommentParentResponse, :t}
+             {NotionSDK.BlockIdCommentParentResponse, :t},
+             {NotionSDK.PageIdCommentParentResponse, :t}
            ]},
         write_only: false
       },
@@ -230,30 +222,23 @@ defmodule NotionSDK.CommentObjectResponse do
         nullable: false,
         read_only: false,
         required: true,
-        type: [{NotionSDK.RichTextItemResponse, :t}],
+        type: {:array, {NotionSDK.RichTextItemResponse, :t}},
         write_only: false
       }
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.CommentObjectResponse, type, data)
+  end
 end

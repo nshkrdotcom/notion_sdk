@@ -17,11 +17,14 @@ reference fixtures and executed through the shared `pristine` runtime.
 That `pristine` dependency is intentional. `notion_sdk` targets the bounded
 public runtime surface:
 
-- `Pristine.execute_request/3`
-- `Pristine.foundation_context/1`
-- `Pristine.SDK.*`
+- `Pristine.Operation`
+- `Pristine.execute/3`
+- `Pristine.stream/3`
+- `Pristine.Client.foundation/1`
+- `Pristine.Profiles.Foundation`
+- `Pristine.OAuth2`
 
-It does not treat broad `Pristine.Core.*` or `Pristine.OpenAPI.*` internals as
+It does not treat broad `Pristine.Core.*` internals as
 its SDK contract.
 
 ## What this SDK is

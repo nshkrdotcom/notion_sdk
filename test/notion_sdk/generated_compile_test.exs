@@ -1,17 +1,21 @@
 defmodule NotionSDK.GeneratedCompileTest do
   use ExUnit.Case, async: true
 
-  @manifest_path Path.expand("../../priv/generated/manifest.json", __DIR__)
-  @docs_manifest_path Path.expand("../../priv/generated/docs_manifest.json", __DIR__)
+  @generation_manifest_path Path.expand("../../priv/generated/generation_manifest.json", __DIR__)
+  @docs_inventory_path Path.expand("../../priv/generated/docs_inventory.json", __DIR__)
+  @provider_ir_path Path.expand("../../priv/generated/provider_ir.json", __DIR__)
 
   test "all generated operations are present and compiled" do
-    manifest = Jason.decode!(File.read!(@manifest_path))
+    provider_ir = Jason.decode!(File.read!(@provider_ir_path))
+    generation_manifest = Jason.decode!(File.read!(@generation_manifest_path))
 
-    assert manifest["operation_count"] == 35
-    assert length(manifest["operations"]) == 35
+    operations = provider_ir["operations"] || []
 
-    Enum.each(manifest["operations"], fn %{"function" => function_name, "module" => module_name} ->
-      module = Module.concat([NotionSDK, module_name])
+    assert generation_manifest["operation_count"] == 35
+    assert length(operations) == 35
+
+    Enum.each(operations, fn %{"function" => function_name, "module" => module_name} ->
+      module = Module.concat([module_name])
 
       function = String.to_atom(function_name)
 
@@ -45,16 +49,20 @@ defmodule NotionSDK.GeneratedCompileTest do
   end
 
   test "oauth owner schema modules are emitted and compiled" do
-    manifest =
-      @manifest_path
+    generation_manifest =
+      @generation_manifest_path
       |> File.read!()
       |> Jason.decode!()
       |> update_in(["generated_files"], fn generated_files ->
         Enum.reject(generated_files || [], fn path -> is_nil(path) end)
       end)
 
-    assert Enum.any?(manifest["generated_files"], &String.ends_with?(&1, "/user.ex"))
-    assert Enum.any?(manifest["generated_files"], &String.ends_with?(&1, "/workspace.ex"))
+    assert Enum.any?(generation_manifest["generated_files"], &String.ends_with?(&1, "/user.ex"))
+
+    assert Enum.any?(
+             generation_manifest["generated_files"],
+             &String.ends_with?(&1, "/workspace.ex")
+           )
 
     assert Code.ensure_loaded?(NotionSDK.User)
     assert Code.ensure_loaded?(NotionSDK.Workspace)
@@ -66,18 +74,17 @@ defmodule NotionSDK.GeneratedCompileTest do
     assert Enum.any?(workspace_types, &match?({:type, {:t, _, _}}, &1))
   end
 
-  test "docs manifest and runtime metadata helpers are materially richer" do
-    docs_manifest_source = File.read!(@docs_manifest_path)
-    docs_manifest = Jason.decode!(File.read!(@docs_manifest_path))
+  test "docs inventory and runtime metadata helpers are materially richer" do
+    docs_inventory_source = File.read!(@docs_inventory_path)
+    docs_inventory = Jason.decode!(File.read!(@docs_inventory_path))
 
-    retrieve_entry =
-      Enum.find(docs_manifest["operations"], &(&1["path"] == "/v1/pages/{page_id}"))
+    retrieve_entry = get_in(docs_inventory, ["operations", "pages/retrieve"])
 
     assert retrieve_entry["doc"] =~ "## Source Context"
     assert retrieve_entry["doc"] =~ "### Limits"
     assert retrieve_entry["doc"] =~ "## Code Samples"
-    assert retrieve_entry["source_context"]["metadata"]["slug"] == "retrieve-a-page"
-    refute docs_manifest_source =~ "#Reference<"
+    assert retrieve_entry["source_context"]["slug"] == "retrieve-a-page"
+    refute docs_inventory_source =~ "#Reference<"
 
     [field | _rest] = NotionSDK.PageObjectResponse.__openapi_fields__()
 

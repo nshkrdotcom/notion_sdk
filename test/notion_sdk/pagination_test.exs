@@ -4,7 +4,7 @@ defmodule NotionSDK.PaginationTest do
   alias NotionSDK.Client
   alias NotionSDK.Pagination
   alias NotionSDK.TestTransport
-  alias Pristine.SDK.Response
+  alias Pristine.Response
 
   describe "iterate_paginated_api/3 and collect_paginated_api/3" do
     test "advance start_cursor across pages" do

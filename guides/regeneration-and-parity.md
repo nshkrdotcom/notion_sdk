@@ -18,11 +18,10 @@ mix notion.refresh --notion-docs-root /path/to/notion_docs --js-sdk-root /path/t
 parity inventory in `priv/upstream/parity_inventory.json`. It does not require
 a sibling `notion_docs` checkout when those fixtures are already present.
 
-The generated runtime surface targets the hardened `Pristine.SDK.*` namespace
-plus `Pristine.execute_request/3`, not broad `pristine` internals.
-
-The retained build-time seam is `Pristine.OpenAPI.Bridge.run/3`, and
-`notion_sdk` keeps that dependency confined to its codegen workflow.
+The generated runtime surface targets `Pristine.Operation`,
+`Pristine.execute/3`, `Pristine.stream/3`, and thin `Pristine.Client`
+integration. `notion_sdk` keeps direct compiler/runtime internals out of its
+public contract.
 
 ## What `mix notion.refresh` does
 
@@ -46,9 +45,10 @@ when the defaults are not appropriate.
 - `priv/upstream/parity_inventory.json`: committed bounded-surface inventory for the vendored JS SDK oracle
 - `priv/upstream/supplemental/`: committed supplemental specs
 - `priv/upstream/snapshots/`: raw upstream snapshot inputs
-- `priv/generated/manifest.json`: generated surface summary emitted from the `pristine` bridge result
-- `priv/generated/docs_manifest.json`: shared docs-manifest artifact emitted from the `pristine` seam
-- `priv/generated/open_api_state.snapshot.term`: bridge snapshot
+- `priv/generated/provider_ir.json`: committed normalized provider IR
+- `priv/generated/generation_manifest.json`: generation summary emitted by the shared compiler
+- `priv/generated/docs_inventory.json`: operation docs and source-context inventory
+- `priv/generated/source_inventory.json`: source fingerprint inventory
 - `priv/generated/refresh_report.json`: grouped change report
 
 ## Recommended maintenance loop
@@ -91,7 +91,7 @@ The committed test suite currently pins:
 - Default Notion API version: `2025-09-03`
 - Documented endpoint surface: 35 operations
 
-`test/notion_sdk/parity_endpoint_test.exs` compares the generated manifest
+`test/notion_sdk/parity_endpoint_test.exs` compares the committed provider IR
 against `priv/upstream/parity_inventory.json`.
 
 ## When to use `generate` vs `refresh`
@@ -107,7 +107,7 @@ Use `mix notion.refresh --snapshots-only` when you want to capture upstream chan
 The richer docs are proved from generated artifacts, not hand edits:
 
 - `priv/upstream/reference_context/*.json` should retain warnings, limits, errors, sections, resources, and code samples
-- `priv/generated/docs_manifest.json` should include source-context-backed operation docs
+- `priv/generated/docs_inventory.json` should include source-context-backed operation docs
 - generated sources such as `lib/notion_sdk/generated/pages.ex` should show `## Source Context` and `## Code Samples`
 - generated schema helpers such as `__openapi_fields__/1` should include doc metadata keys beyond `name`, `type`, and `required`
 - generated request maps should carry stable runtime metadata such as `resource`, `retry`, `circuit_breaker`, and `rate_limit`

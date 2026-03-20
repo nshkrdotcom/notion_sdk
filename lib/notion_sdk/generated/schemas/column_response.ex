@@ -1,31 +1,26 @@
 defmodule NotionSDK.ColumnResponse do
   @moduledoc """
-  ColumnResponse
-
-  ## Fields
-
-    * `width_ratio`: Ratio between 0 and 1 of the width of this column relative to all columns in the list. If not provided, uses an equal width.
-
+  Generated Notion Sdk type for column response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{width_ratio: number | nil}
-
+  @enforce_keys []
   defstruct [:width_ratio]
 
+  @type t :: %__MODULE__{
+          width_ratio: number()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [width_ratio: :number]
+    [
+      width_ratio: :number
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -36,7 +31,7 @@ defmodule NotionSDK.ColumnResponse do
         description:
           "Ratio between 0 and 1 of the width of this column relative to all columns in the list. If not provided, uses an equal width.",
         example: nil,
-        examples: nil,
+        examples: [0.5],
         extensions: %{},
         external_docs: nil,
         name: "width_ratio",
@@ -49,24 +44,17 @@ defmodule NotionSDK.ColumnResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(NotionSDK.ColumnResponse, type, data)
+  end
 end

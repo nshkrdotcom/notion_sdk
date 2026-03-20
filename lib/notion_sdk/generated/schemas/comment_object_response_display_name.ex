@@ -1,34 +1,28 @@
 defmodule NotionSDK.CommentObjectResponseDisplayName do
   @moduledoc """
-  CommentObjectResponseDisplayName
-
-  The display name of the comment.
-
-  ## Fields
-
-    * `resolved_name`: required
-    * `type`: One of: `custom`, `user`, `integration`
-
+  Generated Notion Sdk type for comment object response display name.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{resolved_name: String.t() | nil, type: String.t()}
-
+  @enforce_keys [:resolved_name, :type]
   defstruct [:resolved_name, :type]
 
+  @type t :: %__MODULE__{
+          resolved_name: nil | String.t(),
+          type: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [resolved_name: {:union, [:null, :string]}, type: {:enum, ["custom", "user", "integration"]}]
+    [
+      resolved_name: {:union, [:null, :string]},
+      type: {:enum, ["custom", "user", "integration"]}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -66,24 +60,21 @@ defmodule NotionSDK.CommentObjectResponseDisplayName do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.CommentObjectResponseDisplayName,
+      type,
+      data
+    )
+  end
 end

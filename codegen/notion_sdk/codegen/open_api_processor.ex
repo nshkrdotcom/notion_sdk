@@ -1,11 +1,5 @@
-defmodule NotionSDK.Codegen.Processor do
-  @moduledoc """
-  Notion-specific naming overrides for the generated endpoint surface.
-
-  The upstream Notion docs snippets contain several awkward or incorrect
-  `operationId` values. This processor keeps the generated public surface
-  stable and SDK-shaped without reintroducing handwritten wrappers.
-  """
+defmodule NotionSDK.Codegen.OpenAPIProcessor do
+  @moduledoc false
 
   use OpenAPI.Processor
 

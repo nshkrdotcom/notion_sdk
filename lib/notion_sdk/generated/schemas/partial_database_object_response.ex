@@ -1,32 +1,28 @@
 defmodule NotionSDK.PartialDatabaseObjectResponse do
   @moduledoc """
-  PartialDatabaseObjectResponse
-
-  ## Fields
-
-    * `id`: required
-    * `object`: The database object type name.
-
+  Generated Notion Sdk type for partial database object response.
   """
-  alias Pristine.SDK.OpenAPI.Runtime, as: OpenAPIRuntime
 
-  @type t :: %__MODULE__{id: String.t(), object: String.t()}
-
+  @enforce_keys [:id, :object]
   defstruct [:id, :object]
 
+  @type t :: %__MODULE__{
+          id: String.t(),
+          object: String.t()
+        }
   @doc false
-  @spec __fields__(atom) :: keyword
+  @spec __fields__(atom()) :: keyword()
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [id: {:string, "uuid"}, object: {:const, "database"}]
+    [
+      id: {:string, "uuid"},
+      object: {:const, "database"}
+    ]
   end
 
-  (
-    @doc false
-    @spec __openapi_fields__(atom) :: [map()]
-  )
-
+  @doc false
+  @spec __openapi_fields__(atom()) :: [map()]
   def __openapi_fields__(type \\ :t)
 
   def __openapi_fields__(:t) do
@@ -64,24 +60,21 @@ defmodule NotionSDK.PartialDatabaseObjectResponse do
     ]
   end
 
-  (
-    @doc false
-    @spec __schema__(atom) :: Sinter.Schema.t()
-  )
-
-  def __schema__(type \\ :t)
-
-  def __schema__(:t) do
-    OpenAPIRuntime.build_schema(__openapi_fields__(:t))
+  @doc false
+  @spec __schema__(atom()) :: Sinter.Schema.t()
+  def __schema__(type \\ :t) when is_atom(type) do
+    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
   end
 
-  (
-    @doc false
-    @spec decode(term(), atom) :: {:ok, term()} | {:error, term()}
-    def decode(data, type \\ :t)
+  @doc false
+  @spec decode(map(), atom()) :: {:ok, term()} | {:error, term()}
+  def decode(data, type \\ :t)
 
-    def decode(data, type) do
-      OpenAPIRuntime.decode_module_type(__MODULE__, type, data)
-    end
-  )
+  def decode(data, type) when is_map(data) and is_atom(type) do
+    Pristine.Runtime.Schema.decode_module_type(
+      NotionSDK.PartialDatabaseObjectResponse,
+      type,
+      data
+    )
+  end
 end

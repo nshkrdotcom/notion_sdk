@@ -1,0 +1,665 @@
+{
+  "artifact_files": [
+    "priv/generated/docs_inventory.json",
+    "priv/generated/generation_manifest.json",
+    "priv/generated/provider_ir.json",
+    "priv/generated/source_inventory.json"
+  ],
+  "auth_policy_count": 2,
+  "fingerprints": {
+    "generation": {
+      "compiler": "pristine_codegen",
+      "provider": "notion_sdk",
+      "source_strategy": "openapi_plus_source_plugin",
+      "version": "dev"
+    },
+    "sources": [
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/complete-a-file-upload.yaml",
+        "sha256": "92d04285224fbfc9327422ea8d8c93a2ea931a18912e5a52ea07cb02dbb26622"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/create-a-comment.yaml",
+        "sha256": "18849a6aefc277b768fc5828f46614a242d8ec7219d04b8b45d304a442843818"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/create-a-data-source.yaml",
+        "sha256": "5dc0e157762a23de1cbcdf3919c7c61f1c9f158196ad51ce781e395d1579e488"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/create-a-database.yaml",
+        "sha256": "55076bce944e59c867ddf76bff06f421a871f94908074242982582a8cad479be"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/create-a-file-upload.yaml",
+        "sha256": "b81fad17a061bc5c9665ae1959cef0420c953ce0d76f84ef4dd5ef795f6e28b6"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/create-a-token.yaml",
+        "sha256": "5fb5f90d11e00ee11edb0b9cbe84091926258b156ffc9982e4302f6d87e09cd9"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/delete-a-block.yaml",
+        "sha256": "9f50c715bdd9e96ceb0a3831d6cae17f8a5836cebb52cf2c70257521520f3c2a"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/get-block-children.yaml",
+        "sha256": "c93804983b71264b47ec07d8551ee66fcb24f82042e3bfb10bbee50af14d0027"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/get-self.yaml",
+        "sha256": "049a9a578258aa9a4bee76111890c3a53e110c9ca3c7a6453d1ed34e3e31db53"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/get-user.yaml",
+        "sha256": "910cdebaf7437b6ceb43f24eda5d23396b55e7e3f87604e7a7ad60eddc5326cc"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/get-users.yaml",
+        "sha256": "0b64a9acc88f20211d5b508310d5ab21d84e4b2847f251952b9774e1188eeff1"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/introspect-token.yaml",
+        "sha256": "7bca7a0a673bc12c083943eb9c72b68d234575f821ecc856162f9178d9194a07"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/list-comments.yaml",
+        "sha256": "eca129e1e0c075109bd184d02b6f69cf744ed4bd3b9530a44455bece8b3fc242"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/list-data-source-templates.yaml",
+        "sha256": "882916a4db9b3e9b375197994b86aa5b59744f72e530464a4887cf614845c3e4"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/list-file-uploads.yaml",
+        "sha256": "957701bedf8a4c78c7c1888986f7eaaaf5824b5f0e7360f674743cd2fb81cb70"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/move-page.yaml",
+        "sha256": "321dd84652def18da014d42b0c97e34d84182860a372600fa0ebcebf5e21dbef"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/patch-block-children.yaml",
+        "sha256": "94835419ce635fb9fc265e150498a7b3e7533752c27188fc14a1882923e17874"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/patch-page.yaml",
+        "sha256": "1f1e3ab1d398de418011e039eabbe5f2649e3b6c83885af1aa43ccfcc535bb3c"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/post-page.yaml",
+        "sha256": "3762a9da2878a91f34bac6cc09a5505630dbb14f2a9e77fcd43c2fbfe71e7222"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/post-search.yaml",
+        "sha256": "c624dcbc723d6bca36ef0dcf38fa1b73f5cfcc0e9a2f049d2e14435e9323f9f2"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/query-a-data-source.yaml",
+        "sha256": "143f5f1f4254be67105e3d5a593b8c88b253398c39c33e4ad026ee109a516c02"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-a-block.yaml",
+        "sha256": "553c9e10b048f97359760dfdb44aa7c6bdbd4d1383570d78fdfe43b0eed9fe06"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-a-data-source.yaml",
+        "sha256": "09a3034d225e302d333907f5f17e1e36d435615b5c51bc118c949b0264401d6e"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-a-database.yaml",
+        "sha256": "4f8b4dba60572c431030440e0ab81d4461f102d1bed2bbb6209b1746e4ece450"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-a-file-upload.yaml",
+        "sha256": "a1f56e40569da72e3e302cbcb8ea5fce3f68732300c9bb29c845d3595757a252"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-a-page-property.yaml",
+        "sha256": "9b808933d78622ebc63471edab5022c34e3587eaf7c720d1f140e9e10f5fb0d3"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-a-page.yaml",
+        "sha256": "9cc2eadd5753185c04f650453c8cfaef26cd8daaa6e66c4ff33d603b74efbeb5"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-comment.yaml",
+        "sha256": "f65a64bc83655f50bc6ef1ffe737f864335a89f481759d1e4e75b639554296c7"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/retrieve-page-markdown.yaml",
+        "sha256": "c9e642de8c9ed56e722f109555a30122f5f719f29fac28b1139ba4bf0c733694"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/revoke-token.yaml",
+        "sha256": "292cc207601d2539d9ef77bbc39ae36255c982e78bd97eda81731404afe92c3c"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/send-a-file-upload.yaml",
+        "sha256": "7d2990578dc63bfc5cbbd24c67a42b37ebfb70d3c1eb8a43a4e6b85f872bc622"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/update-a-block.yaml",
+        "sha256": "5afdefd024db6fb833f17afdd06fb23f6684e1c70b02f88d2985db9a4ccea64f"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/update-a-data-source.yaml",
+        "sha256": "0b8e3801723cd9fb54d486708c3d1cd1e2fee02460d714b27f49860fa509b31a"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/update-a-database.yaml",
+        "sha256": "2fb2b6bea6db203e266695d0858b20de6422256a6bcd5ae44a0bf594a8b905db"
+      },
+      {
+        "kind": "reference",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference/update-page-markdown.yaml",
+        "sha256": "b6e3c329345a3e238792162c705c1db1512c2e9dd3b7f0433c48dcd1809c64a4"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/complete-a-file-upload.json",
+        "sha256": "5e7157e57fb108b63d547ca00e781ead36c21d202751682a84f048d28ae408c8"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/create-a-comment.json",
+        "sha256": "5f3f2b57d25bd40d8a299238fb0b369bd86d80960a9c1f8fcb17604ab1f1a0be"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/create-a-data-source.json",
+        "sha256": "1a82024c460cfef653a311623bde26ff404f499beccd99e5bc822e8e4b6042b3"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/create-a-database.json",
+        "sha256": "d6c463a992b36f0580fddb17cffdd7dd23bd04bdc3e17a7be1f289f155c7ff87"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/create-a-file-upload.json",
+        "sha256": "ee6d4bd937b4e1a6fe4ed5701c849bff8b34b9b026534b8973425fa413efe90b"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/create-a-token.json",
+        "sha256": "8d10b72588cf4d747b3faa3d6002e4428e07deaca65c35efb44e035a1e632c0d"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/delete-a-block.json",
+        "sha256": "fa0d173c8b546c142a599f05222dc6d9b8b7cd238f8cda2e81c99d0f1623a2ec"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/get-block-children.json",
+        "sha256": "8a4ef8a816b4690be5b3a5e43cc1f5257d2e07d1efbc069e5efc4da64e312c07"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/get-self.json",
+        "sha256": "50f34e73911d6938899b21f0699d7111ea35af2b24a05bab96f5a9ee86f97713"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/get-user.json",
+        "sha256": "5e749fb9357580e0ba6e6e8b4ddf5905d094560c1bce808f7100dadf22473411"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/get-users.json",
+        "sha256": "473a9e1dad0ddb23507a81b14c6a5cda6c42f352156a3376e67472b7b01da61e"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/introspect-token.json",
+        "sha256": "d67feae3e12a2603f1c603a0a6fc541fabff1d0e224c76910b856abf671b82a4"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/list-comments.json",
+        "sha256": "ff16a8d74f14eb2e6a76430d55efbab0fb3294b78b296a8ec16eb1206d06c743"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/list-data-source-templates.json",
+        "sha256": "cc954629e42f571d522be23c29b3d39d6ac0d46e9e468677fa61d23c8cc01bec"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/list-file-uploads.json",
+        "sha256": "c5d149c9cdeac7c583dfd255d479fbdcab5f044c37a7f1289731af9629b9bca1"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/move-page.json",
+        "sha256": "b0ceee03855b064906905c4e4a02331a2d46fbceaf75145cb17d5fcc9a8fbba6"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/patch-block-children.json",
+        "sha256": "c4a35841a85d738234982adfeab842b0cb6a9b50f08b26e4a33c9a6590ff8ab2"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/patch-page.json",
+        "sha256": "55bcadae2d37a8288fba2b7db569424af9a343740b11da2feb8b497a324da146"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/post-page.json",
+        "sha256": "45833e2a551bcbb6d9e5ce1972fc6ccaddd9cb9a85283e10e990bdb5a699bba9"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/post-search.json",
+        "sha256": "7db32cd0c110d71a41d37f8b65ae5b4b58f919ac0400656f9e940a5d5bf4faed"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/query-a-data-source.json",
+        "sha256": "d893cfd6dc5f37813fca133e5329b1e68d0a93c36a1c772ae2b0395f03baec28"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-a-block.json",
+        "sha256": "58c259e094aceff675c179cf6b4319aa554aa78b0fccd6d156fbf242df084f64"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-a-data-source.json",
+        "sha256": "37afdaea842dafb83495ff2fd3789f48a794aea757402e7ebb0d9a93931e9ac5"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-a-database.json",
+        "sha256": "735c56afaee4906c7c83567c7c464308c19fdb9ceae14c652b7ce20cf7641fb5"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-a-file-upload.json",
+        "sha256": "01fd9169afc17e23778031d3eaef764b46559e86c0699343653b44fa7782a4d3"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-a-page-property.json",
+        "sha256": "5ac6acf84f4f2696aebba097327b985670974f31d2939e66aff95dc2eff47b56"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-a-page.json",
+        "sha256": "43ba05d58264706bb6bfc9bb9c621d47ecd04a6cf157f2a39935d7e8897df82a"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-comment.json",
+        "sha256": "95e51107141dc88a31d2718980dc5c976b008f8bfb10d62856594b61adedbd05"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/retrieve-page-markdown.json",
+        "sha256": "070073f8dee8829d86634cc341cf8a8a1a904e5babafe1610d4c67ebef0f54b7"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/revoke-token.json",
+        "sha256": "e52460b939edeb7b245b9f095e2301a4596b8a4cdbc666eaf17453d3325d606c"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/send-a-file-upload.json",
+        "sha256": "3d3e9254c28a83f08f0b28ff063ad4c1828a3852b5f792d5a9a284df919b1eac"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/update-a-block.json",
+        "sha256": "053929af2dd3f7f336bcc171c03ed55360c02d648a91d48f2bc212f4552542d1"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/update-a-data-source.json",
+        "sha256": "a150ec1be52d677a98a6fa433738f540bfc075d87e43288aa96f9079b8bf60b2"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/update-a-database.json",
+        "sha256": "a01d209d2142f54599a9e78e6918c761e808a60405140fec58778a99957b0e3f"
+      },
+      {
+        "kind": "reference_context",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/reference_context/update-page-markdown.json",
+        "sha256": "f3afa9678b6d23bca41103931cf7cafdf39a239e8f0270b975428fdc6539aebc"
+      },
+      {
+        "kind": "supplemental",
+        "path": "/home/home/p/g/n/notion_sdk/priv/upstream/supplemental/notion_sdk.root.yaml",
+        "sha256": "5faa79970a15cc1dfda6868446a1a567cefe118eb5697a6db021ee2f5de1c492"
+      }
+    ]
+  },
+  "generated_files": [
+    "lib/notion_sdk/generated/blocks.ex",
+    "lib/notion_sdk/generated/client.ex",
+    "lib/notion_sdk/generated/comments.ex",
+    "lib/notion_sdk/generated/data_sources.ex",
+    "lib/notion_sdk/generated/databases.ex",
+    "lib/notion_sdk/generated/file_uploads.ex",
+    "lib/notion_sdk/generated/o_auth.ex",
+    "lib/notion_sdk/generated/pages.ex",
+    "lib/notion_sdk/generated/schemas/annotation_request.ex",
+    "lib/notion_sdk/generated/schemas/annotation_response.ex",
+    "lib/notion_sdk/generated/schemas/array.ex",
+    "lib/notion_sdk/generated/schemas/audio.ex",
+    "lib/notion_sdk/generated/schemas/audio_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/block_id.ex",
+    "lib/notion_sdk/generated/schemas/block_id_comment_parent_response.ex",
+    "lib/notion_sdk/generated/schemas/block_id_parent_for_block_based_object_response.ex",
+    "lib/notion_sdk/generated/schemas/bookmark.ex",
+    "lib/notion_sdk/generated/schemas/bookmark_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/boolean_formula_property_response.ex",
+    "lib/notion_sdk/generated/schemas/breadcrumb.ex",
+    "lib/notion_sdk/generated/schemas/breadcrumb_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/bulleted_list_item.ex",
+    "lib/notion_sdk/generated/schemas/bulleted_list_item_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/bulleted_list_item_bulleted_list_item.ex",
+    "lib/notion_sdk/generated/schemas/button_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/callout.ex",
+    "lib/notion_sdk/generated/schemas/callout_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/callout_block_object_response_callout.ex",
+    "lib/notion_sdk/generated/schemas/callout_callout.ex",
+    "lib/notion_sdk/generated/schemas/checkbox.ex",
+    "lib/notion_sdk/generated/schemas/checkbox_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/child_database_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/child_page_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/code.ex",
+    "lib/notion_sdk/generated/schemas/code_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/code_block_object_response_code.ex",
+    "lib/notion_sdk/generated/schemas/code_code.ex",
+    "lib/notion_sdk/generated/schemas/column.ex",
+    "lib/notion_sdk/generated/schemas/column_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/column_block_with_children_request.ex",
+    "lib/notion_sdk/generated/schemas/column_list.ex",
+    "lib/notion_sdk/generated/schemas/column_list_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/column_list_request.ex",
+    "lib/notion_sdk/generated/schemas/column_response.ex",
+    "lib/notion_sdk/generated/schemas/column_with_children_request.ex",
+    "lib/notion_sdk/generated/schemas/comment_id.ex",
+    "lib/notion_sdk/generated/schemas/comment_object_response.ex",
+    "lib/notion_sdk/generated/schemas/comment_object_response_attachments.ex",
+    "lib/notion_sdk/generated/schemas/comment_object_response_display_name.ex",
+    "lib/notion_sdk/generated/schemas/content_with_expression_request.ex",
+    "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_and_list_response.ex",
+    "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_request.ex",
+    "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_response.ex",
+    "lib/notion_sdk/generated/schemas/content_with_rich_text_request.ex",
+    "lib/notion_sdk/generated/schemas/content_with_single_level_of_children_request.ex",
+    "lib/notion_sdk/generated/schemas/content_with_table_response.ex",
+    "lib/notion_sdk/generated/schemas/content_with_table_row_request.ex",
+    "lib/notion_sdk/generated/schemas/content_with_table_row_response.ex",
+    "lib/notion_sdk/generated/schemas/created_by.ex",
+    "lib/notion_sdk/generated/schemas/created_by_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/created_time.ex",
+    "lib/notion_sdk/generated/schemas/created_time_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/custom.ex",
+    "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_request.ex",
+    "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_request_custom_emoji.ex",
+    "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_response.ex",
+    "lib/notion_sdk/generated/schemas/custom_emoji_response.ex",
+    "lib/notion_sdk/generated/schemas/data_source_id.ex",
+    "lib/notion_sdk/generated/schemas/data_source_object_response.ex",
+    "lib/notion_sdk/generated/schemas/data_source_parent_response.ex",
+    "lib/notion_sdk/generated/schemas/data_source_reference_response.ex",
+    "lib/notion_sdk/generated/schemas/database_id.ex",
+    "lib/notion_sdk/generated/schemas/database_object_response.ex",
+    "lib/notion_sdk/generated/schemas/database_parent_response.ex",
+    "lib/notion_sdk/generated/schemas/date.ex",
+    "lib/notion_sdk/generated/schemas/date_formula_property_response.ex",
+    "lib/notion_sdk/generated/schemas/date_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/date_response.ex",
+    "lib/notion_sdk/generated/schemas/divider.ex",
+    "lib/notion_sdk/generated/schemas/divider_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/email.ex",
+    "lib/notion_sdk/generated/schemas/email_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/embed.ex",
+    "lib/notion_sdk/generated/schemas/embed_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/emoji_page_icon_request.ex",
+    "lib/notion_sdk/generated/schemas/emoji_page_icon_response.ex",
+    "lib/notion_sdk/generated/schemas/empty_object.ex",
+    "lib/notion_sdk/generated/schemas/equation.ex",
+    "lib/notion_sdk/generated/schemas/equation_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/error_api400.ex",
+    "lib/notion_sdk/generated/schemas/error_api401.ex",
+    "lib/notion_sdk/generated/schemas/error_api403.ex",
+    "lib/notion_sdk/generated/schemas/error_api404.ex",
+    "lib/notion_sdk/generated/schemas/error_api409.ex",
+    "lib/notion_sdk/generated/schemas/error_api429.ex",
+    "lib/notion_sdk/generated/schemas/error_api500.ex",
+    "lib/notion_sdk/generated/schemas/error_api503.ex",
+    "lib/notion_sdk/generated/schemas/error_oauth400.ex",
+    "lib/notion_sdk/generated/schemas/error_oauth401.ex",
+    "lib/notion_sdk/generated/schemas/error_oauth403.ex",
+    "lib/notion_sdk/generated/schemas/error_oauth500.ex",
+    "lib/notion_sdk/generated/schemas/expression_object_response.ex",
+    "lib/notion_sdk/generated/schemas/external.ex",
+    "lib/notion_sdk/generated/schemas/external_file_request.ex",
+    "lib/notion_sdk/generated/schemas/external_media_content_with_file_and_caption_response.ex",
+    "lib/notion_sdk/generated/schemas/external_media_content_with_file_and_caption_response_external.ex",
+    "lib/notion_sdk/generated/schemas/external_media_content_with_file_name_and_caption_response.ex",
+    "lib/notion_sdk/generated/schemas/external_media_content_with_file_name_and_caption_response_external.ex",
+    "lib/notion_sdk/generated/schemas/external_page_cover_request.ex",
+    "lib/notion_sdk/generated/schemas/external_page_cover_request_external.ex",
+    "lib/notion_sdk/generated/schemas/external_page_cover_response.ex",
+    "lib/notion_sdk/generated/schemas/external_page_cover_response_external.ex",
+    "lib/notion_sdk/generated/schemas/external_page_icon_request.ex",
+    "lib/notion_sdk/generated/schemas/external_page_icon_request_external.ex",
+    "lib/notion_sdk/generated/schemas/external_page_icon_response.ex",
+    "lib/notion_sdk/generated/schemas/external_page_icon_response_external.ex",
+    "lib/notion_sdk/generated/schemas/file.ex",
+    "lib/notion_sdk/generated/schemas/file_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/file_media_content_with_file_and_caption_response.ex",
+    "lib/notion_sdk/generated/schemas/file_media_content_with_file_name_and_caption_response.ex",
+    "lib/notion_sdk/generated/schemas/file_page_cover_response.ex",
+    "lib/notion_sdk/generated/schemas/file_page_icon_response.ex",
+    "lib/notion_sdk/generated/schemas/file_upload.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_id_request.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_object_response.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_object_response_created_by.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_object_response_file_import_result.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_object_response_number_of_parts.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_page_cover_request.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_page_cover_request_file_upload.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_page_icon_request.ex",
+    "lib/notion_sdk/generated/schemas/file_upload_page_icon_request_file_upload.ex",
+    "lib/notion_sdk/generated/schemas/files.ex",
+    "lib/notion_sdk/generated/schemas/files_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/formula.ex",
+    "lib/notion_sdk/generated/schemas/formula_formula.ex",
+    "lib/notion_sdk/generated/schemas/formula_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/header_content_with_rich_text_and_color_request.ex",
+    "lib/notion_sdk/generated/schemas/header_content_with_rich_text_and_color_response.ex",
+    "lib/notion_sdk/generated/schemas/header_content_with_single_level_of_children_request.ex",
+    "lib/notion_sdk/generated/schemas/heading1.ex",
+    "lib/notion_sdk/generated/schemas/heading1_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/heading1_heading1.ex",
+    "lib/notion_sdk/generated/schemas/heading2.ex",
+    "lib/notion_sdk/generated/schemas/heading2_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/heading2_heading2.ex",
+    "lib/notion_sdk/generated/schemas/heading3.ex",
+    "lib/notion_sdk/generated/schemas/heading3_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/heading3_heading3.ex",
+    "lib/notion_sdk/generated/schemas/image.ex",
+    "lib/notion_sdk/generated/schemas/image_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/incomplete.ex",
+    "lib/notion_sdk/generated/schemas/initial_data_source_request.ex",
+    "lib/notion_sdk/generated/schemas/integration.ex",
+    "lib/notion_sdk/generated/schemas/internal_file_response.ex",
+    "lib/notion_sdk/generated/schemas/internal_or_external_file_with_name_response.ex",
+    "lib/notion_sdk/generated/schemas/last_edited_by.ex",
+    "lib/notion_sdk/generated/schemas/last_edited_by_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/last_edited_time.ex",
+    "lib/notion_sdk/generated/schemas/last_edited_time_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/link_preview_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/link_to_page.ex",
+    "lib/notion_sdk/generated/schemas/link_to_page_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/media_content_with_url_and_caption_request.ex",
+    "lib/notion_sdk/generated/schemas/media_content_with_url_and_caption_response.ex",
+    "lib/notion_sdk/generated/schemas/media_content_with_url_response.ex",
+    "lib/notion_sdk/generated/schemas/meeting_notes_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/multi_select.ex",
+    "lib/notion_sdk/generated/schemas/multi_select_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/notion_sdk.ex",
+    "lib/notion_sdk/generated/schemas/number.ex",
+    "lib/notion_sdk/generated/schemas/number_formula_property_response.ex",
+    "lib/notion_sdk/generated/schemas/number_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/numbered_list_item.ex",
+    "lib/notion_sdk/generated/schemas/numbered_list_item_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/numbered_list_item_numbered_list_item.ex",
+    "lib/notion_sdk/generated/schemas/page_id.ex",
+    "lib/notion_sdk/generated/schemas/page_id_comment_parent_response.ex",
+    "lib/notion_sdk/generated/schemas/page_id_parent_for_block_based_object_response.ex",
+    "lib/notion_sdk/generated/schemas/page_markdown_response.ex",
+    "lib/notion_sdk/generated/schemas/page_object_response.ex",
+    "lib/notion_sdk/generated/schemas/paragraph.ex",
+    "lib/notion_sdk/generated/schemas/paragraph_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/paragraph_paragraph.ex",
+    "lib/notion_sdk/generated/schemas/parent_of_data_source_request.ex",
+    "lib/notion_sdk/generated/schemas/partial_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/partial_comment_object_response.ex",
+    "lib/notion_sdk/generated/schemas/partial_data_source_object_response.ex",
+    "lib/notion_sdk/generated/schemas/partial_database_object_response.ex",
+    "lib/notion_sdk/generated/schemas/partial_page_object_response.ex",
+    "lib/notion_sdk/generated/schemas/partial_select_response.ex",
+    "lib/notion_sdk/generated/schemas/partial_user_object_response.ex",
+    "lib/notion_sdk/generated/schemas/pdf.ex",
+    "lib/notion_sdk/generated/schemas/pdf_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/people.ex",
+    "lib/notion_sdk/generated/schemas/people_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/person.ex",
+    "lib/notion_sdk/generated/schemas/phone_number.ex",
+    "lib/notion_sdk/generated/schemas/phone_number_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/place_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/place_property_item_object_response_place.ex",
+    "lib/notion_sdk/generated/schemas/property_item_property_item_list_response.ex",
+    "lib/notion_sdk/generated/schemas/quote.ex",
+    "lib/notion_sdk/generated/schemas/quote_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/quote_quote.ex",
+    "lib/notion_sdk/generated/schemas/relation.ex",
+    "lib/notion_sdk/generated/schemas/relation_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/relation_property_item_object_response_relation.ex",
+    "lib/notion_sdk/generated/schemas/rich_text.ex",
+    "lib/notion_sdk/generated/schemas/rich_text_item_request.ex",
+    "lib/notion_sdk/generated/schemas/rich_text_item_response.ex",
+    "lib/notion_sdk/generated/schemas/rich_text_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/rollup.ex",
+    "lib/notion_sdk/generated/schemas/rollup_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/rollup_rollup.ex",
+    "lib/notion_sdk/generated/schemas/select.ex",
+    "lib/notion_sdk/generated/schemas/select_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/status.ex",
+    "lib/notion_sdk/generated/schemas/status_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/string_formula_property_response.ex",
+    "lib/notion_sdk/generated/schemas/synced_block.ex",
+    "lib/notion_sdk/generated/schemas/synced_block_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/synced_block_block_object_response_synced_block.ex",
+    "lib/notion_sdk/generated/schemas/synced_block_synced_block.ex",
+    "lib/notion_sdk/generated/schemas/table.ex",
+    "lib/notion_sdk/generated/schemas/table_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/table_of_contents.ex",
+    "lib/notion_sdk/generated/schemas/table_of_contents_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/table_of_contents_block_object_response_table_of_contents.ex",
+    "lib/notion_sdk/generated/schemas/table_of_contents_table_of_contents.ex",
+    "lib/notion_sdk/generated/schemas/table_request_with_table_row_children.ex",
+    "lib/notion_sdk/generated/schemas/table_row.ex",
+    "lib/notion_sdk/generated/schemas/table_row_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/table_row_request.ex",
+    "lib/notion_sdk/generated/schemas/template.ex",
+    "lib/notion_sdk/generated/schemas/template_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/template_block_object_response_template.ex",
+    "lib/notion_sdk/generated/schemas/template_template.ex",
+    "lib/notion_sdk/generated/schemas/timestamp_created_time_filter.ex",
+    "lib/notion_sdk/generated/schemas/timestamp_last_edited_time_filter.ex",
+    "lib/notion_sdk/generated/schemas/title.ex",
+    "lib/notion_sdk/generated/schemas/title_object_response.ex",
+    "lib/notion_sdk/generated/schemas/title_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/to_do.ex",
+    "lib/notion_sdk/generated/schemas/to_do_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/to_do_block_object_response_to_do.ex",
+    "lib/notion_sdk/generated/schemas/to_do_to_do.ex",
+    "lib/notion_sdk/generated/schemas/toggle.ex",
+    "lib/notion_sdk/generated/schemas/toggle_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/toggle_toggle.ex",
+    "lib/notion_sdk/generated/schemas/transcription_block_response.ex",
+    "lib/notion_sdk/generated/schemas/transcription_calendar_event_response.ex",
+    "lib/notion_sdk/generated/schemas/transcription_children_response.ex",
+    "lib/notion_sdk/generated/schemas/transcription_recording_response.ex",
+    "lib/notion_sdk/generated/schemas/unique_id.ex",
+    "lib/notion_sdk/generated/schemas/unique_id_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/unique_id_property_item_object_response_unique_id.ex",
+    "lib/notion_sdk/generated/schemas/unsupported.ex",
+    "lib/notion_sdk/generated/schemas/unsupported_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/unsupported_block_object_response_unsupported.ex",
+    "lib/notion_sdk/generated/schemas/update_media_content_with_file_and_caption_request.ex",
+    "lib/notion_sdk/generated/schemas/update_media_content_with_file_name_and_caption_request.ex",
+    "lib/notion_sdk/generated/schemas/update_media_content_with_url_and_caption_request.ex",
+    "lib/notion_sdk/generated/schemas/url.ex",
+    "lib/notion_sdk/generated/schemas/url_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/user.ex",
+    "lib/notion_sdk/generated/schemas/user_object_response.ex",
+    "lib/notion_sdk/generated/schemas/verification.ex",
+    "lib/notion_sdk/generated/schemas/verification_property_item_object_response.ex",
+    "lib/notion_sdk/generated/schemas/verification_property_response.ex",
+    "lib/notion_sdk/generated/schemas/verification_property_status_filter.ex",
+    "lib/notion_sdk/generated/schemas/verification_property_unverified_response.ex",
+    "lib/notion_sdk/generated/schemas/video.ex",
+    "lib/notion_sdk/generated/schemas/video_block_object_response.ex",
+    "lib/notion_sdk/generated/schemas/workspace.ex",
+    "lib/notion_sdk/generated/schemas/workspace_parent_for_block_based_object_response.ex",
+    "lib/notion_sdk/generated/search.ex",
+    "lib/notion_sdk/generated/users.ex"
+  ],
+  "operation_count": 35,
+  "pagination_policy_count": 7,
+  "provider": {
+    "base_module": "NotionSDK",
+    "client_module": "NotionSDK.Client",
+    "id": "notion_sdk",
+    "package_app": "notion_sdk",
+    "package_name": "notion_sdk",
+    "source_strategy": "openapi_plus_source_plugin"
+  },
+  "schema_count": 338
+}
