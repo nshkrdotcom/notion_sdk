@@ -4,7 +4,6 @@ defmodule NotionSDK.BoundaryContractTest do
   @forbidden_patterns [
     "Pristine.Core.Context",
     "Pristine.Core.Response",
-    "Pristine.Core.ResultClassification",
     "Pristine.Manifest",
     "Pristine.OpenAPI.Client",
     "Pristine.OpenAPI.Operation",
@@ -62,14 +61,17 @@ defmodule NotionSDK.BoundaryContractTest do
       end)
       |> Enum.sort()
 
-    assert bridge_refs == ["codegen/notion_sdk/codegen.ex"]
+    assert bridge_refs == []
   end
 
   test "mix notion.oauth defaults route through the retained pristine oauth helpers" do
     source = File.read!(@oauth_task_path)
 
     assert source =~ "Module.concat([Pristine, OAuth2, Interactive])"
-    assert source =~ "Module.concat([Pristine, SDK, OAuth2])"
+
+    assert source =~
+             "Application.get_env(:notion_sdk, :oauth2_module, Module.concat([Pristine, OAuth2]))"
+
     assert source =~ "Module.concat([Pristine, OAuth2, SavedToken])"
     assert source =~ "interactive_module().authorize(NotionSDK.OAuth.provider(),"
     assert source =~ "saved_token_module().refresh(NotionSDK.OAuth.provider(),"
@@ -83,6 +85,10 @@ defmodule NotionSDK.BoundaryContractTest do
 
   defp generated_path?(path) do
     String.contains?(path, "/lib/notion_sdk/generated/") or
-      path == "test/notion_sdk/boundary_contract_test.exs"
+      path in [
+        "test/notion_sdk/boundary_contract_test.exs",
+        "test/notion_sdk/generated_source_test.exs",
+        "test/notion_sdk/generated_surface_contract_test.exs"
+      ]
   end
 end

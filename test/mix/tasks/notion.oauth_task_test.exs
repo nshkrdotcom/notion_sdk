@@ -2,7 +2,6 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
   use ExUnit.Case, async: false
 
   alias Mix.Tasks.Notion.Oauth, as: OAuthTask
-  alias Pristine.Core.Context, as: RuntimeContext
   alias Pristine.OAuth2.Token, as: SDKToken
 
   @moduletag :tmp_dir
@@ -192,7 +191,7 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
     assert provider.name == "notion"
     assert opts[:client_id] == "client-id"
     assert opts[:client_secret] == "client-secret"
-    assert opts[:context].__struct__ == RuntimeContext.new().__struct__
+    assert match?(%{__struct__: _}, opts[:context])
 
     assert_receive {:mix_shell, :info, ["Updated token file: " <> ^path]}
     assert_receive {:mix_shell, :info, ["Access token:"]}

@@ -35,6 +35,6 @@ mix notion.refresh --snapshots-only
 - snapshot metadata diffs should show auditable provenance fields, not just file lists
 - reference-context diffs should explain any generated doc or docs-inventory changes
 - generated code diffs should trace back to either upstream snapshot changes or supplemental spec changes
-- bridge artifact diffs should remain deterministic and reviewable
+- generated artifact diffs should remain deterministic and reviewable
 - `docs_inventory.json` diffs should line up with `reference_context` or generated-source changes
 - OAuth, markdown, file upload, retry, helper, and error-mapping parity tests should stay green after regeneration

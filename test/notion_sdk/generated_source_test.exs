@@ -2,6 +2,7 @@ defmodule NotionSDK.GeneratedSourceTest do
   use ExUnit.Case, async: true
 
   @generated_dir Path.expand("../../lib/notion_sdk/generated", __DIR__)
+  @runtime_schema_source Path.join(@generated_dir, "runtime_schema.ex")
   @oauth_source Path.join(@generated_dir, "o_auth.ex")
   @oauth_helper_source Path.expand("../../lib/notion_sdk/oauth.ex", __DIR__)
   @pages_source Path.join(@generated_dir, "pages.ex")
@@ -22,15 +23,33 @@ defmodule NotionSDK.GeneratedSourceTest do
                                )
   @todo_schema_source Path.join(@generated_dir, "schemas/to_do_to_do.ex")
 
-  test "generated modules use the shared Pristine runtime schema helpers" do
+  test "generated modules use provider-local runtime schema helpers" do
     sources =
       @generated_dir
       |> Path.join("**/*.ex")
       |> Path.wildcard()
       |> Enum.map(&File.read!/1)
 
-    assert Enum.any?(sources, &String.contains?(&1, "Pristine.Runtime.Schema.build_schema"))
-    assert Enum.any?(sources, &String.contains?(&1, "Pristine.Runtime.Schema.decode_module_type"))
+    runtime_schema_source = File.read!(@runtime_schema_source)
+
+    assert runtime_schema_source =~ "defmodule NotionSDK.Generated.RuntimeSchema do"
+
+    assert Enum.any?(
+             sources,
+             &String.contains?(&1, "alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema")
+           )
+
+    assert Enum.any?(
+             sources,
+             &String.contains?(&1, "RuntimeSchema.build_schema")
+           )
+
+    assert Enum.any?(
+             sources,
+             &String.contains?(&1, "RuntimeSchema.decode_module_type")
+           )
+
+    refute Enum.any?(sources, &String.contains?(&1, "Pristine.Runtime.Schema"))
     refute Enum.any?(sources, &String.contains?(&1, "NotionSDK.GeneratedRuntime"))
   end
 
@@ -124,7 +143,8 @@ defmodule NotionSDK.GeneratedSourceTest do
     pages_source = File.read!(@pages_source)
 
     assert users_source =~ "Pristine.Operation.new("
-    assert users_source =~ "Pristine.execute(runtime_client, operation, opts)"
+    assert users_source =~ "execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)"
+    assert users_source =~ "Pristine.execute(runtime_client, operation, execute_opts)"
     assert users_source =~ "runtime_client = NotionSDK.Client.pristine_client(client)"
     assert pages_source =~ "path_template: \"/v1/pages/{page_id}\""
     refute users_source =~ "NotionSDK.Client.execute_generated_request(client, %{"

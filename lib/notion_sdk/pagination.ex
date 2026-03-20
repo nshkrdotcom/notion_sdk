@@ -3,7 +3,11 @@ defmodule NotionSDK.Pagination do
   Cursor-pagination helpers for Notion list APIs.
   """
 
-  @type data_source_template :: NotionSDK.DataSources.list_templates_200_json_resp_templates()
+  @type data_source_template :: %{
+          required(:id) => String.t(),
+          required(:is_default) => boolean(),
+          required(:name) => String.t()
+        }
   @type reduce_step(acc) :: {:cont, acc} | {:halt, acc}
 
   @spec collect_paginated_api(
@@ -142,14 +146,29 @@ defmodule NotionSDK.Pagination do
 
   defp fetch_data_source_template_page(client, params) do
     case NotionSDK.DataSources.list_templates(client, params) do
-      {:ok, %{next_cursor: next_cursor, templates: templates}}
-      when is_binary(next_cursor) ->
-        {:ok, templates, put_cursor(params, next_cursor)}
-
-      {:ok, %{templates: templates}} ->
-        {:ok, templates, :done}
+      {:ok, page} ->
+        normalize_template_page(page, params)
 
       {:error, _error} = error ->
+        error
+    end
+  end
+
+  defp normalize_template_page(%{next_cursor: next_cursor, templates: templates}, params)
+       when is_binary(next_cursor) do
+    {:ok, templates, put_cursor(params, next_cursor)}
+  end
+
+  defp normalize_template_page(%{templates: templates}, _params) do
+    {:ok, templates, :done}
+  end
+
+  defp normalize_template_page(%{"templates" => _templates} = page, params) do
+    case NotionSDK.DataSources.decode(page, :list_templates_200_json_resp) do
+      {:ok, decoded_page} ->
+        normalize_template_page(decoded_page, params)
+
+      {:error, _reason} = error ->
         error
     end
   end

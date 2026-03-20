@@ -3,6 +3,8 @@ defmodule NotionSDK.Incomplete do
   Generated Notion Sdk type for incomplete.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:function, :incomplete, :type]
   defstruct [:function, :incomplete, :type]
 
@@ -134,7 +136,7 @@ defmodule NotionSDK.Incomplete do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -142,6 +144,6 @@ defmodule NotionSDK.Incomplete do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Incomplete, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

@@ -3,6 +3,8 @@ defmodule NotionSDK.Search do
   Generated Notion Sdk operations for search.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @search_partition_spec %{
     path: [],
     auth: {"auth", :auth},
@@ -21,19 +23,69 @@ defmodule NotionSDK.Search do
     form_data: %{mode: :none}
   }
 
-  @doc "Search by title\n## Source Context\nSearches all parent or child pages and data_sources that have been shared with an integration.\n\n### Warnings\n\nTo search a specific data\\_source — not all sources shared with the integration — use the [Query a data\\_source](https://developers.notion.com/reference/query-a-data-source) endpoint instead.\n\n### Notes\n\nThe Search endpoint supports pagination. To learn more about working with [paginated](https://developers.notion.com/reference/intro#pagination) responses, see the pagination section of the Notion API Introduction.\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [paginated](https://developers.notion.com/reference/intro#pagination)\n  * [Query a data\\_source](https://developers.notion.com/reference/query-a-data-source)\n  * [Search by title](https://developers.notion.com/reference/post-search)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.search({\n  query: \"meeting notes\",\n  filter: {\n    property: \"object\",\n    value: \"page\"\n  },\n  sort: {\n    direction: \"descending\",\n    timestamp: \"last_edited_time\"\n  }\n})\n```\n"
+  @doc ~S"""
+       Search by title
+       ## Source Context
+       Searches all parent or child pages and data_sources that have been shared with an integration.
+
+       ### Warnings
+
+       To search a specific data\_source — not all sources shared with the integration — use the [Query a data\_source](https://developers.notion.com/reference/query-a-data-source) endpoint instead.
+
+       ### Notes
+
+       The Search endpoint supports pagination. To learn more about working with [paginated](https://developers.notion.com/reference/intro#pagination) responses, see the pagination section of the Notion API Introduction.
+
+       ### Errors
+
+       Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.
+
+       ### Resources
+
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [paginated](https://developers.notion.com/reference/intro#pagination)
+       * [Query a data\_source](https://developers.notion.com/reference/query-a-data-source)
+       * [Search by title](https://developers.notion.com/reference/post-search)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.search({
+       query: "meeting notes",
+       filter: {
+         property: "object",
+         value: "page"
+       },
+       sort: {
+         direction: "descending",
+         timestamp: "last_edited_time"
+       }
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec search(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def search(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_search_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   @spec stream_search(term(), map(), keyword()) :: Enumerable.t()
   def stream_search(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
 
     Stream.resource(
       fn -> build_search_operation(params) end,
@@ -42,7 +94,9 @@ defmodule NotionSDK.Search do
           {:halt, nil}
 
         %Pristine.Operation{} = operation ->
-          case Pristine.execute(runtime_client, operation, opts) do
+          operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+          case Pristine.execute(runtime_client, operation, execute_opts) do
             {:ok, response} ->
               items = List.wrap(Pristine.Operation.items(operation, response))
               {items, Pristine.Operation.next_page(operation, response)}
@@ -409,7 +463,7 @@ defmodule NotionSDK.Search do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :search_200_json_resp) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -417,6 +471,6 @@ defmodule NotionSDK.Search do
   def decode(data, type \\ :search_200_json_resp)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Search, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

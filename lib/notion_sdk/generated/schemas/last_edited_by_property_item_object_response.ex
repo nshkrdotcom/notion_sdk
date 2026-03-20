@@ -3,6 +3,8 @@ defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
   Generated Notion Sdk type for last edited by property item object response.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:id, :last_edited_by, :object, :type]
   defstruct [:id, :last_edited_by, :object, :type]
 
@@ -101,7 +103,7 @@ defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -109,10 +111,6 @@ defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.LastEditedByPropertyItemObjectResponse,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

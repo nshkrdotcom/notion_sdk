@@ -3,6 +3,8 @@ defmodule NotionSDK.ContentWithRichTextAndColorAndListResponse do
   Generated Notion Sdk type for content with rich text and color and list response.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:color, :rich_text]
   defstruct [:color, :list_format, :list_start_index, :rich_text]
 
@@ -144,7 +146,7 @@ defmodule NotionSDK.ContentWithRichTextAndColorAndListResponse do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -152,10 +154,6 @@ defmodule NotionSDK.ContentWithRichTextAndColorAndListResponse do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.ContentWithRichTextAndColorAndListResponse,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

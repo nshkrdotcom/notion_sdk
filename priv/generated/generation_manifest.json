@@ -11,7 +11,7 @@
       "compiler": "pristine_codegen",
       "provider": "notion_sdk",
       "source_strategy": "openapi_plus_source_plugin",
-      "version": "dev"
+      "version": "0.1.0"
     },
     "sources": [
       {
@@ -380,6 +380,7 @@
     "lib/notion_sdk/generated/file_uploads.ex",
     "lib/notion_sdk/generated/o_auth.ex",
     "lib/notion_sdk/generated/pages.ex",
+    "lib/notion_sdk/generated/runtime_schema.ex",
     "lib/notion_sdk/generated/schemas/annotation_request.ex",
     "lib/notion_sdk/generated/schemas/annotation_response.ex",
     "lib/notion_sdk/generated/schemas/array.ex",

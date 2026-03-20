@@ -3,6 +3,8 @@ defmodule NotionSDK.UniqueId do
   Generated Notion Sdk type for unique id.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:property, :unique_id]
   defstruct [:property, :type, :unique_id]
 
@@ -110,7 +112,7 @@ defmodule NotionSDK.UniqueId do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -118,6 +120,6 @@ defmodule NotionSDK.UniqueId do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.UniqueId, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

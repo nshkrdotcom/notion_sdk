@@ -3,6 +3,8 @@ defmodule NotionSDK.TableOfContentsTableOfContents do
   Generated Notion Sdk type for table of contents table of contents.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys []
   defstruct [:color]
 
@@ -93,7 +95,7 @@ defmodule NotionSDK.TableOfContentsTableOfContents do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -101,10 +103,6 @@ defmodule NotionSDK.TableOfContentsTableOfContents do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.TableOfContentsTableOfContents,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

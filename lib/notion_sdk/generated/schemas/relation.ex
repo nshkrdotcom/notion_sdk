@@ -3,6 +3,8 @@ defmodule NotionSDK.Relation do
   Generated Notion Sdk type for relation.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:id, :next_url, :relation, :type]
   defstruct [:id, :next_url, :relation, :type]
 
@@ -97,7 +99,7 @@ defmodule NotionSDK.Relation do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -105,6 +107,6 @@ defmodule NotionSDK.Relation do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Relation, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

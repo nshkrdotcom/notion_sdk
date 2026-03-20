@@ -42,6 +42,11 @@
         "path": "lib/notion_sdk/generated/pages.ex"
       },
       {
+        "id": "lib_notion_sdk_generated_runtime_schema",
+        "kind": "code",
+        "path": "lib/notion_sdk/generated/runtime_schema.ex"
+      },
+      {
         "id": "lib_notion_sdk_generated_schemas_annotation_request",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/annotation_request.ex"
@@ -4460,7 +4465,7 @@
       "compiler": "pristine_codegen",
       "provider": "notion_sdk",
       "source_strategy": "openapi_plus_source_plugin",
-      "version": "dev"
+      "version": "0.1.0"
     },
     "sources": [
       {

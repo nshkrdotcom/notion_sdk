@@ -3,6 +3,8 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
   Generated Notion Sdk type for place property item object response place.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:lat, :lon]
   defstruct [:address, :aws_place_id, :google_place_id, :lat, :lon, :name]
 
@@ -131,7 +133,7 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -139,10 +141,6 @@ defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.PlacePropertyItemObjectResponsePlace,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

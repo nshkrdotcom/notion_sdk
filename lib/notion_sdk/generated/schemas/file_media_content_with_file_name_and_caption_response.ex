@@ -3,6 +3,8 @@ defmodule NotionSDK.FileMediaContentWithFileNameAndCaptionResponse do
   Generated Notion Sdk type for file media content with file name and caption response.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:caption, :file, :name, :type]
   defstruct [:caption, :file, :name, :type]
 
@@ -97,7 +99,7 @@ defmodule NotionSDK.FileMediaContentWithFileNameAndCaptionResponse do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -105,10 +107,6 @@ defmodule NotionSDK.FileMediaContentWithFileNameAndCaptionResponse do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.FileMediaContentWithFileNameAndCaptionResponse,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

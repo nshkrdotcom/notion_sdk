@@ -21,7 +21,6 @@ public runtime surface:
 - `Pristine.execute/3`
 - `Pristine.stream/3`
 - `Pristine.Client.foundation/1`
-- `Pristine.Profiles.Foundation`
 - `Pristine.OAuth2`
 
 It does not treat broad `Pristine.Core.*` internals as

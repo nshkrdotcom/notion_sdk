@@ -3,6 +3,8 @@ defmodule NotionSDK.Blocks do
   Generated Notion Sdk operations for blocks.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @append_children_partition_spec %{
     path: [{"block_id", :block_id}],
     auth: {"auth", :auth},
@@ -12,13 +14,99 @@ defmodule NotionSDK.Blocks do
     form_data: %{mode: :none}
   }
 
-  @doc "Append block children\n## Source Context\nCreates and appends new children blocks to the parent `block_id` specified. Blocks can be parented by other blocks, pages, or databases.\n\n### Warnings\n\nDeprecated parameter\n\nThe `after` parameter is deprecated. Use the `position` parameter instead, which provides more flexibility including inserting at the start of the children list.\nIf you're currently using `after`, migrate to `position` with type `after_block`:\nYou cannot specify both `after` and `position` in the same request.\n\n  * **Before:** `{ \"children\": [...], \"after\": \"<block_id>\" }`\n  * **After:** `{ \"children\": [...], \"position\": { \"type\": \"after_block\", \"after_block\": { \"id\": \"<block_id>\" } } }`\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have insert content capabilities. Attempting to call this API without insert content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Controlling insert position\n\nBy default, blocks are appended to the end of the parent block's children. Use the `position` parameter to insert blocks at a specific location:\n| Position type                                                      | Description                                                   |\n| ------------------------------------------------------------------ | ------------------------------------------------------------- |\n| `{ \"type\": \"end\" }`                                                | Insert at the end of the parent's children (default behavior) |\n| `{ \"type\": \"start\" }`                                              | Insert at the beginning of the parent's children              |\n| `{ \"type\": \"after_block\", \"after_block\": { \"id\": \"<block_id>\" } }` | Insert after the specified block                              |\n<CodeGroup>\n```json Insert at start theme={null}\n{\n\"children\": [/* blocks */],\n\"position\": { \"type\": \"start\" }\n}\n```\n```json Insert after specific block theme={null}\n{\n\"children\": [/* blocks */],\n\"position\": {\n\"type\": \"after_block\",\n\"after_block\": { \"id\": \"12345678-1234-1234-1234-123456789abc\" }\n}\n}\n```\n</CodeGroup>\n\n### Errors\n\nReturns a 404 HTTP response if the block specified by `id` doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*\n\n### Resources\n\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Append block children](https://developers.notion.com/reference/patch-block-children)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.children.append({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\",\n  children: [\n    {\n      type: \"paragraph\",\n      paragraph: {\n        rich_text: [{ text: { content: \"Hello, world!\" } }]\n      }\n    }\n  ]\n})\n```\n"
+  @doc ~S"""
+       Append block children
+       ## Source Context
+       Creates and appends new children blocks to the parent `block_id` specified. Blocks can be parented by other blocks, pages, or databases.
+
+       ### Warnings
+
+       Deprecated parameter
+
+       The `after` parameter is deprecated. Use the `position` parameter instead, which provides more flexibility including inserting at the start of the children list.
+       If you're currently using `after`, migrate to `position` with type `after_block`:
+       You cannot specify both `after` and `position` in the same request.
+
+       * **Before:** `{ "children": [...], "after": "<block_id>" }`
+       * **After:** `{ "children": [...], "position": { "type": "after_block", "after_block": { "id": "<block_id>" } } }`
+
+       ### Notes
+
+       Integration capabilities
+
+       This endpoint requires an integration to have insert content capabilities. Attempting to call this API without insert content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).
+
+       ### Controlling insert position
+
+       By default, blocks are appended to the end of the parent block's children. Use the `position` parameter to insert blocks at a specific location:
+       | Position type                                                      | Description                                                   |
+       | ------------------------------------------------------------------ | ------------------------------------------------------------- |
+       | `{ "type": "end" }`                                                | Insert at the end of the parent's children (default behavior) |
+       | `{ "type": "start" }`                                              | Insert at the beginning of the parent's children              |
+       | `{ "type": "after_block", "after_block": { "id": "<block_id>" } }` | Insert after the specified block                              |
+       <CodeGroup>
+       ```json Insert at start theme={null}
+       {
+       "children": [/* blocks */],
+       "position": { "type": "start" }
+       }
+       ```
+       ```json Insert after specific block theme={null}
+       {
+       "children": [/* blocks */],
+       "position": {
+       "type": "after_block",
+       "after_block": { "id": "12345678-1234-1234-1234-123456789abc" }
+       }
+       }
+       ```
+       </CodeGroup>
+
+       ### Errors
+
+       Returns a 404 HTTP response if the block specified by `id` doesn't exist, or if the integration doesn't have access to the block.
+       Returns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).
+       *Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*
+
+       ### Resources
+
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [request limits](https://developers.notion.com/reference/request-limits)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [Append block children](https://developers.notion.com/reference/patch-block-children)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.blocks.children.append({
+       block_id: "c02fc1d3-db8b-45c5-a222-27595b15aea7",
+       children: [
+         {
+           type: "paragraph",
+           paragraph: {
+             rich_text: [{ text: { content: "Hello, world!" } }]
+           }
+         }
+       ]
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec append_children(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def append_children(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_append_children_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_append_children_operation(params) when is_map(params) do
@@ -71,13 +159,52 @@ defmodule NotionSDK.Blocks do
     form_data: %{mode: :none}
   }
 
-  @doc "Delete a block\n## Source Context\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have update content capabilities. Attempting to call this API without update content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nReturns a 404 HTTP response if the block doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information*\n\n### Resources\n\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Delete a block](https://developers.notion.com/reference/delete-a-block)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.delete({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})\n```\n"
+  @doc ~S"""
+       Delete a block
+       ## Source Context
+       ### Notes
+
+       Integration capabilities
+
+       This endpoint requires an integration to have update content capabilities. Attempting to call this API without update content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).
+
+       ### Errors
+
+       Returns a 404 HTTP response if the block doesn't exist, or if the integration doesn't have access to the block.
+       Returns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).
+       *Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information*
+
+       ### Resources
+
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [request limits](https://developers.notion.com/reference/request-limits)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [Delete a block](https://developers.notion.com/reference/delete-a-block)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.blocks.delete({
+       block_id: "c02fc1d3-db8b-45c5-a222-27595b15aea7"
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec delete(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def delete(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_delete_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_delete_operation(params) when is_map(params) do
@@ -168,19 +295,64 @@ defmodule NotionSDK.Blocks do
     form_data: %{mode: :none}
   }
 
-  @doc "Retrieve block children\n## Source Context\nReturns a paginated array of child [block objects](https://developers.notion.com/reference/block) contained in the block using the ID specified. In order to receive a complete representation of a block, you may need to recursively retrieve the block children of child blocks.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nReturns a 404 HTTP response if the block specified by `id` doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [block objects](https://developers.notion.com/reference/block)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Retrieve block children](https://developers.notion.com/reference/get-block-children)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.children.list({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\",\n  start_cursor: undefined,\n  page_size: 50\n})\n```\n"
+  @doc ~S"""
+       Retrieve block children
+       ## Source Context
+       Returns a paginated array of child [block objects](https://developers.notion.com/reference/block) contained in the block using the ID specified. In order to receive a complete representation of a block, you may need to recursively retrieve the block children of child blocks.
+
+       ### Notes
+
+       Integration capabilities
+
+       This endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).
+
+       ### Errors
+
+       Returns a 404 HTTP response if the block specified by `id` doesn't exist, or if the integration doesn't have access to the block.
+       Returns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).
+       *Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*
+
+       ### Resources
+
+       * [block objects](https://developers.notion.com/reference/block)
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [request limits](https://developers.notion.com/reference/request-limits)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [Retrieve block children](https://developers.notion.com/reference/get-block-children)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.blocks.children.list({
+       block_id: "c02fc1d3-db8b-45c5-a222-27595b15aea7",
+       start_cursor: undefined,
+       page_size: 50
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec list_children(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def list_children(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_list_children_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   @spec stream_list_children(term(), map(), keyword()) :: Enumerable.t()
   def stream_list_children(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
 
     Stream.resource(
       fn -> build_list_children_operation(params) end,
@@ -189,7 +361,9 @@ defmodule NotionSDK.Blocks do
           {:halt, nil}
 
         %Pristine.Operation{} = operation ->
-          case Pristine.execute(runtime_client, operation, opts) do
+          operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+          case Pristine.execute(runtime_client, operation, execute_opts) do
             {:ok, response} ->
               items = List.wrap(Pristine.Operation.items(operation, response))
               {items, Pristine.Operation.next_page(operation, response)}
@@ -258,13 +432,55 @@ defmodule NotionSDK.Blocks do
     form_data: %{mode: :none}
   }
 
-  @doc "Retrieve a block\n## Source Context\nRetrieves a [Block object](https://developers.notion.com/reference/block) using the ID specified.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nReturns a 404 HTTP response if the block doesn't exist, or if the integration doesn't have access to the block.\nReturns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [Block object](https://developers.notion.com/reference/block)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Retrieve a block](https://developers.notion.com/reference/retrieve-a-block)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.retrieve({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})\n```\n"
+  @doc ~S"""
+       Retrieve a block
+       ## Source Context
+       Retrieves a [Block object](https://developers.notion.com/reference/block) using the ID specified.
+
+       ### Notes
+
+       Integration capabilities
+
+       This endpoint requires an integration to have read content capabilities. Attempting to call this API without read content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).
+
+       ### Errors
+
+       Returns a 404 HTTP response if the block doesn't exist, or if the integration doesn't have access to the block.
+       Returns a 400 or 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).
+       *Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*
+
+       ### Resources
+
+       * [Block object](https://developers.notion.com/reference/block)
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [request limits](https://developers.notion.com/reference/request-limits)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [Retrieve a block](https://developers.notion.com/reference/retrieve-a-block)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.blocks.retrieve({
+       block_id: "c02fc1d3-db8b-45c5-a222-27595b15aea7"
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_retrieve_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_retrieve_operation(params) when is_map(params) do
@@ -355,13 +571,76 @@ defmodule NotionSDK.Blocks do
     form_data: %{mode: :none}
   }
 
-  @doc "Update a block\n## Source Context\n### Notes\n\nUpdating `child_page` blocks\n\nTo update `child_page` type blocks, use the [Update page](https://developers.notion.com/reference/patch-page) endpoint. Updating the page's `title` updates the text displayed in the associated `child_page` block.\n\nUpdating `child_database` blocks\n\nTo update `child_database` type blocks, use the [Update database](https://developers.notion.com/reference/update-a-database) endpoint. Updating the page's `title` updates the text displayed in the associated `child_database` block.\n\nUpdating `children`\n\nA block's children *CANNOT* be directly updated with this endpoint. Instead use [Append block children](https://developers.notion.com/reference/patch-block-children) to add children.\n\nIntegration capabilities\n\nThis endpoint requires an integration to have update content capabilities. Attempting to call this API without update content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Success\n\nReturns a 200 HTTP response containing the updated [block object](https://developers.notion.com/reference/block) on success.\n\n### Errors\n\nReturns a 404 HTTP response if the block doesn't exist, is in the trash, or if the integration doesn't have access to the page.\nReturns a 400 if the `type` for the block is incorrect or the input is incorrect for a given field.\nReturns a 400 or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).\n*Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*\n\n### Resources\n\n  * [Update page](https://developers.notion.com/reference/patch-page)\n  * [Update database](https://developers.notion.com/reference/update-a-database)\n  * [Append block children](https://developers.notion.com/reference/patch-block-children)\n  * [block object](https://developers.notion.com/reference/block)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [request limits](https://developers.notion.com/reference/request-limits)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Update a block](https://developers.notion.com/reference/update-a-block)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.blocks.update({\n  block_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\",\n  paragraph: {\n    rich_text: [{ text: { content: \"Updated paragraph text\" } }]\n  }\n})\n```\n"
+  @doc ~S"""
+       Update a block
+       ## Source Context
+       ### Notes
+
+       Updating `child_page` blocks
+
+       To update `child_page` type blocks, use the [Update page](https://developers.notion.com/reference/patch-page) endpoint. Updating the page's `title` updates the text displayed in the associated `child_page` block.
+
+       Updating `child_database` blocks
+
+       To update `child_database` type blocks, use the [Update database](https://developers.notion.com/reference/update-a-database) endpoint. Updating the page's `title` updates the text displayed in the associated `child_database` block.
+
+       Updating `children`
+
+       A block's children *CANNOT* be directly updated with this endpoint. Instead use [Append block children](https://developers.notion.com/reference/patch-block-children) to add children.
+
+       Integration capabilities
+
+       This endpoint requires an integration to have update content capabilities. Attempting to call this API without update content capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).
+
+       ### Success
+
+       Returns a 200 HTTP response containing the updated [block object](https://developers.notion.com/reference/block) on success.
+
+       ### Errors
+
+       Returns a 404 HTTP response if the block doesn't exist, is in the trash, or if the integration doesn't have access to the page.
+       Returns a 400 if the `type` for the block is incorrect or the input is incorrect for a given field.
+       Returns a 400 or a 429 HTTP response if the request exceeds the [request limits](https://developers.notion.com/reference/request-limits).
+       *Note: Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.*
+
+       ### Resources
+
+       * [Update page](https://developers.notion.com/reference/patch-page)
+       * [Update database](https://developers.notion.com/reference/update-a-database)
+       * [Append block children](https://developers.notion.com/reference/patch-block-children)
+       * [block object](https://developers.notion.com/reference/block)
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [request limits](https://developers.notion.com/reference/request-limits)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [Update a block](https://developers.notion.com/reference/update-a-block)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.blocks.update({
+       block_id: "c02fc1d3-db8b-45c5-a222-27595b15aea7",
+       paragraph: {
+         rich_text: [{ text: { content: "Updated paragraph text" } }]
+       }
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec update(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def update(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_update_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_update_operation(params) when is_map(params) do
@@ -1736,7 +2015,7 @@ defmodule NotionSDK.Blocks do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :append_children_200_json_resp) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -1744,6 +2023,6 @@ defmodule NotionSDK.Blocks do
   def decode(data, type \\ :append_children_200_json_resp)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Blocks, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

@@ -3,6 +3,8 @@ defmodule NotionSDK.RichText do
   Generated Notion Sdk type for rich text.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:id, :next_url, :rich_text, :type]
   defstruct [:id, :next_url, :rich_text, :type]
 
@@ -97,7 +99,7 @@ defmodule NotionSDK.RichText do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -105,6 +107,6 @@ defmodule NotionSDK.RichText do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.RichText, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

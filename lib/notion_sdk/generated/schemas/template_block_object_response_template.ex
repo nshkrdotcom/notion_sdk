@@ -3,6 +3,8 @@ defmodule NotionSDK.TemplateBlockObjectResponseTemplate do
   Generated Notion Sdk type for template block object response template.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:rich_text]
   defstruct [:rich_text]
 
@@ -46,7 +48,7 @@ defmodule NotionSDK.TemplateBlockObjectResponseTemplate do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -54,10 +56,6 @@ defmodule NotionSDK.TemplateBlockObjectResponseTemplate do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.TemplateBlockObjectResponseTemplate,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

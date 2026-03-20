@@ -3,6 +3,8 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
   Generated Notion Sdk type for table request with table row children.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:children, :table_width]
   defstruct [:children, :has_column_header, :has_row_header, :table_width]
 
@@ -97,7 +99,7 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -105,10 +107,6 @@ defmodule NotionSDK.TableRequestWithTableRowChildren do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.TableRequestWithTableRowChildren,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

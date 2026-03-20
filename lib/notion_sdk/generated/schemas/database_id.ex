@@ -3,6 +3,8 @@ defmodule NotionSDK.DatabaseId do
   Generated Notion Sdk type for database id.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:database_id, :type]
   defstruct [:database_id, :type]
 
@@ -63,7 +65,7 @@ defmodule NotionSDK.DatabaseId do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -71,6 +73,6 @@ defmodule NotionSDK.DatabaseId do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.DatabaseId, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

@@ -3,6 +3,8 @@ defmodule NotionSDK.Paragraph do
   Generated Notion Sdk type for paragraph.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:paragraph]
   defstruct [:object, :paragraph, :type]
 
@@ -249,7 +251,7 @@ defmodule NotionSDK.Paragraph do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -257,6 +259,6 @@ defmodule NotionSDK.Paragraph do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Paragraph, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

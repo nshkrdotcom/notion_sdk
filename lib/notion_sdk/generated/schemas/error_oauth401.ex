@@ -3,6 +3,8 @@ defmodule NotionSDK.ErrorOauth401 do
   Generated Notion Sdk type for error oauth401.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys []
   defstruct [:additional_data, :code, :message, :object, :status]
 
@@ -114,7 +116,7 @@ defmodule NotionSDK.ErrorOauth401 do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -122,6 +124,6 @@ defmodule NotionSDK.ErrorOauth401 do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.ErrorOauth401, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

@@ -3,6 +3,8 @@ defmodule NotionSDK.MultiSelect do
   Generated Notion Sdk type for multi select.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:multi_select, :property]
   defstruct [:multi_select, :property, :type]
 
@@ -82,7 +84,7 @@ defmodule NotionSDK.MultiSelect do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -90,6 +92,6 @@ defmodule NotionSDK.MultiSelect do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.MultiSelect, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

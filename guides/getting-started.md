@@ -4,8 +4,8 @@
 
 The dependency on `pristine` is intentional. `notion_sdk` targets
 `Pristine.Operation`, `Pristine.execute/3`, `Pristine.stream/3`,
-`Pristine.Client.foundation/1`, `Pristine.Profiles.Foundation`, and
-`Pristine.OAuth2` as its supported runtime boundary.
+`Pristine.Client.foundation/1`, and `Pristine.OAuth2` as its supported runtime
+boundary.
 
 Related guides: `client-configuration.md`, `low-level-requests.md`, `versioning-and-compatibility.md`, `capabilities-permissions-and-sharing.md`, `examples/README.md`.
 
@@ -116,8 +116,7 @@ client =
 ```
 
 That configuration is implemented on top of the shared
-`Pristine.Client.foundation/1` runtime profile and the shared
-`Pristine.Profiles.Foundation` helpers. NotionSDK keeps only the
+`Pristine.Client.foundation/1` runtime profile. NotionSDK keeps only the
 provider-specific classifier and grouping logic.
 
 ## Make a first request

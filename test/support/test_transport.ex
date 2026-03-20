@@ -3,7 +3,8 @@ defmodule NotionSDK.TestTransport do
 
   @behaviour Pristine.Ports.Transport
 
-  alias Pristine.Response
+  alias Pristine.Core.Response
+  alias Pristine.Response, as: PublicResponse
 
   @impl true
   def send(request, %{transport_opts: transport_opts} = context)
@@ -13,12 +14,24 @@ defmodule NotionSDK.TestTransport do
     end
 
     case Keyword.get(transport_opts, :response, default_response()) do
-      response when is_function(response, 2) -> response.(request, context)
-      response -> response
+      response when is_function(response, 2) -> normalize_response(response.(request, context))
+      response -> normalize_response(response)
     end
   end
 
   defp default_response do
-    {:ok, Response.new(status: 200, headers: %{}, body: "{}")}
+    {:ok, %Response{status: 200, headers: %{}, body: "{}"}}
   end
+
+  defp normalize_response({:ok, %PublicResponse{} = response}) do
+    {:ok,
+     %Response{
+       status: response.status,
+       headers: response.headers,
+       body: response.body,
+       metadata: response.metadata
+     }}
+  end
+
+  defp normalize_response(other), do: other
 end

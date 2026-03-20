@@ -5,6 +5,8 @@ defmodule NotionSDK.OAuth do
 
   use NotionSDK.OAuth.Helpers
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @introspect_partition_spec %{
     path: [],
     auth: %{
@@ -17,13 +19,41 @@ defmodule NotionSDK.OAuth do
     form_data: %{mode: :none}
   }
 
-  @doc "Introspect a token\n## Source Context\nGet a token's active status, scope, and issued time.\n\n### Resources\n\n  * [Introspect a token](https://developers.notion.com/reference/introspect-token)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client()\n\nconst response = await notion.oauth.introspect({\n  client_id: process.env.OAUTH_CLIENT_ID,\n  client_secret: process.env.OAUTH_CLIENT_SECRET,\n  token: \"access_token_to_introspect\"\n})\n```\n"
+  @doc ~S"""
+       Introspect a token
+       ## Source Context
+       Get a token's active status, scope, and issued time.
+
+       ### Resources
+
+       * [Introspect a token](https://developers.notion.com/reference/introspect-token)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client()
+
+       const response = await notion.oauth.introspect({
+       client_id: process.env.OAUTH_CLIENT_ID,
+       client_secret: process.env.OAUTH_CLIENT_SECRET,
+       token: "access_token_to_introspect"
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec introspect(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def introspect(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_introspect_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_introspect_operation(params) when is_map(params) do
@@ -75,13 +105,41 @@ defmodule NotionSDK.OAuth do
     form_data: %{mode: :none}
   }
 
-  @doc "Revoke a token\n## Source Context\nRevoke an access token.\n\n### Resources\n\n  * [Revoke a token](https://developers.notion.com/reference/revoke-token)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client()\n\nconst response = await notion.oauth.revoke({\n  client_id: process.env.OAUTH_CLIENT_ID,\n  client_secret: process.env.OAUTH_CLIENT_SECRET,\n  token: \"access_token_to_revoke\"\n})\n```\n"
+  @doc ~S"""
+       Revoke a token
+       ## Source Context
+       Revoke an access token.
+
+       ### Resources
+
+       * [Revoke a token](https://developers.notion.com/reference/revoke-token)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client()
+
+       const response = await notion.oauth.revoke({
+       client_id: process.env.OAUTH_CLIENT_ID,
+       client_secret: process.env.OAUTH_CLIENT_SECRET,
+       token: "access_token_to_revoke"
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec revoke(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def revoke(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_revoke_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_revoke_operation(params) when is_map(params) do
@@ -133,13 +191,65 @@ defmodule NotionSDK.OAuth do
     form_data: %{mode: :none}
   }
 
-  @doc "Create a token\n## Source Context\n### Warnings\n\nRedirect URI requirements for public integrations\n\nThe `redirect_uri` is a *required* field in the request body for this endpoint if:\nIn most cases, the `redirect_uri` field is required.\nThis field is not allowed in the request body if:\nLearn more in the public integration section of the [Authorization Guide](https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up).\n*Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*\n\n  * the `redirect_uri` query parameter was set in the [Authorization URL](https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url) provided to users, *or*;\n  * there are more than one `redirect_uri`s included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**.\n  * there is one `redirect_uri` included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**, *and* the `redirect_uri` query parameter was not included in the Authorization URL.\n\n### Notes\n\nFor step-by-step instructions on how to use this endpoint to create a public integration, check out the [Authorization guide](https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration). To walkthrough how to create tokens for Link Previews, refer to the [Link Previews guide](https://developers.notion.com/guides/link-previews/build-a-link-preview-integration).\n\n### Resources\n\n  * [Authorization guide](https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration)\n  * [Link Previews guide](https://developers.notion.com/guides/link-previews/build-a-link-preview-integration)\n  * [Authorization URL](https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url)\n  * [integration's settings](https://www.notion.so/profile/integrations)\n  * [Authorization Guide](https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [Create a token](https://developers.notion.com/reference/create-a-token)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client()\n\nconst response = await notion.oauth.token({\n  client_id: process.env.OAUTH_CLIENT_ID,\n  client_secret: process.env.OAUTH_CLIENT_SECRET,\n  grant_type: \"authorization_code\",\n  code: \"abc123-authorization-code\",\n  redirect_uri: \"https://example.com/callback\"\n})\n```\n"
+  @doc ~S"""
+       Create a token
+       ## Source Context
+       ### Warnings
+
+       Redirect URI requirements for public integrations
+
+       The `redirect_uri` is a *required* field in the request body for this endpoint if:
+       In most cases, the `redirect_uri` field is required.
+       This field is not allowed in the request body if:
+       Learn more in the public integration section of the [Authorization Guide](https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up).
+       *Note: Each Public API endpoint can return several possible error codes. To see a full description of each type of error code, see the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation.*
+
+       * the `redirect_uri` query parameter was set in the [Authorization URL](https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url) provided to users, *or*;
+       * there are more than one `redirect_uri`s included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**.
+       * there is one `redirect_uri` included in the [integration's settings](https://www.notion.so/profile/integrations) under **OAuth Domain & URIs**, *and* the `redirect_uri` query parameter was not included in the Authorization URL.
+
+       ### Notes
+
+       For step-by-step instructions on how to use this endpoint to create a public integration, check out the [Authorization guide](https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration). To walkthrough how to create tokens for Link Previews, refer to the [Link Previews guide](https://developers.notion.com/guides/link-previews/build-a-link-preview-integration).
+
+       ### Resources
+
+       * [Authorization guide](https://developers.notion.com/guides/get-started/authorization#set-up-the-auth-flow-for-a-public-integration)
+       * [Link Previews guide](https://developers.notion.com/guides/link-previews/build-a-link-preview-integration)
+       * [Authorization URL](https://developers.notion.com/guides/get-started/authorization#step-1-navigate-the-user-to-the-integrations-authorization-url)
+       * [integration's settings](https://www.notion.so/profile/integrations)
+       * [Authorization Guide](https://developers.notion.com/guides/get-started/authorization#public-integration-auth-flow-set-up)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [Create a token](https://developers.notion.com/reference/create-a-token)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client()
+
+       const response = await notion.oauth.token({
+       client_id: process.env.OAUTH_CLIENT_ID,
+       client_secret: process.env.OAUTH_CLIENT_SECRET,
+       grant_type: "authorization_code",
+       code: "abc123-authorization-code",
+       redirect_uri: "https://example.com/callback"
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec token(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def token(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_token_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_token_operation(params) when is_map(params) do
@@ -629,7 +739,7 @@ defmodule NotionSDK.OAuth do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :introspect_200_json_resp) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -637,6 +747,6 @@ defmodule NotionSDK.OAuth do
   def decode(data, type \\ :introspect_200_json_resp)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.OAuth, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

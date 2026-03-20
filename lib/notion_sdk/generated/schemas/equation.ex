@@ -3,6 +3,8 @@ defmodule NotionSDK.Equation do
   Generated Notion Sdk type for equation.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:equation]
   defstruct [:equation, :object, :type]
 
@@ -80,7 +82,7 @@ defmodule NotionSDK.Equation do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -88,6 +90,6 @@ defmodule NotionSDK.Equation do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Equation, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

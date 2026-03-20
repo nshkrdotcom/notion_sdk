@@ -3,6 +3,8 @@ defmodule NotionSDK.Comments do
   Generated Notion Sdk operations for comments.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @create_partition_spec %{
     path: [],
     auth: {"auth", :auth},
@@ -19,13 +21,53 @@ defmodule NotionSDK.Comments do
     form_data: %{mode: :none}
   }
 
-  @doc "Create comment\n## Source Context\n### Notes\n\nReminder: Turn on integration comment capabilities\n\nIntegration capabilities for reading and inserting comments are off by default.\nThis endpoint requires an integration to have insert comment capabilities. Attempting to call this endpoint without insert comment capabilities will return an HTTP response with a 403 status code.\nFor more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [integration dashboard](https://www.notion.so/profile/integrations)\n  * [Create comment](https://developers.notion.com/reference/create-a-comment)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.comments.create({\n  parent: { page_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\" },\n  rich_text: [{ text: { content: \"This is a comment\" } }]\n})\n```\n"
+  @doc ~S"""
+       Create comment
+       ## Source Context
+       ### Notes
+
+       Reminder: Turn on integration comment capabilities
+
+       Integration capabilities for reading and inserting comments are off by default.
+       This endpoint requires an integration to have insert comment capabilities. Attempting to call this endpoint without insert comment capabilities will return an HTTP response with a 403 status code.
+       For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).
+
+       ### Errors
+
+       Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.
+
+       ### Resources
+
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [integration dashboard](https://www.notion.so/profile/integrations)
+       * [Create comment](https://developers.notion.com/reference/create-a-comment)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.comments.create({
+       parent: { page_id: "b55c9c91-384d-452b-81db-d1ef79372b75" },
+       rich_text: [{ text: { content: "This is a comment" } }]
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec create(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def create(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_create_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_create_operation(params) when is_map(params) do
@@ -84,19 +126,64 @@ defmodule NotionSDK.Comments do
     form_data: %{mode: :none}
   }
 
-  @doc "List comments\n## Source Context\nRetrieves a list of un-resolved [Comment objects](https://developers.notion.com/reference/comment-object) from a page or block.\n\n### Notes\n\nReminder: Turn on integration comment capabilities\n\nIntegration capabilities for reading and inserting comments are off by default.\nThis endpoint requires an integration to have read comment capabilities. Attempting to call this endpoint without read comment capabilities will return an HTTP response with a 403 status code.\nFor more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Comment objects](https://developers.notion.com/reference/comment-object)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [integration dashboard](https://www.notion.so/profile/integrations)\n  * [List comments](https://developers.notion.com/reference/list-comments)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.comments.list({\n  block_id: \"b55c9c91-384d-452b-81db-d1ef79372b75\",\n  start_cursor: undefined,\n  page_size: 50\n})\n```\n"
+  @doc ~S"""
+       List comments
+       ## Source Context
+       Retrieves a list of un-resolved [Comment objects](https://developers.notion.com/reference/comment-object) from a page or block.
+
+       ### Notes
+
+       Reminder: Turn on integration comment capabilities
+
+       Integration capabilities for reading and inserting comments are off by default.
+       This endpoint requires an integration to have read comment capabilities. Attempting to call this endpoint without read comment capabilities will return an HTTP response with a 403 status code.
+       For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).
+
+       ### Errors
+
+       Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.
+
+       ### Resources
+
+       * [Comment objects](https://developers.notion.com/reference/comment-object)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [integration dashboard](https://www.notion.so/profile/integrations)
+       * [List comments](https://developers.notion.com/reference/list-comments)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.comments.list({
+       block_id: "b55c9c91-384d-452b-81db-d1ef79372b75",
+       start_cursor: undefined,
+       page_size: 50
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec list(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_list_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   @spec stream_list(term(), map(), keyword()) :: Enumerable.t()
   def stream_list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
 
     Stream.resource(
       fn -> build_list_operation(params) end,
@@ -105,7 +192,9 @@ defmodule NotionSDK.Comments do
           {:halt, nil}
 
         %Pristine.Operation{} = operation ->
-          case Pristine.execute(runtime_client, operation, opts) do
+          operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+          case Pristine.execute(runtime_client, operation, execute_opts) do
             {:ok, response} ->
               items = List.wrap(Pristine.Operation.items(operation, response))
               {items, Pristine.Operation.next_page(operation, response)}
@@ -174,13 +263,55 @@ defmodule NotionSDK.Comments do
     form_data: %{mode: :none}
   }
 
-  @doc "Retrieve a comment\n## Source Context\nRetrieves a [Comment object](https://developers.notion.com/reference/comment-object) from its `comment_id`.\n\n### Notes\n\nReminder: Turn on integration comment capabilities\n\nIntegration capabilities for reading and inserting comments are off by default.\nThis endpoint requires an integration to have read comment capabilities. Attempting to call this endpoint without read comment capabilities will return an HTTP response with a 403 status code.\nFor more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [Comment object](https://developers.notion.com/reference/comment-object)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [integration dashboard](https://www.notion.so/profile/integrations)\n  * [Retrieve a comment](https://developers.notion.com/reference/retrieve-comment)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.comments.retrieve({\n  comment_id: \"c02fc1d3-db8b-45c5-a222-27595b15aea7\"\n})\n```\n"
+  @doc ~S"""
+       Retrieve a comment
+       ## Source Context
+       Retrieves a [Comment object](https://developers.notion.com/reference/comment-object) from its `comment_id`.
+
+       ### Notes
+
+       Reminder: Turn on integration comment capabilities
+
+       Integration capabilities for reading and inserting comments are off by default.
+       This endpoint requires an integration to have read comment capabilities. Attempting to call this endpoint without read comment capabilities will return an HTTP response with a 403 status code.
+       For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities). To update your integration settings, visit the [integration dashboard](https://www.notion.so/profile/integrations).
+
+       ### Errors
+
+       Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.
+
+       ### Resources
+
+       * [Comment object](https://developers.notion.com/reference/comment-object)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [integration dashboard](https://www.notion.so/profile/integrations)
+       * [Retrieve a comment](https://developers.notion.com/reference/retrieve-comment)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.comments.retrieve({
+       comment_id: "c02fc1d3-db8b-45c5-a222-27595b15aea7"
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_retrieve_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_retrieve_operation(params) when is_map(params) do
@@ -445,7 +576,7 @@ defmodule NotionSDK.Comments do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :create_json_req) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -453,6 +584,6 @@ defmodule NotionSDK.Comments do
   def decode(data, type \\ :create_json_req)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Comments, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

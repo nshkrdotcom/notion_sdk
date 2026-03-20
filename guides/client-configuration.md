@@ -45,8 +45,8 @@ The generic transport, retry, telemetry, and path-validation behavior behind
 these options comes from `pristine`. `notion_sdk` keeps the Notion-specific
 classifier, retry groups, breaker grouping, and default headers locally.
 It depends on `Pristine.Operation`, `Pristine.execute/3`,
-`Pristine.Client.foundation/1`, `Pristine.Profiles.Foundation`, and
-`Pristine.OAuth2`, not broad runtime internals.
+`Pristine.Client.foundation/1`, and `Pristine.OAuth2`, not broad runtime
+internals.
 
 ## Foundation-backed production runtime
 
@@ -71,10 +71,9 @@ client =
 ```
 
 This is a provider-specific facade over the shared
-`Pristine.Client.foundation/1` / `Pristine.Profiles.Foundation.context/1`
-runtime builder. NotionSDK adds Notion-specific classification, retry groups,
-breaker naming, and integration-key behavior on top of that generic Pristine
-profile.
+`Pristine.Client.foundation/1` runtime builder. NotionSDK adds Notion-specific
+classification, retry groups, breaker naming, and integration-key behavior on
+top of that generic Pristine profile.
 
 Supported `foundation:` keys:
 
@@ -115,19 +114,24 @@ distributed coordination layer.
 
 ### Exporting telemetry
 
-The recommended exporter path is still normal `:telemetry` plus an attached
-reporter:
+The recommended exporter path is normal `:telemetry` handlers attached to the
+events emitted by the client runtime:
 
 ```elixir
-{:ok, handler_id} =
-  Pristine.Profiles.Foundation.attach_reporter(
-    client.context,
-    reporter: MyApp.NotionTelemetryReporter
-  )
+:telemetry.attach_many(
+  "my-app-notion-events",
+  [
+    [:notion_sdk, :request, :start],
+    [:notion_sdk, :request, :stop],
+    [:notion_sdk, :request, :exception]
+  ],
+  &MyApp.NotionTelemetry.handle_event/4,
+  %{}
+)
 ```
 
-Create the reporter under supervision with
-`Pristine.Profiles.Foundation.reporter_child_spec/1`.
+If you need a supervised consumer, supervise your own handler process and
+attach from there.
 
 ## Explicit OAuth-backed bearer auth
 

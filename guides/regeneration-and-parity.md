@@ -20,8 +20,13 @@ a sibling `notion_docs` checkout when those fixtures are already present.
 
 The generated runtime surface targets `Pristine.Operation`,
 `Pristine.execute/3`, `Pristine.stream/3`, and thin `Pristine.Client`
-integration. `notion_sdk` keeps direct compiler/runtime internals out of its
-public contract.
+integration. The generated modules bind through the thin
+`NotionSDK.Client.pristine_client/1`, `runtime_execute_opts/2`, and
+`runtime_operation/3` helpers before calling the runtime directly.
+`notion_sdk` keeps direct compiler/runtime internals out of its public
+contract. Generated schema modules resolve through the provider-local
+`lib/notion_sdk/generated/runtime_schema.ex` helper rather than shared
+runtime-schema internals.
 
 ## What `mix notion.refresh` does
 
@@ -30,7 +35,7 @@ public contract.
 1. snapshots upstream Notion docs and vendored JS SDK files
 2. extracts the OpenAPI fixtures used for generation
 3. persists structured `reference_context` artifacts from the same markdown pages
-4. regenerates the SDK modules and bridge artifacts
+4. regenerates the SDK modules and committed generation artifacts
 5. writes a grouped diff report for review
 
 `mix notion.refresh` re-extracts the committed fixtures from upstream markdown,

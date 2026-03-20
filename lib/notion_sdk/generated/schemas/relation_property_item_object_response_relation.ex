@@ -3,6 +3,8 @@ defmodule NotionSDK.RelationPropertyItemObjectResponseRelation do
   Generated Notion Sdk type for relation property item object response relation.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:id]
   defstruct [:id]
 
@@ -46,7 +48,7 @@ defmodule NotionSDK.RelationPropertyItemObjectResponseRelation do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -54,10 +56,6 @@ defmodule NotionSDK.RelationPropertyItemObjectResponseRelation do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.RelationPropertyItemObjectResponseRelation,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

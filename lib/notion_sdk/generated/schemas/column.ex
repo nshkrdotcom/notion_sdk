@@ -3,6 +3,8 @@ defmodule NotionSDK.Column do
   Generated Notion Sdk type for column.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:column]
   defstruct [:column, :object, :type]
 
@@ -80,7 +82,7 @@ defmodule NotionSDK.Column do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -88,6 +90,6 @@ defmodule NotionSDK.Column do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Column, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

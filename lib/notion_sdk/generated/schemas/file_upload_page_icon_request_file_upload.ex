@@ -3,6 +3,8 @@ defmodule NotionSDK.FileUploadPageIconRequestFileUpload do
   Generated Notion Sdk type for file upload page icon request file upload.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @enforce_keys [:id]
   defstruct [:id]
 
@@ -46,7 +48,7 @@ defmodule NotionSDK.FileUploadPageIconRequestFileUpload do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :t) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -54,10 +56,6 @@ defmodule NotionSDK.FileUploadPageIconRequestFileUpload do
   def decode(data, type \\ :t)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(
-      NotionSDK.FileUploadPageIconRequestFileUpload,
-      type,
-      data
-    )
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end

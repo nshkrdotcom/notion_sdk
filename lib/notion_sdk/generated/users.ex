@@ -3,6 +3,8 @@ defmodule NotionSDK.Users do
   Generated Notion Sdk operations for users.
   """
 
+  alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
+
   @get_self_partition_spec %{
     path: [],
     auth: {"auth", :auth},
@@ -17,8 +19,11 @@ defmodule NotionSDK.Users do
   def get_self(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_get_self_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_get_self_operation(params) when is_map(params) do
@@ -76,14 +81,18 @@ defmodule NotionSDK.Users do
   def list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_list_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   @spec stream_list(term(), map(), keyword()) :: Enumerable.t()
   def stream_list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
 
     Stream.resource(
       fn -> build_list_operation(params) end,
@@ -92,7 +101,9 @@ defmodule NotionSDK.Users do
           {:halt, nil}
 
         %Pristine.Operation{} = operation ->
-          case Pristine.execute(runtime_client, operation, opts) do
+          operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+          case Pristine.execute(runtime_client, operation, execute_opts) do
             {:ok, response} ->
               items = List.wrap(Pristine.Operation.items(operation, response))
               {items, Pristine.Operation.next_page(operation, response)}
@@ -161,13 +172,52 @@ defmodule NotionSDK.Users do
     form_data: %{mode: :none}
   }
 
-  @doc "Retrieve a user\n## Source Context\nRetrieves a [User](https://developers.notion.com/reference/user) using the ID specified.\n\n### Notes\n\nIntegration capabilities\n\nThis endpoint requires an integration to have user information capabilities. Attempting to call this API without user information capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).\n\n### Errors\n\nEach Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.\n\n### Resources\n\n  * [User](https://developers.notion.com/reference/user)\n  * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)\n  * [capabilities guide](https://developers.notion.com/reference/capabilities)\n  * [Retrieve a user](https://developers.notion.com/reference/get-user)\n## Code Samples\n\nTypeScript SDK\n```javascript\nimport { Client } from \"@notionhq/client\"\n\nconst notion = new Client({ auth: process.env.NOTION_API_KEY })\n\nconst response = await notion.users.retrieve({\n  user_id: \"e79a0b74-3aba-4149-9f74-0bb5791a6ee6\"\n})\n```\n"
+  @doc ~S"""
+       Retrieve a user
+       ## Source Context
+       Retrieves a [User](https://developers.notion.com/reference/user) using the ID specified.
+
+       ### Notes
+
+       Integration capabilities
+
+       This endpoint requires an integration to have user information capabilities. Attempting to call this API without user information capabilities will return an HTTP response with a 403 status code. For more information on integration capabilities, see the [capabilities guide](https://developers.notion.com/reference/capabilities).
+
+       ### Errors
+
+       Each Public API endpoint can return several possible error codes. See the [Error codes section](https://developers.notion.com/reference/status-codes#error-codes) of the Status codes documentation for more information.
+
+       ### Resources
+
+       * [User](https://developers.notion.com/reference/user)
+       * [Error codes section](https://developers.notion.com/reference/status-codes#error-codes)
+       * [capabilities guide](https://developers.notion.com/reference/capabilities)
+       * [Retrieve a user](https://developers.notion.com/reference/get-user)
+       ## Code Samples
+
+       TypeScript SDK
+       ```javascript
+       import { Client } from "@notionhq/client"
+
+       const notion = new Client({ auth: process.env.NOTION_API_KEY })
+
+       const response = await notion.users.retrieve({
+       user_id: "e79a0b74-3aba-4149-9f74-0bb5791a6ee6"
+       })
+       ```
+
+       """
+       |> String.trim_leading("\n")
+       |> String.trim_trailing("\n")
   @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
     runtime_client = NotionSDK.Client.pristine_client(client)
+    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
     operation = build_retrieve_operation(params)
-    Pristine.execute(runtime_client, operation, opts)
+    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+
+    Pristine.execute(runtime_client, operation, execute_opts)
   end
 
   defp build_retrieve_operation(params) when is_map(params) do
@@ -328,7 +378,7 @@ defmodule NotionSDK.Users do
   @doc false
   @spec __schema__(atom()) :: Sinter.Schema.t()
   def __schema__(type \\ :list_200_json_resp) when is_atom(type) do
-    Pristine.Runtime.Schema.build_schema(__openapi_fields__(type))
+    RuntimeSchema.build_schema(__openapi_fields__(type))
   end
 
   @doc false
@@ -336,6 +386,6 @@ defmodule NotionSDK.Users do
   def decode(data, type \\ :list_200_json_resp)
 
   def decode(data, type) when is_map(data) and is_atom(type) do
-    Pristine.Runtime.Schema.decode_module_type(NotionSDK.Users, type, data)
+    RuntimeSchema.decode_module_type(__MODULE__, type, data)
   end
 end
