@@ -5,6 +5,8 @@ defmodule NotionSDK.Users do
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
 
+  alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient
+
   @get_self_partition_spec %{
     path: [],
     auth: {"auth", :auth},
@@ -18,19 +20,21 @@ defmodule NotionSDK.Users do
   @spec get_self(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def get_self(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_get_self_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_get_self_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_get_self_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @get_self_partition_spec)
+  defp build_get_self_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @get_self_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "users/get_self",
+      args: params,
+      call: {__MODULE__, :get_self},
+      opts: opts,
       method: :get,
       path_template: "/v1/users/me",
       path_params: partition.path_params,
@@ -55,16 +59,14 @@ defmodule NotionSDK.Users do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :users, :get_self],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :users, :get_self],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @list_partition_spec %{
@@ -80,33 +82,32 @@ defmodule NotionSDK.Users do
   @spec list(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_list_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_list_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
   @spec stream_list(term(), map(), keyword()) :: Enumerable.t()
   def stream_list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
+    opts = normalize_request_opts!(opts)
 
     Stream.resource(
-      fn -> build_list_operation(params) end,
+      fn -> build_list_request(client, params, opts) end,
       fn
         nil ->
           {:halt, nil}
 
-        %Pristine.Operation{} = operation ->
-          operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+        request when is_map(request) ->
+          wrapped_request =
+            update_in(request[:opts], fn request_opts ->
+              Keyword.put(request_opts || [], :response, :wrapped)
+            end)
 
-          case Pristine.execute(runtime_client, operation, execute_opts) do
+          case NotionSDK.Client.execute_generated_request(client, wrapped_request) do
             {:ok, response} ->
-              items = List.wrap(Pristine.Operation.items(operation, response))
-              {items, Pristine.Operation.next_page(operation, response)}
+              items = List.wrap(OpenAPIClient.items(request, response))
+              {items, OpenAPIClient.next_page_request(request, response)}
 
             {:error, reason} ->
               raise "pagination failed: " <> inspect(reason)
@@ -116,11 +117,16 @@ defmodule NotionSDK.Users do
     )
   end
 
-  defp build_list_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @list_partition_spec)
+  defp build_list_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @list_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "users/list",
+      args: params,
+      call: {__MODULE__, :list},
+      opts: opts,
       method: :get,
       path_template: "/v1/users",
       path_params: partition.path_params,
@@ -145,14 +151,12 @@ defmodule NotionSDK.Users do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :users, :list],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :users, :list],
+      timeout: nil,
       pagination: %{
         default_limit: nil,
         items_path: ["results"],
@@ -160,7 +164,7 @@ defmodule NotionSDK.Users do
         response_mapping: %{cursor_path: ["next_cursor"]},
         strategy: :cursor
       }
-    })
+    }
   end
 
   @retrieve_partition_spec %{
@@ -212,19 +216,21 @@ defmodule NotionSDK.Users do
   @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_retrieve_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_retrieve_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_retrieve_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @retrieve_partition_spec)
+  defp build_retrieve_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @retrieve_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "users/retrieve",
+      args: params,
+      call: {__MODULE__, :retrieve},
+      opts: opts,
       method: :get,
       path_template: "/v1/users/{user_id}",
       path_params: partition.path_params,
@@ -249,16 +255,23 @@ defmodule NotionSDK.Users do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :users, :retrieve],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :users, :retrieve],
+      timeout: nil,
       pagination: nil
-    })
+    }
+  end
+
+  @spec normalize_request_opts!(list()) :: keyword()
+  defp normalize_request_opts!(opts) when is_list(opts) do
+    if Keyword.keyword?(opts) do
+      opts
+    else
+      raise ArgumentError, "request opts must be a keyword list"
+    end
   end
 
   @doc false

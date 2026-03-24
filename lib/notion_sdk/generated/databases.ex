@@ -5,6 +5,8 @@ defmodule NotionSDK.Databases do
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
 
+  alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient
+
   @create_partition_spec %{
     path: [],
     auth: {"auth", :auth},
@@ -75,19 +77,21 @@ defmodule NotionSDK.Databases do
   @spec create(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def create(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_create_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_create_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_create_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @create_partition_spec)
+  defp build_create_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @create_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "databases/create",
+      args: params,
+      call: {__MODULE__, :create},
+      opts: opts,
       method: :post,
       path_template: "/v1/databases",
       path_params: partition.path_params,
@@ -114,16 +118,14 @@ defmodule NotionSDK.Databases do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :databases, :create],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :databases, :create],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @retrieve_partition_spec %{
@@ -214,19 +216,21 @@ defmodule NotionSDK.Databases do
   @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_retrieve_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_retrieve_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_retrieve_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @retrieve_partition_spec)
+  defp build_retrieve_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @retrieve_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "databases/retrieve",
+      args: params,
+      call: {__MODULE__, :retrieve},
+      opts: opts,
       method: :get,
       path_template: "/v1/databases/{database_id}",
       path_params: partition.path_params,
@@ -253,16 +257,14 @@ defmodule NotionSDK.Databases do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :databases, :retrieve],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :databases, :retrieve],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @update_partition_spec %{
@@ -353,19 +355,21 @@ defmodule NotionSDK.Databases do
   @spec update(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def update(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_update_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_update_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_update_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @update_partition_spec)
+  defp build_update_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @update_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "databases/update",
+      args: params,
+      call: {__MODULE__, :update},
+      opts: opts,
       method: :patch,
       path_template: "/v1/databases/{database_id}",
       path_params: partition.path_params,
@@ -392,16 +396,23 @@ defmodule NotionSDK.Databases do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :databases, :update],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :databases, :update],
+      timeout: nil,
       pagination: nil
-    })
+    }
+  end
+
+  @spec normalize_request_opts!(list()) :: keyword()
+  defp normalize_request_opts!(opts) when is_list(opts) do
+    if Keyword.keyword?(opts) do
+      opts
+    else
+      raise ArgumentError, "request opts must be a keyword list"
+    end
   end
 
   @doc false

@@ -5,6 +5,8 @@ defmodule NotionSDK.Pages do
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
 
+  alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient
+
   @create_partition_spec %{
     path: [],
     auth: {"auth", :auth},
@@ -125,19 +127,21 @@ defmodule NotionSDK.Pages do
   @spec create(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def create(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_create_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_create_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_create_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @create_partition_spec)
+  defp build_create_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @create_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "pages/create",
+      args: params,
+      call: {__MODULE__, :create},
+      opts: opts,
       method: :post,
       path_template: "/v1/pages",
       path_params: partition.path_params,
@@ -164,16 +168,14 @@ defmodule NotionSDK.Pages do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :pages, :create],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :pages, :create],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @move_partition_spec %{
@@ -313,19 +315,21 @@ defmodule NotionSDK.Pages do
   @spec move(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def move(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_move_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_move_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_move_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @move_partition_spec)
+  defp build_move_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @move_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "pages/move",
+      args: params,
+      call: {__MODULE__, :move},
+      opts: opts,
       method: :post,
       path_template: "/v1/pages/{page_id}/move",
       path_params: partition.path_params,
@@ -352,16 +356,14 @@ defmodule NotionSDK.Pages do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :pages, :move],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :pages, :move],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @retrieve_partition_spec %{
@@ -454,19 +456,21 @@ defmodule NotionSDK.Pages do
   @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_retrieve_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_retrieve_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_retrieve_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @retrieve_partition_spec)
+  defp build_retrieve_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @retrieve_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "pages/retrieve",
+      args: params,
+      call: {__MODULE__, :retrieve},
+      opts: opts,
       method: :get,
       path_template: "/v1/pages/{page_id}",
       path_params: partition.path_params,
@@ -493,16 +497,14 @@ defmodule NotionSDK.Pages do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :pages, :retrieve],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :pages, :retrieve],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @retrieve_markdown_partition_spec %{
@@ -589,19 +591,21 @@ defmodule NotionSDK.Pages do
   @spec retrieve_markdown(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve_markdown(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_retrieve_markdown_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_retrieve_markdown_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_retrieve_markdown_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @retrieve_markdown_partition_spec)
+  defp build_retrieve_markdown_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @retrieve_markdown_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "pages/retrieve_markdown",
+      args: params,
+      call: {__MODULE__, :retrieve_markdown},
+      opts: opts,
       method: :get,
       path_template: "/v1/pages/{page_id}/markdown",
       path_params: partition.path_params,
@@ -626,16 +630,14 @@ defmodule NotionSDK.Pages do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :pages, :retrieve_markdown],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :pages, :retrieve_markdown],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @retrieve_property_partition_spec %{
@@ -730,19 +732,21 @@ defmodule NotionSDK.Pages do
   @spec retrieve_property(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve_property(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_retrieve_property_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_retrieve_property_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_retrieve_property_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @retrieve_property_partition_spec)
+  defp build_retrieve_property_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @retrieve_property_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "pages/retrieve_property",
+      args: params,
+      call: {__MODULE__, :retrieve_property},
+      opts: opts,
       method: :get,
       path_template: "/v1/pages/{page_id}/properties/{property_id}",
       path_params: partition.path_params,
@@ -795,16 +799,14 @@ defmodule NotionSDK.Pages do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :pages, :retrieve_property],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :pages, :retrieve_property],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @update_partition_spec %{
@@ -924,19 +926,21 @@ defmodule NotionSDK.Pages do
   @spec update(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def update(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_update_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_update_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_update_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @update_partition_spec)
+  defp build_update_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @update_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "pages/update",
+      args: params,
+      call: {__MODULE__, :update},
+      opts: opts,
       method: :patch,
       path_template: "/v1/pages/{page_id}",
       path_params: partition.path_params,
@@ -963,16 +967,14 @@ defmodule NotionSDK.Pages do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :pages, :update],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :pages, :update],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @update_markdown_partition_spec %{
@@ -1064,19 +1066,21 @@ defmodule NotionSDK.Pages do
   @spec update_markdown(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def update_markdown(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_update_markdown_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_update_markdown_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_update_markdown_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @update_markdown_partition_spec)
+  defp build_update_markdown_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @update_markdown_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "pages/update_markdown",
+      args: params,
+      call: {__MODULE__, :update_markdown},
+      opts: opts,
       method: :patch,
       path_template: "/v1/pages/{page_id}/markdown",
       path_params: partition.path_params,
@@ -1106,16 +1110,23 @@ defmodule NotionSDK.Pages do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "core_api",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :pages, :update_markdown],
-        timeout_ms: nil
-      },
+      resource: "core_api",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :pages, :update_markdown],
+      timeout: nil,
       pagination: nil
-    })
+    }
+  end
+
+  @spec normalize_request_opts!(list()) :: keyword()
+  defp normalize_request_opts!(opts) when is_list(opts) do
+    if Keyword.keyword?(opts) do
+      opts
+    else
+      raise ArgumentError, "request opts must be a keyword list"
+    end
   end
 
   @doc false

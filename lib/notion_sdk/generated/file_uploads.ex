@@ -5,6 +5,8 @@ defmodule NotionSDK.FileUploads do
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
 
+  alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient
+
   @complete_partition_spec %{
     path: [{"file_upload_id", :file_upload_id}],
     auth: {"auth", :auth},
@@ -39,19 +41,21 @@ defmodule NotionSDK.FileUploads do
   @spec complete(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def complete(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_complete_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_complete_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_complete_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @complete_partition_spec)
+  defp build_complete_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @complete_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "file_uploads/complete",
+      args: params,
+      call: {__MODULE__, :complete},
+      opts: opts,
       method: :post,
       path_template: "/v1/file_uploads/{file_upload_id}/complete",
       path_params: partition.path_params,
@@ -76,16 +80,14 @@ defmodule NotionSDK.FileUploads do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "file_upload_control",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :file_uploads, :complete],
-        timeout_ms: nil
-      },
+      resource: "file_upload_control",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :file_uploads, :complete],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @create_partition_spec %{
@@ -136,19 +138,21 @@ defmodule NotionSDK.FileUploads do
   @spec create(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def create(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_create_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_create_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_create_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @create_partition_spec)
+  defp build_create_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @create_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "file_uploads/create",
+      args: params,
+      call: {__MODULE__, :create},
+      opts: opts,
       method: :post,
       path_template: "/v1/file_uploads",
       path_params: partition.path_params,
@@ -173,16 +177,14 @@ defmodule NotionSDK.FileUploads do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "file_upload_control",
-        retry_group: "notion.write",
-        telemetry_event: [:notion_sdk, :file_uploads, :create],
-        timeout_ms: nil
-      },
+      resource: "file_upload_control",
+      retry: "notion.write",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :file_uploads, :create],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @list_partition_spec %{
@@ -202,33 +204,32 @@ defmodule NotionSDK.FileUploads do
   @spec list(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_list_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_list_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
   @spec stream_list(term(), map(), keyword()) :: Enumerable.t()
   def stream_list(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
+    opts = normalize_request_opts!(opts)
 
     Stream.resource(
-      fn -> build_list_operation(params) end,
+      fn -> build_list_request(client, params, opts) end,
       fn
         nil ->
           {:halt, nil}
 
-        %Pristine.Operation{} = operation ->
-          operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
+        request when is_map(request) ->
+          wrapped_request =
+            update_in(request[:opts], fn request_opts ->
+              Keyword.put(request_opts || [], :response, :wrapped)
+            end)
 
-          case Pristine.execute(runtime_client, operation, execute_opts) do
+          case NotionSDK.Client.execute_generated_request(client, wrapped_request) do
             {:ok, response} ->
-              items = List.wrap(Pristine.Operation.items(operation, response))
-              {items, Pristine.Operation.next_page(operation, response)}
+              items = List.wrap(OpenAPIClient.items(request, response))
+              {items, OpenAPIClient.next_page_request(request, response)}
 
             {:error, reason} ->
               raise "pagination failed: " <> inspect(reason)
@@ -238,11 +239,16 @@ defmodule NotionSDK.FileUploads do
     )
   end
 
-  defp build_list_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @list_partition_spec)
+  defp build_list_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @list_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "file_uploads/list",
+      args: params,
+      call: {__MODULE__, :list},
+      opts: opts,
       method: :get,
       path_template: "/v1/file_uploads",
       path_params: partition.path_params,
@@ -267,14 +273,12 @@ defmodule NotionSDK.FileUploads do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "file_upload_control",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :file_uploads, :list],
-        timeout_ms: nil
-      },
+      resource: "file_upload_control",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :file_uploads, :list],
+      timeout: nil,
       pagination: %{
         default_limit: nil,
         items_path: ["results"],
@@ -282,7 +286,7 @@ defmodule NotionSDK.FileUploads do
         response_mapping: %{cursor_path: ["next_cursor"]},
         strategy: :cursor
       }
-    })
+    }
   end
 
   @retrieve_partition_spec %{
@@ -322,19 +326,21 @@ defmodule NotionSDK.FileUploads do
   @spec retrieve(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def retrieve(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_retrieve_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_retrieve_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_retrieve_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @retrieve_partition_spec)
+  defp build_retrieve_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @retrieve_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "file_uploads/retrieve",
+      args: params,
+      call: {__MODULE__, :retrieve},
+      opts: opts,
       method: :get,
       path_template: "/v1/file_uploads/{file_upload_id}",
       path_params: partition.path_params,
@@ -359,16 +365,14 @@ defmodule NotionSDK.FileUploads do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "core_api",
-        rate_limit_group: "notion.integration",
-        resource: "file_upload_control",
-        retry_group: "notion.read",
-        telemetry_event: [:notion_sdk, :file_uploads, :retrieve],
-        timeout_ms: nil
-      },
+      resource: "file_upload_control",
+      retry: "notion.read",
+      circuit_breaker: "core_api",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :file_uploads, :retrieve],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @send_partition_spec %{
@@ -438,19 +442,21 @@ defmodule NotionSDK.FileUploads do
   @spec send(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def send(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_send_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_send_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_send_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @send_partition_spec)
+  defp build_send_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @send_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "file_uploads/send",
+      args: params,
+      call: {__MODULE__, :send},
+      opts: opts,
       method: :post,
       path_template: "/v1/file_uploads/{file_upload_id}/send",
       path_params: partition.path_params,
@@ -475,16 +481,23 @@ defmodule NotionSDK.FileUploads do
         override: partition.auth,
         security_schemes: ["bearerAuth"]
       },
-      runtime: %{
-        circuit_breaker: "file_upload_send",
-        rate_limit_group: "notion.integration",
-        resource: "file_upload_send",
-        retry_group: "notion.file_upload_send",
-        telemetry_event: [:notion_sdk, :file_uploads, :send],
-        timeout_ms: nil
-      },
+      resource: "file_upload_send",
+      retry: "notion.file_upload_send",
+      circuit_breaker: "file_upload_send",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :file_uploads, :send],
+      timeout: nil,
       pagination: nil
-    })
+    }
+  end
+
+  @spec normalize_request_opts!(list()) :: keyword()
+  defp normalize_request_opts!(opts) when is_list(opts) do
+    if Keyword.keyword?(opts) do
+      opts
+    else
+      raise ArgumentError, "request opts must be a keyword list"
+    end
   end
 
   @doc false

@@ -18,11 +18,11 @@ mix notion.refresh --notion-docs-root /path/to/notion_docs --js-sdk-root /path/t
 parity inventory in `priv/upstream/parity_inventory.json`. It does not require
 a sibling `notion_docs` checkout when those fixtures are already present.
 
-The generated runtime surface targets `Pristine.Operation`,
-`Pristine.execute/3`, `Pristine.stream/3`, and thin `Pristine.Client`
-integration. The generated modules bind through the thin
-`NotionSDK.Client.pristine_client/1`, `runtime_execute_opts/2`, and
-`runtime_operation/3` helpers before calling the runtime directly.
+The generated runtime surface targets `Pristine.foundation_context/1`,
+`Pristine.execute_request/3`, `Pristine.stream/3`, and the shared
+`Pristine.SDK.OpenAPI.Client` helpers. The generated modules build request
+maps, then bind through the generated-request bridge inside `NotionSDK.Client`
+before calling the runtime.
 `notion_sdk` keeps direct compiler/runtime internals out of its public
 contract. Generated schema modules resolve through the provider-local
 `lib/notion_sdk/generated/runtime_schema.ex` helper rather than shared

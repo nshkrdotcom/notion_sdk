@@ -3,8 +3,9 @@
 `NotionSDK` is a thin Elixir client for the Notion API. The library stays close to the upstream JSON payloads, exposes the documented API namespaces as generated modules, and layers a small amount of Notion-specific behavior on top of `Pristine`.
 
 The dependency on `pristine` is intentional. `notion_sdk` targets
-`Pristine.Operation`, `Pristine.execute/3`, `Pristine.stream/3`,
-`Pristine.Client.foundation/1`, and `Pristine.OAuth2` as its supported runtime
+`Pristine.foundation_context/1`, `Pristine.execute_request/3`,
+`Pristine.SDK.OpenAPI.Client`, `Pristine.stream/3`, and `Pristine.OAuth2` as
+its supported runtime
 boundary.
 
 Related guides: `client-configuration.md`, `low-level-requests.md`, `versioning-and-compatibility.md`, `capabilities-permissions-and-sharing.md`, `examples/README.md`.
@@ -116,7 +117,7 @@ client =
 ```
 
 That configuration is implemented on top of the shared
-`Pristine.Client.foundation/1` runtime profile. NotionSDK keeps only the
+`Pristine.foundation_context/1` runtime profile. NotionSDK keeps only the
 provider-specific classifier and grouping logic.
 
 ## Make a first request

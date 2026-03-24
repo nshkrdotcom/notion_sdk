@@ -5,6 +5,8 @@ defmodule NotionSDK.Client do
 
   alias Pristine.Client, as: RuntimeClient
   alias Pristine.Operation
+  alias Pristine.SDK.Context
+  alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient
 
   @default_base_url "https://api.notion.com"
   @default_log_level :warn
@@ -50,17 +52,22 @@ defmodule NotionSDK.Client do
           optional(:call) => {module(), atom()},
           optional(:circuit_breaker) => String.t(),
           optional(:headers) => map(),
+          optional(:id) => String.t() | nil,
           optional(:opts) => keyword(),
+          optional(:pagination) => map() | nil,
           optional(:rate_limit) => String.t(),
           optional(:request) => [{String.t(), term()}],
+          optional(:request_schema) => term() | nil,
           optional(:resource) => String.t(),
           optional(:response) => [{integer() | :default, term()}],
+          optional(:response_schemas) => map(),
           optional(:retry) => String.t(),
           optional(:retry_opts) => keyword(),
           optional(:security) => [map()] | nil,
           optional(:telemetry) => term(),
-          optional(:timeout) => pos_integer(),
-          optional(:typed_responses) => boolean()
+          optional(:timeout) => pos_integer() | nil,
+          optional(:typed_responses) => boolean(),
+          optional(:use_default_auth) => boolean()
         }
 
   @type raw_request_t :: %{
@@ -83,7 +90,9 @@ defmodule NotionSDK.Client do
           optional(:retry) => String.t() | nil,
           optional(:retry_opts) => keyword(),
           optional(:telemetry) => term(),
-          optional(:timeout) => pos_integer()
+          optional(:timeout) => pos_integer() | nil,
+          optional(:opts) => keyword(),
+          optional(:use_default_auth) => boolean()
         }
 
   @type request_t :: raw_request_t()
@@ -91,13 +100,13 @@ defmodule NotionSDK.Client do
   @type t :: %__MODULE__{
           auth: String.t() | nil,
           base_url: String.t(),
-          context: term(),
+          context: Context.t() | nil,
           foundation: map() | nil,
           log_level: :debug | :info | :warn | :error | nil,
           logger: (atom(), String.t(), map() -> term()) | nil,
           notion_version: String.t(),
           oauth2: oauth2_config() | nil,
-          pristine_client: RuntimeClient.t(),
+          pristine_client: RuntimeClient.t() | nil,
           retry: retry_config(),
           timeout_ms: pos_integer(),
           transport: module(),
@@ -174,8 +183,9 @@ defmodule NotionSDK.Client do
       user_agent: user_agent
     }
 
-    runtime_client = build_runtime_client(client)
-    %{client | pristine_client: runtime_client, context: runtime_client.context}
+    context = build_context(client)
+    runtime_client = RuntimeClient.from_context(context)
+    %{client | pristine_client: runtime_client, context: context}
   end
 
   @spec pristine_client(t() | RuntimeClient.t()) :: RuntimeClient.t()
@@ -218,16 +228,7 @@ defmodule NotionSDK.Client do
   @spec request(t() | RuntimeClient.t(), request_t()) :: {:ok, term()} | {:error, term()}
   def request(client, request) when is_map(request) do
     if raw_request?(request) do
-      typed_runtime? = typed_runtime_enabled?(client, request)
-
-      operation =
-        request
-        |> Map.put(:form_data, normalize_form_data(request[:form_data]))
-        |> put_default_raw_security()
-        |> maybe_disable_raw_schemas(typed_runtime?)
-        |> build_raw_operation(client)
-
-      execute_operation(client, operation, request[:retry_opts] || [], typed_runtime?)
+      execute_raw_request(client, request)
     else
       raise ArgumentError, "expected raw request spec, got: #{inspect(request)}"
     end
@@ -244,35 +245,50 @@ defmodule NotionSDK.Client do
     if generated_request?(request) do
       typed_runtime? = typed_runtime_enabled?(client, request)
 
-      operation =
+      request_spec =
         request
         |> normalize_generated_request()
-        |> maybe_disable_generated_schemas(typed_runtime?)
-        |> build_generated_operation(client)
+        |> OpenAPIClient.to_request_spec()
+        |> prepare_request_spec(client, typed_runtime?)
 
-      execute_operation(client, operation, request[:retry_opts] || [], typed_runtime?)
+      execute_opts =
+        request[:opts]
+        |> normalize_execute_opts()
+        |> maybe_put(:retry_opts, request[:retry_opts])
+        |> maybe_put(:typed_responses, typed_runtime?)
+
+      Pristine.execute_request(request_spec, client_context(client), execute_opts)
     else
       raise ArgumentError, "expected generated request spec, got: #{inspect(request)}"
     end
   end
 
-  defp execute_operation(client, %Operation{} = operation, retry_opts, typed_responses?) do
-    execute_opts =
-      []
-      |> maybe_put(:retry_opts, retry_opts)
-      |> maybe_put(:typed_responses, typed_responses?)
+  defp execute_raw_request(client, request) do
+    typed_runtime? = typed_runtime_enabled?(client, request)
 
-    Pristine.execute(pristine_client(client), operation, execute_opts)
+    request_spec =
+      request
+      |> normalize_raw_request()
+      |> put_default_raw_security()
+      |> prepare_request_spec(client, typed_runtime?)
+
+    execute_opts =
+      request[:opts]
+      |> normalize_execute_opts()
+      |> maybe_put(:retry_opts, request[:retry_opts])
+      |> maybe_put(:typed_responses, typed_runtime?)
+
+    Pristine.execute_request(request_spec, client_context(client), execute_opts)
   end
 
-  defp build_runtime_client(%__MODULE__{} = client) do
-    RuntimeClient.foundation(
+  defp build_context(%__MODULE__{} = client) do
+    Pristine.foundation_context(
       admission_control: admission_control_profile(client.foundation),
       auth: default_auth(client.auth, client.oauth2),
       base_url: client.base_url,
       circuit_breaker: circuit_breaker_profile(client.foundation),
       default_timeout: client.timeout_ms,
-      default_headers: %{
+      headers: %{
         "Notion-Version" => client.notion_version,
         "User-Agent" => client.user_agent
       },
@@ -280,6 +296,7 @@ defmodule NotionSDK.Client do
       log_level: client.log_level,
       logger: client.logger,
       package_version: package_version(),
+      provider_profile: NotionSDK.ProviderProfile.profile(),
       rate_limit: rate_limit_profile(client.foundation),
       result_classifier: NotionSDK.ResultClassifier,
       retry: retry_profile(client.retry),
@@ -290,60 +307,6 @@ defmodule NotionSDK.Client do
       transport: client.transport,
       transport_opts: client.transport_opts
     )
-  end
-
-  defp build_generated_operation(request, client) do
-    request_schema = generated_request_schema(request[:request])
-    response_schemas = generated_response_schemas(request[:response])
-    resource = request[:resource] || resource_group(request)
-
-    Operation.new(%{
-      id: generated_request_id(request),
-      method: request[:method],
-      path_template: request[:path_template],
-      path_params: request[:path_params] || %{},
-      query: request[:query] || %{},
-      headers: request[:headers] || %{},
-      body: request[:body],
-      form_data: request[:form_data],
-      request_schema: request_schema,
-      response_schemas: response_schemas,
-      auth: runtime_auth(request[:auth], request[:security]),
-      runtime: %{
-        resource: resource,
-        retry_group: request[:retry] || retry_group(request, resource),
-        circuit_breaker: resolve_circuit_breaker(client, request[:circuit_breaker], resource),
-        rate_limit_group: request[:rate_limit] || "notion.integration",
-        telemetry_event: request[:telemetry],
-        timeout_ms: request[:timeout]
-      }
-    })
-  end
-
-  defp build_raw_operation(request, client) do
-    resource = request[:resource] || resource_group(request)
-
-    Operation.new(%{
-      id: request[:id] || "#{request[:method]} #{request[:path]}",
-      method: request[:method],
-      path_template: request[:path],
-      path_params: request[:path_params] || %{},
-      query: request[:query] || %{},
-      headers: request[:headers] || %{},
-      body: request[:body],
-      form_data: request[:form_data],
-      request_schema: request[:request_schema],
-      response_schemas: raw_response_schemas(request[:response_schema]),
-      auth: runtime_auth(request[:auth], request[:security]),
-      runtime: %{
-        resource: resource,
-        retry_group: request[:retry] || retry_group(request, resource),
-        circuit_breaker: resolve_circuit_breaker(client, request[:circuit_breaker], resource),
-        rate_limit_group: request[:rate_limit] || "notion.integration",
-        telemetry_event: request[:telemetry],
-        timeout_ms: request[:timeout]
-      }
-    })
   end
 
   defp generated_request_schema([]), do: nil
@@ -358,35 +321,10 @@ defmodule NotionSDK.Client do
 
   defp generated_response_schemas(_responses), do: %{}
 
-  defp raw_response_schemas(nil), do: %{}
-  defp raw_response_schemas(schema), do: %{default: schema}
-
-  defp runtime_auth(auth, security) do
-    %{
-      use_client_default?: use_client_default_auth?(auth),
-      override: normalize_request_auth(auth),
-      security_schemes: security_schemes(security)
-    }
-  end
-
   defp use_client_default_auth?(nil), do: true
   defp use_client_default_auth?(false), do: false
   defp use_client_default_auth?([]), do: false
   defp use_client_default_auth?(_auth), do: true
-
-  defp security_schemes(nil), do: []
-
-  defp security_schemes(security) when is_list(security) do
-    security
-    |> Enum.flat_map(fn
-      %{} = requirement -> Map.keys(requirement)
-      _other -> []
-    end)
-    |> Enum.map(&to_string/1)
-    |> Enum.uniq()
-  end
-
-  defp security_schemes(_security), do: []
 
   defp typed_runtime_enabled?(client, request) do
     default =
@@ -413,22 +351,6 @@ defmodule NotionSDK.Client do
 
   defp request_typed_responses(_args, default), do: default
 
-  defp maybe_disable_generated_schemas(request, true), do: request
-
-  defp maybe_disable_generated_schemas(request, false) do
-    request
-    |> Map.put(:request, [])
-    |> Map.put(:response, [])
-  end
-
-  defp maybe_disable_raw_schemas(request, true), do: request
-
-  defp maybe_disable_raw_schemas(request, false) do
-    request
-    |> Map.put(:request_schema, nil)
-    |> Map.put(:response_schema, nil)
-  end
-
   defp maybe_disable_operation_schemas(%Operation{} = operation, true), do: operation
 
   defp maybe_disable_operation_schemas(%Operation{} = operation, false) do
@@ -448,13 +370,71 @@ defmodule NotionSDK.Client do
     }
   end
 
+  defp client_context(%RuntimeClient{context: context}), do: context
+  defp client_context(%__MODULE__{context: context}), do: context
+
+  defp prepare_request_spec(request_spec, client, typed_runtime?) do
+    resource = request_spec[:resource] || resource_group(request_spec)
+    auth = normalize_request_auth(request_spec[:auth])
+    use_default_auth? = Map.get(request_spec, :use_default_auth, use_client_default_auth?(auth))
+
+    request_spec
+    |> Map.put(:auth, auth)
+    |> Map.put(:headers, request_spec[:headers] || %{})
+    |> Map.put(:query, request_spec[:query] || %{})
+    |> Map.put(:path_params, request_spec[:path_params] || %{})
+    |> Map.put(:form_data, normalize_form_data(request_spec[:form_data]))
+    |> Map.put(:use_default_auth, use_default_auth?)
+    |> maybe_disable_schemas(typed_runtime?)
+    |> Map.put(:resource, resource)
+    |> Map.put(:retry, request_spec[:retry] || retry_group(request_spec, resource))
+    |> Map.put(:rate_limit, request_spec[:rate_limit] || "notion.integration")
+    |> Map.put(
+      :circuit_breaker,
+      resolve_circuit_breaker(client, request_spec[:circuit_breaker], resource)
+    )
+  end
+
+  defp maybe_disable_schemas(request_spec, true), do: request_spec
+
+  defp maybe_disable_schemas(request_spec, false) do
+    request_spec
+    |> Map.put(:request_schema, nil)
+    |> Map.put(:response_schema, nil)
+  end
+
+  defp normalize_raw_request(request) when is_map(request) do
+    request
+    |> Map.put_new(:path_params, %{})
+    |> Map.put_new(:query, %{})
+    |> Map.put_new(:headers, %{})
+    |> Map.put_new(:form_data, nil)
+  end
+
   defp normalize_generated_request(request) when is_map(request) do
     request
     |> Map.put_new(:args, %{})
+    |> Map.put_new(:opts, [])
     |> Map.put_new(:headers, %{})
-    |> Map.put_new(:request, [])
-    |> Map.put_new(:response, [])
+    |> Map.put_new(:path_params, %{})
+    |> Map.put_new(:query, %{})
+    |> Map.put_new(:request_schema, generated_request_schema(request[:request]))
+    |> Map.put_new(:response_schemas, generated_response_schemas(request[:response]))
     |> Map.put_new(:security, nil)
+  end
+
+  defp normalize_execute_opts(nil), do: []
+
+  defp normalize_execute_opts(opts) when is_list(opts) do
+    if Keyword.keyword?(opts) do
+      opts
+    else
+      raise ArgumentError, "request opts must be a keyword list"
+    end
+  end
+
+  defp normalize_execute_opts(_opts) do
+    raise ArgumentError, "request opts must be a keyword list"
   end
 
   defp put_default_raw_security(%{path: path} = request) when is_binary(path) do
@@ -868,14 +848,6 @@ defmodule NotionSDK.Client do
       end
 
     "notion:#{host}:#{group}"
-  end
-
-  defp generated_request_id(%{call: {module, function}}) do
-    "#{inspect(module)}.#{function}"
-  end
-
-  defp generated_request_id(request) do
-    "#{request[:method]} #{request[:path_template]}"
   end
 
   defp package_version do

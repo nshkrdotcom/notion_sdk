@@ -17,10 +17,10 @@ reference fixtures and executed through the shared `pristine` runtime.
 That `pristine` dependency is intentional. `notion_sdk` targets the bounded
 public runtime surface:
 
-- `Pristine.Operation`
-- `Pristine.execute/3`
+- `Pristine.foundation_context/1`
+- `Pristine.execute_request/3`
+- `Pristine.SDK.OpenAPI.Client`
 - `Pristine.stream/3`
-- `Pristine.Client.foundation/1`
 - `Pristine.OAuth2`
 
 It does not treat broad `Pristine.Core.*` internals as
@@ -36,7 +36,9 @@ its SDK contract.
 - hand-written guides explain the supported runtime contract and common workflows around the generated API reference
 
 The client owns runtime concerns such as auth, retries, transport, and headers.
-Workspace resource ids stay on each request:
+Generated modules now emit request maps with stable runtime metadata and pass
+them through the shared `Pristine.execute_request/3` boundary. Workspace
+resource ids stay on each request:
 
 ```elixir
 {:ok, page} =

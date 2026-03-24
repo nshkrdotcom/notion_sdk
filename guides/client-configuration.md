@@ -44,8 +44,9 @@ Both return a `%NotionSDK.Client{}` configured with:
 The generic transport, retry, telemetry, and path-validation behavior behind
 these options comes from `pristine`. `notion_sdk` keeps the Notion-specific
 classifier, retry groups, breaker grouping, and default headers locally.
-It depends on `Pristine.Operation`, `Pristine.execute/3`,
-`Pristine.Client.foundation/1`, and `Pristine.OAuth2`, not broad runtime
+It depends on `Pristine.foundation_context/1`,
+`Pristine.execute_request/3`, `Pristine.SDK.OpenAPI.Client`, and
+`Pristine.OAuth2`, not broad runtime
 internals.
 
 ## Foundation-backed production runtime
@@ -71,7 +72,7 @@ client =
 ```
 
 This is a provider-specific facade over the shared
-`Pristine.Client.foundation/1` runtime builder. NotionSDK adds Notion-specific
+`Pristine.foundation_context/1` runtime builder. NotionSDK adds Notion-specific
 classification, retry groups, breaker naming, and integration-key behavior on
 top of that generic Pristine profile.
 
@@ -232,9 +233,10 @@ NotionSDK.OAuth.introspect(client, %{
 })
 ```
 
-These overrides are partitioned into a rendered `Pristine.Operation` and passed
-through `Pristine.execute/3` instead of mutating the client context, so bearer overrides, Basic
-overrides, and `auth: false` / `auth: []` all stay request-scoped.
+These overrides are partitioned into a request spec and passed through
+`Pristine.execute_request/3` instead of mutating the client context, so bearer
+overrides, Basic overrides, and `auth: false` / `auth: []` all stay
+request-scoped.
 
 Remove the client's default auth from one request with `false` or `[]`:
 

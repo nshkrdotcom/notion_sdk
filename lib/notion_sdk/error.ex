@@ -3,29 +3,9 @@ defmodule NotionSDK.Error do
   Notion-specific error type returned by the thin generated SDK.
   """
 
-  @api_code_map %{
-    "bad_gateway" => :bad_gateway,
-    "conflict_error" => :conflict_error,
-    "database_connection_unavailable" => :database_connection_unavailable,
-    "gateway_timeout" => :gateway_timeout,
-    "internal_server_error" => :internal_server_error,
-    "invalid_grant" => :invalid_grant,
-    "invalid_client" => :invalid_client,
-    "invalid_json" => :invalid_json,
-    "invalid_request" => :invalid_request,
-    "invalid_request_url" => :invalid_request_url,
-    "invalid_scope" => :invalid_scope,
-    "missing_version" => :missing_version,
-    "object_not_found" => :object_not_found,
-    "rate_limited" => :rate_limited,
-    "restricted_resource" => :restricted_resource,
-    "service_unavailable" => :service_unavailable,
-    "test_env_error" => :test_env_error,
-    "unauthorized" => :unauthorized,
-    "unauthorized_client" => :unauthorized_client,
-    "unsupported_grant_type" => :unsupported_grant_type,
-    "validation_error" => :validation_error
-  }
+  alias NotionSDK.ProviderProfile
+  alias Pristine.Error, as: RuntimeError
+
   @retryable_codes [
     :api_connection,
     :bad_gateway,
@@ -107,27 +87,19 @@ defmodule NotionSDK.Error do
   end
 
   @spec from_response(
-          Pristine.Response.t() | map(),
+          Pristine.SDK.Response.t() | map(),
           term(),
           non_neg_integer() | nil,
           keyword()
         ) :: t()
   def from_response(%{status: status} = response, body, retry_after_ms, _opts) do
-    body = normalize_body(body)
-    headers = Map.get(response, :headers, %{})
-    code = code_from_body(body) || code_from_status(status)
-    message = message_from_body(body) || "HTTP #{status}"
-
-    %__MODULE__{
-      additional_data: additional_data(body),
+    response
+    |> RuntimeError.from_response(
       body: body,
-      code: code,
-      headers: normalize_headers(headers),
-      message: message,
-      request_id: request_id(body, headers),
       retry_after_ms: retry_after_ms,
-      status: status
-    }
+      profile: ProviderProfile.profile()
+    )
+    |> from_runtime_error(status)
   end
 
   @spec connection_error(term()) :: t()
@@ -152,27 +124,6 @@ defmodule NotionSDK.Error do
     "[#{code}] #{message} (request_id: #{request_id})"
   end
 
-  defp additional_data(%{"additional_data" => additional_data}) when is_map(additional_data),
-    do: additional_data
-
-  defp additional_data(_body), do: nil
-
-  defp code_from_body(%{"code" => code}) when is_binary(code), do: Map.get(@api_code_map, code)
-  defp code_from_body(_body), do: nil
-
-  defp code_from_status(400), do: :invalid_request
-  defp code_from_status(401), do: :unauthorized
-  defp code_from_status(403), do: :restricted_resource
-  defp code_from_status(404), do: :object_not_found
-  defp code_from_status(409), do: :conflict_error
-  defp code_from_status(422), do: :validation_error
-  defp code_from_status(429), do: :rate_limited
-  defp code_from_status(500), do: :internal_server_error
-  defp code_from_status(502), do: :bad_gateway
-  defp code_from_status(503), do: :service_unavailable
-  defp code_from_status(504), do: :gateway_timeout
-  defp code_from_status(_status), do: :response_error
-
   defp format_reason(reason) do
     cond do
       is_struct(reason) and function_exported?(reason.__struct__, :message, 1) ->
@@ -186,23 +137,18 @@ defmodule NotionSDK.Error do
     end
   end
 
-  defp message_from_body(%{"message" => message}) when is_binary(message), do: message
-  defp message_from_body(_body), do: nil
-
-  defp normalize_body(nil), do: nil
-
-  defp normalize_body(body) when is_binary(body) do
-    case Jason.decode(body) do
-      {:ok, decoded} -> normalize_body(decoded)
-      {:error, _} -> %{"message" => body}
-    end
+  defp from_runtime_error(%RuntimeError{} = error, status) do
+    %__MODULE__{
+      additional_data: normalize_additional_data(error.additional_data),
+      body: error.body,
+      code: error.provider_code || :response_error,
+      headers: normalize_headers(error.headers),
+      message: error.message || "HTTP #{status}",
+      request_id: error.request_id,
+      retry_after_ms: error.retry_after_ms,
+      status: status
+    }
   end
-
-  defp normalize_body(body) when is_map(body) do
-    Map.new(body, fn {key, value} -> {to_string(key), value} end)
-  end
-
-  defp normalize_body(body), do: body
 
   defp normalize_headers(headers) when is_map(headers) do
     Map.new(headers, fn {key, value} -> {to_string(key), value} end)
@@ -214,11 +160,6 @@ defmodule NotionSDK.Error do
 
   defp normalize_headers(_headers), do: %{}
 
-  defp request_id(%{"request_id" => request_id}, _headers) when is_binary(request_id),
-    do: request_id
-
-  defp request_id(_body, headers) do
-    headers = normalize_headers(headers)
-    headers["x-request-id"] || headers["X-Request-Id"]
-  end
+  defp normalize_additional_data(data) when is_map(data), do: data
+  defp normalize_additional_data(_data), do: nil
 end

@@ -7,6 +7,8 @@ defmodule NotionSDK.OAuth do
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
 
+  alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient
+
   @introspect_partition_spec %{
     path: [],
     auth: %{
@@ -48,19 +50,21 @@ defmodule NotionSDK.OAuth do
   @spec introspect(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def introspect(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_introspect_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_introspect_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_introspect_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @introspect_partition_spec)
+  defp build_introspect_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @introspect_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "o_auth/introspect",
+      args: params,
+      call: {__MODULE__, :introspect},
+      opts: opts,
       method: :post,
       path_template: "/v1/oauth/introspect",
       path_params: partition.path_params,
@@ -81,16 +85,14 @@ defmodule NotionSDK.OAuth do
         override: partition.auth,
         security_schemes: ["basicAuth"]
       },
-      runtime: %{
-        circuit_breaker: "oauth_control",
-        rate_limit_group: "notion.integration",
-        resource: "oauth_control",
-        retry_group: "notion.oauth_control",
-        telemetry_event: [:notion_sdk, :o_auth, :introspect],
-        timeout_ms: nil
-      },
+      resource: "oauth_control",
+      retry: "notion.oauth_control",
+      circuit_breaker: "oauth_control",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :o_auth, :introspect],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @revoke_partition_spec %{
@@ -134,19 +136,21 @@ defmodule NotionSDK.OAuth do
   @spec revoke(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def revoke(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_revoke_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_revoke_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_revoke_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @revoke_partition_spec)
+  defp build_revoke_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @revoke_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "o_auth/revoke",
+      args: params,
+      call: {__MODULE__, :revoke},
+      opts: opts,
       method: :post,
       path_template: "/v1/oauth/revoke",
       path_params: partition.path_params,
@@ -167,16 +171,14 @@ defmodule NotionSDK.OAuth do
         override: partition.auth,
         security_schemes: ["basicAuth"]
       },
-      runtime: %{
-        circuit_breaker: "oauth_control",
-        rate_limit_group: "notion.integration",
-        resource: "oauth_control",
-        retry_group: "notion.oauth_control",
-        telemetry_event: [:notion_sdk, :o_auth, :revoke],
-        timeout_ms: nil
-      },
+      resource: "oauth_control",
+      retry: "notion.oauth_control",
+      circuit_breaker: "oauth_control",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :o_auth, :revoke],
+      timeout: nil,
       pagination: nil
-    })
+    }
   end
 
   @token_partition_spec %{
@@ -244,19 +246,21 @@ defmodule NotionSDK.OAuth do
   @spec token(term(), map(), keyword()) :: {:ok, term()} | {:error, term()}
   def token(client, params \\ %{}, opts \\ [])
       when is_map(params) and is_list(opts) do
-    runtime_client = NotionSDK.Client.pristine_client(client)
-    execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)
-    operation = build_token_operation(params)
-    operation = NotionSDK.Client.runtime_operation(client, operation, execute_opts)
-
-    Pristine.execute(runtime_client, operation, execute_opts)
+    opts = normalize_request_opts!(opts)
+    request = build_token_request(client, params, opts)
+    NotionSDK.Client.execute_generated_request(client, request)
   end
 
-  defp build_token_operation(params) when is_map(params) do
-    partition = Pristine.Operation.partition(params, @token_partition_spec)
+  defp build_token_request(client, params, opts)
+       when is_map(params) and is_list(opts) do
+    _ = client
+    partition = OpenAPIClient.partition(params, @token_partition_spec)
 
-    Pristine.Operation.new(%{
+    %{
       id: "o_auth/token",
+      args: params,
+      call: {__MODULE__, :token},
+      opts: opts,
       method: :post,
       path_template: "/v1/oauth/token",
       path_params: partition.path_params,
@@ -278,16 +282,23 @@ defmodule NotionSDK.OAuth do
         override: partition.auth,
         security_schemes: ["basicAuth"]
       },
-      runtime: %{
-        circuit_breaker: "oauth_control",
-        rate_limit_group: "notion.integration",
-        resource: "oauth_control",
-        retry_group: "notion.oauth_control",
-        telemetry_event: [:notion_sdk, :o_auth, :token],
-        timeout_ms: nil
-      },
+      resource: "oauth_control",
+      retry: "notion.oauth_control",
+      circuit_breaker: "oauth_control",
+      rate_limit: "notion.integration",
+      telemetry: [:notion_sdk, :o_auth, :token],
+      timeout: nil,
       pagination: nil
-    })
+    }
+  end
+
+  @spec normalize_request_opts!(list()) :: keyword()
+  defp normalize_request_opts!(opts) when is_list(opts) do
+    if Keyword.keyword?(opts) do
+      opts
+    else
+      raise ArgumentError, "request opts must be a keyword list"
+    end
   end
 
   @doc false

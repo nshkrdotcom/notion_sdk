@@ -7,19 +7,20 @@ defmodule NotionSDK.GeneratedSurfaceContractTest do
   @runtime_schema_source Path.join(@generated_dir, "runtime_schema.ex")
   @page_schema_source Path.join(@generated_dir, "schemas/page_object_response.ex")
 
-  test "generated operation modules build Pristine.Operation values and execute directly" do
+  test "generated operation modules build request maps and execute through the client bridge" do
     pages_source = File.read!(@pages_source)
     search_source = File.read!(@search_source)
 
-    assert pages_source =~ "Pristine.Operation.new("
-    assert pages_source =~ "Pristine.execute("
+    assert pages_source =~ "alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient"
+    assert pages_source =~ "NotionSDK.Client.execute_generated_request(client, request)"
     assert search_source =~ "def stream_search("
-    assert search_source =~ "case Pristine.execute("
-    assert pages_source =~ "NotionSDK.Client.pristine_client(client)"
 
-    refute pages_source =~ "Pristine.SDK.OpenAPI"
-    refute pages_source =~ "Pristine.execute_request("
-    refute pages_source =~ "OpenAPIRuntime"
+    assert search_source =~
+             "case NotionSDK.Client.execute_generated_request(client, wrapped_request)"
+
+    assert search_source =~ "OpenAPIClient.next_page_request(request, response)"
+    refute pages_source =~ "Pristine.Operation.new("
+    refute pages_source =~ "NotionSDK.Client.pristine_client(client)"
     refute pages_source =~ "GeneratedSupport"
   end
 

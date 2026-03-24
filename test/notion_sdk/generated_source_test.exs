@@ -122,32 +122,37 @@ defmodule NotionSDK.GeneratedSourceTest do
     oauth_source = File.read!(@oauth_source)
 
     assert users_source =~ ~s(resource: "core_api")
-    assert users_source =~ ~s(retry_group: "notion.read")
+    assert users_source =~ ~s(retry: "notion.read")
     assert users_source =~ ~s(circuit_breaker: "core_api")
-    assert users_source =~ ~s(rate_limit_group: "notion.integration")
+    assert users_source =~ ~s(rate_limit: "notion.integration")
 
     assert search_source =~ ~s(resource: "core_api")
-    assert search_source =~ ~s(retry_group: "notion.write")
+    assert search_source =~ ~s(retry: "notion.write")
 
     assert file_uploads_source =~ ~s(resource: "file_upload_send")
-    assert file_uploads_source =~ ~s(retry_group: "notion.file_upload_send")
+    assert file_uploads_source =~ ~s(retry: "notion.file_upload_send")
     assert file_uploads_source =~ ~s(circuit_breaker: "file_upload_send")
 
     assert oauth_source =~ ~s(resource: "oauth_control")
-    assert oauth_source =~ ~s(retry_group: "notion.oauth_control")
+    assert oauth_source =~ ~s(retry: "notion.oauth_control")
     assert oauth_source =~ ~s(circuit_breaker: "oauth_control")
   end
 
-  test "generated operations use Pristine.Operation and execute directly" do
+  test "generated operations use request maps and execute through the client boundary" do
     users_source = File.read!(@users_source)
     pages_source = File.read!(@pages_source)
+    search_source = File.read!(@search_source)
 
-    assert users_source =~ "Pristine.Operation.new("
-    assert users_source =~ "execute_opts = NotionSDK.Client.runtime_execute_opts(client, opts)"
-    assert users_source =~ "Pristine.execute(runtime_client, operation, execute_opts)"
-    assert users_source =~ "runtime_client = NotionSDK.Client.pristine_client(client)"
+    assert users_source =~ "opts = normalize_request_opts!(opts)"
+    assert users_source =~ "defp normalize_request_opts!(opts) when is_list(opts) do"
+    assert users_source =~ "request = build_get_self_request(client, params, opts)"
+    assert users_source =~ "NotionSDK.Client.execute_generated_request(client, request)"
+    assert users_source =~ "alias Pristine.SDK.OpenAPI.Client, as: OpenAPIClient"
     assert pages_source =~ "path_template: \"/v1/pages/{page_id}\""
-    refute users_source =~ "NotionSDK.Client.execute_generated_request(client, %{"
+    assert search_source =~ "OpenAPIClient.next_page_request(request, response)"
+    refute users_source =~ "Pristine.Operation.new("
+    refute users_source =~ "NotionSDK.Client.pristine_client(client)"
+    refute users_source =~ "Pristine.execute(runtime_client, operation, execute_opts)"
     refute pages_source =~ "url: "
     refute users_source =~ "NotionSDK.GeneratedOperation"
     refute pages_source =~ "NotionSDK.GeneratedOperation"

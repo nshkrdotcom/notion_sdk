@@ -83,6 +83,12 @@ defmodule NotionSDK.BoundaryContractTest do
     refute mixfile =~ "{:oauth2,"
   end
 
+  test "handwritten docs do not link hidden generated-request helpers directly" do
+    guide = File.read!("guides/regeneration-and-parity.md")
+
+    refute guide =~ "NotionSDK.Client.execute_generated_request/2"
+  end
+
   defp generated_path?(path) do
     String.contains?(path, "/lib/notion_sdk/generated/") or
       path in [
