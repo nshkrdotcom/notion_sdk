@@ -40,7 +40,7 @@ end
 Inside this repo, `pristine` child apps follow the same policy:
 
 - prefer sibling-relative paths when those checkouts exist
-- otherwise fall back to pinned git refs with `subdir:`
+- otherwise fall back to GitHub `subdir:` dependencies
 
 That keeps local development and downstream consumption aligned without a
 vendored `deps/` layout.

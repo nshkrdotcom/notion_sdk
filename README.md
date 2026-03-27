@@ -74,7 +74,7 @@ Within this repo, the shared `pristine` child apps now resolve by one stable
 policy:
 
 - prefer sibling-relative paths when local checkouts exist
-- otherwise fall back to pinned git refs with `subdir:`
+- otherwise fall back to GitHub `subdir:` dependencies
 
 That removes the need for a committed vendored `deps/` tree while keeping
 local development and downstream dependency behavior aligned.

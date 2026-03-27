@@ -18,7 +18,7 @@ mix notion.refresh --notion-docs-root /path/to/notion_docs --js-sdk-root /path/t
 parity inventory in `priv/upstream/parity_inventory.json`. It does not require
 a sibling `notion_docs` checkout when those fixtures are already present. It
 also no longer depends on a vendored `pristine` tree; sibling checkouts are
-preferred for local work and pinned git refs are the stable fallback.
+preferred for local work and GitHub `subdir:` deps are the stable fallback.
 
 The generated runtime surface targets `Pristine.foundation_context/1`,
 `Pristine.execute_request/3`, `Pristine.stream/3`, and the shared
