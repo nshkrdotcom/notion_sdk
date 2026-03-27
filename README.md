@@ -63,6 +63,22 @@ Then fetch dependencies:
 mix deps.get
 ```
 
+For active local development beside sibling checkouts, `notion_sdk` can also be
+consumed from a relative path:
+
+```elixir
+{:notion_sdk, path: "../notion_sdk"}
+```
+
+Within this repo, the shared `pristine` child apps now resolve by one stable
+policy:
+
+- prefer sibling-relative paths when local checkouts exist
+- otherwise fall back to pinned git refs with `subdir:`
+
+That removes the need for a committed vendored `deps/` tree while keeping
+local development and downstream dependency behavior aligned.
+
 ## Make one request
 
 Create a client with a bearer token:
