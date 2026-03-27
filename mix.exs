@@ -74,24 +74,26 @@ defmodule NotionSDK.MixProject do
     )
   end
 
-  defp path_dependency?(%Mix.Dep{opts: opts}), do: is_binary(opts[:path])
-
   defp path_dependencies do
-    if dependency_checkout?() do
-      []
-    else
-      Mix.Dep.load_and_cache()
-      |> Enum.filter(&path_dependency?/1)
-      |> Enum.map(fn %Mix.Dep{app: app, opts: opts} ->
-        %{app: app, path: Path.expand(opts[:path], __DIR__)}
-      end)
-    end
+    deps()
+    |> Enum.flat_map(&path_dependency/1)
   end
 
-  defp dependency_checkout? do
-    __DIR__
-    |> Path.split()
-    |> Enum.member?("deps")
+  defp path_dependency({app, opts}) when is_atom(app) and is_list(opts) do
+    path_dependency(app, opts)
+  end
+
+  defp path_dependency({app, _requirement, opts}) when is_atom(app) and is_list(opts) do
+    path_dependency(app, opts)
+  end
+
+  defp path_dependency(_dependency), do: []
+
+  defp path_dependency(app, opts) do
+    case Keyword.fetch(opts, :path) do
+      {:ok, path} -> [%{app: app, path: Path.expand(path, __DIR__)}]
+      :error -> []
+    end
   end
 
   defp description do
