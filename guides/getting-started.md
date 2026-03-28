@@ -15,7 +15,7 @@ Related guides: `client-configuration.md`, `low-level-requests.md`, `versioning-
 ```elixir
 def deps do
   [
-    {:notion_sdk, "~> 0.1.0"}
+    {:notion_sdk, "~> 0.2.0"}
   ]
 end
 ```
@@ -37,10 +37,11 @@ def deps do
 end
 ```
 
-Inside this repo, `pristine` child apps follow the same policy:
+Inside this repo, `pristine` dependencies follow the same policy:
 
 - prefer sibling-relative paths when those checkouts exist
-- otherwise fall back to GitHub `subdir:` dependencies
+- otherwise use Hex `pristine ~> 0.2.0` plus GitHub `subdir:` dependencies for
+  `pristine_codegen` and `pristine_provider_testkit`
 
 That keeps local development and downstream consumption aligned without a
 vendored `deps/` layout.

@@ -52,7 +52,7 @@ resource ids stay on each request:
 ```elixir
 def deps do
   [
-    {:notion_sdk, "~> 0.1.0"}
+    {:notion_sdk, "~> 0.2.0"}
   ]
 end
 ```
@@ -70,11 +70,12 @@ consumed from a relative path:
 {:notion_sdk, path: "../notion_sdk"}
 ```
 
-Within this repo, the shared `pristine` child apps now resolve by one stable
+Within this repo, the shared `pristine` dependencies now resolve by one stable
 policy:
 
 - prefer sibling-relative paths when local checkouts exist
-- otherwise fall back to GitHub `subdir:` dependencies
+- otherwise use Hex `pristine ~> 0.2.0` plus GitHub `subdir:` dependencies for
+  `pristine_codegen` and `pristine_provider_testkit`
 
 That removes the need for a committed vendored `deps/` tree while keeping
 local development and downstream dependency behavior aligned.

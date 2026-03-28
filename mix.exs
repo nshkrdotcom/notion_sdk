@@ -7,7 +7,7 @@ defmodule NotionSDK.MixProject do
   alias NotionSDK.Build.PltFingerprint
   alias NotionSDK.Build.DependencyResolver
 
-  @version "0.1.0"
+  @version "0.2.0"
   @source_url "https://github.com/nshkrdotcom/notion_sdk"
 
   def project do
@@ -28,8 +28,15 @@ defmodule NotionSDK.MixProject do
     ]
   end
 
-  defp elixirc_paths(:dev), do: ["lib", "codegen"]
-  defp elixirc_paths(:test), do: ["lib", "test/support", "codegen"]
+  defp elixirc_paths(:dev), do: if(include_tooling_deps?(), do: ["lib", "codegen"], else: ["lib"])
+
+  defp elixirc_paths(:test),
+    do:
+      if(include_tooling_deps?(),
+        do: ["lib", "test/support", "codegen"],
+        else: ["lib", "test/support"]
+      )
+
   defp elixirc_paths(_), do: ["lib"]
 
   def application do
@@ -41,9 +48,8 @@ defmodule NotionSDK.MixProject do
 
   defp deps do
     [
-      DependencyResolver.pristine_runtime(),
-      DependencyResolver.pristine_codegen(),
-      DependencyResolver.pristine_provider_testkit(only: :test),
+      pristine_runtime_dep(),
+      codegen_deps(),
       {:oapi_generator,
        github: "nshkrdotcom/open-api-generator",
        branch: "doc-generator-fix",
@@ -57,6 +63,26 @@ defmodule NotionSDK.MixProject do
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
+    |> List.flatten()
+  end
+
+  defp pristine_runtime_dep do
+    if use_hex_runtime_dep?() do
+      {:pristine, "~> 0.2.0"}
+    else
+      DependencyResolver.pristine_runtime()
+    end
+  end
+
+  defp codegen_deps do
+    if include_tooling_deps?() do
+      [
+        DependencyResolver.pristine_codegen(),
+        DependencyResolver.pristine_provider_testkit(only: :test)
+      ]
+    else
+      []
+    end
   end
 
   defp dialyzer do
@@ -107,7 +133,28 @@ defmodule NotionSDK.MixProject do
     [
       name: "notion_sdk",
       description: description(),
-      files: ~w(build_support config lib priv mix.exs README.md CHANGELOG.md LICENSE),
+      files: ~w(
+        assets/notion_sdk.svg
+        build_support/dependency_resolver.exs
+        build_support/plt_fingerprint.ex
+        lib/notion_sdk/application.ex
+        lib/notion_sdk/client.ex
+        lib/notion_sdk/error.ex
+        lib/notion_sdk/generated
+        lib/notion_sdk/guards.ex
+        lib/notion_sdk/helpers.ex
+        lib/notion_sdk/oauth.ex
+        lib/notion_sdk/oauth_token_file.ex
+        lib/notion_sdk/pagination.ex
+        lib/notion_sdk/provider_profile.ex
+        lib/notion_sdk/result_classifier.ex
+        lib/notion_sdk/retry.ex
+        lib/mix/tasks/notion.oauth.ex
+        CHANGELOG.md
+        LICENSE
+        README.md
+        mix.exs
+      ),
       licenses: ["MIT"],
       links: %{
         "GitHub" => @source_url
@@ -199,7 +246,7 @@ defmodule NotionSDK.MixProject do
   end
 
   defp groups_for_modules do
-    [
+    runtime_groups = [
       {"Core",
        [
          NotionSDK.Client,
@@ -221,24 +268,57 @@ defmodule NotionSDK.MixProject do
          NotionSDK.Search,
          NotionSDK.Users
        ]},
-      {"Tooling",
-       [
-         NotionSDK.Codegen,
-         NotionSDK.Codegen.OpenAPIProcessor,
-         NotionSDK.Codegen.Provider,
-         NotionSDK.Codegen.Plugins.Source,
-         NotionSDK.Codegen.Source.Extractor,
-         NotionSDK.Codegen.Source.PageContext,
-         Mix.Tasks.Notion.Oauth,
-         NotionSDK.Refresh,
-         Mix.Tasks.Notion.Generate,
-         Mix.Tasks.Notion.Refresh
-       ]},
       {"Generated Types", generated_type_module_pattern()}
     ]
+
+    published_task_group = [
+      {"Tasks", [Mix.Tasks.Notion.Oauth]}
+    ]
+
+    repo_tooling_group =
+      if include_tooling_deps?() do
+        [
+          {"Repo Tooling",
+           [
+             NotionSDK.Codegen,
+             NotionSDK.Codegen.OpenAPIProcessor,
+             NotionSDK.Codegen.Provider,
+             NotionSDK.Codegen.Plugins.Source,
+             NotionSDK.Codegen.Source.Extractor,
+             NotionSDK.Codegen.Source.PageContext,
+             NotionSDK.Refresh,
+             Mix.Tasks.Notion.Generate,
+             Mix.Tasks.Notion.Refresh
+           ]}
+        ]
+      else
+        []
+      end
+
+    runtime_groups ++ published_task_group ++ repo_tooling_group
   end
 
   defp generated_type_module_pattern do
     ~r/^NotionSDK\.(?!Application$|Auth(?:\.|$)|Blocks$|Client$|Codegen(?:\.|$)|Comments$|DataSources$|Databases$|Error$|FileUploads$|Guards$|Helpers$|OAuth$|OAuthTokenFile$|Pages$|Pagination$|Refresh$|Retry$|Search$|Users$)[A-Z]/
+  end
+
+  defp publishing_package? do
+    Enum.any?(System.argv(), &(&1 in ["hex.build", "hex.publish"]))
+  end
+
+  defp use_hex_runtime_dep? do
+    publishing_package?() or installing_as_dependency?() or force_hex_runtime_dep?()
+  end
+
+  defp include_tooling_deps? do
+    not use_hex_runtime_dep?()
+  end
+
+  defp installing_as_dependency? do
+    Enum.member?(Path.split(__DIR__), "deps")
+  end
+
+  defp force_hex_runtime_dep? do
+    System.get_env("NOTION_SDK_HEX_DEPS") in ["1", "true", "TRUE", "yes", "YES"]
   end
 end

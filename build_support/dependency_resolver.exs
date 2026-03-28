@@ -5,12 +5,10 @@ defmodule NotionSDK.Build.DependencyResolver do
   @pristine_repo "nshkrdotcom/pristine"
 
   def pristine_runtime(opts \\ []) do
-    resolve(
-      :pristine,
-      ["../pristine/apps/pristine_runtime"],
-      [github: @pristine_repo, branch: "master", subdir: "apps/pristine_runtime"],
-      opts
-    )
+    case workspace_path(["../pristine/apps/pristine_runtime"]) do
+      nil -> {:pristine, "~> 0.2.0", opts}
+      path -> {:pristine, Keyword.merge([path: path], opts)}
+    end
   end
 
   def pristine_codegen(opts \\ []) do
