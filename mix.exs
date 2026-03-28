@@ -52,7 +52,7 @@ defmodule NotionSDK.MixProject do
       {:jason, "~> 1.4"},
       {:finch, "~> 0.18"},
       {:telemetry, "~> 1.2"},
-      {:mox, "~> 1.1", only: :test},
+      {:mox, "~> 1.2", only: :test},
       {:ex_doc, "~> 0.40", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
