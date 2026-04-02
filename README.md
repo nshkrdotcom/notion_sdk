@@ -26,6 +26,12 @@ public runtime surface:
 It does not treat broad `Pristine.Core.*` internals as
 its SDK contract.
 
+Auth ownership is split intentionally:
+
+- `Pristine.OAuth2` owns the generic OAuth runtime behavior
+- `NotionSDK.OAuth` owns Notion-specific helper semantics and CLI UX
+- durable install and secret authority stay outside the SDK
+
 ## What this SDK is
 
 `NotionSDK` is intentionally thin:

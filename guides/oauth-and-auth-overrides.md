@@ -6,6 +6,12 @@ Normal Notion API calls use bearer auth. OAuth token exchange and token
 lifecycle operations use Basic auth credentials instead. `NotionSDK` supports
 both without forcing you to create separate client types.
 
+Ownership split:
+
+- `Pristine.OAuth2` owns the generic OAuth runtime behavior
+- `NotionSDK.OAuth` owns the Notion-specific URLs, owner defaults, and CLI UX
+- durable secret authority and hosted install records stay outside the SDK
+
 For most public integrations, use the redirect URI already registered under the
 integration's `OAuth Domain & URIs` settings and let the CLI guide you through
 the browser step:
