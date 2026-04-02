@@ -58,7 +58,7 @@ resource ids stay on each request:
 ```elixir
 def deps do
   [
-    {:notion_sdk, "~> 0.2.0"}
+    {:notion_sdk, "~> 0.2.1"}
   ]
 end
 ```
@@ -79,8 +79,11 @@ consumed from a relative path:
 Within this repo, the shared `pristine` dependencies now resolve by one stable
 policy:
 
-- prefer sibling-relative paths when local checkouts exist
-- otherwise use Hex `pristine ~> 0.2.0` plus GitHub `subdir:` dependencies for
+- prefer sibling-relative paths when local checkouts exist for normal compile,
+  test, and docs work
+- use release Hex/GitHub sources when running `mix deps.get`, `mix hex.build`,
+  or `mix hex.publish` so `mix.lock` stays publishable
+- otherwise use Hex `pristine ~> 0.2.1` plus GitHub `subdir:` dependencies for
   `pristine_codegen` and `pristine_provider_testkit`
 
 That removes the need for a committed vendored `deps/` tree while keeping

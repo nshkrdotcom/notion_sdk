@@ -6,7 +6,7 @@ defmodule NotionSDK.Build.DependencyResolver do
 
   def pristine_runtime(opts \\ []) do
     case workspace_path(["../pristine/apps/pristine_runtime"]) do
-      nil -> {:pristine, "~> 0.2.0", opts}
+      nil -> {:pristine, "~> 0.2.1", opts}
       path -> {:pristine, Keyword.merge([path: path], opts)}
     end
   end
@@ -47,7 +47,11 @@ defmodule NotionSDK.Build.DependencyResolver do
   end
 
   defp prefer_workspace_paths? do
-    not Enum.member?(Path.split(@project_root), "deps")
+    not release_locking_command?() and not Enum.member?(Path.split(@project_root), "deps")
+  end
+
+  defp release_locking_command? do
+    Enum.any?(System.argv(), &(&1 in ["deps.get", "hex.build", "hex.publish"]))
   end
 
   defp existing_path(relative_path) do

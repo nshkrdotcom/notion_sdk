@@ -7,7 +7,7 @@ defmodule NotionSDK.MixProject do
   alias NotionSDK.Build.PltFingerprint
   alias NotionSDK.Build.DependencyResolver
 
-  @version "0.2.0"
+  @version "0.2.1"
   @source_url "https://github.com/nshkrdotcom/notion_sdk"
 
   def project do
@@ -68,7 +68,7 @@ defmodule NotionSDK.MixProject do
 
   defp pristine_runtime_dep do
     if use_hex_runtime_dep?() do
-      {:pristine, "~> 0.2.0"}
+      {:pristine, "~> 0.2.1"}
     else
       DependencyResolver.pristine_runtime()
     end
@@ -306,12 +306,16 @@ defmodule NotionSDK.MixProject do
     Enum.any?(System.argv(), &(&1 in ["hex.build", "hex.publish"]))
   end
 
+  defp locking_release_deps? do
+    publishing_package?() or Enum.any?(System.argv(), &(&1 == "deps.get"))
+  end
+
   defp use_hex_runtime_dep? do
-    publishing_package?() or installing_as_dependency?() or force_hex_runtime_dep?()
+    locking_release_deps?() or installing_as_dependency?() or force_hex_runtime_dep?()
   end
 
   defp include_tooling_deps? do
-    not use_hex_runtime_dep?()
+    not (publishing_package?() or installing_as_dependency?() or force_hex_runtime_dep?())
   end
 
   defp installing_as_dependency? do

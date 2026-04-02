@@ -15,7 +15,7 @@ Related guides: `client-configuration.md`, `low-level-requests.md`, `versioning-
 ```elixir
 def deps do
   [
-    {:notion_sdk, "~> 0.2.0"}
+    {:notion_sdk, "~> 0.2.1"}
   ]
 end
 ```
@@ -39,8 +39,11 @@ end
 
 Inside this repo, `pristine` dependencies follow the same policy:
 
-- prefer sibling-relative paths when those checkouts exist
-- otherwise use Hex `pristine ~> 0.2.0` plus GitHub `subdir:` dependencies for
+- prefer sibling-relative paths when those checkouts exist for normal compile,
+  test, and docs work
+- use release Hex/GitHub sources when running `mix deps.get`, `mix hex.build`,
+  or `mix hex.publish` so `mix.lock` stays publishable
+- otherwise use Hex `pristine ~> 0.2.1` plus GitHub `subdir:` dependencies for
   `pristine_codegen` and `pristine_provider_testkit`
 
 That keeps local development and downstream consumption aligned without a
