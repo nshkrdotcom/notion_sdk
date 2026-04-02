@@ -15,7 +15,7 @@ defmodule NotionSDK.Build.DependencyResolver do
     resolve(
       :pristine_codegen,
       ["../pristine/apps/pristine_codegen"],
-      [github: @pristine_repo, branch: "master", subdir: "apps/pristine_codegen"],
+      [github: @pristine_repo, branch: "main", subdir: "apps/pristine_codegen"],
       opts
     )
   end
@@ -26,7 +26,7 @@ defmodule NotionSDK.Build.DependencyResolver do
       ["../pristine/apps/pristine_provider_testkit"],
       [
         github: @pristine_repo,
-        branch: "master",
+        branch: "main",
         subdir: "apps/pristine_provider_testkit"
       ],
       opts
