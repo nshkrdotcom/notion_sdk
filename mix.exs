@@ -134,7 +134,7 @@ defmodule NotionSDK.MixProject do
       name: "notion_sdk",
       description: description(),
       files: ~w(
-        assets/notion_sdk.svg
+        assets
         build_support/dependency_resolver.exs
         build_support/plt_fingerprint.ex
         lib/notion_sdk/application.ex
