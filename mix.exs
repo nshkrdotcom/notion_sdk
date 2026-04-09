@@ -154,6 +154,8 @@ defmodule NotionSDK.MixProject do
         LICENSE
         README.md
         mix.exs
+        examples
+        guides
       ),
       licenses: ["MIT"],
       links: %{
