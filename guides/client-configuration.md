@@ -1,6 +1,11 @@
 # Client Configuration
 
-`NotionSDK.Client` owns transport setup, default headers, retry behavior, and per-request auth overrides. Most applications only need one client per Notion integration token.
+`NotionSDK.Client` is a thin Notion-specific facade over the bounded
+`pristine` family surface. It selects Notion defaults for headers, retry
+groups, transport options, and per-request auth overrides, while the lower
+unary HTTP lane stays inside `pristine` and its Execution Plane-backed
+transport substrate. Most applications only need one client per Notion
+integration token.
 
 Related guides: `getting-started.md`, `low-level-requests.md`, `versioning-and-compatibility.md`, `errors-retries-and-observability.md`, `oauth-and-auth-overrides.md`.
 

@@ -8,6 +8,10 @@ The dependency on `pristine` is intentional. `notion_sdk` targets
 its supported runtime
 boundary.
 
+That means the provider-local surface stays in `NotionSDK.*`, while the lower
+HTTP execution path stays below the family boundary in `pristine` rather than
+reappearing as a repo-local transport API here.
+
 Related guides: `client-configuration.md`, `low-level-requests.md`, `versioning-and-compatibility.md`, `capabilities-permissions-and-sharing.md`, `examples/README.md`.
 
 ## Add the dependency

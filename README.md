@@ -41,10 +41,16 @@ Auth ownership is split intentionally:
 - generic transport, retry, telemetry, and path-safety behavior comes from `pristine`
 - hand-written guides explain the supported runtime contract and common workflows around the generated API reference
 
-The client owns runtime concerns such as auth, retries, transport, and headers.
+The client selects Notion-specific defaults for auth, retry groups, transport
+options, and headers.
 Generated modules now emit request maps with stable runtime metadata and pass
 them through the shared `Pristine.execute_request/3` boundary. Workspace
 resource ids stay on each request:
+
+That boundary is intentional. `notion_sdk` keeps its public SDK surface in
+`NotionSDK.*`, while the lower unary HTTP lane stays inside `pristine` and its
+Execution Plane-backed transport substrate instead of becoming a repo-local
+public path here.
 
 ```elixir
 {:ok, page} =

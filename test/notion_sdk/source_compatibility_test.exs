@@ -8,9 +8,11 @@ defmodule NotionSDK.SourceCompatibilityTest do
   setup do
     original_project = Mix.Project.get()
     original_argv = System.argv()
+    original_workspace_paths = System.get_env("FORCE_WORKSPACE_PATH_DEPS")
 
     on_exit(fn ->
       System.argv(original_argv)
+      restore_env("FORCE_WORKSPACE_PATH_DEPS", original_workspace_paths)
       restore_mix_project_stack(original_project)
     end)
 
@@ -47,6 +49,49 @@ defmodule NotionSDK.SourceCompatibilityTest do
 
     assert opts[:github] == "nshkrdotcom/pristine"
     refute Keyword.has_key?(opts, :path)
+
+    on_exit(fn ->
+      :code.purge(probe_module)
+      :code.delete(probe_module)
+    end)
+  end
+
+  test "FORCE_WORKSPACE_PATH_DEPS=1 keeps sibling workspace paths available during deps.get", %{
+    tmp_dir: tmp_dir
+  } do
+    probe_module =
+      Module.concat([
+        NotionSDK,
+        TestSupport,
+        "MixProjectWorkspaceProbe#{System.unique_integer([:positive])}"
+      ])
+
+    mix_path = Path.join([tmp_dir, "standalone", "notion_sdk", "mix.exs"])
+
+    write_transformed_mix_exs!(mix_path, probe_module)
+    System.put_env("FORCE_WORKSPACE_PATH_DEPS", "1")
+    System.argv(["deps.get"])
+
+    assert [{^probe_module, _beam}] = Code.compile_file(mix_path)
+
+    deps = probe_module.project()[:deps]
+
+    assert {:pristine, opts} = find_dependency!(deps, :pristine)
+
+    assert opts[:path] ==
+             Path.join(@project_root, "../pristine/apps/pristine_runtime") |> Path.expand()
+
+    assert {:pristine_codegen, opts} = find_dependency!(deps, :pristine_codegen)
+
+    assert opts[:path] ==
+             Path.join(@project_root, "../pristine/apps/pristine_codegen") |> Path.expand()
+
+    assert {:pristine_provider_testkit, opts} =
+             find_dependency!(deps, :pristine_provider_testkit)
+
+    assert opts[:path] ==
+             Path.join(@project_root, "../pristine/apps/pristine_provider_testkit")
+             |> Path.expand()
 
     on_exit(fn ->
       :code.purge(probe_module)
@@ -103,4 +148,7 @@ defmodule NotionSDK.SourceCompatibilityTest do
         restore_mix_project_stack(original_project)
     end
   end
+
+  defp restore_env(name, nil), do: System.delete_env(name)
+  defp restore_env(name, value), do: System.put_env(name, value)
 end
