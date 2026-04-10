@@ -9,54 +9,19 @@ defmodule NotionSDK.SourceCompatibilityTest do
     original_project = Mix.Project.get()
     original_argv = System.argv()
     original_workspace_paths = System.get_env("FORCE_WORKSPACE_PATH_DEPS")
+    original_hex_deps = System.get_env("NOTION_SDK_HEX_DEPS")
 
     on_exit(fn ->
       System.argv(original_argv)
       restore_env("FORCE_WORKSPACE_PATH_DEPS", original_workspace_paths)
+      restore_env("NOTION_SDK_HEX_DEPS", original_hex_deps)
       restore_mix_project_stack(original_project)
     end)
 
     :ok
   end
 
-  test "mix deps.get resolves release sources even when sibling workspaces exist", %{
-    tmp_dir: tmp_dir
-  } do
-    probe_module =
-      Module.concat([
-        NotionSDK,
-        TestSupport,
-        "MixProjectProbe#{System.unique_integer([:positive])}"
-      ])
-
-    mix_path = Path.join([tmp_dir, "standalone", "notion_sdk", "mix.exs"])
-
-    write_transformed_mix_exs!(mix_path, probe_module)
-    System.argv(["deps.get"])
-
-    assert [{^probe_module, _beam}] = Code.compile_file(mix_path)
-
-    deps = probe_module.project()[:deps]
-
-    assert {:pristine, "~> 0.2.1"} = find_dependency!(deps, :pristine)
-
-    assert {:pristine_codegen, opts} = find_dependency!(deps, :pristine_codegen)
-    assert opts[:github] == "nshkrdotcom/pristine"
-    refute Keyword.has_key?(opts, :path)
-
-    assert {:pristine_provider_testkit, opts} =
-             find_dependency!(deps, :pristine_provider_testkit)
-
-    assert opts[:github] == "nshkrdotcom/pristine"
-    refute Keyword.has_key?(opts, :path)
-
-    on_exit(fn ->
-      :code.purge(probe_module)
-      :code.delete(probe_module)
-    end)
-  end
-
-  test "FORCE_WORKSPACE_PATH_DEPS=1 keeps sibling workspace paths available during deps.get", %{
+  test "mix deps.get prefers sibling workspace sources when they exist", %{
     tmp_dir: tmp_dir
   } do
     probe_module =
@@ -69,7 +34,6 @@ defmodule NotionSDK.SourceCompatibilityTest do
     mix_path = Path.join([tmp_dir, "standalone", "notion_sdk", "mix.exs"])
 
     write_transformed_mix_exs!(mix_path, probe_module)
-    System.put_env("FORCE_WORKSPACE_PATH_DEPS", "1")
     System.argv(["deps.get"])
 
     assert [{^probe_module, _beam}] = Code.compile_file(mix_path)
@@ -81,17 +45,47 @@ defmodule NotionSDK.SourceCompatibilityTest do
     assert opts[:path] ==
              Path.join(@project_root, "../pristine/apps/pristine_runtime") |> Path.expand()
 
-    assert {:pristine_codegen, opts} = find_dependency!(deps, :pristine_codegen)
+    assert {:pristine_codegen, codegen_opts} = find_dependency!(deps, :pristine_codegen)
 
-    assert opts[:path] ==
+    assert codegen_opts[:path] ==
              Path.join(@project_root, "../pristine/apps/pristine_codegen") |> Path.expand()
 
-    assert {:pristine_provider_testkit, opts} =
+    assert {:pristine_provider_testkit, testkit_opts} =
              find_dependency!(deps, :pristine_provider_testkit)
 
-    assert opts[:path] ==
+    assert testkit_opts[:path] ==
              Path.join(@project_root, "../pristine/apps/pristine_provider_testkit")
              |> Path.expand()
+
+    on_exit(fn ->
+      :code.purge(probe_module)
+      :code.delete(probe_module)
+    end)
+  end
+
+  test "NOTION_SDK_HEX_DEPS=1 matches the published dependency surface during deps.get", %{
+    tmp_dir: tmp_dir
+  } do
+    probe_module =
+      Module.concat([
+        NotionSDK,
+        TestSupport,
+        "MixProjectPublishedProbe#{System.unique_integer([:positive])}"
+      ])
+
+    mix_path = Path.join([tmp_dir, "standalone", "notion_sdk", "mix.exs"])
+
+    write_transformed_mix_exs!(mix_path, probe_module)
+    System.put_env("NOTION_SDK_HEX_DEPS", "1")
+    System.argv(["deps.get"])
+
+    assert [{^probe_module, _beam}] = Code.compile_file(mix_path)
+
+    deps = probe_module.project()[:deps]
+
+    assert {:pristine, "~> 0.2.1"} = find_dependency!(deps, :pristine)
+    refute dependency_present?(deps, :pristine_codegen)
+    refute dependency_present?(deps, :pristine_provider_testkit)
 
     on_exit(fn ->
       :code.purge(probe_module)
@@ -133,6 +127,15 @@ defmodule NotionSDK.SourceCompatibilityTest do
       {^app, opts} when is_list(opts) -> true
       _other -> false
     end) || flunk("expected dependency #{inspect(app)} to be present")
+  end
+
+  defp dependency_present?(deps, app) do
+    Enum.any?(deps, fn
+      {^app, _requirement} -> true
+      {^app, _requirement, _opts} -> true
+      {^app, opts} when is_list(opts) -> true
+      _other -> false
+    end)
   end
 
   defp restore_mix_project_stack(original_project) do

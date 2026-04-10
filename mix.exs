@@ -309,12 +309,11 @@ defmodule NotionSDK.MixProject do
   end
 
   defp locking_release_deps? do
-    publishing_package?() or Enum.any?(System.argv(), &(&1 == "deps.get"))
+    publishing_package?() or force_hex_runtime_dep?()
   end
 
   defp use_hex_runtime_dep? do
-    (locking_release_deps?() and not force_workspace_path_deps?()) or
-      installing_as_dependency?() or force_hex_runtime_dep?()
+    locking_release_deps?() or installing_as_dependency?()
   end
 
   defp include_tooling_deps? do

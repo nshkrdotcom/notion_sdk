@@ -86,9 +86,11 @@ Within this repo, the shared `pristine` dependencies now resolve by one stable
 policy:
 
 - prefer sibling-relative paths when local checkouts exist for normal compile,
-  test, and docs work
-- use release Hex/GitHub sources when running `mix deps.get`, `mix hex.build`,
-  or `mix hex.publish` so `mix.lock` stays publishable
+  test, docs, and `mix deps.get`
+- use the published dependency surface when running `mix hex.build` or
+  `mix hex.publish`
+- set `NOTION_SDK_HEX_DEPS=1` if you want `mix deps.get` to ignore sibling
+  `../pristine` checkouts and resolve the published dependency surface instead
 - otherwise use Hex `pristine ~> 0.2.1` plus GitHub `subdir:` dependencies for
   `pristine_codegen` and `pristine_provider_testkit`
 
