@@ -152,7 +152,9 @@ defmodule NotionSDK.Client do
     timeout_ms = Keyword.get(opts, :timeout_ms, config(:timeout_ms, @default_timeout_ms))
     log_level = Keyword.get(opts, :log_level, @default_log_level)
     logger = Keyword.get(opts, :logger)
-    transport = Keyword.get(opts, :transport, Pristine.Adapters.Transport.Finch)
+
+    transport =
+      Keyword.get(opts, :transport, config(:transport, Pristine.Adapters.Transport.Finch))
 
     transport_opts =
       normalize_transport_opts(
