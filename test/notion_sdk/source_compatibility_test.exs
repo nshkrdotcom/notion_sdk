@@ -8,13 +8,9 @@ defmodule NotionSDK.SourceCompatibilityTest do
   setup do
     original_project = Mix.Project.get()
     original_argv = System.argv()
-    original_workspace_paths = System.get_env("FORCE_WORKSPACE_PATH_DEPS")
-    original_hex_deps = System.get_env("NOTION_SDK_HEX_DEPS")
 
     on_exit(fn ->
       System.argv(original_argv)
-      restore_env("FORCE_WORKSPACE_PATH_DEPS", original_workspace_paths)
-      restore_env("NOTION_SDK_HEX_DEPS", original_hex_deps)
       restore_mix_project_stack(original_project)
     end)
 
@@ -63,7 +59,7 @@ defmodule NotionSDK.SourceCompatibilityTest do
     end)
   end
 
-  test "NOTION_SDK_HEX_DEPS=1 matches the published dependency surface during deps.get", %{
+  test "hex packaging commands match the published dependency surface", %{
     tmp_dir: tmp_dir
   } do
     probe_module =
@@ -76,8 +72,7 @@ defmodule NotionSDK.SourceCompatibilityTest do
     mix_path = Path.join([tmp_dir, "standalone", "notion_sdk", "mix.exs"])
 
     write_transformed_mix_exs!(mix_path, probe_module)
-    System.put_env("NOTION_SDK_HEX_DEPS", "1")
-    System.argv(["deps.get"])
+    System.argv(["hex.build"])
 
     assert [{^probe_module, _beam}] = Code.compile_file(mix_path)
 
@@ -151,7 +146,4 @@ defmodule NotionSDK.SourceCompatibilityTest do
         restore_mix_project_stack(original_project)
     end
   end
-
-  defp restore_env(name, nil), do: System.delete_env(name)
-  defp restore_env(name, value), do: System.put_env(name, value)
 end

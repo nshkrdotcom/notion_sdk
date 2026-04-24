@@ -317,29 +317,15 @@ defmodule NotionSDK.MixProject do
     Enum.any?(System.argv(), &(&1 in ["hex.build", "hex.publish"]))
   end
 
-  defp locking_release_deps? do
-    publishing_package?() or force_hex_runtime_dep?()
-  end
-
   defp use_hex_runtime_dep? do
-    locking_release_deps?() or installing_as_dependency?()
+    publishing_package?() or installing_as_dependency?()
   end
 
   defp include_tooling_deps? do
-    force_workspace_path_deps?() or
-      not (publishing_package?() or installing_as_dependency?() or force_hex_runtime_dep?())
+    not (publishing_package?() or installing_as_dependency?())
   end
 
   defp installing_as_dependency? do
     Enum.member?(Path.split(__DIR__), "deps")
-  end
-
-  defp force_hex_runtime_dep? do
-    System.get_env("NOTION_SDK_HEX_DEPS") in ["1", "true", "TRUE", "yes", "YES"]
-  end
-
-  defp force_workspace_path_deps? do
-    not force_hex_runtime_dep?() and
-      System.get_env("FORCE_WORKSPACE_PATH_DEPS") in ["1", "true", "TRUE", "yes", "YES"]
   end
 end

@@ -41,27 +41,17 @@ defmodule NotionSDK.Build.DependencyResolver do
   end
 
   defp workspace_path(local_paths) do
-    if prefer_workspace_paths?() do
+    if local_workspace_deps?() do
       Enum.find_value(local_paths, &existing_path/1)
     end
   end
 
-  defp prefer_workspace_paths? do
-    workspace_paths_forced?() or
-      (not release_source_deps_forced?() and not Enum.member?(Path.split(@project_root), "deps"))
+  defp local_workspace_deps? do
+    not hex_packaging_task?() and not Enum.member?(Path.split(@project_root), "deps")
   end
 
-  defp release_source_deps_forced? do
-    force_hex_deps?() or Enum.any?(System.argv(), &(&1 in ["hex.build", "hex.publish"]))
-  end
-
-  defp workspace_paths_forced? do
-    not force_hex_deps?() and
-      System.get_env("FORCE_WORKSPACE_PATH_DEPS") in ["1", "true", "TRUE", "yes", "YES"]
-  end
-
-  defp force_hex_deps? do
-    System.get_env("NOTION_SDK_HEX_DEPS") in ["1", "true", "TRUE", "yes", "YES"]
+  defp hex_packaging_task? do
+    Enum.any?(System.argv(), &(&1 in ["hex.build", "hex.publish"]))
   end
 
   defp existing_path(relative_path) do
