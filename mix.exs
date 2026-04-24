@@ -161,7 +161,16 @@ defmodule NotionSDK.MixProject do
       links: %{
         "GitHub" => @source_url
       },
-      maintainers: ["nshkrdotcom"]
+      maintainers: ["nshkrdotcom"],
+      exclude_patterns: [
+        "**/_build/**",
+        "**/deps/**",
+        "**/doc/**",
+        "**/*.beam",
+        "**/*.plt",
+        "**/*.plt.hash",
+        "examples/_output/**"
+      ]
     ]
   end
 

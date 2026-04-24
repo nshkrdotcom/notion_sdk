@@ -24,3 +24,14 @@ notion_sdk-*.tar
 
 # Cloned reference JS SDK
 /notion-sdk-js/
+
+# Nested example project artifacts
+examples/_output/
+examples/**/_build/
+examples/**/deps/
+examples/**/doc/
+examples/**/cover/
+examples/**/priv/plts/
+examples/**/*.beam
+examples/**/*.plt
+examples/**/*.plt.hash
