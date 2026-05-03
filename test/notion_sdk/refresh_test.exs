@@ -156,14 +156,14 @@ defmodule NotionSDK.RefreshTest do
     assert metadata["parity_inventory"]["js_sdk"]["package"] == "@notionhq/client"
     assert metadata["parity_inventory"]["operation_count"] == 1
     assert metadata["provenance"]["notion_docs"]["git"]["available"] == true
-    assert metadata["provenance"]["notion_docs"]["git"]["commit"] =~ ~r/^[0-9a-f]{40}$/
+    assert hex_sha_40?(metadata["provenance"]["notion_docs"]["git"]["commit"])
 
     assert metadata["provenance"]["notion_docs"]["git"]["origin_url"] ==
              "https://example.com/notion_docs.git"
 
     assert metadata["provenance"]["js_sdk"]["package_version"] == "5.12.0"
     assert metadata["provenance"]["js_sdk"]["git"]["available"] == true
-    assert metadata["provenance"]["js_sdk"]["git"]["commit"] =~ ~r/^[0-9a-f]{40}$/
+    assert hex_sha_40?(metadata["provenance"]["js_sdk"]["git"]["commit"])
 
     assert metadata["provenance"]["js_sdk"]["git"]["origin_url"] ==
              "https://example.com/notion-sdk-js.git"
@@ -206,5 +206,19 @@ defmodule NotionSDK.RefreshTest do
       System.cmd(List.first(argv), Enum.drop(argv, 1), cd: cwd, stderr_to_stdout: true)
 
     output
+  end
+
+  defp hex_sha_40?(value) when is_binary(value) and byte_size(value) == 40 do
+    value
+    |> String.downcase()
+    |> do_hex_sha_40?()
+  end
+
+  defp hex_sha_40?(_value), do: false
+
+  defp do_hex_sha_40?(""), do: true
+
+  defp do_hex_sha_40?(<<char, rest::binary>>) do
+    (char in ?0..?9 or char in ?a..?f) and do_hex_sha_40?(rest)
   end
 end

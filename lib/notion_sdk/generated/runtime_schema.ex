@@ -43,8 +43,22 @@ defmodule NotionSDK.Generated.RuntimeSchema do
 
   @spec decode_module_type(module(), atom(), term()) :: {:ok, term()} | {:error, term()}
   def decode_module_type(module, type, data) when is_atom(module) and is_atom(type) do
-    with {:ok, validated} <- Sinter.Validator.validate(module.__schema__(type), data) do
+    with {:ok, validated} <- Sinter.Validator.validate(schema_for(module, type), data) do
       {:ok, materialize_module(module, type, validated)}
+    end
+  end
+
+  defp schema_for(module, type) do
+    key = {__MODULE__, :schema, module, type}
+
+    case :persistent_term.get(key, :missing) do
+      :missing ->
+        schema = module.__schema__(type)
+        :persistent_term.put(key, schema)
+        schema
+
+      schema ->
+        schema
     end
   end
 
@@ -71,19 +85,11 @@ defmodule NotionSDK.Generated.RuntimeSchema do
         []
       end
 
+    field_keys = materialize_field_keys(module)
+
     values =
       Enum.reduce(fields, %{}, fn field, acc ->
-        case Map.fetch(validated, field.name) do
-          {:ok, value} ->
-            Map.put(
-              acc,
-              String.to_atom(field.name),
-              materialize_openapi_value(field.type, value)
-            )
-
-          :error ->
-            acc
-        end
+        put_materialized_field(acc, field_keys, validated, field)
       end)
 
     if function_exported?(module, :__struct__, 0) do
@@ -91,6 +97,50 @@ defmodule NotionSDK.Generated.RuntimeSchema do
     else
       values
     end
+  end
+
+  defp put_materialized_field(acc, field_keys, validated, field) do
+    with {:ok, value} <- Map.fetch(validated, field.name),
+         {:ok, key} <- materialize_field_key(field_keys, field.name) do
+      Map.put(acc, key, materialize_openapi_value(field.type, value))
+    else
+      _other -> acc
+    end
+  end
+
+  defp materialize_field_keys(module) do
+    if function_exported?(module, :__struct__, 0) do
+      cached_struct_field_keys(module)
+    else
+      :string_keys
+    end
+  end
+
+  defp cached_struct_field_keys(module) do
+    key = {__MODULE__, :field_keys, module}
+
+    case :persistent_term.get(key, :missing) do
+      :missing ->
+        keys =
+          module
+          |> struct_field_keys()
+          |> Map.new(&{Atom.to_string(&1), &1})
+
+        :persistent_term.put(key, keys)
+        keys
+
+      keys ->
+        keys
+    end
+  end
+
+  defp materialize_field_key(:string_keys, field_name), do: {:ok, field_name}
+  defp materialize_field_key(field_keys, field_name), do: Map.fetch(field_keys, field_name)
+
+  defp struct_field_keys(module) do
+    module.__struct__()
+    |> Map.keys()
+    |> Enum.reject(&(&1 == :__struct__))
   end
 
   defp materialize_openapi_value(_type, nil), do: nil

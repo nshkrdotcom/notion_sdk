@@ -163,15 +163,26 @@ defmodule NotionSDK.Pagination do
     {:ok, templates, :done}
   end
 
-  defp normalize_template_page(%{"templates" => _templates} = page, params) do
-    case NotionSDK.DataSources.decode(page, :list_templates_200_json_resp) do
-      {:ok, decoded_page} ->
-        normalize_template_page(decoded_page, params)
-
-      {:error, _reason} = error ->
-        error
-    end
+  defp normalize_template_page(%{"templates" => templates} = page, params)
+       when is_list(templates) do
+    page
+    |> normalize_template_response(templates)
+    |> normalize_template_page(params)
   end
+
+  defp normalize_template_response(page, templates) do
+    %{
+      has_more: Map.get(page, "has_more"),
+      next_cursor: Map.get(page, "next_cursor"),
+      templates: Enum.map(templates, &normalize_template/1)
+    }
+  end
+
+  defp normalize_template(%{"id" => id, "name" => name, "is_default" => is_default}) do
+    %{id: id, name: name, is_default: is_default}
+  end
+
+  defp normalize_template(template), do: template
 
   defp enable_typed_responses(params) when is_map(params) do
     Map.put(params, :typed_responses, true)

@@ -31,6 +31,17 @@ defmodule NotionSDK.BoundaryContractTest do
     "codegen/**/*.ex"
   ]
 
+  @prohibited_source_tokens [
+    "String." <> "to_atom",
+    "binary_" <> "to_atom",
+    "to_existing_" <> "atom",
+    "list_" <> "to_atom",
+    "Reg" <> "ex",
+    "~" <> "r",
+    ":r" <> "e.",
+    "String." <> "match"
+  ]
+
   test "handwritten source depends on the hardened pristine boundary instead of old internals" do
     violations =
       @handwritten_globs
@@ -62,6 +73,27 @@ defmodule NotionSDK.BoundaryContractTest do
       |> Enum.sort()
 
     assert bridge_refs == []
+  end
+
+  test "active source avoids dynamic atom conversion and pattern engines" do
+    violations =
+      @code_globs
+      |> Enum.flat_map(&Path.wildcard/1)
+      |> Enum.reject(&generated_path?/1)
+      |> Enum.flat_map(fn path ->
+        source = File.read!(path)
+
+        Enum.flat_map(@prohibited_source_tokens, fn token ->
+          if String.contains?(source, token) do
+            ["#{path}: #{token}"]
+          else
+            []
+          end
+        end)
+      end)
+      |> Enum.sort()
+
+    assert violations == []
   end
 
   test "mix notion.oauth defaults route through the retained pristine oauth helpers" do

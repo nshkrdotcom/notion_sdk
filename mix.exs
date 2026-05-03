@@ -310,7 +310,22 @@ defmodule NotionSDK.MixProject do
   end
 
   defp generated_type_module_pattern do
-    ~r/^NotionSDK\.(?!Application$|Auth(?:\.|$)|Blocks$|Client$|Codegen(?:\.|$)|Comments$|DataSources$|Databases$|Error$|FileUploads$|Guards$|Helpers$|OAuth$|OAuthTokenFile$|Pages$|Pagination$|Refresh$|Retry$|Search$|Users$)[A-Z]/
+    generated_schema_module_names()
+  end
+
+  defp generated_schema_module_names do
+    __DIR__
+    |> Path.join("lib/notion_sdk/generated/schemas/**/*.ex")
+    |> Path.wildcard()
+    |> Enum.map(&schema_module_name/1)
+    |> Enum.sort()
+  end
+
+  defp schema_module_name(path) do
+    path
+    |> Path.basename(".ex")
+    |> Macro.camelize()
+    |> then(&"NotionSDK.#{&1}")
   end
 
   defp publishing_package? do

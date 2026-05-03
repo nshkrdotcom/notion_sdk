@@ -5,6 +5,68 @@ defmodule NotionSDK.Codegen.Plugins.Source do
   alias PristineCodegen.Source.Dataset
 
   @openapi_profile :notion_sdk_codegen_source
+  @telemetry_module_segments %{
+    "Blocks" => :blocks,
+    "Comments" => :comments,
+    "DataSources" => :data_sources,
+    "Databases" => :databases,
+    "FileUploads" => :file_uploads,
+    "OAuth" => :oauth,
+    "Pages" => :pages,
+    "Search" => :search,
+    "Users" => :users
+  }
+  @provider_key_atoms %{
+    "attachments" => :attachments,
+    "auth" => :auth,
+    "block_id" => :block_id,
+    "children" => :children,
+    "client_id" => :client_id,
+    "client_secret" => :client_secret,
+    "comment_id" => :comment_id,
+    "content" => :content,
+    "content_type" => :content_type,
+    "cover" => :cover,
+    "data_source_id" => :data_source_id,
+    "database_id" => :database_id,
+    "description" => :description,
+    "display_name" => :display_name,
+    "erase_content" => :erase_content,
+    "external_url" => :external_url,
+    "file" => :file,
+    "file_upload_id" => :file_upload_id,
+    "filename" => :filename,
+    "filter" => :filter,
+    "filter_properties" => :filter_properties,
+    "icon" => :icon,
+    "in_trash" => :in_trash,
+    "include_transcript" => :include_transcript,
+    "initial_data_source" => :initial_data_source,
+    "is_inline" => :is_inline,
+    "is_locked" => :is_locked,
+    "markdown" => :markdown,
+    "mode" => :mode,
+    "name" => :name,
+    "number_of_parts" => :number_of_parts,
+    "page_id" => :page_id,
+    "page_size" => :page_size,
+    "parent" => :parent,
+    "part_number" => :part_number,
+    "position" => :position,
+    "properties" => :properties,
+    "property_id" => :property_id,
+    "query" => :query,
+    "result_type" => :result_type,
+    "rich_text" => :rich_text,
+    "sort" => :sort,
+    "sorts" => :sorts,
+    "start_cursor" => :start_cursor,
+    "status" => :status,
+    "template" => :template,
+    "title" => :title,
+    "token" => :token,
+    "user_id" => :user_id
+  }
 
   @spec load(module(), keyword()) :: Dataset.t()
   def load(_provider_module, opts) when is_list(opts) do
@@ -206,7 +268,7 @@ defmodule NotionSDK.Codegen.Plugins.Source do
       fields ->
         %{
           mode: :keys,
-          keys: Enum.map(fields, &{&1.name, String.to_atom(&1.name)})
+          keys: Enum.map(fields, &{&1.name, provider_key!(&1.name)})
         }
     end
   end
@@ -217,7 +279,7 @@ defmodule NotionSDK.Codegen.Plugins.Source do
     Enum.map(params, fn param ->
       %{
         name: param.name,
-        key: String.to_atom(param.name),
+        key: provider_key!(param.name),
         required: param.required
       }
     end)
@@ -386,9 +448,17 @@ defmodule NotionSDK.Codegen.Plugins.Source do
   defp telemetry_event(operation) do
     [
       :notion_sdk,
-      operation.module_name |> module_segment() |> Macro.underscore() |> String.to_atom(),
+      operation.module_name |> module_segment() |> telemetry_module_segment(),
       operation.function_name
     ]
+  end
+
+  defp telemetry_module_segment(segment) do
+    Map.fetch!(@telemetry_module_segments, segment)
+  end
+
+  defp provider_key!(name) do
+    Map.fetch!(@provider_key_atoms, name)
   end
 
   defp operation_doc(source_context, operation) do

@@ -228,8 +228,11 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
                path: path
              )
 
-    assert_raise Mix.Error, ~r/does not contain a refresh token/, fn ->
-      OAuthTask.run(["refresh", "--path=#{path}"])
-    end
+    error =
+      assert_raise Mix.Error, fn ->
+        OAuthTask.run(["refresh", "--path=#{path}"])
+      end
+
+    assert String.contains?(error.message, "does not contain a refresh token")
   end
 end

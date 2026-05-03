@@ -9111,7 +9111,7 @@
         "retry_group": "notion.oauth_control",
         "telemetry_event": [
           "notion_sdk",
-          "o_auth",
+          "oauth",
           "introspect"
         ],
         "timeout_ms": null
@@ -9216,7 +9216,7 @@
         "retry_group": "notion.oauth_control",
         "telemetry_event": [
           "notion_sdk",
-          "o_auth",
+          "oauth",
           "revoke"
         ],
         "timeout_ms": null
@@ -9370,7 +9370,7 @@
         "retry_group": "notion.oauth_control",
         "telemetry_event": [
           "notion_sdk",
-          "o_auth",
+          "oauth",
           "token"
         ],
         "timeout_ms": null

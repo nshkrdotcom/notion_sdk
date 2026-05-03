@@ -104,15 +104,31 @@ defmodule NotionSDK.Codegen.Source.Extractor do
   end
 
   defp extract_yaml_block!(markdown) do
-    case Regex.named_captures(
-           ~r/````yaml(?:\s+(?<method>[A-Za-z]+)\s+(?<path>\S+))?\n(?<yaml>.*?)\n````/ms,
-           markdown
-         ) do
-      %{"yaml" => yaml} = captures ->
-        {String.trim_trailing(yaml) <> "\n", captures}
+    marker = "````yaml"
 
+    with {start, _size} <- :binary.match(markdown, marker),
+         after_marker <-
+           binary_part(
+             markdown,
+             start + byte_size(marker),
+             byte_size(markdown) - start - byte_size(marker)
+           ),
+         [header, rest] <- String.split(after_marker, "\n", parts: 2),
+         [yaml, _after_block] <- String.split(rest, "\n````", parts: 2) do
+      {String.trim_trailing(yaml) <> "\n", yaml_block_metadata(header, yaml)}
+    else
       _ ->
         raise "unable to extract OpenAPI fixture from markdown page"
+    end
+  end
+
+  defp yaml_block_metadata(header, yaml) do
+    header_parts = header |> String.trim() |> String.split(" ", trim: true)
+    metadata = %{"yaml" => yaml}
+
+    case header_parts do
+      [method, path] -> Map.merge(metadata, %{"method" => method, "path" => path})
+      _ -> metadata
     end
   end
 
@@ -144,8 +160,32 @@ defmodule NotionSDK.Codegen.Source.Extractor do
   end
 
   defp parse_variables(markdown) do
-    Regex.scan(~r/^export const (\w+) = "(.*?)";$/m, markdown, capture: :all_but_first)
-    |> Enum.into(%{}, fn [name, value] -> {name, value} end)
+    markdown
+    |> String.split("\n")
+    |> Enum.reduce(%{}, fn line, acc ->
+      case parse_variable_line(line) do
+        {name, value} -> Map.put(acc, name, value)
+        nil -> acc
+      end
+    end)
+  end
+
+  defp parse_variable_line("export const " <> rest) do
+    with [name, value_and_suffix] <- String.split(rest, " = \"", parts: 2),
+         [value, ""] <- String.split(value_and_suffix, "\";", parts: 2),
+         true <- identifier?(name) do
+      {name, value}
+    else
+      _ -> nil
+    end
+  end
+
+  defp parse_variable_line(_line), do: nil
+
+  defp identifier?(value) when is_binary(value) and value != "" do
+    value
+    |> String.to_charlist()
+    |> Enum.all?(fn char -> char == ?_ or char in ?a..?z or char in ?A..?Z or char in ?0..?9 end)
   end
 
   defp strip_documentation_index(markdown) do
@@ -338,7 +378,7 @@ defmodule NotionSDK.Codegen.Source.Extractor do
     line
     |> replace_anchor_links(variables)
     |> replace_markdown_relative_links()
-    |> String.replace(~r/^>\s?/, "")
+    |> strip_quote_prefix()
     |> String.trim()
     |> case do
       "" -> nil
@@ -346,19 +386,67 @@ defmodule NotionSDK.Codegen.Source.Extractor do
     end
   end
 
+  defp strip_quote_prefix(">" <> rest) do
+    String.replace_prefix(rest, " ", "")
+  end
+
+  defp strip_quote_prefix(line), do: line
+
   defp replace_anchor_links(line, variables) do
-    Regex.replace(~r/<a href=\{(\w+)\}>(.*?)<\/a>/, line, fn _match, variable, label ->
-      case Map.get(variables, variable) do
-        nil -> label
-        url -> "[#{label}](#{url})"
-      end
-    end)
+    replace_anchor_links(line, variables, "")
+  end
+
+  defp replace_anchor_links("", _variables, acc), do: acc
+
+  defp replace_anchor_links(line, variables, acc) do
+    case String.split(line, "<a href={", parts: 2) do
+      [prefix, rest] ->
+        case String.split(rest, "}>", parts: 2) do
+          [variable, label_and_rest] ->
+            case String.split(label_and_rest, "</a>", parts: 2) do
+              [label, suffix] ->
+                replacement =
+                  case Map.get(variables, variable) do
+                    nil -> label
+                    url -> "[#{label}](#{url})"
+                  end
+
+                replace_anchor_links(suffix, variables, acc <> prefix <> replacement)
+
+              _ ->
+                acc <> line
+            end
+
+          _ ->
+            acc <> line
+        end
+
+      [_no_anchor] ->
+        acc <> line
+    end
   end
 
   defp replace_markdown_relative_links(line) do
-    Regex.replace(~r/\]\((\/[^)]+)\)/, line, fn _match, relative_url ->
-      "](#{@relative_link_base}#{relative_url})"
-    end)
+    replace_markdown_relative_links(line, "")
+  end
+
+  defp replace_markdown_relative_links("", acc), do: acc
+
+  defp replace_markdown_relative_links(line, acc) do
+    case String.split(line, "](/", parts: 2) do
+      [prefix, rest] ->
+        case String.split(rest, ")", parts: 2) do
+          [relative_path, suffix] ->
+            replacement = "](#{@relative_link_base}/#{relative_path})"
+            replace_markdown_relative_links(suffix, acc <> prefix <> replacement)
+
+          _ ->
+            acc <> line
+        end
+
+      [_no_relative_link] ->
+        acc <> line
+    end
   end
 
   defp extract_resources(lines) when is_list(lines) do
@@ -370,18 +458,61 @@ defmodule NotionSDK.Codegen.Source.Extractor do
   defp extract_resources_from_line(line) do
     normalized_line = neutralize_inline_code_brackets(line)
 
-    Regex.scan(~r/\[(.*?)\]\((.*?)\)/, normalized_line, capture: :all_but_first)
-    |> Enum.map(fn [label, url] ->
+    normalized_line
+    |> markdown_links()
+    |> Enum.map(fn {label, url} ->
       %{label: label, url: normalize_url(url), kind: resource_kind(url)}
     end)
   end
 
+  defp markdown_links(line), do: markdown_links(line, [])
+
+  defp markdown_links("", acc), do: Enum.reverse(acc)
+
+  defp markdown_links(line, acc) do
+    case String.split(line, "[", parts: 2) do
+      [_before, label_and_rest] ->
+        case String.split(label_and_rest, "](", parts: 2) do
+          [label, url_and_rest] ->
+            case String.split(url_and_rest, ")", parts: 2) do
+              [url, rest] -> markdown_links(rest, [{label, url} | acc])
+              _ -> Enum.reverse(acc)
+            end
+
+          _ ->
+            Enum.reverse(acc)
+        end
+
+      [_no_link] ->
+        Enum.reverse(acc)
+    end
+  end
+
   defp neutralize_inline_code_brackets(line) do
-    Regex.replace(~r/`([^`]*)`/, line, fn _match, code ->
-      code
-      |> String.replace("[", "")
-      |> String.replace("]", "")
-    end)
+    neutralize_inline_code_brackets(line, "")
+  end
+
+  defp neutralize_inline_code_brackets("", acc), do: acc
+
+  defp neutralize_inline_code_brackets(line, acc) do
+    case String.split(line, "`", parts: 2) do
+      [prefix, rest] ->
+        case String.split(rest, "`", parts: 2) do
+          [code, suffix] ->
+            neutralized =
+              code
+              |> String.replace("[", "")
+              |> String.replace("]", "")
+
+            neutralize_inline_code_brackets(suffix, acc <> prefix <> neutralized)
+
+          _ ->
+            acc <> line
+        end
+
+      [_no_code] ->
+        acc <> line
+    end
   end
 
   defp gather_resources(scan_result, slug) do
@@ -471,21 +602,36 @@ defmodule NotionSDK.Codegen.Source.Extractor do
   defp put_alert(alerts, alert), do: %{alerts | info: alerts.info ++ [alert]}
 
   defp parse_heading(line) do
-    case Regex.run(~r/^(#+)\s+(.+)$/, line, capture: :all_but_first) do
-      [hashes, heading] -> %{level: String.length(hashes), heading: String.trim(heading)}
-      _ -> nil
+    {hashes, rest} = String.split_at(line, leading_hash_count(line))
+
+    cond do
+      hashes == "" ->
+        nil
+
+      String.starts_with?(rest, " ") ->
+        %{level: String.length(hashes), heading: String.trim(rest)}
+
+      true ->
+        nil
     end
   end
+
+  defp leading_hash_count(line), do: leading_hash_count(line, 0)
+
+  defp leading_hash_count(<<"#", rest::binary>>, count), do: leading_hash_count(rest, count + 1)
+  defp leading_hash_count(_line, count), do: count
 
   defp special_heading?(heading) do
     String.downcase(heading.heading || heading["heading"] || "") in ["limits", "errors"]
   end
 
   defp extract_title(body) when is_binary(body) do
-    case Regex.run(~r/^\*\*(.+?)\*\*(?:\n+(?<rest>.*))?$/s, body, capture: :all_but_first) do
-      [title, rest] -> %{title: String.trim(title), body: present(rest)}
-      [title] -> %{title: String.trim(title), body: nil}
-      _ -> %{title: nil, body: present(body)}
+    case String.split(body, "**", parts: 3) do
+      ["", title, rest] ->
+        %{title: String.trim(title), body: rest |> String.trim_leading() |> present()}
+
+      _ ->
+        %{title: nil, body: present(body)}
     end
   end
 

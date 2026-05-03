@@ -89,7 +89,7 @@ defmodule NotionSDK.OAuth do
       retry: "notion.oauth_control",
       circuit_breaker: "oauth_control",
       rate_limit: "notion.integration",
-      telemetry: [:notion_sdk, :o_auth, :introspect],
+      telemetry: [:notion_sdk, :oauth, :introspect],
       timeout: nil,
       pagination: nil
     }
@@ -175,7 +175,7 @@ defmodule NotionSDK.OAuth do
       retry: "notion.oauth_control",
       circuit_breaker: "oauth_control",
       rate_limit: "notion.integration",
-      telemetry: [:notion_sdk, :o_auth, :revoke],
+      telemetry: [:notion_sdk, :oauth, :revoke],
       timeout: nil,
       pagination: nil
     }
@@ -286,7 +286,7 @@ defmodule NotionSDK.OAuth do
       retry: "notion.oauth_control",
       circuit_breaker: "oauth_control",
       rate_limit: "notion.integration",
-      telemetry: [:notion_sdk, :o_auth, :token],
+      telemetry: [:notion_sdk, :oauth, :token],
       timeout: nil,
       pagination: nil
     }

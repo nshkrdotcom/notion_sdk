@@ -69,27 +69,33 @@ defmodule NotionSDK.ClientTest do
     end
 
     test "requires a dispatch server handle when dispatch admission control is enabled" do
-      assert_raise ArgumentError, ~r/foundation dispatch requires/, fn ->
-        Client.new(
-          auth: "secret_test_token",
-          foundation: [
-            integration_key: {:integration, :demo},
-            dispatch: [enabled: true]
-          ]
-        )
-      end
+      error =
+        assert_raise ArgumentError, fn ->
+          Client.new(
+            auth: "secret_test_token",
+            foundation: [
+              integration_key: {:integration, :demo},
+              dispatch: [enabled: true]
+            ]
+          )
+        end
+
+      assert String.contains?(error.message, "foundation dispatch requires")
     end
 
     test "rejects legacy retry option names" do
-      assert_raise ArgumentError, ~r/unknown retry option/, fn ->
-        Client.new(
-          retry: [
-            max_attempts: 4,
-            base_delay_ms: 250,
-            max_delay_ms: 5_000
-          ]
-        )
-      end
+      error =
+        assert_raise ArgumentError, fn ->
+          Client.new(
+            retry: [
+              max_attempts: 4,
+              base_delay_ms: 250,
+              max_delay_ms: 5_000
+            ]
+          )
+        end
+
+      assert String.contains?(error.message, "unknown retry option")
     end
 
     test "keeps retry disablement explicit through the normalized client state" do
@@ -138,17 +144,20 @@ defmodule NotionSDK.ClientTest do
     test "rejects generated request maps on the public raw request api" do
       client = Client.new(auth: "secret_test_token")
 
-      assert_raise ArgumentError, ~r/raw request spec/, fn ->
-        Client.request(client, %{
-          call: {__MODULE__, :request},
-          method: :get,
-          path_template: "/v1/comments",
-          path_params: %{},
-          query: %{},
-          body: %{},
-          form_data: %{}
-        })
-      end
+      error =
+        assert_raise ArgumentError, fn ->
+          Client.request(client, %{
+            call: {__MODULE__, :request},
+            method: :get,
+            path_template: "/v1/comments",
+            path_params: %{},
+            query: %{},
+            body: %{},
+            form_data: %{}
+          })
+        end
+
+      assert String.contains?(error.message, "raw request spec")
     end
 
     test "supports request-level basic auth overrides" do
@@ -684,9 +693,12 @@ defmodule NotionSDK.ClientTest do
           transport_opts: [test_pid: self()]
         )
 
-      assert_raise ArgumentError, ~r/path traversal/i, fn ->
-        NotionSDK.Pages.retrieve(client, %{"page_id" => "../secret"})
-      end
+      error =
+        assert_raise ArgumentError, fn ->
+          NotionSDK.Pages.retrieve(client, %{"page_id" => "../secret"})
+        end
+
+      assert error.message |> String.downcase() |> String.contains?("path traversal")
 
       refute_receive {:transport_request, _request, _context}
     end

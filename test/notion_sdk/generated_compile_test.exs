@@ -4,6 +4,28 @@ defmodule NotionSDK.GeneratedCompileTest do
   @generation_manifest_path Path.expand("../../priv/generated/generation_manifest.json", __DIR__)
   @docs_inventory_path Path.expand("../../priv/generated/docs_inventory.json", __DIR__)
   @provider_ir_path Path.expand("../../priv/generated/provider_ir.json", __DIR__)
+  @operation_functions %{
+    "append_children" => :append_children,
+    "complete" => :complete,
+    "create" => :create,
+    "delete" => :delete,
+    "get_self" => :get_self,
+    "introspect" => :introspect,
+    "list" => :list,
+    "list_children" => :list_children,
+    "list_templates" => :list_templates,
+    "move" => :move,
+    "query" => :query,
+    "retrieve" => :retrieve,
+    "retrieve_markdown" => :retrieve_markdown,
+    "retrieve_property" => :retrieve_property,
+    "revoke" => :revoke,
+    "search" => :search,
+    "send" => :send,
+    "token" => :token,
+    "update" => :update,
+    "update_markdown" => :update_markdown
+  }
 
   test "all generated operations are present and compiled" do
     provider_ir = Jason.decode!(File.read!(@provider_ir_path))
@@ -17,7 +39,7 @@ defmodule NotionSDK.GeneratedCompileTest do
     Enum.each(operations, fn %{"function" => function_name, "module" => module_name} ->
       module = Module.concat([module_name])
 
-      function = String.to_atom(function_name)
+      function = Map.fetch!(@operation_functions, function_name)
 
       assert Code.ensure_loaded?(module)
       assert function_exported?(module, function, 1)
