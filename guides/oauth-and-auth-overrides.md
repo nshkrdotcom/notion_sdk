@@ -12,6 +12,12 @@ Ownership split:
 - `NotionSDK.OAuth` owns the Notion-specific URLs, owner defaults, and CLI UX
 - durable secret authority and hosted install records stay outside the SDK
 
+All env vars and saved files in this guide are standalone compatibility. They
+are useful for local onboarding and direct SDK usage, but they cannot satisfy a
+governed authority claim. Governed clients reject direct bearer auth,
+OAuth-backed token sources, saved-token files, OAuth client-secret overrides,
+and request-scoped auth overrides.
+
 For most public integrations, use the redirect URI already registered under the
 integration's `OAuth Domain & URIs` settings and let the CLI guide you through
 the browser step:
@@ -237,6 +243,10 @@ will pick up a rotated saved token file without being rebuilt.
 
 Set `NOTION_OAUTH_TOKEN_PATH` only if you want to override that default save
 location.
+
+Do not pass this saved-token source to a governed client. In governed mode, the
+credential must be selected and materialized into `NotionSDK.GovernedAuthority`
+before constructing the client.
 
 Because Notion does not publish expiry metadata in the OAuth token response, do
 not assume `Pristine.Adapters.TokenSource.Refreshable` can transparently

@@ -44,6 +44,8 @@ Both return a `%NotionSDK.Client{}` configured with:
 - `finch`: custom Finch name when using the default Finch transport
 - `typed_responses`: opt in to runtime request validation and generated response structs
 - `oauth2`: explicit bearer-OAuth opt-in for endpoints whose generated security metadata requires `bearerAuth`
+- `governed_authority`: authority-materialized governed mode for externally
+  selected credentials, target, workspace, base URL, and redaction policy
 - `foundation`: curated Foundation-backed production runtime settings
 
 The generic transport, retry, telemetry, and path-validation behavior behind
@@ -53,6 +55,39 @@ It depends on `Pristine.foundation_context/1`,
 `Pristine.execute_request/3`, `Pristine.SDK.OpenAPI.Client`, and
 `Pristine.OAuth2`, not broad runtime
 internals.
+
+## Governed Authority
+
+Use `governed_authority:` only when an external authority has already selected
+the Notion credential, lease, target, workspace, base URL, and materialized
+credential headers:
+
+```elixir
+authority =
+  NotionSDK.GovernedAuthority.new!(
+    base_url: "https://api.notion.com",
+    credential_ref: "credential-handle",
+    credential_lease_ref: "lease-handle",
+    target_ref: "notion-target",
+    workspace_ref: "notion-workspace",
+    headers: %{"X-Governed-Workspace" => "notion-workspace"},
+    credential_headers: %{"Authorization" => "Bearer materialized-token"}
+  )
+
+client = NotionSDK.Client.new(governed_authority: authority)
+```
+
+Governed mode is intentionally not a convenience wrapper around env or local
+files. When `governed_authority:` is present, the client rejects `auth:`,
+`base_url:`, `oauth2:`, saved-token file sources, generated and raw
+request-level auth overrides, OAuth client credential overrides, direct auth
+headers, and app-env base URL defaults. The underlying `Pristine` context uses
+the authority value for base URL, non-secret provider headers, and credential
+headers.
+
+Direct bearer tokens, `oauth2:` token sources, `mix notion.oauth`, XDG/default
+saved token paths, `NOTION_OAUTH_*`, and request-scoped auth overrides remain
+supported only for standalone SDK usage where no governed authority is supplied.
 
 ## Foundation-backed production runtime
 
@@ -181,6 +216,10 @@ config :notion_sdk, :retry,
   max_retry_delay_ms: 60_000
 ```
 
+These app-env defaults are standalone configuration only. They do not select
+the base URL, token source, workspace, or credential material for governed
+clients.
+
 ## Retry tuning
 
 The retry option can be a map or a keyword list:
@@ -242,6 +281,9 @@ These overrides are partitioned into a request spec and passed through
 `Pristine.execute_request/3` instead of mutating the client context, so bearer
 overrides, Basic overrides, and `auth: false` / `auth: []` all stay
 request-scoped.
+
+Governed clients reject these overrides. A governed request can only use the
+credential headers carried by `NotionSDK.GovernedAuthority`.
 
 Remove the client's default auth from one request with `false` or `[]`:
 

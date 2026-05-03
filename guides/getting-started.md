@@ -90,6 +90,11 @@ client =
   )
 ```
 
+This env read is standalone SDK setup. Governed runtime setup uses
+`NotionSDK.GovernedAuthority` instead, and does not accept env vars, saved token
+files, app-env base URLs, request auth overrides, or OAuth response workspace
+metadata as authority.
+
 There is also a shorthand that accepts the token as the first argument:
 
 ```elixir

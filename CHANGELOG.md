@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- Added `NotionSDK.GovernedAuthority` and governed client construction so
+  Notion base URL, credential handles, workspace identity, target identity,
+  redaction policy, and credential headers can be materialized by external
+  authority before runtime execution.
+
+### Changed
+
+- Clarified that env vars, app-env defaults, OAuth saved-token files,
+  request-level auth overrides, and OAuth client credential overrides are
+  standalone compatibility only and cannot satisfy governed authority.
+- Replaced the upstream snapshot Notion ID helper's regex-based parsing with
+  fixed delimiter and bounded character checks.
+
 ## [0.2.1] - 2026-04-01
 
 ### Changed

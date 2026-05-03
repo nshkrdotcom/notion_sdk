@@ -141,6 +141,7 @@ defmodule NotionSDK.MixProject do
         lib/notion_sdk/client.ex
         lib/notion_sdk/error.ex
         lib/notion_sdk/generated
+        lib/notion_sdk/governed_authority.ex
         lib/notion_sdk/guards.ex
         lib/notion_sdk/helpers.ex
         lib/notion_sdk/oauth.ex
@@ -262,6 +263,7 @@ defmodule NotionSDK.MixProject do
        [
          NotionSDK.Client,
          NotionSDK.Error,
+         NotionSDK.GovernedAuthority,
          NotionSDK.Guards,
          NotionSDK.Helpers,
          NotionSDK.OAuthTokenFile,

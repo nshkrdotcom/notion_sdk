@@ -105,6 +105,26 @@ Create a client with a bearer token:
 client = NotionSDK.Client.new(auth: System.fetch_env!("NOTION_TOKEN"))
 ```
 
+This env-backed constructor is standalone SDK compatibility. In governed
+runtime flows, env vars, app config defaults, OAuth saved token files, request
+auth overrides, and workspace ids from OAuth responses cannot satisfy
+authority. Pass a `NotionSDK.GovernedAuthority` value instead:
+
+```elixir
+authority =
+  NotionSDK.GovernedAuthority.new!(
+    base_url: "https://api.notion.com",
+    credential_ref: "credential-handle",
+    credential_lease_ref: "lease-handle",
+    target_ref: "notion-target",
+    workspace_ref: "notion-workspace",
+    headers: %{"X-Governed-Target" => "notion-target"},
+    credential_headers: %{"Authorization" => "Bearer materialized-token"}
+  )
+
+client = NotionSDK.Client.new(governed_authority: authority)
+```
+
 Fetch the bot user tied to that token:
 
 ```elixir
@@ -185,6 +205,8 @@ exchanges the temporary code and saves the token JSON to
 Saved token persistence and refresh merge behavior now come from the upstream
 `Pristine.OAuth2.SavedToken` workflow, while `mix notion.oauth` stays the thin
 Notion-specific wrapper around env vars, CLI wording, and default paths.
+Those env vars and saved files are standalone onboarding and local persistence
+only; governed clients reject them and require `NotionSDK.GovernedAuthority`.
 
 For persisted bearer auth, point the client at the generic file token source:
 

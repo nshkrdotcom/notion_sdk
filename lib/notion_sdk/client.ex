@@ -3,6 +3,7 @@ defmodule NotionSDK.Client do
   Thin Notion client configuration layered on top of Pristine runtime execution.
   """
 
+  alias NotionSDK.GovernedAuthority
   alias Pristine.Client, as: RuntimeClient
   alias Pristine.Operation
   alias Pristine.SDK.Context
@@ -102,6 +103,7 @@ defmodule NotionSDK.Client do
           base_url: String.t(),
           context: Context.t() | nil,
           foundation: map() | nil,
+          governed_authority: GovernedAuthority.t() | nil,
           log_level: :debug | :info | :warn | :error | nil,
           logger: (atom(), String.t(), map() -> term()) | nil,
           notion_version: String.t(),
@@ -120,6 +122,7 @@ defmodule NotionSDK.Client do
     :base_url,
     :context,
     :foundation,
+    :governed_authority,
     :log_level,
     :logger,
     :notion_version,
@@ -143,11 +146,29 @@ defmodule NotionSDK.Client do
 
   @spec new(keyword()) :: t()
   def new(opts \\ []) when is_list(opts) do
-    auth = Keyword.get(opts, :auth)
-    base_url = Keyword.get(opts, :base_url, config(:base_url, @default_base_url))
+    governed_authority = normalize_governed_authority(Keyword.get(opts, :governed_authority))
+    validate_governed_client_opts!(opts, governed_authority)
+
+    auth =
+      if governed_authority do
+        nil
+      else
+        Keyword.get(opts, :auth)
+      end
+
+    base_url =
+      if governed_authority do
+        governed_authority.base_url
+      else
+        Keyword.get(opts, :base_url, config(:base_url, @default_base_url))
+      end
 
     notion_version =
-      Keyword.get(opts, :notion_version, config(:notion_version, @default_notion_version))
+      if governed_authority do
+        Keyword.get(opts, :notion_version, @default_notion_version)
+      else
+        Keyword.get(opts, :notion_version, config(:notion_version, @default_notion_version))
+      end
 
     timeout_ms = Keyword.get(opts, :timeout_ms, config(:timeout_ms, @default_timeout_ms))
     log_level = Keyword.get(opts, :log_level, @default_log_level)
@@ -164,15 +185,31 @@ defmodule NotionSDK.Client do
       )
 
     typed_responses = Keyword.get(opts, :typed_responses, false)
-    user_agent = Keyword.get(opts, :user_agent, config(:user_agent, default_user_agent()))
+
+    user_agent =
+      if governed_authority do
+        Keyword.get(opts, :user_agent, default_user_agent())
+      else
+        Keyword.get(opts, :user_agent, config(:user_agent, default_user_agent()))
+      end
+
     retry = normalize_retry(Keyword.get(opts, :retry, config(:retry, @default_retry)))
-    oauth2 = normalize_oauth2(Keyword.get(opts, :oauth2))
-    foundation = normalize_foundation(Keyword.get(opts, :foundation), auth, oauth2)
+
+    oauth2 =
+      if governed_authority do
+        nil
+      else
+        normalize_oauth2(Keyword.get(opts, :oauth2))
+      end
+
+    foundation =
+      normalize_foundation(Keyword.get(opts, :foundation), auth, oauth2, governed_authority)
 
     client = %__MODULE__{
       auth: auth,
       base_url: base_url,
       foundation: foundation,
+      governed_authority: governed_authority,
       log_level: log_level,
       logger: logger,
       notion_version: notion_version,
@@ -281,6 +318,33 @@ defmodule NotionSDK.Client do
       |> maybe_put(:typed_responses, typed_runtime?)
 
     Pristine.execute_request(request_spec, client_context(client), execute_opts)
+  end
+
+  defp build_context(%__MODULE__{governed_authority: %GovernedAuthority{} = authority} = client) do
+    Pristine.foundation_context(
+      admission_control: admission_control_profile(client.foundation),
+      circuit_breaker: circuit_breaker_profile(client.foundation),
+      default_timeout: client.timeout_ms,
+      error_module: NotionSDK.Error,
+      governed_authority:
+        GovernedAuthority.to_pristine(authority,
+          notion_version: client.notion_version,
+          user_agent: client.user_agent
+        ),
+      log_level: client.log_level,
+      logger: client.logger,
+      package_version: package_version(),
+      provider_profile: NotionSDK.ProviderProfile.profile(),
+      rate_limit: rate_limit_profile(client.foundation),
+      result_classifier: NotionSDK.ResultClassifier,
+      retry: retry_profile(client.retry),
+      serializer: Pristine.Adapters.Serializer.JSON,
+      telemetry: telemetry_profile(client.foundation),
+      pool_base: foundation_value(client.foundation, :pool_base),
+      pool_manager: foundation_value(client.foundation, :pool_manager),
+      transport: client.transport,
+      transport_opts: client.transport_opts
+    )
   end
 
   defp build_context(%__MODULE__{} = client) do
@@ -640,9 +704,35 @@ defmodule NotionSDK.Client do
     "notion-sdk-elixir/#{package_version()}"
   end
 
-  defp normalize_foundation(nil, _auth, _oauth2), do: nil
+  defp normalize_governed_authority(nil), do: nil
+  defp normalize_governed_authority(%GovernedAuthority{} = authority), do: authority
+  defp normalize_governed_authority(authority), do: GovernedAuthority.new!(authority)
 
-  defp normalize_foundation(opts, auth, oauth2) when is_list(opts) do
+  defp validate_governed_client_opts!(_opts, nil), do: :ok
+
+  defp validate_governed_client_opts!(opts, %GovernedAuthority{}) do
+    Enum.each([:auth, :base_url, :oauth2], fn key ->
+      if present_client_option?(opts, key) do
+        raise ArgumentError,
+              "governed authority rejects unmanaged #{key}; use authority materialization"
+      end
+    end)
+  end
+
+  defp present_client_option?(opts, key) do
+    case Keyword.fetch(opts, key) do
+      :error -> false
+      {:ok, nil} -> false
+      {:ok, ""} -> false
+      {:ok, []} -> false
+      {:ok, value} when is_map(value) -> map_size(value) > 0
+      {:ok, _value} -> true
+    end
+  end
+
+  defp normalize_foundation(nil, _auth, _oauth2, _governed_authority), do: nil
+
+  defp normalize_foundation(opts, auth, oauth2, governed_authority) when is_list(opts) do
     rate_limit = normalize_foundation_feature(Keyword.get(opts, :rate_limit, []), enabled: true)
 
     circuit_breaker =
@@ -663,7 +753,8 @@ defmodule NotionSDK.Client do
 
     %{
       integration_key:
-        Keyword.get(opts, :integration_key) || derived_integration_key(auth, oauth2, rate_limit),
+        Keyword.get(opts, :integration_key) ||
+          derived_integration_key(auth, oauth2, governed_authority, rate_limit),
       pool_base: Keyword.get(opts, :pool_base),
       pool_manager: Keyword.get(opts, :pool_manager),
       rate_limit: rate_limit,
@@ -673,7 +764,7 @@ defmodule NotionSDK.Client do
     }
   end
 
-  defp normalize_foundation(_other, _auth, _oauth2) do
+  defp normalize_foundation(_other, _auth, _oauth2, _governed_authority) do
     raise ArgumentError, "foundation must be a keyword list"
   end
 
@@ -705,18 +796,27 @@ defmodule NotionSDK.Client do
 
   defp validate_dispatch_feature(dispatch), do: dispatch
 
-  defp derived_integration_key(auth, _oauth2, %{enabled: true}) when is_binary(auth) do
+  defp derived_integration_key(
+         _auth,
+         _oauth2,
+         %GovernedAuthority{target_ref: target_ref, workspace_ref: workspace_ref},
+         %{enabled: true}
+       ) do
+    {:notion_governed, workspace_ref, target_ref}
+  end
+
+  defp derived_integration_key(auth, _oauth2, nil, %{enabled: true}) when is_binary(auth) do
     {:notion, hashed_secret(auth)}
   end
 
-  defp derived_integration_key(_auth, nil, %{enabled: false}), do: nil
+  defp derived_integration_key(_auth, nil, nil, %{enabled: false}), do: nil
 
-  defp derived_integration_key(_auth, _oauth2, %{enabled: true}) do
+  defp derived_integration_key(_auth, _oauth2, _governed_authority, %{enabled: true}) do
     raise ArgumentError,
           "foundation integration_key is required when shared rate limiting is enabled without a static bearer token"
   end
 
-  defp derived_integration_key(_auth, _oauth2, _rate_limit), do: nil
+  defp derived_integration_key(_auth, _oauth2, _governed_authority, _rate_limit), do: nil
 
   defp hashed_secret(secret) do
     secret

@@ -56,6 +56,10 @@ On non-OAuth paths, raw requests inherit the client's bearer auth unless you
 override or disable it. OAuth control paths do not inherit bearer auth
 automatically.
 
+On governed clients, raw requests do not accept direct `auth`, auth-sensitive
+headers, OAuth client credentials, or base URL changes. The governed authority
+value supplies the base URL and credential headers for every request.
+
 ## Sparse JSON requests
 
 You do not need to build the full request map when the defaults are fine:
@@ -132,8 +136,12 @@ Use Basic credentials for OAuth control endpoints:
       client_id: System.fetch_env!("NOTION_OAUTH_CLIENT_ID"),
       client_secret: System.fetch_env!("NOTION_OAUTH_CLIENT_SECRET")
     }
-  })
+})
 ```
+
+These request-scoped auth examples are standalone SDK behavior. Governed
+clients reject them and require credential materialization through
+`NotionSDK.GovernedAuthority`.
 
 ## Multipart form data
 

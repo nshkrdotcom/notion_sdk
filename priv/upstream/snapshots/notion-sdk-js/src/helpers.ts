@@ -294,38 +294,33 @@ export function extractNotionId(urlOrId: string): string | null {
 
   const trimmed = urlOrId.trim()
 
-  // Check if it's already a properly formatted UUID
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-  if (uuidRegex.test(trimmed)) {
+  // Check if it's already a properly formatted UUID.
+  if (isFormattedUuid(trimmed)) {
     return trimmed.toLowerCase()
   }
 
-  // Check if it's a compact UUID (32 chars, no hyphens)
-  const compactUuidRegex = /^[0-9a-f]{32}$/i
-  if (compactUuidRegex.test(trimmed)) {
+  // Check if it's a compact UUID (32 chars, no hyphens).
+  if (isCompactUuid(trimmed)) {
     return formatUuid(trimmed)
   }
 
   // Extract from URL - prioritize path over query parameters
   // This prevents extracting view IDs when database IDs are in the path
-  const pathMatch = trimmed.match(/\/[^/?#]*-([0-9a-f]{32})(?:[/?#]|$)/i)
-  if (pathMatch && pathMatch[1]) {
-    return formatUuid(pathMatch[1])
+  const pathId = extractPathNotionId(trimmed)
+  if (pathId) {
+    return formatUuid(pathId)
   }
 
   // Fallback to query parameters if no path ID found
-  const queryMatch = trimmed.match(
-    /[?&](?:p|page_id|database_id)=([0-9a-f]{32})/i
-  )
-  if (queryMatch && queryMatch[1]) {
-    return formatUuid(queryMatch[1])
+  const queryId = extractQueryNotionId(trimmed)
+  if (queryId) {
+    return formatUuid(queryId)
   }
 
   // Last resort: any 32-char hex string in the URL
-  const anyMatch = trimmed.match(/([0-9a-f]{32})/i)
-  if (anyMatch && anyMatch[1]) {
-    return formatUuid(anyMatch[1])
+  const anyId = extractAnyCompactNotionId(trimmed)
+  if (anyId) {
+    return formatUuid(anyId)
   }
 
   return null
@@ -342,6 +337,102 @@ function formatUuid(compactId: string): string {
     12,
     16
   )}-${clean.slice(16, 20)}-${clean.slice(20, 32)}`
+}
+
+function isFormattedUuid(value: string): boolean {
+  if (value.length !== 36) {
+    return false
+  }
+
+  const dashPositions = new Set([8, 13, 18, 23])
+
+  for (let index = 0; index < value.length; index++) {
+    const char = value[index]
+
+    if (dashPositions.has(index)) {
+      if (char !== "-") {
+        return false
+      }
+    } else if (!isHexChar(char)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+function isCompactUuid(value: string): boolean {
+  if (value.length !== 32) {
+    return false
+  }
+
+  for (const char of value) {
+    if (!isHexChar(char)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+function isHexChar(char: string): boolean {
+  const lower = char.toLowerCase()
+  return (lower >= "0" && lower <= "9") || (lower >= "a" && lower <= "f")
+}
+
+function extractPathNotionId(value: string): string | null {
+  const path = value.split("?")[0].split("#")[0]
+
+  for (const segment of path.split("/")) {
+    const separatorIndex = segment.lastIndexOf("-")
+
+    if (separatorIndex >= 0) {
+      const candidate = segment.slice(separatorIndex + 1)
+
+      if (isCompactUuid(candidate)) {
+        return candidate
+      }
+    }
+  }
+
+  return null
+}
+
+function extractQueryNotionId(value: string): string | null {
+  const queryStart = value.indexOf("?")
+
+  if (queryStart < 0) {
+    return null
+  }
+
+  const hashStart = value.indexOf("#", queryStart + 1)
+  const query = value.slice(queryStart + 1, hashStart < 0 ? undefined : hashStart)
+
+  for (const pair of query.split("&")) {
+    const [name, candidate] = pair.split("=", 2)
+
+    if (queryIdKey(name) && candidate && isCompactUuid(candidate)) {
+      return candidate
+    }
+  }
+
+  return null
+}
+
+function queryIdKey(name: string): boolean {
+  return name === "p" || name === "page_id" || name === "database_id"
+}
+
+function extractAnyCompactNotionId(value: string): string | null {
+  for (let index = 0; index <= value.length - 32; index++) {
+    const candidate = value.slice(index, index + 32)
+
+    if (isCompactUuid(candidate)) {
+      return candidate
+    }
+  }
+
+  return null
 }
 
 /**
@@ -369,10 +460,17 @@ export function extractBlockId(urlWithBlock: string): string | null {
     return null
   }
 
-  // Look for block fragment in URL (#block-32chars or just #32chars)
-  const blockMatch = urlWithBlock.match(/#(?:block-)?([0-9a-f]{32})/i)
-  if (blockMatch && blockMatch[1]) {
-    return formatUuid(blockMatch[1])
+  const hashIndex = urlWithBlock.indexOf("#")
+
+  if (hashIndex < 0) {
+    return null
+  }
+
+  const fragment = urlWithBlock.slice(hashIndex + 1)
+  const candidate = fragment.startsWith("block-") ? fragment.slice(6, 38) : fragment.slice(0, 32)
+
+  if (isCompactUuid(candidate)) {
+    return formatUuid(candidate)
   }
 
   return null
