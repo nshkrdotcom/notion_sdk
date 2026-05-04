@@ -39,7 +39,7 @@ defmodule NotionSDK.GovernedAuthorityTest do
 
     assert client.auth == nil
     assert client.base_url == "https://governed.notion.test"
-    assert client.governed_authority.workspace_ref == "workspace-123"
+    assert client.governed_authority.workspace_ref == "workspace://tenant-1/notion/workspace-123"
     assert client.context.governed_authority.base_url == "https://governed.notion.test"
 
     assert {:ok, %{"ok" => true}} = NotionSDK.Users.get_self(client)
@@ -50,7 +50,9 @@ defmodule NotionSDK.GovernedAuthorityTest do
     assert request.headers["X-Governed-Target"] == "target-123"
     assert request.headers["X-Governed-Workspace"] == "workspace-123"
     assert request.headers["Notion-Version"] == "2025-09-03"
-    assert context.governed_authority.credential_ref == "credential-123"
+
+    assert context.governed_authority.credential_handle_ref ==
+             "credential-handle://tenant-1/notion/workspace-123/bearer"
   end
 
   test "governed client construction rejects unmanaged bearer oauth and base URL inputs" do
@@ -67,7 +69,9 @@ defmodule NotionSDK.GovernedAuthorityTest do
       [
         oauth2: [
           token_source: {Pristine.Adapters.TokenSource.File, path: "/tmp/notion-oauth.json"}
-        ]
+        ],
+        default_client: NotionSDK.Client,
+        env: %{"NOTION_TOKEN" => "env-token"}
       ]
     ]
 
@@ -156,7 +160,7 @@ defmodule NotionSDK.GovernedAuthorityTest do
     assert oauth_request.headers["Authorization"] == "Bearer oauth-access-token"
   end
 
-  test "upstream snapshot helper remains regex-free after remediation" do
+  test "upstream snapshot helper remains fixed-string after remediation" do
     source = File.read!("priv/upstream/snapshots/notion-sdk-js/src/helpers.ts")
 
     for token <- ["Reg" <> "ex", "Reg" <> "Exp", ".mat" <> "ch(", "/" <> "["] do
@@ -167,16 +171,34 @@ defmodule NotionSDK.GovernedAuthorityTest do
   defp authority(overrides \\ []) do
     [
       base_url: "https://governed.example.test",
-      credential_ref: "credential-123",
-      credential_lease_ref: "lease-123",
-      target_ref: "target-123",
-      workspace_ref: "workspace-123",
-      redaction_ref: "redaction-123",
+      base_url_ref: "base-url://tenant-1/notion/api",
+      authority_ref: "authority://tenant-1/notion/workspace-123",
+      tenant_ref: "tenant://tenant-1",
+      provider_account_ref: "provider-account://tenant-1/notion/workspace-123",
+      connector_instance_ref: "connector-instance://tenant-1/notion/default",
+      credential_handle_ref: "credential-handle://tenant-1/notion/workspace-123/bearer",
+      credential_lease_ref: "credential-lease://tenant-1/notion/workspace-123/bearer",
+      target_ref: "target://tenant-1/notion/http",
+      request_scope_ref: "request-scope://tenant-1/notion/users/me",
+      operation_policy_ref: "operation-policy://tenant-1/notion/read",
+      workspace_ref: "workspace://tenant-1/notion/workspace-123",
+      header_policy_ref: "header-policy://tenant-1/notion/default",
+      redaction_ref: "redaction://tenant-1/notion/default",
+      materialization_kind: "bearer",
+      materialization_ref: "materialization://tenant-1/notion/users/me",
+      bearer_token_ref: "bearer-token://tenant-1/notion/workspace-123",
       headers: %{
         "X-Governed-Target" => "target-123",
         "X-Governed-Workspace" => "workspace-123"
       },
-      credential_headers: %{"Authorization" => "Bearer authority-token"}
+      credential_headers: %{"Authorization" => "Bearer authority-token"},
+      allowed_header_names: [
+        "authorization",
+        "notion-version",
+        "user-agent",
+        "x-governed-target",
+        "x-governed-workspace"
+      ]
     ]
     |> Keyword.merge(overrides)
     |> GovernedAuthority.new!()

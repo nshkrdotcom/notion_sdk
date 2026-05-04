@@ -114,12 +114,30 @@ authority. Pass a `NotionSDK.GovernedAuthority` value instead:
 authority =
   NotionSDK.GovernedAuthority.new!(
     base_url: "https://api.notion.com",
-    credential_ref: "credential-handle",
-    credential_lease_ref: "lease-handle",
-    target_ref: "notion-target",
-    workspace_ref: "notion-workspace",
-    headers: %{"X-Governed-Target" => "notion-target"},
-    credential_headers: %{"Authorization" => "Bearer materialized-token"}
+    base_url_ref: "base-url://tenant-1/notion/api",
+    authority_ref: "authority://tenant-1/notion/workspace-123",
+    tenant_ref: "tenant://tenant-1",
+    provider_account_ref: "provider-account://tenant-1/notion/workspace-123",
+    connector_instance_ref: "connector-instance://tenant-1/notion/default",
+    credential_handle_ref: "credential-handle://tenant-1/notion/workspace-123/bearer",
+    credential_lease_ref: "credential-lease://tenant-1/notion/workspace-123/bearer",
+    target_ref: "target://tenant-1/notion/http",
+    request_scope_ref: "request-scope://tenant-1/notion/users/me",
+    operation_policy_ref: "operation-policy://tenant-1/notion/read",
+    workspace_ref: "workspace://tenant-1/notion/workspace-123",
+    header_policy_ref: "header-policy://tenant-1/notion/default",
+    redaction_ref: "redaction://tenant-1/notion/default",
+    materialization_kind: "bearer",
+    materialization_ref: "materialization://tenant-1/notion/users/me",
+    bearer_token_ref: "bearer-token://tenant-1/notion/workspace-123",
+    headers: %{"X-Governed-Target" => "target-123"},
+    credential_headers: %{"Authorization" => "[REDACTED_BY_AUTHORITY]"},
+    allowed_header_names: [
+      "authorization",
+      "notion-version",
+      "user-agent",
+      "x-governed-target"
+    ]
   )
 
 client = NotionSDK.Client.new(governed_authority: authority)
