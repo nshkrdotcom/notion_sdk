@@ -1,6 +1,6 @@
 defmodule NotionSDK.FilePageCoverResponse do
   @moduledoc """
-  Generated Notion Sdk type for file page cover response.
+  Generated Notion Sdk type module `NotionSDK.FilePageCoverResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

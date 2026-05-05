@@ -1,6 +1,6 @@
 defmodule NotionSDK.PageMarkdownResponse do
   @moduledoc """
-  Generated Notion Sdk type for page markdown response.
+  Generated Notion Sdk type module `NotionSDK.PageMarkdownResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

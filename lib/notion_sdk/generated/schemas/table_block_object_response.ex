@@ -1,6 +1,6 @@
 defmodule NotionSDK.TableBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for table block object response.
+  Generated Notion Sdk type module `NotionSDK.TableBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

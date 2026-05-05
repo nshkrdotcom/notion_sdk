@@ -1,6 +1,6 @@
 defmodule NotionSDK.Databases do
   @moduledoc """
-  Generated Notion Sdk operations for databases.
+  Generated Notion Sdk operations module `NotionSDK.Databases`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

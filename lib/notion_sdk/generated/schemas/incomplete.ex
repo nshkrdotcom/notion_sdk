@@ -1,6 +1,6 @@
 defmodule NotionSDK.Incomplete do
   @moduledoc """
-  Generated Notion Sdk type for incomplete.
+  Generated Notion Sdk type module `NotionSDK.Incomplete`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

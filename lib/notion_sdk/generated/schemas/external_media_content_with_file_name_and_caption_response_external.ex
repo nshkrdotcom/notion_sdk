@@ -1,6 +1,6 @@
 defmodule NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponseExternal do
   @moduledoc """
-  Generated Notion Sdk type for external media content with file name and caption response external.
+  Generated Notion Sdk type module `NotionSDK.ExternalMediaContentWithFileNameAndCaptionResponseExternal`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

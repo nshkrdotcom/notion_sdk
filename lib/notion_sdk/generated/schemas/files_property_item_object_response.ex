@@ -1,6 +1,6 @@
 defmodule NotionSDK.FilesPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for files property item object response.
+  Generated Notion Sdk type module `NotionSDK.FilesPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.UpdateMediaContentWithUrlAndCaptionRequest do
   @moduledoc """
-  Generated Notion Sdk type for update media content with url and caption request.
+  Generated Notion Sdk type module `NotionSDK.UpdateMediaContentWithUrlAndCaptionRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

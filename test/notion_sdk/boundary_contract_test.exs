@@ -39,7 +39,8 @@ defmodule NotionSDK.BoundaryContractTest do
     "Reg" <> "ex",
     "~" <> "r",
     ":r" <> "e.",
-    "String." <> "match"
+    "String." <> "match",
+    "Module." <> "concat"
   ]
 
   test "handwritten source depends on the hardened pristine boundary instead of old internals" do
@@ -99,12 +100,9 @@ defmodule NotionSDK.BoundaryContractTest do
   test "mix notion.oauth defaults route through the retained pristine oauth helpers" do
     source = File.read!(@oauth_task_path)
 
-    assert source =~ "Module.concat([Pristine, OAuth2, Interactive])"
-
-    assert source =~
-             "Application.get_env(:notion_sdk, :oauth2_module, Module.concat([Pristine, OAuth2]))"
-
-    assert source =~ "Module.concat([Pristine, OAuth2, SavedToken])"
+    assert source =~ "Pristine.OAuth2.Interactive"
+    assert source =~ "Application.get_env(:notion_sdk, :oauth2_module, Pristine.OAuth2)"
+    assert source =~ "Pristine.OAuth2.SavedToken"
     assert source =~ "interactive_module().authorize(NotionSDK.OAuth.provider(),"
     assert source =~ "saved_token_module().refresh(NotionSDK.OAuth.provider(),"
   end

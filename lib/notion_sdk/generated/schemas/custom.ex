@@ -1,6 +1,6 @@
 defmodule NotionSDK.Custom do
   @moduledoc """
-  Generated Notion Sdk type for custom.
+  Generated Notion Sdk type module `NotionSDK.Custom`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

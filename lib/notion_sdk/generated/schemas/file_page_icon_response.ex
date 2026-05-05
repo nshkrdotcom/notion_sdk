@@ -1,6 +1,6 @@
 defmodule NotionSDK.FilePageIconResponse do
   @moduledoc """
-  Generated Notion Sdk type for file page icon response.
+  Generated Notion Sdk type module `NotionSDK.FilePageIconResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

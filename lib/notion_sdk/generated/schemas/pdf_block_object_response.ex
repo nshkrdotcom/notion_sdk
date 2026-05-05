@@ -1,6 +1,6 @@
 defmodule NotionSDK.PdfBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for pdf block object response.
+  Generated Notion Sdk type module `NotionSDK.PdfBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

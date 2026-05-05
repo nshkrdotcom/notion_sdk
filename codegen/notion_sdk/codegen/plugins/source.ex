@@ -314,7 +314,7 @@ defmodule NotionSDK.Codegen.Plugins.Source do
         id: "notion_bearer_override",
         mode: :request_override_optional,
         security_schemes: ["bearerAuth"],
-        override_source: %{key: "auth"},
+        override_source: %{key: :auth},
         strategy_label: "Optional bearer override"
       },
       %{
@@ -409,7 +409,7 @@ defmodule NotionSDK.Codegen.Plugins.Source do
   defp runtime_metadata(operation) do
     resource = runtime_resource(operation.request_path)
 
-    %{
+    metadata = %{
       resource: resource,
       retry_group: runtime_retry_group(operation.request_method, resource),
       circuit_breaker: runtime_circuit_breaker(resource),
@@ -417,6 +417,12 @@ defmodule NotionSDK.Codegen.Plugins.Source do
       telemetry_event: telemetry_event(operation),
       timeout_ms: nil
     }
+
+    if module_segment(operation.module_name) == "OAuth" do
+      Map.put(metadata, :module_uses, [NotionSDK.OAuth.Helpers])
+    else
+      metadata
+    end
   end
 
   defp runtime_resource(path) do
@@ -583,7 +589,7 @@ defmodule NotionSDK.Codegen.Plugins.Source do
   end
 
   defp public_module(module_name) do
-    Module.concat([NotionSDK, module_name])
+    NotionSDK.Codegen.PublicModule.from_source!(module_name)
   end
 
   defp module_segment(module_name) when is_atom(module_name) do

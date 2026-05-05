@@ -20,12 +20,7 @@ defmodule NotionSDK.SourceCompatibilityTest do
   test "mix deps.get prefers sibling workspace sources when they exist", %{
     tmp_dir: tmp_dir
   } do
-    probe_module =
-      Module.concat([
-        NotionSDK,
-        TestSupport,
-        "MixProjectWorkspaceProbe#{System.unique_integer([:positive])}"
-      ])
+    probe_module = NotionSDK.TestSupport.MixProjectWorkspaceProbe
 
     mix_path = Path.join([tmp_dir, "standalone", "notion_sdk", "mix.exs"])
 
@@ -34,7 +29,7 @@ defmodule NotionSDK.SourceCompatibilityTest do
 
     assert [{^probe_module, _beam}] = Code.compile_file(mix_path)
 
-    deps = probe_module.project()[:deps]
+    deps = :erlang.apply(probe_module, :project, [])[:deps]
 
     assert {:pristine, opts} = find_dependency!(deps, :pristine)
 
@@ -62,12 +57,7 @@ defmodule NotionSDK.SourceCompatibilityTest do
   test "hex packaging commands match the published dependency surface", %{
     tmp_dir: tmp_dir
   } do
-    probe_module =
-      Module.concat([
-        NotionSDK,
-        TestSupport,
-        "MixProjectPublishedProbe#{System.unique_integer([:positive])}"
-      ])
+    probe_module = NotionSDK.TestSupport.MixProjectPublishedProbe
 
     mix_path = Path.join([tmp_dir, "standalone", "notion_sdk", "mix.exs"])
 
@@ -76,7 +66,7 @@ defmodule NotionSDK.SourceCompatibilityTest do
 
     assert [{^probe_module, _beam}] = Code.compile_file(mix_path)
 
-    deps = probe_module.project()[:deps]
+    deps = :erlang.apply(probe_module, :project, [])[:deps]
 
     assert {:pristine, "~> 0.2.1"} = find_dependency!(deps, :pristine)
     refute dependency_present?(deps, :pristine_codegen)

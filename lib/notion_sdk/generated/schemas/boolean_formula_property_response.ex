@@ -1,6 +1,6 @@
 defmodule NotionSDK.BooleanFormulaPropertyResponse do
   @moduledoc """
-  Generated Notion Sdk type for boolean formula property response.
+  Generated Notion Sdk type module `NotionSDK.BooleanFormulaPropertyResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

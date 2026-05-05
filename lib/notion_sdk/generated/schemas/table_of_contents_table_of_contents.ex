@@ -1,6 +1,6 @@
 defmodule NotionSDK.TableOfContentsTableOfContents do
   @moduledoc """
-  Generated Notion Sdk type for table of contents table of contents.
+  Generated Notion Sdk type module `NotionSDK.TableOfContentsTableOfContents`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

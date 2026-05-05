@@ -1,6 +1,6 @@
 defmodule NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest do
   @moduledoc """
-  Generated Notion Sdk type for header content with single level of children request.
+  Generated Notion Sdk type module `NotionSDK.HeaderContentWithSingleLevelOfChildrenRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

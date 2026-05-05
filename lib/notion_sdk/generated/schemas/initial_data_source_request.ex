@@ -1,6 +1,6 @@
 defmodule NotionSDK.InitialDataSourceRequest do
   @moduledoc """
-  Generated Notion Sdk type for initial data source request.
+  Generated Notion Sdk type module `NotionSDK.InitialDataSourceRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

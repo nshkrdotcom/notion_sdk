@@ -1,6 +1,6 @@
 defmodule NotionSDK.TimestampLastEditedTimeFilter do
   @moduledoc """
-  Generated Notion Sdk type for timestamp last edited time filter.
+  Generated Notion Sdk type module `NotionSDK.TimestampLastEditedTimeFilter`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

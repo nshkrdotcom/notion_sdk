@@ -1,6 +1,6 @@
 defmodule NotionSDK.ExpressionObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for expression object response.
+  Generated Notion Sdk type module `NotionSDK.ExpressionObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

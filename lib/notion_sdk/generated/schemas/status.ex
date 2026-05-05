@@ -1,6 +1,6 @@
 defmodule NotionSDK.Status do
   @moduledoc """
-  Generated Notion Sdk type for status.
+  Generated Notion Sdk type module `NotionSDK.Status`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

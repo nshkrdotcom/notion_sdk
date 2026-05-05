@@ -1,6 +1,6 @@
 defmodule NotionSDK.FileUploadPageIconRequestFileUpload do
   @moduledoc """
-  Generated Notion Sdk type for file upload page icon request file upload.
+  Generated Notion Sdk type module `NotionSDK.FileUploadPageIconRequestFileUpload`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

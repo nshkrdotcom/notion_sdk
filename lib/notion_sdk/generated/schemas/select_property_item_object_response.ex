@@ -1,6 +1,6 @@
 defmodule NotionSDK.SelectPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for select property item object response.
+  Generated Notion Sdk type module `NotionSDK.SelectPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

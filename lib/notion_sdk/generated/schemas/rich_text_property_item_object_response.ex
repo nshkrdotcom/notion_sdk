@@ -1,6 +1,6 @@
 defmodule NotionSDK.RichTextPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for rich text property item object response.
+  Generated Notion Sdk type module `NotionSDK.RichTextPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

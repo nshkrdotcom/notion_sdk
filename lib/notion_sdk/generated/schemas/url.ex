@@ -1,6 +1,6 @@
 defmodule NotionSDK.Url do
   @moduledoc """
-  Generated Notion Sdk type for url.
+  Generated Notion Sdk type module `NotionSDK.Url`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

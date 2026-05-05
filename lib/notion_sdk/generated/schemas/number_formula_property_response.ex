@@ -1,6 +1,6 @@
 defmodule NotionSDK.NumberFormulaPropertyResponse do
   @moduledoc """
-  Generated Notion Sdk type for number formula property response.
+  Generated Notion Sdk type module `NotionSDK.NumberFormulaPropertyResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

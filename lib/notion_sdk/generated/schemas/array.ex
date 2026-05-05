@@ -1,6 +1,6 @@
 defmodule NotionSDK.Array do
   @moduledoc """
-  Generated Notion Sdk type for array.
+  Generated Notion Sdk type module `NotionSDK.Array`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

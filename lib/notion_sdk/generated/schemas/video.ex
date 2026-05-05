@@ -1,6 +1,6 @@
 defmodule NotionSDK.Video do
   @moduledoc """
-  Generated Notion Sdk type for video.
+  Generated Notion Sdk type module `NotionSDK.Video`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.MeetingNotesBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for meeting notes block object response.
+  Generated Notion Sdk type module `NotionSDK.MeetingNotesBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

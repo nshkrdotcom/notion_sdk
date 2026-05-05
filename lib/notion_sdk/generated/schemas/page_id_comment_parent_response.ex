@@ -1,6 +1,6 @@
 defmodule NotionSDK.PageIdCommentParentResponse do
   @moduledoc """
-  Generated Notion Sdk type for page id comment parent response.
+  Generated Notion Sdk type module `NotionSDK.PageIdCommentParentResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Workspace do
   @moduledoc """
-  Generated Notion Sdk type for workspace.
+  Generated Notion Sdk type module `NotionSDK.Workspace`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

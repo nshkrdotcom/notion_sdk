@@ -1,6 +1,6 @@
 defmodule NotionSDK.PageObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for page object response.
+  Generated Notion Sdk type module `NotionSDK.PageObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

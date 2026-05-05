@@ -1,6 +1,6 @@
 defmodule NotionSDK.Divider do
   @moduledoc """
-  Generated Notion Sdk type for divider.
+  Generated Notion Sdk type module `NotionSDK.Divider`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

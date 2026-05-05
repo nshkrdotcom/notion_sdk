@@ -1,6 +1,6 @@
 defmodule NotionSDK.WorkspaceParentForBlockBasedObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for workspace parent for block based object response.
+  Generated Notion Sdk type module `NotionSDK.WorkspaceParentForBlockBasedObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

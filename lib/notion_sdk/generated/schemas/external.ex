@@ -1,6 +1,6 @@
 defmodule NotionSDK.External do
   @moduledoc """
-  Generated Notion Sdk type for external.
+  Generated Notion Sdk type module `NotionSDK.External`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.ToggleBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for toggle block object response.
+  Generated Notion Sdk type module `NotionSDK.ToggleBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

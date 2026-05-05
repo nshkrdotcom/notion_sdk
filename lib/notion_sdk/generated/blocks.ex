@@ -1,6 +1,6 @@
 defmodule NotionSDK.Blocks do
   @moduledoc """
-  Generated Notion Sdk operations for blocks.
+  Generated Notion Sdk operations module `NotionSDK.Blocks`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

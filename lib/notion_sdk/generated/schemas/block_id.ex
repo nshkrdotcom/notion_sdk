@@ -1,6 +1,6 @@
 defmodule NotionSDK.BlockId do
   @moduledoc """
-  Generated Notion Sdk type for block id.
+  Generated Notion Sdk type module `NotionSDK.BlockId`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

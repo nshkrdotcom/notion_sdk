@@ -1,6 +1,6 @@
 defmodule NotionSDK.NumberedListItem do
   @moduledoc """
-  Generated Notion Sdk type for numbered list item.
+  Generated Notion Sdk type module `NotionSDK.NumberedListItem`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

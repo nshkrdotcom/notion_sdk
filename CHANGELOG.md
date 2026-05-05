@@ -19,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clarified that env vars, app-env defaults, OAuth saved-token files,
   request-level auth overrides, and OAuth client credential overrides are
   standalone compatibility only and cannot satisfy governed authority.
-- Replaced the upstream snapshot Notion ID helper's regex-based parsing with
-  fixed delimiter and bounded character checks.
+- Replaced the upstream snapshot Notion ID helper's pattern-engine parsing
+  with fixed delimiter and bounded character checks.
 
 ## [0.2.1] - 2026-04-01
 

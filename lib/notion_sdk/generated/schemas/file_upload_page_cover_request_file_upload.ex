@@ -1,6 +1,6 @@
 defmodule NotionSDK.FileUploadPageCoverRequestFileUpload do
   @moduledoc """
-  Generated Notion Sdk type for file upload page cover request file upload.
+  Generated Notion Sdk type module `NotionSDK.FileUploadPageCoverRequestFileUpload`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

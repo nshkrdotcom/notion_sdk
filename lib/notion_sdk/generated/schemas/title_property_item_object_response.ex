@@ -1,6 +1,6 @@
 defmodule NotionSDK.TitlePropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for title property item object response.
+  Generated Notion Sdk type module `NotionSDK.TitlePropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

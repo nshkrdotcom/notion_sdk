@@ -1,6 +1,6 @@
 defmodule NotionSDK.FileUploadObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for file upload object response.
+  Generated Notion Sdk type module `NotionSDK.FileUploadObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

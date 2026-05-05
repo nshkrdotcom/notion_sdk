@@ -1,6 +1,6 @@
 defmodule NotionSDK.Relation do
   @moduledoc """
-  Generated Notion Sdk type for relation.
+  Generated Notion Sdk type module `NotionSDK.Relation`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

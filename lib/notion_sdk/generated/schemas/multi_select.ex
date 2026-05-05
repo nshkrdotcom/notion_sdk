@@ -1,6 +1,6 @@
 defmodule NotionSDK.MultiSelect do
   @moduledoc """
-  Generated Notion Sdk type for multi select.
+  Generated Notion Sdk type module `NotionSDK.MultiSelect`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

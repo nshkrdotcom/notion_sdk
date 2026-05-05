@@ -1,6 +1,6 @@
 defmodule NotionSDK.DividerBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for divider block object response.
+  Generated Notion Sdk type module `NotionSDK.DividerBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

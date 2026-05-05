@@ -1,6 +1,6 @@
 defmodule NotionSDK.ErrorApi500 do
   @moduledoc """
-  Generated Notion Sdk type for error api500.
+  Generated Notion Sdk type module `NotionSDK.ErrorApi500`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

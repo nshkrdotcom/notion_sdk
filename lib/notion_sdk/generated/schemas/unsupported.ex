@@ -1,6 +1,6 @@
 defmodule NotionSDK.Unsupported do
   @moduledoc """
-  Generated Notion Sdk type for unsupported.
+  Generated Notion Sdk type module `NotionSDK.Unsupported`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

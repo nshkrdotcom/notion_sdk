@@ -1,6 +1,6 @@
 defmodule NotionSDK.Verification do
   @moduledoc """
-  Generated Notion Sdk type for verification.
+  Generated Notion Sdk type module `NotionSDK.Verification`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

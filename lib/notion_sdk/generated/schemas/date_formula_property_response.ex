@@ -1,6 +1,6 @@
 defmodule NotionSDK.DateFormulaPropertyResponse do
   @moduledoc """
-  Generated Notion Sdk type for date formula property response.
+  Generated Notion Sdk type module `NotionSDK.DateFormulaPropertyResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

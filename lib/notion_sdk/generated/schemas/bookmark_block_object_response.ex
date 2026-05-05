@@ -1,6 +1,6 @@
 defmodule NotionSDK.BookmarkBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for bookmark block object response.
+  Generated Notion Sdk type module `NotionSDK.BookmarkBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

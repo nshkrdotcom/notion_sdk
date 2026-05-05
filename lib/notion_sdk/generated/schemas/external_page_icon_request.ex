@@ -1,6 +1,6 @@
 defmodule NotionSDK.ExternalPageIconRequest do
   @moduledoc """
-  Generated Notion Sdk type for external page icon request.
+  Generated Notion Sdk type module `NotionSDK.ExternalPageIconRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

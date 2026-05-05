@@ -1,6 +1,6 @@
 defmodule NotionSDK.CreatedTime do
   @moduledoc """
-  Generated Notion Sdk type for created time.
+  Generated Notion Sdk type module `NotionSDK.CreatedTime`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

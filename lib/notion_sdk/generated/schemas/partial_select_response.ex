@@ -1,6 +1,6 @@
 defmodule NotionSDK.PartialSelectResponse do
   @moduledoc """
-  Generated Notion Sdk type for partial select response.
+  Generated Notion Sdk type module `NotionSDK.PartialSelectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

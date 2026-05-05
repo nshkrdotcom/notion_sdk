@@ -1,6 +1,6 @@
 defmodule NotionSDK.Heading2BlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for heading2 block object response.
+  Generated Notion Sdk type module `NotionSDK.Heading2BlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

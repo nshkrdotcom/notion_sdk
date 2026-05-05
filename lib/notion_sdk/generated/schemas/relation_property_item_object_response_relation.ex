@@ -1,6 +1,6 @@
 defmodule NotionSDK.RelationPropertyItemObjectResponseRelation do
   @moduledoc """
-  Generated Notion Sdk type for relation property item object response relation.
+  Generated Notion Sdk type module `NotionSDK.RelationPropertyItemObjectResponseRelation`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

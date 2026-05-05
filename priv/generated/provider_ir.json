@@ -2,1397 +2,1397 @@
   "artifact_plan": {
     "artifacts": [
       {
-        "id": "lib_notion_sdk_generated_blocks",
+        "id": "lib/notion_sdk/generated/blocks.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/blocks.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_client",
+        "id": "lib/notion_sdk/generated/client.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/client.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_comments",
+        "id": "lib/notion_sdk/generated/comments.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/comments.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_data_sources",
+        "id": "lib/notion_sdk/generated/data_sources.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/data_sources.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_databases",
+        "id": "lib/notion_sdk/generated/databases.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/databases.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_file_uploads",
+        "id": "lib/notion_sdk/generated/file_uploads.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/file_uploads.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_o_auth",
+        "id": "lib/notion_sdk/generated/o_auth.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/o_auth.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_pages",
+        "id": "lib/notion_sdk/generated/pages.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/pages.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_runtime_schema",
+        "id": "lib/notion_sdk/generated/runtime_schema.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/runtime_schema.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_annotation_request",
+        "id": "lib/notion_sdk/generated/schemas/annotation_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/annotation_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_annotation_response",
+        "id": "lib/notion_sdk/generated/schemas/annotation_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/annotation_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_array",
+        "id": "lib/notion_sdk/generated/schemas/array.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/array.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_audio",
+        "id": "lib/notion_sdk/generated/schemas/audio.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/audio.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_audio_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/audio_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/audio_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_block_id",
+        "id": "lib/notion_sdk/generated/schemas/block_id.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/block_id.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_block_id_comment_parent_response",
+        "id": "lib/notion_sdk/generated/schemas/block_id_comment_parent_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/block_id_comment_parent_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_block_id_parent_for_block_based_object_response",
+        "id": "lib/notion_sdk/generated/schemas/block_id_parent_for_block_based_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/block_id_parent_for_block_based_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_bookmark",
+        "id": "lib/notion_sdk/generated/schemas/bookmark.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/bookmark.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_bookmark_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/bookmark_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/bookmark_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_boolean_formula_property_response",
+        "id": "lib/notion_sdk/generated/schemas/boolean_formula_property_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/boolean_formula_property_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_breadcrumb",
+        "id": "lib/notion_sdk/generated/schemas/breadcrumb.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/breadcrumb.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_breadcrumb_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/breadcrumb_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/breadcrumb_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_bulleted_list_item",
+        "id": "lib/notion_sdk/generated/schemas/bulleted_list_item.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/bulleted_list_item.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_bulleted_list_item_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/bulleted_list_item_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/bulleted_list_item_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_bulleted_list_item_bulleted_list_item",
+        "id": "lib/notion_sdk/generated/schemas/bulleted_list_item_bulleted_list_item.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/bulleted_list_item_bulleted_list_item.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_button_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/button_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/button_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_callout",
+        "id": "lib/notion_sdk/generated/schemas/callout.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/callout.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_callout_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/callout_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/callout_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_callout_block_object_response_callout",
+        "id": "lib/notion_sdk/generated/schemas/callout_block_object_response_callout.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/callout_block_object_response_callout.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_callout_callout",
+        "id": "lib/notion_sdk/generated/schemas/callout_callout.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/callout_callout.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_checkbox",
+        "id": "lib/notion_sdk/generated/schemas/checkbox.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/checkbox.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_checkbox_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/checkbox_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/checkbox_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_child_database_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/child_database_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/child_database_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_child_page_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/child_page_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/child_page_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_code",
+        "id": "lib/notion_sdk/generated/schemas/code.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/code.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_code_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/code_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/code_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_code_block_object_response_code",
+        "id": "lib/notion_sdk/generated/schemas/code_block_object_response_code.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/code_block_object_response_code.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_code_code",
+        "id": "lib/notion_sdk/generated/schemas/code_code.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/code_code.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column",
+        "id": "lib/notion_sdk/generated/schemas/column.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/column_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column_block_with_children_request",
+        "id": "lib/notion_sdk/generated/schemas/column_block_with_children_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column_block_with_children_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column_list",
+        "id": "lib/notion_sdk/generated/schemas/column_list.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column_list.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column_list_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/column_list_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column_list_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column_list_request",
+        "id": "lib/notion_sdk/generated/schemas/column_list_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column_list_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column_response",
+        "id": "lib/notion_sdk/generated/schemas/column_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_column_with_children_request",
+        "id": "lib/notion_sdk/generated/schemas/column_with_children_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/column_with_children_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_comment_id",
+        "id": "lib/notion_sdk/generated/schemas/comment_id.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/comment_id.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_comment_object_response",
+        "id": "lib/notion_sdk/generated/schemas/comment_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/comment_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_comment_object_response_attachments",
+        "id": "lib/notion_sdk/generated/schemas/comment_object_response_attachments.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/comment_object_response_attachments.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_comment_object_response_display_name",
+        "id": "lib/notion_sdk/generated/schemas/comment_object_response_display_name.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/comment_object_response_display_name.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_expression_request",
+        "id": "lib/notion_sdk/generated/schemas/content_with_expression_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_expression_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_rich_text_and_color_and_list_response",
+        "id": "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_and_list_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_and_list_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_rich_text_and_color_request",
+        "id": "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_rich_text_and_color_response",
+        "id": "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_rich_text_and_color_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_rich_text_request",
+        "id": "lib/notion_sdk/generated/schemas/content_with_rich_text_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_rich_text_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_single_level_of_children_request",
+        "id": "lib/notion_sdk/generated/schemas/content_with_single_level_of_children_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_single_level_of_children_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_table_response",
+        "id": "lib/notion_sdk/generated/schemas/content_with_table_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_table_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_table_row_request",
+        "id": "lib/notion_sdk/generated/schemas/content_with_table_row_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_table_row_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_content_with_table_row_response",
+        "id": "lib/notion_sdk/generated/schemas/content_with_table_row_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/content_with_table_row_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_created_by",
+        "id": "lib/notion_sdk/generated/schemas/created_by.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/created_by.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_created_by_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/created_by_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/created_by_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_created_time",
+        "id": "lib/notion_sdk/generated/schemas/created_time.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/created_time.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_created_time_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/created_time_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/created_time_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_custom",
+        "id": "lib/notion_sdk/generated/schemas/custom.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/custom.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_custom_emoji_page_icon_request",
+        "id": "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_custom_emoji_page_icon_request_custom_emoji",
+        "id": "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_request_custom_emoji.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_request_custom_emoji.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_custom_emoji_page_icon_response",
+        "id": "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/custom_emoji_page_icon_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_custom_emoji_response",
+        "id": "lib/notion_sdk/generated/schemas/custom_emoji_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/custom_emoji_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_data_source_id",
+        "id": "lib/notion_sdk/generated/schemas/data_source_id.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/data_source_id.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_data_source_object_response",
+        "id": "lib/notion_sdk/generated/schemas/data_source_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/data_source_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_data_source_parent_response",
+        "id": "lib/notion_sdk/generated/schemas/data_source_parent_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/data_source_parent_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_data_source_reference_response",
+        "id": "lib/notion_sdk/generated/schemas/data_source_reference_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/data_source_reference_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_database_id",
+        "id": "lib/notion_sdk/generated/schemas/database_id.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/database_id.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_database_object_response",
+        "id": "lib/notion_sdk/generated/schemas/database_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/database_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_database_parent_response",
+        "id": "lib/notion_sdk/generated/schemas/database_parent_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/database_parent_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_date",
+        "id": "lib/notion_sdk/generated/schemas/date.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/date.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_date_formula_property_response",
+        "id": "lib/notion_sdk/generated/schemas/date_formula_property_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/date_formula_property_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_date_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/date_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/date_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_date_response",
+        "id": "lib/notion_sdk/generated/schemas/date_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/date_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_divider",
+        "id": "lib/notion_sdk/generated/schemas/divider.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/divider.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_divider_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/divider_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/divider_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_email",
+        "id": "lib/notion_sdk/generated/schemas/email.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/email.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_email_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/email_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/email_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_embed",
+        "id": "lib/notion_sdk/generated/schemas/embed.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/embed.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_embed_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/embed_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/embed_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_emoji_page_icon_request",
+        "id": "lib/notion_sdk/generated/schemas/emoji_page_icon_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/emoji_page_icon_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_emoji_page_icon_response",
+        "id": "lib/notion_sdk/generated/schemas/emoji_page_icon_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/emoji_page_icon_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_empty_object",
+        "id": "lib/notion_sdk/generated/schemas/empty_object.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/empty_object.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_equation",
+        "id": "lib/notion_sdk/generated/schemas/equation.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/equation.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_equation_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/equation_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/equation_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api400",
+        "id": "lib/notion_sdk/generated/schemas/error_api400.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api400.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api401",
+        "id": "lib/notion_sdk/generated/schemas/error_api401.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api401.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api403",
+        "id": "lib/notion_sdk/generated/schemas/error_api403.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api403.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api404",
+        "id": "lib/notion_sdk/generated/schemas/error_api404.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api404.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api409",
+        "id": "lib/notion_sdk/generated/schemas/error_api409.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api409.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api429",
+        "id": "lib/notion_sdk/generated/schemas/error_api429.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api429.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api500",
+        "id": "lib/notion_sdk/generated/schemas/error_api500.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api500.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_api503",
+        "id": "lib/notion_sdk/generated/schemas/error_api503.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_api503.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_oauth400",
+        "id": "lib/notion_sdk/generated/schemas/error_oauth400.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_oauth400.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_oauth401",
+        "id": "lib/notion_sdk/generated/schemas/error_oauth401.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_oauth401.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_oauth403",
+        "id": "lib/notion_sdk/generated/schemas/error_oauth403.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_oauth403.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_error_oauth500",
+        "id": "lib/notion_sdk/generated/schemas/error_oauth500.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/error_oauth500.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_expression_object_response",
+        "id": "lib/notion_sdk/generated/schemas/expression_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/expression_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external",
+        "id": "lib/notion_sdk/generated/schemas/external.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_file_request",
+        "id": "lib/notion_sdk/generated/schemas/external_file_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_file_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_media_content_with_file_and_caption_response",
+        "id": "lib/notion_sdk/generated/schemas/external_media_content_with_file_and_caption_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_media_content_with_file_and_caption_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_media_content_with_file_and_caption_response_external",
+        "id": "lib/notion_sdk/generated/schemas/external_media_content_with_file_and_caption_response_external.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_media_content_with_file_and_caption_response_external.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_media_content_with_file_name_and_caption_response",
+        "id": "lib/notion_sdk/generated/schemas/external_media_content_with_file_name_and_caption_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_media_content_with_file_name_and_caption_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_media_content_with_file_name_and_caption_response_external",
+        "id": "lib/notion_sdk/generated/schemas/external_media_content_with_file_name_and_caption_response_external.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_media_content_with_file_name_and_caption_response_external.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_cover_request",
+        "id": "lib/notion_sdk/generated/schemas/external_page_cover_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_cover_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_cover_request_external",
+        "id": "lib/notion_sdk/generated/schemas/external_page_cover_request_external.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_cover_request_external.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_cover_response",
+        "id": "lib/notion_sdk/generated/schemas/external_page_cover_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_cover_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_cover_response_external",
+        "id": "lib/notion_sdk/generated/schemas/external_page_cover_response_external.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_cover_response_external.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_icon_request",
+        "id": "lib/notion_sdk/generated/schemas/external_page_icon_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_icon_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_icon_request_external",
+        "id": "lib/notion_sdk/generated/schemas/external_page_icon_request_external.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_icon_request_external.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_icon_response",
+        "id": "lib/notion_sdk/generated/schemas/external_page_icon_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_icon_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_external_page_icon_response_external",
+        "id": "lib/notion_sdk/generated/schemas/external_page_icon_response_external.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/external_page_icon_response_external.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file",
+        "id": "lib/notion_sdk/generated/schemas/file.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/file_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_media_content_with_file_and_caption_response",
+        "id": "lib/notion_sdk/generated/schemas/file_media_content_with_file_and_caption_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_media_content_with_file_and_caption_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_media_content_with_file_name_and_caption_response",
+        "id": "lib/notion_sdk/generated/schemas/file_media_content_with_file_name_and_caption_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_media_content_with_file_name_and_caption_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_page_cover_response",
+        "id": "lib/notion_sdk/generated/schemas/file_page_cover_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_page_cover_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_page_icon_response",
+        "id": "lib/notion_sdk/generated/schemas/file_page_icon_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_page_icon_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload",
+        "id": "lib/notion_sdk/generated/schemas/file_upload.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_id_request",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_id_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_id_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_object_response",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_object_response_created_by",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_object_response_created_by.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_object_response_created_by.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_object_response_file_import_result",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_object_response_file_import_result.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_object_response_file_import_result.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_object_response_number_of_parts",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_object_response_number_of_parts.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_object_response_number_of_parts.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_page_cover_request",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_page_cover_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_page_cover_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_page_cover_request_file_upload",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_page_cover_request_file_upload.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_page_cover_request_file_upload.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_page_icon_request",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_page_icon_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_page_icon_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_file_upload_page_icon_request_file_upload",
+        "id": "lib/notion_sdk/generated/schemas/file_upload_page_icon_request_file_upload.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/file_upload_page_icon_request_file_upload.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_files",
+        "id": "lib/notion_sdk/generated/schemas/files.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/files.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_files_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/files_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/files_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_formula",
+        "id": "lib/notion_sdk/generated/schemas/formula.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/formula.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_formula_formula",
+        "id": "lib/notion_sdk/generated/schemas/formula_formula.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/formula_formula.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_formula_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/formula_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/formula_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_header_content_with_rich_text_and_color_request",
+        "id": "lib/notion_sdk/generated/schemas/header_content_with_rich_text_and_color_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/header_content_with_rich_text_and_color_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_header_content_with_rich_text_and_color_response",
+        "id": "lib/notion_sdk/generated/schemas/header_content_with_rich_text_and_color_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/header_content_with_rich_text_and_color_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_header_content_with_single_level_of_children_request",
+        "id": "lib/notion_sdk/generated/schemas/header_content_with_single_level_of_children_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/header_content_with_single_level_of_children_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading1",
+        "id": "lib/notion_sdk/generated/schemas/heading1.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading1.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading1_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/heading1_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading1_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading1_heading1",
+        "id": "lib/notion_sdk/generated/schemas/heading1_heading1.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading1_heading1.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading2",
+        "id": "lib/notion_sdk/generated/schemas/heading2.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading2.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading2_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/heading2_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading2_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading2_heading2",
+        "id": "lib/notion_sdk/generated/schemas/heading2_heading2.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading2_heading2.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading3",
+        "id": "lib/notion_sdk/generated/schemas/heading3.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading3.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading3_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/heading3_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading3_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_heading3_heading3",
+        "id": "lib/notion_sdk/generated/schemas/heading3_heading3.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/heading3_heading3.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_image",
+        "id": "lib/notion_sdk/generated/schemas/image.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/image.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_image_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/image_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/image_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_incomplete",
+        "id": "lib/notion_sdk/generated/schemas/incomplete.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/incomplete.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_initial_data_source_request",
+        "id": "lib/notion_sdk/generated/schemas/initial_data_source_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/initial_data_source_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_integration",
+        "id": "lib/notion_sdk/generated/schemas/integration.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/integration.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_internal_file_response",
+        "id": "lib/notion_sdk/generated/schemas/internal_file_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/internal_file_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_internal_or_external_file_with_name_response",
+        "id": "lib/notion_sdk/generated/schemas/internal_or_external_file_with_name_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/internal_or_external_file_with_name_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_last_edited_by",
+        "id": "lib/notion_sdk/generated/schemas/last_edited_by.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/last_edited_by.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_last_edited_by_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/last_edited_by_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/last_edited_by_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_last_edited_time",
+        "id": "lib/notion_sdk/generated/schemas/last_edited_time.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/last_edited_time.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_last_edited_time_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/last_edited_time_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/last_edited_time_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_link_preview_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/link_preview_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/link_preview_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_link_to_page",
+        "id": "lib/notion_sdk/generated/schemas/link_to_page.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/link_to_page.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_link_to_page_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/link_to_page_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/link_to_page_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_media_content_with_url_and_caption_request",
+        "id": "lib/notion_sdk/generated/schemas/media_content_with_url_and_caption_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/media_content_with_url_and_caption_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_media_content_with_url_and_caption_response",
+        "id": "lib/notion_sdk/generated/schemas/media_content_with_url_and_caption_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/media_content_with_url_and_caption_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_media_content_with_url_response",
+        "id": "lib/notion_sdk/generated/schemas/media_content_with_url_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/media_content_with_url_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_meeting_notes_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/meeting_notes_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/meeting_notes_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_multi_select",
+        "id": "lib/notion_sdk/generated/schemas/multi_select.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/multi_select.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_multi_select_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/multi_select_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/multi_select_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_notion_sdk",
+        "id": "lib/notion_sdk/generated/schemas/notion_sdk.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/notion_sdk.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_number",
+        "id": "lib/notion_sdk/generated/schemas/number.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/number.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_number_formula_property_response",
+        "id": "lib/notion_sdk/generated/schemas/number_formula_property_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/number_formula_property_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_number_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/number_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/number_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_numbered_list_item",
+        "id": "lib/notion_sdk/generated/schemas/numbered_list_item.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/numbered_list_item.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_numbered_list_item_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/numbered_list_item_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/numbered_list_item_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_numbered_list_item_numbered_list_item",
+        "id": "lib/notion_sdk/generated/schemas/numbered_list_item_numbered_list_item.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/numbered_list_item_numbered_list_item.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_page_id",
+        "id": "lib/notion_sdk/generated/schemas/page_id.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/page_id.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_page_id_comment_parent_response",
+        "id": "lib/notion_sdk/generated/schemas/page_id_comment_parent_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/page_id_comment_parent_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_page_id_parent_for_block_based_object_response",
+        "id": "lib/notion_sdk/generated/schemas/page_id_parent_for_block_based_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/page_id_parent_for_block_based_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_page_markdown_response",
+        "id": "lib/notion_sdk/generated/schemas/page_markdown_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/page_markdown_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_page_object_response",
+        "id": "lib/notion_sdk/generated/schemas/page_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/page_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_paragraph",
+        "id": "lib/notion_sdk/generated/schemas/paragraph.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/paragraph.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_paragraph_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/paragraph_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/paragraph_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_paragraph_paragraph",
+        "id": "lib/notion_sdk/generated/schemas/paragraph_paragraph.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/paragraph_paragraph.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_parent_of_data_source_request",
+        "id": "lib/notion_sdk/generated/schemas/parent_of_data_source_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/parent_of_data_source_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_partial_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/partial_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/partial_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_partial_comment_object_response",
+        "id": "lib/notion_sdk/generated/schemas/partial_comment_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/partial_comment_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_partial_data_source_object_response",
+        "id": "lib/notion_sdk/generated/schemas/partial_data_source_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/partial_data_source_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_partial_database_object_response",
+        "id": "lib/notion_sdk/generated/schemas/partial_database_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/partial_database_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_partial_page_object_response",
+        "id": "lib/notion_sdk/generated/schemas/partial_page_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/partial_page_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_partial_select_response",
+        "id": "lib/notion_sdk/generated/schemas/partial_select_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/partial_select_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_partial_user_object_response",
+        "id": "lib/notion_sdk/generated/schemas/partial_user_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/partial_user_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_pdf",
+        "id": "lib/notion_sdk/generated/schemas/pdf.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/pdf.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_pdf_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/pdf_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/pdf_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_people",
+        "id": "lib/notion_sdk/generated/schemas/people.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/people.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_people_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/people_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/people_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_person",
+        "id": "lib/notion_sdk/generated/schemas/person.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/person.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_phone_number",
+        "id": "lib/notion_sdk/generated/schemas/phone_number.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/phone_number.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_phone_number_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/phone_number_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/phone_number_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_place_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/place_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/place_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_place_property_item_object_response_place",
+        "id": "lib/notion_sdk/generated/schemas/place_property_item_object_response_place.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/place_property_item_object_response_place.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_property_item_property_item_list_response",
+        "id": "lib/notion_sdk/generated/schemas/property_item_property_item_list_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/property_item_property_item_list_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_quote",
+        "id": "lib/notion_sdk/generated/schemas/quote.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/quote.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_quote_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/quote_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/quote_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_quote_quote",
+        "id": "lib/notion_sdk/generated/schemas/quote_quote.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/quote_quote.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_relation",
+        "id": "lib/notion_sdk/generated/schemas/relation.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/relation.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_relation_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/relation_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/relation_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_relation_property_item_object_response_relation",
+        "id": "lib/notion_sdk/generated/schemas/relation_property_item_object_response_relation.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/relation_property_item_object_response_relation.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_rich_text",
+        "id": "lib/notion_sdk/generated/schemas/rich_text.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/rich_text.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_rich_text_item_request",
+        "id": "lib/notion_sdk/generated/schemas/rich_text_item_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/rich_text_item_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_rich_text_item_response",
+        "id": "lib/notion_sdk/generated/schemas/rich_text_item_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/rich_text_item_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_rich_text_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/rich_text_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/rich_text_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_rollup",
+        "id": "lib/notion_sdk/generated/schemas/rollup.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/rollup.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_rollup_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/rollup_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/rollup_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_rollup_rollup",
+        "id": "lib/notion_sdk/generated/schemas/rollup_rollup.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/rollup_rollup.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_select",
+        "id": "lib/notion_sdk/generated/schemas/select.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/select.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_select_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/select_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/select_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_status",
+        "id": "lib/notion_sdk/generated/schemas/status.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/status.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_status_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/status_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/status_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_string_formula_property_response",
+        "id": "lib/notion_sdk/generated/schemas/string_formula_property_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/string_formula_property_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_synced_block",
+        "id": "lib/notion_sdk/generated/schemas/synced_block.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/synced_block.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_synced_block_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/synced_block_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/synced_block_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_synced_block_block_object_response_synced_block",
+        "id": "lib/notion_sdk/generated/schemas/synced_block_block_object_response_synced_block.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/synced_block_block_object_response_synced_block.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_synced_block_synced_block",
+        "id": "lib/notion_sdk/generated/schemas/synced_block_synced_block.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/synced_block_synced_block.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table",
+        "id": "lib/notion_sdk/generated/schemas/table.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/table_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_of_contents",
+        "id": "lib/notion_sdk/generated/schemas/table_of_contents.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_of_contents.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_of_contents_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/table_of_contents_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_of_contents_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_of_contents_block_object_response_table_of_contents",
+        "id": "lib/notion_sdk/generated/schemas/table_of_contents_block_object_response_table_of_contents.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_of_contents_block_object_response_table_of_contents.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_of_contents_table_of_contents",
+        "id": "lib/notion_sdk/generated/schemas/table_of_contents_table_of_contents.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_of_contents_table_of_contents.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_request_with_table_row_children",
+        "id": "lib/notion_sdk/generated/schemas/table_request_with_table_row_children.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_request_with_table_row_children.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_row",
+        "id": "lib/notion_sdk/generated/schemas/table_row.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_row.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_row_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/table_row_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_row_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_table_row_request",
+        "id": "lib/notion_sdk/generated/schemas/table_row_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/table_row_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_template",
+        "id": "lib/notion_sdk/generated/schemas/template.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/template.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_template_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/template_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/template_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_template_block_object_response_template",
+        "id": "lib/notion_sdk/generated/schemas/template_block_object_response_template.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/template_block_object_response_template.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_template_template",
+        "id": "lib/notion_sdk/generated/schemas/template_template.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/template_template.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_timestamp_created_time_filter",
+        "id": "lib/notion_sdk/generated/schemas/timestamp_created_time_filter.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/timestamp_created_time_filter.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_timestamp_last_edited_time_filter",
+        "id": "lib/notion_sdk/generated/schemas/timestamp_last_edited_time_filter.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/timestamp_last_edited_time_filter.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_title",
+        "id": "lib/notion_sdk/generated/schemas/title.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/title.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_title_object_response",
+        "id": "lib/notion_sdk/generated/schemas/title_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/title_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_title_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/title_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/title_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_to_do",
+        "id": "lib/notion_sdk/generated/schemas/to_do.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/to_do.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_to_do_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/to_do_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/to_do_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_to_do_block_object_response_to_do",
+        "id": "lib/notion_sdk/generated/schemas/to_do_block_object_response_to_do.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/to_do_block_object_response_to_do.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_to_do_to_do",
+        "id": "lib/notion_sdk/generated/schemas/to_do_to_do.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/to_do_to_do.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_toggle",
+        "id": "lib/notion_sdk/generated/schemas/toggle.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/toggle.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_toggle_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/toggle_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/toggle_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_toggle_toggle",
+        "id": "lib/notion_sdk/generated/schemas/toggle_toggle.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/toggle_toggle.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_transcription_block_response",
+        "id": "lib/notion_sdk/generated/schemas/transcription_block_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/transcription_block_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_transcription_calendar_event_response",
+        "id": "lib/notion_sdk/generated/schemas/transcription_calendar_event_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/transcription_calendar_event_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_transcription_children_response",
+        "id": "lib/notion_sdk/generated/schemas/transcription_children_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/transcription_children_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_transcription_recording_response",
+        "id": "lib/notion_sdk/generated/schemas/transcription_recording_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/transcription_recording_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_unique_id",
+        "id": "lib/notion_sdk/generated/schemas/unique_id.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/unique_id.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_unique_id_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/unique_id_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/unique_id_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_unique_id_property_item_object_response_unique_id",
+        "id": "lib/notion_sdk/generated/schemas/unique_id_property_item_object_response_unique_id.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/unique_id_property_item_object_response_unique_id.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_unsupported",
+        "id": "lib/notion_sdk/generated/schemas/unsupported.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/unsupported.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_unsupported_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/unsupported_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/unsupported_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_unsupported_block_object_response_unsupported",
+        "id": "lib/notion_sdk/generated/schemas/unsupported_block_object_response_unsupported.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/unsupported_block_object_response_unsupported.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_update_media_content_with_file_and_caption_request",
+        "id": "lib/notion_sdk/generated/schemas/update_media_content_with_file_and_caption_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/update_media_content_with_file_and_caption_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_update_media_content_with_file_name_and_caption_request",
+        "id": "lib/notion_sdk/generated/schemas/update_media_content_with_file_name_and_caption_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/update_media_content_with_file_name_and_caption_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_update_media_content_with_url_and_caption_request",
+        "id": "lib/notion_sdk/generated/schemas/update_media_content_with_url_and_caption_request.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/update_media_content_with_url_and_caption_request.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_url",
+        "id": "lib/notion_sdk/generated/schemas/url.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/url.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_url_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/url_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/url_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_user",
+        "id": "lib/notion_sdk/generated/schemas/user.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/user.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_user_object_response",
+        "id": "lib/notion_sdk/generated/schemas/user_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/user_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_verification",
+        "id": "lib/notion_sdk/generated/schemas/verification.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/verification.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_verification_property_item_object_response",
+        "id": "lib/notion_sdk/generated/schemas/verification_property_item_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/verification_property_item_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_verification_property_response",
+        "id": "lib/notion_sdk/generated/schemas/verification_property_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/verification_property_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_verification_property_status_filter",
+        "id": "lib/notion_sdk/generated/schemas/verification_property_status_filter.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/verification_property_status_filter.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_verification_property_unverified_response",
+        "id": "lib/notion_sdk/generated/schemas/verification_property_unverified_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/verification_property_unverified_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_video",
+        "id": "lib/notion_sdk/generated/schemas/video.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/video.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_video_block_object_response",
+        "id": "lib/notion_sdk/generated/schemas/video_block_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/video_block_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_workspace",
+        "id": "lib/notion_sdk/generated/schemas/workspace.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/workspace.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_schemas_workspace_parent_for_block_based_object_response",
+        "id": "lib/notion_sdk/generated/schemas/workspace_parent_for_block_based_object_response.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/schemas/workspace_parent_for_block_based_object_response.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_search",
+        "id": "lib/notion_sdk/generated/search.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/search.ex"
       },
       {
-        "id": "lib_notion_sdk_generated_users",
+        "id": "lib/notion_sdk/generated/users.ex",
         "kind": "code",
         "path": "lib/notion_sdk/generated/users.ex"
       },
@@ -9106,6 +9106,9 @@
       },
       "runtime_metadata": {
         "circuit_breaker": "oauth_control",
+        "module_uses": [
+          "NotionSDK.OAuth.Helpers"
+        ],
         "rate_limit_group": "notion.integration",
         "resource": "oauth_control",
         "retry_group": "notion.oauth_control",
@@ -9211,6 +9214,9 @@
       },
       "runtime_metadata": {
         "circuit_breaker": "oauth_control",
+        "module_uses": [
+          "NotionSDK.OAuth.Helpers"
+        ],
         "rate_limit_group": "notion.integration",
         "resource": "oauth_control",
         "retry_group": "notion.oauth_control",
@@ -9365,6 +9371,9 @@
       },
       "runtime_metadata": {
         "circuit_breaker": "oauth_control",
+        "module_uses": [
+          "NotionSDK.OAuth.Helpers"
+        ],
         "rate_limit_group": "notion.integration",
         "resource": "oauth_control",
         "retry_group": "notion.oauth_control",

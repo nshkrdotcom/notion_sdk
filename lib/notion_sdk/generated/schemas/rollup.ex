@@ -1,6 +1,6 @@
 defmodule NotionSDK.Rollup do
   @moduledoc """
-  Generated Notion Sdk type for rollup.
+  Generated Notion Sdk type module `NotionSDK.Rollup`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -168,7 +168,7 @@ defmodule NotionSDK.Refresh do
   end
 
   defp codegen_module do
-    Module.concat(NotionSDK, Codegen)
+    NotionSDK.Codegen
   end
 
   defp snapshot_upstream!(paths) do
@@ -421,10 +421,10 @@ defmodule NotionSDK.Refresh do
   end
 
   defp json_module do
-    Module.concat([Jason])
+    Jason
   end
 
   defp ordered_object_module do
-    Module.concat([Jason, OrderedObject])
+    Jason.OrderedObject
   end
 end

@@ -1,6 +1,6 @@
 defmodule NotionSDK.CommentId do
   @moduledoc """
-  Generated Notion Sdk type for comment id.
+  Generated Notion Sdk type module `NotionSDK.CommentId`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

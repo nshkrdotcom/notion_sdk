@@ -1,6 +1,6 @@
 defmodule NotionSDK.LinkPreviewBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for link preview block object response.
+  Generated Notion Sdk type module `NotionSDK.LinkPreviewBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

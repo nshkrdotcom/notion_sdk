@@ -1,6 +1,6 @@
 defmodule NotionSDK.ErrorApi403 do
   @moduledoc """
-  Generated Notion Sdk type for error api403.
+  Generated Notion Sdk type module `NotionSDK.ErrorApi403`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Bookmark do
   @moduledoc """
-  Generated Notion Sdk type for bookmark.
+  Generated Notion Sdk type module `NotionSDK.Bookmark`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

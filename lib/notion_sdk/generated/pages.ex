@@ -1,6 +1,6 @@
 defmodule NotionSDK.Pages do
   @moduledoc """
-  Generated Notion Sdk operations for pages.
+  Generated Notion Sdk operations module `NotionSDK.Pages`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Date do
   @moduledoc """
-  Generated Notion Sdk type for date.
+  Generated Notion Sdk type module `NotionSDK.Date`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

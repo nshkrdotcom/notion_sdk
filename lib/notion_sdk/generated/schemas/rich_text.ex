@@ -1,6 +1,6 @@
 defmodule NotionSDK.RichText do
   @moduledoc """
-  Generated Notion Sdk type for rich text.
+  Generated Notion Sdk type module `NotionSDK.RichText`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

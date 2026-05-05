@@ -1,6 +1,6 @@
 defmodule NotionSDK.CommentObjectResponseAttachments do
   @moduledoc """
-  Generated Notion Sdk type for comment object response attachments.
+  Generated Notion Sdk type module `NotionSDK.CommentObjectResponseAttachments`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.ErrorApi409 do
   @moduledoc """
-  Generated Notion Sdk type for error api409.
+  Generated Notion Sdk type module `NotionSDK.ErrorApi409`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

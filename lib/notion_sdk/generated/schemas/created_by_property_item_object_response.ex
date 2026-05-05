@@ -1,6 +1,6 @@
 defmodule NotionSDK.CreatedByPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for created by property item object response.
+  Generated Notion Sdk type module `NotionSDK.CreatedByPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

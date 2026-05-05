@@ -1,6 +1,6 @@
 defmodule NotionSDK.RollupPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for rollup property item object response.
+  Generated Notion Sdk type module `NotionSDK.RollupPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

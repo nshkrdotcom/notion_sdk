@@ -1,6 +1,6 @@
 defmodule NotionSDK.CalloutBlockObjectResponseCallout do
   @moduledoc """
-  Generated Notion Sdk type for callout block object response callout.
+  Generated Notion Sdk type module `NotionSDK.CalloutBlockObjectResponseCallout`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

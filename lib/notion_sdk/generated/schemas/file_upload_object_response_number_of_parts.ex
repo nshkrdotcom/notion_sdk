@@ -1,6 +1,6 @@
 defmodule NotionSDK.FileUploadObjectResponseNumberOfParts do
   @moduledoc """
-  Generated Notion Sdk type for file upload object response number of parts.
+  Generated Notion Sdk type module `NotionSDK.FileUploadObjectResponseNumberOfParts`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

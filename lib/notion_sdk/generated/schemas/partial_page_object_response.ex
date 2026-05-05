@@ -1,6 +1,6 @@
 defmodule NotionSDK.PartialPageObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for partial page object response.
+  Generated Notion Sdk type module `NotionSDK.PartialPageObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

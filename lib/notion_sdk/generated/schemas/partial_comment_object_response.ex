@@ -1,6 +1,6 @@
 defmodule NotionSDK.PartialCommentObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for partial comment object response.
+  Generated Notion Sdk type module `NotionSDK.PartialCommentObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

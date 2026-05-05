@@ -1,6 +1,6 @@
 defmodule NotionSDK.PhoneNumberPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for phone number property item object response.
+  Generated Notion Sdk type module `NotionSDK.PhoneNumberPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

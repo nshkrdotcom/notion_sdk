@@ -1,6 +1,6 @@
 defmodule NotionSDK.TranscriptionCalendarEventResponse do
   @moduledoc """
-  Generated Notion Sdk type for transcription calendar event response.
+  Generated Notion Sdk type module `NotionSDK.TranscriptionCalendarEventResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

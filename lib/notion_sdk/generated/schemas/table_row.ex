@@ -1,6 +1,6 @@
 defmodule NotionSDK.TableRow do
   @moduledoc """
-  Generated Notion Sdk type for table row.
+  Generated Notion Sdk type module `NotionSDK.TableRow`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

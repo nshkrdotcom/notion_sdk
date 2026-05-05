@@ -1,6 +1,6 @@
 defmodule NotionSDK.VerificationPropertyUnverifiedResponse do
   @moduledoc """
-  Generated Notion Sdk type for verification property unverified response.
+  Generated Notion Sdk type module `NotionSDK.VerificationPropertyUnverifiedResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

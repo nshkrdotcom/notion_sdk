@@ -1,6 +1,6 @@
 defmodule NotionSDK.TranscriptionBlockResponse do
   @moduledoc """
-  Generated Notion Sdk type for transcription block response.
+  Generated Notion Sdk type module `NotionSDK.TranscriptionBlockResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.UniqueId do
   @moduledoc """
-  Generated Notion Sdk type for unique id.
+  Generated Notion Sdk type module `NotionSDK.UniqueId`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

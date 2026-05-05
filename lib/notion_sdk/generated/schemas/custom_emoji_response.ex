@@ -1,6 +1,6 @@
 defmodule NotionSDK.CustomEmojiResponse do
   @moduledoc """
-  Generated Notion Sdk type for custom emoji response.
+  Generated Notion Sdk type module `NotionSDK.CustomEmojiResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

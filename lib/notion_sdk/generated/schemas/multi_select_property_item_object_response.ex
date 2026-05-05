@@ -1,6 +1,6 @@
 defmodule NotionSDK.MultiSelectPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for multi select property item object response.
+  Generated Notion Sdk type module `NotionSDK.MultiSelectPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

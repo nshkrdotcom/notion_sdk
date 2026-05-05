@@ -1,6 +1,6 @@
 defmodule NotionSDK.NumberPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for number property item object response.
+  Generated Notion Sdk type module `NotionSDK.NumberPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

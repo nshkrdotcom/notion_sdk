@@ -1,6 +1,6 @@
 defmodule NotionSDK.CheckboxPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for checkbox property item object response.
+  Generated Notion Sdk type module `NotionSDK.CheckboxPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

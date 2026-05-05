@@ -1,6 +1,6 @@
 defmodule NotionSDK.PeoplePropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for people property item object response.
+  Generated Notion Sdk type module `NotionSDK.PeoplePropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.ContentWithTableRowResponse do
   @moduledoc """
-  Generated Notion Sdk type for content with table row response.
+  Generated Notion Sdk type module `NotionSDK.ContentWithTableRowResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

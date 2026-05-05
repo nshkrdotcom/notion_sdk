@@ -1,6 +1,6 @@
 defmodule NotionSDK.ButtonPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for button property item object response.
+  Generated Notion Sdk type module `NotionSDK.ButtonPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Formula do
   @moduledoc """
-  Generated Notion Sdk type for formula.
+  Generated Notion Sdk type module `NotionSDK.Formula`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

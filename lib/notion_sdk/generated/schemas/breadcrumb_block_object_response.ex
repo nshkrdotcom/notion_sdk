@@ -1,6 +1,6 @@
 defmodule NotionSDK.BreadcrumbBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for breadcrumb block object response.
+  Generated Notion Sdk type module `NotionSDK.BreadcrumbBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

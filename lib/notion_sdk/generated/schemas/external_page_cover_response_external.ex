@@ -1,6 +1,6 @@
 defmodule NotionSDK.ExternalPageCoverResponseExternal do
   @moduledoc """
-  Generated Notion Sdk type for external page cover response external.
+  Generated Notion Sdk type module `NotionSDK.ExternalPageCoverResponseExternal`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

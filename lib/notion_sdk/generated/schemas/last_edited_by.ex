@@ -1,6 +1,6 @@
 defmodule NotionSDK.LastEditedBy do
   @moduledoc """
-  Generated Notion Sdk type for last edited by.
+  Generated Notion Sdk type module `NotionSDK.LastEditedBy`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.ParagraphBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for paragraph block object response.
+  Generated Notion Sdk type module `NotionSDK.ParagraphBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

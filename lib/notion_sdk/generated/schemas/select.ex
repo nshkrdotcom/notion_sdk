@@ -1,6 +1,6 @@
 defmodule NotionSDK.Select do
   @moduledoc """
-  Generated Notion Sdk type for select.
+  Generated Notion Sdk type module `NotionSDK.Select`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

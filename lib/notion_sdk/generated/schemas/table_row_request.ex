@@ -1,6 +1,6 @@
 defmodule NotionSDK.TableRowRequest do
   @moduledoc """
-  Generated Notion Sdk type for table row request.
+  Generated Notion Sdk type module `NotionSDK.TableRowRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

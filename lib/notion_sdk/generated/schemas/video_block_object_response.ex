@@ -1,6 +1,6 @@
 defmodule NotionSDK.VideoBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for video block object response.
+  Generated Notion Sdk type module `NotionSDK.VideoBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

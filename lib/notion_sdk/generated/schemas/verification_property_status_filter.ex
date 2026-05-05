@@ -1,6 +1,6 @@
 defmodule NotionSDK.VerificationPropertyStatusFilter do
   @moduledoc """
-  Generated Notion Sdk type for verification property status filter.
+  Generated Notion Sdk type module `NotionSDK.VerificationPropertyStatusFilter`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.CalloutCallout do
   @moduledoc """
-  Generated Notion Sdk type for callout callout.
+  Generated Notion Sdk type module `NotionSDK.CalloutCallout`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

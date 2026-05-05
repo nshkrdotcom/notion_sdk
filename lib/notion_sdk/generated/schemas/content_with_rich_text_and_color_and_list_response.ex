@@ -1,6 +1,6 @@
 defmodule NotionSDK.ContentWithRichTextAndColorAndListResponse do
   @moduledoc """
-  Generated Notion Sdk type for content with rich text and color and list response.
+  Generated Notion Sdk type module `NotionSDK.ContentWithRichTextAndColorAndListResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

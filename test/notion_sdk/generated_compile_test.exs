@@ -1,6 +1,8 @@
 defmodule NotionSDK.GeneratedCompileTest do
   use ExUnit.Case, async: true
 
+  alias NotionSDK.Codegen.PublicModule
+
   @generation_manifest_path Path.expand("../../priv/generated/generation_manifest.json", __DIR__)
   @docs_inventory_path Path.expand("../../priv/generated/docs_inventory.json", __DIR__)
   @provider_ir_path Path.expand("../../priv/generated/provider_ir.json", __DIR__)
@@ -37,7 +39,7 @@ defmodule NotionSDK.GeneratedCompileTest do
     assert length(operations) == 35
 
     Enum.each(operations, fn %{"function" => function_name, "module" => module_name} ->
-      module = Module.concat([module_name])
+      module = PublicModule.from_provider_ir!(module_name)
 
       function = Map.fetch!(@operation_functions, function_name)
 
@@ -45,6 +47,16 @@ defmodule NotionSDK.GeneratedCompileTest do
       assert function_exported?(module, function, 1)
       assert function_exported?(module, function, 2)
     end)
+  end
+
+  test "generated module lookup rejects unknown provider IR names without atom creation" do
+    assert_raise ArgumentError, fn ->
+      PublicModule.from_provider_ir!("OtherSDK.Pages")
+    end
+
+    assert_raise ArgumentError, fn ->
+      PublicModule.from_provider_ir!("NotionSDK.DoesNotExistForAtomGate")
+    end
   end
 
   test "markdown, file upload lifecycle, and oauth functions are exported" do

@@ -1,6 +1,6 @@
 defmodule NotionSDK.CommentObjectResponseDisplayName do
   @moduledoc """
-  Generated Notion Sdk type for comment object response display name.
+  Generated Notion Sdk type module `NotionSDK.CommentObjectResponseDisplayName`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

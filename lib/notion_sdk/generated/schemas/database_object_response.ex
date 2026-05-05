@@ -1,6 +1,6 @@
 defmodule NotionSDK.DatabaseObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for database object response.
+  Generated Notion Sdk type module `NotionSDK.DatabaseObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

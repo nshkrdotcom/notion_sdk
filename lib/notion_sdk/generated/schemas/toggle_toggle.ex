@@ -1,6 +1,6 @@
 defmodule NotionSDK.ToggleToggle do
   @moduledoc """
-  Generated Notion Sdk type for toggle toggle.
+  Generated Notion Sdk type module `NotionSDK.ToggleToggle`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

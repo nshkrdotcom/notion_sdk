@@ -1,6 +1,6 @@
 defmodule NotionSDK.NumberedListItemBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for numbered list item block object response.
+  Generated Notion Sdk type module `NotionSDK.NumberedListItemBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

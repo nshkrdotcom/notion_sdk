@@ -1,6 +1,6 @@
 defmodule NotionSDK.ColumnListRequest do
   @moduledoc """
-  Generated Notion Sdk type for column list request.
+  Generated Notion Sdk type module `NotionSDK.ColumnListRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

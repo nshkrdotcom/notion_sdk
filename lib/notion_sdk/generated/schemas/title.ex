@@ -1,6 +1,6 @@
 defmodule NotionSDK.Title do
   @moduledoc """
-  Generated Notion Sdk type for title.
+  Generated Notion Sdk type module `NotionSDK.Title`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

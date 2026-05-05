@@ -1,6 +1,6 @@
 defmodule NotionSDK.BulletedListItemBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for bulleted list item block object response.
+  Generated Notion Sdk type module `NotionSDK.BulletedListItemBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

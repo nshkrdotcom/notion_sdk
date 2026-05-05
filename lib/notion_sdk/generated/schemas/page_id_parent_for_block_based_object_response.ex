@@ -1,6 +1,6 @@
 defmodule NotionSDK.PageIdParentForBlockBasedObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for page id parent for block based object response.
+  Generated Notion Sdk type module `NotionSDK.PageIdParentForBlockBasedObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

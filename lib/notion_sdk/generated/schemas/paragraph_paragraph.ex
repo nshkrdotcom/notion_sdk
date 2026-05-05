@@ -1,6 +1,6 @@
 defmodule NotionSDK.ParagraphParagraph do
   @moduledoc """
-  Generated Notion Sdk type for paragraph paragraph.
+  Generated Notion Sdk type module `NotionSDK.ParagraphParagraph`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

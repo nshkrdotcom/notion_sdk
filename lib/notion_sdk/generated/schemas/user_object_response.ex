@@ -1,6 +1,6 @@
 defmodule NotionSDK.UserObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for user object response.
+  Generated Notion Sdk type module `NotionSDK.UserObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

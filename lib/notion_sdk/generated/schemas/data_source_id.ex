@@ -1,6 +1,6 @@
 defmodule NotionSDK.DataSourceId do
   @moduledoc """
-  Generated Notion Sdk type for data source id.
+  Generated Notion Sdk type module `NotionSDK.DataSourceId`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

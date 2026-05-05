@@ -1,6 +1,6 @@
 defmodule NotionSDK.ContentWithExpressionRequest do
   @moduledoc """
-  Generated Notion Sdk type for content with expression request.
+  Generated Notion Sdk type module `NotionSDK.ContentWithExpressionRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

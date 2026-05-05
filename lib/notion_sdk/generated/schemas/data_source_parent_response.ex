@@ -1,6 +1,6 @@
 defmodule NotionSDK.DataSourceParentResponse do
   @moduledoc """
-  Generated Notion Sdk type for data source parent response.
+  Generated Notion Sdk type module `NotionSDK.DataSourceParentResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

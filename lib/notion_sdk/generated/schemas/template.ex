@@ -1,6 +1,6 @@
 defmodule NotionSDK.Template do
   @moduledoc """
-  Generated Notion Sdk type for template.
+  Generated Notion Sdk type module `NotionSDK.Template`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

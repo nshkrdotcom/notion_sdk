@@ -1,6 +1,6 @@
 defmodule NotionSDK.Person do
   @moduledoc """
-  Generated Notion Sdk type for person.
+  Generated Notion Sdk type module `NotionSDK.Person`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

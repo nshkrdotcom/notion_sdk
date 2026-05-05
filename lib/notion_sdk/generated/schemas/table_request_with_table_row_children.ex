@@ -1,6 +1,6 @@
 defmodule NotionSDK.TableRequestWithTableRowChildren do
   @moduledoc """
-  Generated Notion Sdk type for table request with table row children.
+  Generated Notion Sdk type module `NotionSDK.TableRequestWithTableRowChildren`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

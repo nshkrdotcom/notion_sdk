@@ -1,6 +1,6 @@
 defmodule NotionSDK.File do
   @moduledoc """
-  Generated Notion Sdk type for file.
+  Generated Notion Sdk type module `NotionSDK.File`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

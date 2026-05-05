@@ -1,6 +1,6 @@
 defmodule NotionSDK.PhoneNumber do
   @moduledoc """
-  Generated Notion Sdk type for phone number.
+  Generated Notion Sdk type module `NotionSDK.PhoneNumber`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

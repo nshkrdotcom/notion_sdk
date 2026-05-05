@@ -1,6 +1,6 @@
 defmodule NotionSDK.ImageBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for image block object response.
+  Generated Notion Sdk type module `NotionSDK.ImageBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

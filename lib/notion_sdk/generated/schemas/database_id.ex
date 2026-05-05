@@ -1,6 +1,6 @@
 defmodule NotionSDK.DatabaseId do
   @moduledoc """
-  Generated Notion Sdk type for database id.
+  Generated Notion Sdk type module `NotionSDK.DatabaseId`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

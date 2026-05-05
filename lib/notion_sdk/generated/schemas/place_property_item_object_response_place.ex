@@ -1,6 +1,6 @@
 defmodule NotionSDK.PlacePropertyItemObjectResponsePlace do
   @moduledoc """
-  Generated Notion Sdk type for place property item object response place.
+  Generated Notion Sdk type module `NotionSDK.PlacePropertyItemObjectResponsePlace`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

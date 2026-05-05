@@ -1,6 +1,6 @@
 defmodule NotionSDK.BulletedListItemBulletedListItem do
   @moduledoc """
-  Generated Notion Sdk type for bulleted list item bulleted list item.
+  Generated Notion Sdk type module `NotionSDK.BulletedListItemBulletedListItem`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.UnsupportedBlockObjectResponseUnsupported do
   @moduledoc """
-  Generated Notion Sdk type for unsupported block object response unsupported.
+  Generated Notion Sdk type module `NotionSDK.UnsupportedBlockObjectResponseUnsupported`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

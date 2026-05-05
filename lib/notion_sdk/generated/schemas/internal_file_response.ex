@@ -1,6 +1,6 @@
 defmodule NotionSDK.InternalFileResponse do
   @moduledoc """
-  Generated Notion Sdk type for internal file response.
+  Generated Notion Sdk type module `NotionSDK.InternalFileResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

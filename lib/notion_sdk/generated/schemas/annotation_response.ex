@@ -1,6 +1,6 @@
 defmodule NotionSDK.AnnotationResponse do
   @moduledoc """
-  Generated Notion Sdk type for annotation response.
+  Generated Notion Sdk type module `NotionSDK.AnnotationResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

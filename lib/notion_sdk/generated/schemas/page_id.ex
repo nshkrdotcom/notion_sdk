@@ -1,6 +1,6 @@
 defmodule NotionSDK.PageId do
   @moduledoc """
-  Generated Notion Sdk type for page id.
+  Generated Notion Sdk type module `NotionSDK.PageId`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.LinkToPage do
   @moduledoc """
-  Generated Notion Sdk type for link to page.
+  Generated Notion Sdk type module `NotionSDK.LinkToPage`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

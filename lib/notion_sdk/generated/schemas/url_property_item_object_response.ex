@@ -1,6 +1,6 @@
 defmodule NotionSDK.UrlPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for url property item object response.
+  Generated Notion Sdk type module `NotionSDK.UrlPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.ToDoBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for to do block object response.
+  Generated Notion Sdk type module `NotionSDK.ToDoBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.ChildPageBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for child page block object response.
+  Generated Notion Sdk type module `NotionSDK.ChildPageBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

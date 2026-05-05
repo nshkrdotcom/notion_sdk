@@ -1,6 +1,6 @@
 defmodule NotionSDK.Number do
   @moduledoc """
-  Generated Notion Sdk type for number.
+  Generated Notion Sdk type module `NotionSDK.Number`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

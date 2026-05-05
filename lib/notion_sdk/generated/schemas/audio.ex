@@ -1,6 +1,6 @@
 defmodule NotionSDK.Audio do
   @moduledoc """
-  Generated Notion Sdk type for audio.
+  Generated Notion Sdk type module `NotionSDK.Audio`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

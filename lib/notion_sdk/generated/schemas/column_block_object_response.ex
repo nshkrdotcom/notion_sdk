@@ -1,6 +1,6 @@
 defmodule NotionSDK.ColumnBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for column block object response.
+  Generated Notion Sdk type module `NotionSDK.ColumnBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

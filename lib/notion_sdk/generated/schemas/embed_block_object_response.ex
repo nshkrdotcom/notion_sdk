@@ -1,6 +1,6 @@
 defmodule NotionSDK.EmbedBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for embed block object response.
+  Generated Notion Sdk type module `NotionSDK.EmbedBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

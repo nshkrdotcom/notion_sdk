@@ -1,6 +1,6 @@
 defmodule NotionSDK.LastEditedByPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for last edited by property item object response.
+  Generated Notion Sdk type module `NotionSDK.LastEditedByPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Embed do
   @moduledoc """
-  Generated Notion Sdk type for embed.
+  Generated Notion Sdk type module `NotionSDK.Embed`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

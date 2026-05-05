@@ -1,6 +1,6 @@
 defmodule NotionSDK.Search do
   @moduledoc """
-  Generated Notion Sdk operations for search.
+  Generated Notion Sdk operations module `NotionSDK.Search`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

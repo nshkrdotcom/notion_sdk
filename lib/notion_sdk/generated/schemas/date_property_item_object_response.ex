@@ -1,6 +1,6 @@
 defmodule NotionSDK.DatePropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for date property item object response.
+  Generated Notion Sdk type module `NotionSDK.DatePropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Comments do
   @moduledoc """
-  Generated Notion Sdk operations for comments.
+  Generated Notion Sdk operations module `NotionSDK.Comments`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Pdf do
   @moduledoc """
-  Generated Notion Sdk type for pdf.
+  Generated Notion Sdk type module `NotionSDK.Pdf`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

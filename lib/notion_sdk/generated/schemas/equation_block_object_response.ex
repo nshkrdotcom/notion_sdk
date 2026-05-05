@@ -1,6 +1,6 @@
 defmodule NotionSDK.EquationBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for equation block object response.
+  Generated Notion Sdk type module `NotionSDK.EquationBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

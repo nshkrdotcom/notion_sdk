@@ -1,6 +1,6 @@
 defmodule NotionSDK.CreatedTimePropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for created time property item object response.
+  Generated Notion Sdk type module `NotionSDK.CreatedTimePropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

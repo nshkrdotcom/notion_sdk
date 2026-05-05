@@ -1,6 +1,6 @@
 defmodule NotionSDK.HeaderContentWithRichTextAndColorRequest do
   @moduledoc """
-  Generated Notion Sdk type for header content with rich text and color request.
+  Generated Notion Sdk type module `NotionSDK.HeaderContentWithRichTextAndColorRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

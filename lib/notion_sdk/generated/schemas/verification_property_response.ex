@@ -1,6 +1,6 @@
 defmodule NotionSDK.VerificationPropertyResponse do
   @moduledoc """
-  Generated Notion Sdk type for verification property response.
+  Generated Notion Sdk type module `NotionSDK.VerificationPropertyResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

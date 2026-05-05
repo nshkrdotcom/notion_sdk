@@ -1,6 +1,6 @@
 defmodule NotionSDK.ExternalFileRequest do
   @moduledoc """
-  Generated Notion Sdk type for external file request.
+  Generated Notion Sdk type module `NotionSDK.ExternalFileRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

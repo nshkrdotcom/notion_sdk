@@ -1,6 +1,6 @@
 defmodule NotionSDK.UniqueIdPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for unique id property item object response.
+  Generated Notion Sdk type module `NotionSDK.UniqueIdPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

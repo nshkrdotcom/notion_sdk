@@ -154,16 +154,16 @@ defmodule Mix.Tasks.Notion.Oauth do
     Application.get_env(
       :notion_sdk,
       :oauth_interactive_module,
-      Module.concat([Pristine, OAuth2, Interactive])
+      Pristine.OAuth2.Interactive
     )
   end
 
   defp oauth2_module do
-    Application.get_env(:notion_sdk, :oauth2_module, Module.concat([Pristine, OAuth2]))
+    Application.get_env(:notion_sdk, :oauth2_module, Pristine.OAuth2)
   end
 
   defp saved_token_module do
-    Module.concat([Pristine, OAuth2, SavedToken])
+    Pristine.OAuth2.SavedToken
   end
 
   defp fetch_env!(name) do
@@ -263,7 +263,7 @@ defmodule Mix.Tasks.Notion.Oauth do
   end
 
   defp token_source_module do
-    Module.concat([Pristine, Adapters, TokenSource, File])
+    Pristine.Adapters.TokenSource.File
   end
 
   defp format_save_error({kind, %_{} = error}), do: "#{kind}: #{Exception.message(error)}"

@@ -1,6 +1,6 @@
 defmodule NotionSDK.PartialBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for partial block object response.
+  Generated Notion Sdk type module `NotionSDK.PartialBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.StringFormulaPropertyResponse do
   @moduledoc """
-  Generated Notion Sdk type for string formula property response.
+  Generated Notion Sdk type module `NotionSDK.StringFormulaPropertyResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

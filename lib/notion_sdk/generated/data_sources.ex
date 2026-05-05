@@ -1,6 +1,6 @@
 defmodule NotionSDK.DataSources do
   @moduledoc """
-  Generated Notion Sdk operations for data sources.
+  Generated Notion Sdk operations module `NotionSDK.DataSources`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.ChildDatabaseBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for child database block object response.
+  Generated Notion Sdk type module `NotionSDK.ChildDatabaseBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

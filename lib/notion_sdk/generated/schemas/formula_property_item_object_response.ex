@@ -1,6 +1,6 @@
 defmodule NotionSDK.FormulaPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for formula property item object response.
+  Generated Notion Sdk type module `NotionSDK.FormulaPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

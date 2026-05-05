@@ -1,6 +1,6 @@
 defmodule NotionSDK.ColumnWithChildrenRequest do
   @moduledoc """
-  Generated Notion Sdk type for column with children request.
+  Generated Notion Sdk type module `NotionSDK.ColumnWithChildrenRequest`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

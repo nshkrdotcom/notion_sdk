@@ -1,6 +1,6 @@
 defmodule NotionSDK.EmojiPageIconResponse do
   @moduledoc """
-  Generated Notion Sdk type for emoji page icon response.
+  Generated Notion Sdk type module `NotionSDK.EmojiPageIconResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Heading1Heading1 do
   @moduledoc """
-  Generated Notion Sdk type for heading1 heading1.
+  Generated Notion Sdk type module `NotionSDK.Heading1Heading1`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

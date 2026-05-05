@@ -1,6 +1,6 @@
 defmodule NotionSDK.Breadcrumb do
   @moduledoc """
-  Generated Notion Sdk type for breadcrumb.
+  Generated Notion Sdk type module `NotionSDK.Breadcrumb`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

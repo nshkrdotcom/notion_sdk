@@ -1,6 +1,6 @@
 defmodule NotionSDK.DataSourceReferenceResponse do
   @moduledoc """
-  Generated Notion Sdk type for data source reference response.
+  Generated Notion Sdk type module `NotionSDK.DataSourceReferenceResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

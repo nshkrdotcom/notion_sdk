@@ -1,6 +1,6 @@
 defmodule NotionSDK.AudioBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for audio block object response.
+  Generated Notion Sdk type module `NotionSDK.AudioBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

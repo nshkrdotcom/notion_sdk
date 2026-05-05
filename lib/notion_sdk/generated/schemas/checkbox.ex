@@ -1,6 +1,6 @@
 defmodule NotionSDK.Checkbox do
   @moduledoc """
-  Generated Notion Sdk type for checkbox.
+  Generated Notion Sdk type module `NotionSDK.Checkbox`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.DataSourceObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for data source object response.
+  Generated Notion Sdk type module `NotionSDK.DataSourceObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

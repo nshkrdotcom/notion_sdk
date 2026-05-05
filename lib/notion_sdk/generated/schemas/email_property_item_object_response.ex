@@ -1,6 +1,6 @@
 defmodule NotionSDK.EmailPropertyItemObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for email property item object response.
+  Generated Notion Sdk type module `NotionSDK.EmailPropertyItemObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

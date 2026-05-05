@@ -1,6 +1,6 @@
 defmodule NotionSDK.Email do
   @moduledoc """
-  Generated Notion Sdk type for email.
+  Generated Notion Sdk type module `NotionSDK.Email`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

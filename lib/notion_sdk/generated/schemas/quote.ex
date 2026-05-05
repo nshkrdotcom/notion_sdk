@@ -1,6 +1,6 @@
 defmodule NotionSDK.Quote do
   @moduledoc """
-  Generated Notion Sdk type for quote.
+  Generated Notion Sdk type module `NotionSDK.Quote`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

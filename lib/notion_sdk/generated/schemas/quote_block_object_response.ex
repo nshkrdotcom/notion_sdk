@@ -1,6 +1,6 @@
 defmodule NotionSDK.QuoteBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for quote block object response.
+  Generated Notion Sdk type module `NotionSDK.QuoteBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

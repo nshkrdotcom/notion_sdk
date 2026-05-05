@@ -1,6 +1,6 @@
 defmodule NotionSDK.OAuth do
   @moduledoc """
-  Generated Notion Sdk operations for o auth.
+  Generated Notion Sdk operations module `NotionSDK.OAuth`.
   """
 
   use NotionSDK.OAuth.Helpers

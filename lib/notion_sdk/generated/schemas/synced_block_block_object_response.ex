@@ -1,6 +1,6 @@
 defmodule NotionSDK.SyncedBlockBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for synced block block object response.
+  Generated Notion Sdk type module `NotionSDK.SyncedBlockBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

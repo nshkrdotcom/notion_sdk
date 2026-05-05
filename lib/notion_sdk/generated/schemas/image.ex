@@ -1,6 +1,6 @@
 defmodule NotionSDK.Image do
   @moduledoc """
-  Generated Notion Sdk type for image.
+  Generated Notion Sdk type module `NotionSDK.Image`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

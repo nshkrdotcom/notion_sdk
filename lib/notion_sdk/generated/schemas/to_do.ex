@@ -1,6 +1,6 @@
 defmodule NotionSDK.ToDo do
   @moduledoc """
-  Generated Notion Sdk type for to do.
+  Generated Notion Sdk type module `NotionSDK.ToDo`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

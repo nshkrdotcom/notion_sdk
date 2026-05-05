@@ -1,6 +1,6 @@
 defmodule NotionSDK.ErrorOauth403 do
   @moduledoc """
-  Generated Notion Sdk type for error oauth403.
+  Generated Notion Sdk type module `NotionSDK.ErrorOauth403`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

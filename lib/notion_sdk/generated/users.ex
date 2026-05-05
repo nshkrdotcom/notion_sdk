@@ -1,6 +1,6 @@
 defmodule NotionSDK.Users do
   @moduledoc """
-  Generated Notion Sdk operations for users.
+  Generated Notion Sdk operations module `NotionSDK.Users`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

@@ -1,6 +1,6 @@
 defmodule NotionSDK.Integration do
   @moduledoc """
-  Generated Notion Sdk type for integration.
+  Generated Notion Sdk type module `NotionSDK.Integration`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

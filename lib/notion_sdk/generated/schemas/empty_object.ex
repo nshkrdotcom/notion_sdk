@@ -1,6 +1,6 @@
 defmodule NotionSDK.EmptyObject do
   @moduledoc """
-  Generated Notion Sdk type for empty object.
+  Generated Notion Sdk type module `NotionSDK.EmptyObject`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

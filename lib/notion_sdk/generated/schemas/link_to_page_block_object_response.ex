@@ -1,6 +1,6 @@
 defmodule NotionSDK.LinkToPageBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for link to page block object response.
+  Generated Notion Sdk type module `NotionSDK.LinkToPageBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

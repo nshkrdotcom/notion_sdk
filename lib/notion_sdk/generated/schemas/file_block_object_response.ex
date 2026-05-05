@@ -1,6 +1,6 @@
 defmodule NotionSDK.FileBlockObjectResponse do
   @moduledoc """
-  Generated Notion Sdk type for file block object response.
+  Generated Notion Sdk type module `NotionSDK.FileBlockObjectResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema

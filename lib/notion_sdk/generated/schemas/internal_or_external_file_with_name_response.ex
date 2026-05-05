@@ -1,6 +1,6 @@
 defmodule NotionSDK.InternalOrExternalFileWithNameResponse do
   @moduledoc """
-  Generated Notion Sdk type for internal or external file with name response.
+  Generated Notion Sdk type module `NotionSDK.InternalOrExternalFileWithNameResponse`.
   """
 
   alias NotionSDK.Generated.RuntimeSchema, as: RuntimeSchema
