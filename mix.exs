@@ -1,11 +1,10 @@
 Code.require_file("build_support/plt_fingerprint.ex", __DIR__)
-Code.require_file("build_support/dependency_resolver.exs", __DIR__)
+Code.require_file("build_support/dependency_sources.exs", __DIR__)
 
 defmodule NotionSDK.MixProject do
   use Mix.Project
 
   alias NotionSDK.Build.PltFingerprint
-  alias NotionSDK.Build.DependencyResolver
 
   @version "0.2.1"
   @source_url "https://github.com/nshkrdotcom/notion_sdk"
@@ -70,15 +69,15 @@ defmodule NotionSDK.MixProject do
     if use_hex_runtime_dep?() do
       {:pristine, "~> 0.2.1"}
     else
-      DependencyResolver.pristine_runtime()
+      DependencySources.dep(:pristine, __DIR__)
     end
   end
 
   defp codegen_deps do
     if include_tooling_deps?() do
       [
-        DependencyResolver.pristine_codegen(override: true),
-        DependencyResolver.pristine_provider_testkit(only: :test)
+        DependencySources.dep(:pristine_codegen, __DIR__, override: true),
+        DependencySources.dep(:pristine_provider_testkit, __DIR__, only: :test)
       ]
     else
       []
@@ -135,7 +134,8 @@ defmodule NotionSDK.MixProject do
       description: description(),
       files: ~w(
         assets
-        build_support/dependency_resolver.exs
+        build_support/dependency_sources.config.exs
+        build_support/dependency_sources.exs
         build_support/plt_fingerprint.ex
         lib/notion_sdk/application.ex
         lib/notion_sdk/client.ex

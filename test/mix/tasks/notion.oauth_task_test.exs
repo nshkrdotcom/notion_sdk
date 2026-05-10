@@ -51,24 +51,10 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
     Process.put(:notion_oauth_task_test_pid, self())
     Application.put_env(:notion_sdk, :oauth_interactive_module, FakeInteractive)
     Application.put_env(:notion_sdk, :oauth2_module, FakeOAuth2)
-
-    env_backup =
-      Enum.map(
-        [
-          "NOTION_OAUTH_CLIENT_ID",
-          "NOTION_OAUTH_CLIENT_SECRET",
-          "NOTION_OAUTH_REDIRECT_URI",
-          "XDG_CONFIG_HOME"
-        ],
-        &{&1, System.get_env(&1)}
-      )
+    previous_config = put_default_oauth_config()
 
     on_exit(fn ->
-      Enum.each(env_backup, fn
-        {key, nil} -> System.delete_env(key)
-        {key, value} -> System.put_env(key, value)
-      end)
-
+      restore_oauth_config(previous_config)
       Application.delete_env(:notion_sdk, :oauth_interactive_module)
       Application.delete_env(:notion_sdk, :oauth2_module)
       Process.delete(:notion_oauth_task_result)
@@ -77,14 +63,10 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
       Mix.shell(previous_shell)
     end)
 
-    System.put_env("NOTION_OAUTH_CLIENT_ID", "client-id")
-    System.put_env("NOTION_OAUTH_CLIENT_SECRET", "client-secret")
-    System.put_env("NOTION_OAUTH_REDIRECT_URI", "http://127.0.0.1:40071/callback")
-
     :ok
   end
 
-  test "loads oauth credentials from env and passes manual mode flags through" do
+  test "loads oauth credentials from config and passes manual mode flags through" do
     OAuthTask.run(["--manual", "--no-browser", "--timeout=90000"])
 
     assert_receive {:interactive_authorize, provider, opts}
@@ -98,7 +80,7 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
     assert opts[:params] == [owner: "user"]
   end
 
-  test "lets --redirect-uri override the environment for loopback mode" do
+  test "lets --redirect-uri override configured redirect URI for loopback mode" do
     OAuthTask.run(["--redirect-uri=http://127.0.0.1:40123/callback"])
 
     assert_receive {:interactive_authorize, _provider, opts}
@@ -127,7 +109,7 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
   end
 
   test "saves tokens to the default XDG path when requested", %{tmp_dir: tmp_dir} do
-    System.put_env("XDG_CONFIG_HOME", tmp_dir)
+    Application.put_env(:notion_sdk, :oauth_config_home, tmp_dir)
 
     OAuthTask.run(["--save"])
 
@@ -234,5 +216,30 @@ defmodule Mix.Tasks.Notion.OAuthTaskTest do
       end
 
     assert String.contains?(error.message, "does not contain a refresh token")
+  end
+
+  defp put_default_oauth_config do
+    keys = [
+      :oauth_client_id,
+      :oauth_client_secret,
+      :oauth_redirect_uri,
+      :oauth_token_path,
+      :oauth_config_home
+    ]
+
+    previous = Map.new(keys, &{&1, Application.fetch_env(:notion_sdk, &1)})
+
+    Application.put_env(:notion_sdk, :oauth_client_id, "client-id")
+    Application.put_env(:notion_sdk, :oauth_client_secret, "client-secret")
+    Application.put_env(:notion_sdk, :oauth_redirect_uri, "http://127.0.0.1:40071/callback")
+
+    previous
+  end
+
+  defp restore_oauth_config(previous) do
+    Enum.each(previous, fn
+      {key, {:ok, value}} -> Application.put_env(:notion_sdk, key, value)
+      {key, :error} -> Application.delete_env(:notion_sdk, key)
+    end)
   end
 end

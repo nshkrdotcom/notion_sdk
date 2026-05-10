@@ -21,6 +21,7 @@ notion_sdk-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+.dependency_sources.local.exs
 
 # Cloned reference JS SDK
 /notion-sdk-js/

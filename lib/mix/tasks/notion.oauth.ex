@@ -6,10 +6,10 @@ defmodule Mix.Tasks.Notion.Oauth do
   Preferred first-run path for most public integrations with a registered HTTPS
   redirect URI under Notion's `OAuth Domain & URIs` settings:
 
-      export NOTION_OAUTH_CLIENT_ID="..."
-      export NOTION_OAUTH_CLIENT_SECRET="..."
-      export NOTION_OAUTH_REDIRECT_URI="https://your-app.example.com/notion/callback"
-      mix notion.oauth --save --manual --no-browser
+      mix notion.oauth --save --manual --no-browser \\
+        --client-id="..." \\
+        --client-secret="..." \\
+        --redirect-uri="https://your-app.example.com/notion/callback"
 
   The task prints the authorization URL, waits for you to approve access in the
   browser, then asks you to paste back the final redirected URL containing the
@@ -22,8 +22,10 @@ defmodule Mix.Tasks.Notion.Oauth do
   Optional loopback path if you have explicitly registered a literal loopback
   redirect URI such as `http://127.0.0.1:40071/callback` in Notion:
 
-      export NOTION_OAUTH_REDIRECT_URI="http://127.0.0.1:40071/callback"
-      mix notion.oauth --save
+      mix notion.oauth --save \\
+        --client-id="..." \\
+        --client-secret="..." \\
+        --redirect-uri="http://127.0.0.1:40071/callback"
 
   `Webhook URL` settings in Notion are unrelated to OAuth redirect URIs.
 
@@ -47,6 +49,8 @@ defmodule Mix.Tasks.Notion.Oauth do
 
   @default_timeout_ms 120_000
   @interactive_switches [
+    client_id: :string,
+    client_secret: :string,
     manual: :boolean,
     no_browser: :boolean,
     path: :string,
@@ -54,7 +58,7 @@ defmodule Mix.Tasks.Notion.Oauth do
     save: :boolean,
     timeout: :integer
   ]
-  @refresh_switches [path: :string]
+  @refresh_switches [client_id: :string, client_secret: :string, path: :string]
 
   @shortdoc "Complete the interactive Notion OAuth flow"
 
@@ -80,9 +84,14 @@ defmodule Mix.Tasks.Notion.Oauth do
       Mix.raise("invalid options: #{format_invalid_options(invalid)}")
     end
 
-    client_id = fetch_env!("NOTION_OAUTH_CLIENT_ID")
-    client_secret = fetch_env!("NOTION_OAUTH_CLIENT_SECRET")
-    redirect_uri = opts[:redirect_uri] || fetch_env!("NOTION_OAUTH_REDIRECT_URI")
+    client_id = required_oauth_value(opts, :client_id, :oauth_client_id, "--client-id")
+
+    client_secret =
+      required_oauth_value(opts, :client_secret, :oauth_client_secret, "--client-secret")
+
+    redirect_uri =
+      opts[:redirect_uri] || required_config_value(:oauth_redirect_uri, "--redirect-uri")
+
     timeout_ms = opts[:timeout] || @default_timeout_ms
     open_browser? = not Keyword.get(opts, :no_browser, false)
     manual? = Keyword.get(opts, :manual, false)
@@ -111,8 +120,11 @@ defmodule Mix.Tasks.Notion.Oauth do
   end
 
   defp refresh_saved_token(opts) do
-    client_id = fetch_env!("NOTION_OAUTH_CLIENT_ID")
-    client_secret = fetch_env!("NOTION_OAUTH_CLIENT_SECRET")
+    client_id = required_oauth_value(opts, :client_id, :oauth_client_id, "--client-id")
+
+    client_secret =
+      required_oauth_value(opts, :client_secret, :oauth_client_secret, "--client-secret")
+
     path = save_path(opts)
     client = NotionSDK.Client.new()
 
@@ -166,10 +178,23 @@ defmodule Mix.Tasks.Notion.Oauth do
     Pristine.OAuth2.SavedToken
   end
 
-  defp fetch_env!(name) do
-    case System.get_env(name) do
-      value when is_binary(value) and value != "" -> value
-      _other -> Mix.raise("missing required environment variable #{name}")
+  defp required_oauth_value(opts, option_key, config_key, option_name) do
+    case Keyword.get(opts, option_key) || Application.get_env(:notion_sdk, config_key) do
+      value when is_binary(value) and value != "" ->
+        value
+
+      _other ->
+        Mix.raise("missing required OAuth value #{option_name} or :notion_sdk, #{config_key}")
+    end
+  end
+
+  defp required_config_value(config_key, option_name) do
+    case Application.get_env(:notion_sdk, config_key) do
+      value when is_binary(value) and value != "" ->
+        value
+
+      _other ->
+        Mix.raise("missing required OAuth value #{option_name} or :notion_sdk, #{config_key}")
     end
   end
 
@@ -246,9 +271,13 @@ defmodule Mix.Tasks.Notion.Oauth do
   defp save_enabled?(opts), do: Keyword.get(opts, :save, false)
 
   defp save_path(opts) do
-    opts
-    |> Keyword.get(:path, default_save_path())
-    |> Path.expand()
+    path = Keyword.get(opts, :path) || Application.get_env(:notion_sdk, :oauth_token_path)
+
+    if is_binary(path) and path != "" do
+      Path.expand(path)
+    else
+      default_save_path()
+    end
   end
 
   defp default_save_path do

@@ -247,7 +247,10 @@ defmodule NotionSDK.Examples.Live do
   end
 
   def oauth_token_path do
-    OAuthTokenFile.resolve_env_or_default(get_env("NOTION_OAUTH_TOKEN_PATH"))
+    case get_env("NOTION_OAUTH_TOKEN_PATH") do
+      value when is_binary(value) and value != "" -> Path.expand(value)
+      _other -> OAuthTokenFile.default_path(get_env("XDG_CONFIG_HOME"))
+    end
   end
 
   def oauth_token! do
