@@ -1,5 +1,8 @@
 Code.require_file("build_support/plt_fingerprint.ex", __DIR__)
-Code.require_file("build_support/dependency_sources.exs", __DIR__)
+
+unless Code.ensure_loaded?(DependencySources) do
+  Code.require_file("build_support/dependency_sources.exs", __DIR__)
+end
 
 defmodule NotionSDK.MixProject do
   use Mix.Project
